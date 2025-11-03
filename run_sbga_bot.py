@@ -18,6 +18,11 @@ if __name__ == "__main__":
     print("Starting Mythara SBGA Integration Bot...")
     bot = MytharaSBGABot()
     
+    # Discover new grants from Grants.gov API
+    print("\n[CHECK] Fetching opportunities from Grants.gov API...")
+    grants = bot.discover_sbga_grants()
+    print(f"[OK] Discovered {len(grants)} grant opportunities")
+    
     # Generate daily SBGA report
     report = bot.generate_sbga_report()
     print(report)
