@@ -1,14 +1,14 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
-# Master script to schedule all 15 Mythara bots in Windows Task Scheduler
+# Master script to schedule all 16 Mythara bots in Windows Task Scheduler
 # Run this script as Administrator
 
 $pythonPath = "C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\.venv\Scripts\python.exe"
 $workingDir = "C:\Users\HVele\OneDrive\Desktop\Mythara_Archive"
 
 Write-Host "=" * 80 -ForegroundColor Cyan
-Write-Host "MYTHARA BOT SCHEDULER - Setting up all 15 autonomous bots" -ForegroundColor Yellow
+Write-Host "MYTHARA BOT SCHEDULER - Setting up all 16 autonomous bots" -ForegroundColor Yellow
 Write-Host "=" * 80 -ForegroundColor Cyan
 
 # Check if running as Administrator
@@ -117,14 +117,21 @@ Register-ScheduledTask -TaskName "Mythara_SBGA_Bot" -Action $action -Trigger $tr
 Write-Host "[OK] SBGA Integration Bot scheduled" -ForegroundColor Green
 
 # Daily 11:00 AM - Accounting VP
-Write-Host "`n[15/15] Scheduling Accounting VP (Daily 11:00 AM)..." -ForegroundColor Cyan
+Write-Host "`n[15/16] Scheduling Accounting VP (Daily 11:00 AM)..." -ForegroundColor Cyan
 $action = New-ScheduledTaskAction -Execute $pythonPath -Argument "$workingDir\run_accounting_vp.py" -WorkingDirectory $workingDir
 $trigger = New-ScheduledTaskTrigger -Daily -At "11:00AM"
 Register-ScheduledTask -TaskName "Mythara_Accounting_VP" -Action $action -Trigger $trigger -Description "Mythara Accounting VP - Daily financial tracking" -Force
 Write-Host "[OK] Accounting VP scheduled" -ForegroundColor Green
 
+# Daily 7:00 AM - Sigma Six Blackbelt (Quality)
+Write-Host "`n[16/16] Scheduling Sigma Six Blackbelt (Daily 7:00 AM)..." -ForegroundColor Cyan
+$action = New-ScheduledTaskAction -Execute $pythonPath -Argument "$workingDir\run_sigma_six_blackbelt.py" -WorkingDirectory $workingDir
+$trigger = New-ScheduledTaskTrigger -Daily -At "7:00AM"
+Register-ScheduledTask -TaskName "Mythara_Sigma_Six_Blackbelt" -Action $action -Trigger $trigger -Description "Mythara Sigma Six Blackbelt - Daily quality metrics" -Force
+Write-Host "[OK] Sigma Six Blackbelt scheduled" -ForegroundColor Green
+
 Write-Host "`n" + "=" * 80 -ForegroundColor Cyan
-Write-Host "SUCCESS! All 15 bots scheduled in Windows Task Scheduler" -ForegroundColor Green
+Write-Host "SUCCESS! All 16 bots scheduled in Windows Task Scheduler" -ForegroundColor Green
 Write-Host "=" * 80 -ForegroundColor Cyan
 
 Write-Host "`nSCHEDULE SUMMARY:" -ForegroundColor Yellow
@@ -137,7 +144,7 @@ Write-Host "  - DevSecOps VP: Every hour" -ForegroundColor Gray
 
 Write-Host "`nDAILY (Staggered):" -ForegroundColor White
 Write-Host "  06:00 AM - Finance VP" -ForegroundColor Gray
-Write-Host "  07:00 AM - Logistics VP" -ForegroundColor Gray
+Write-Host "  07:00 AM - Logistics VP, Sigma Six Blackbelt" -ForegroundColor Gray
 Write-Host "  08:00 AM - Sales/Marketing VP" -ForegroundColor Gray
 Write-Host "  09:00 AM - Customer Success VP, International Sales VP, Researcher Bot" -ForegroundColor Gray
 Write-Host "  10:00 AM - Public Affairs VP, SBGA Bot" -ForegroundColor Gray
@@ -157,5 +164,5 @@ Write-Host "`nTo manually run a task now:" -ForegroundColor Yellow
 Write-Host "  Start-ScheduledTask -TaskName 'Mythara_Finance_VP'" -ForegroundColor Cyan
 
 Write-Host "`n" + "=" * 80 -ForegroundColor Cyan
-Write-Host "ALL 15 BOTS NOW RUNNING AUTONOMOUSLY AT `$0/MONTH!" -ForegroundColor Green
+Write-Host "ALL 16 BOTS NOW RUNNING AUTONOMOUSLY AT `$0/MONTH!" -ForegroundColor Green
 Write-Host "=" * 80 -ForegroundColor Cyan
