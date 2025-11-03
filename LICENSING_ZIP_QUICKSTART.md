@@ -17,6 +17,7 @@
 - ✅ **LICENSE.md** — Proprietary license with evaluation terms
 - ✅ **COPYRIGHT.md** — Comprehensive IP ownership notice (all components protected)
 - ✅ **INSTALL.md** — Docker, native Python, and air-gapped deployment instructions
+- ✅ **Mythara_Engine_Validation_Report_v1.0.0.txt** — Complete test results (all 5 suites passing)
 - ✅ **PGP-signed manifests** — RELEASE_MANIFEST.json.asc, checksums.sha256.asc
 - ✅ **Complete documentation** — docs/, core/API_SPEC_PUBLIC.md (all with copyright headers)
 - ✅ **Validation suite** — tests/, Evidence/ with all test results (copyright protected)

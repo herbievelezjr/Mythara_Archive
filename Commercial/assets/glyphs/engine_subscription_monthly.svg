@@ -1,0 +1,18 @@
+<!--
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Proprietary and Confidential.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Engine Subscription Monthly">
+  <g fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Calendar -->
+    <rect x="40" y="64" width="176" height="132" rx="12"/>
+    <path d="M40 96h176"/>
+    <line x1="88" y1="56" x2="88" y2="80"/>
+    <line x1="168" y1="56" x2="168" y2="80"/>
+    <!-- Hex emblem (engine) -->
+    <path d="M128 132l20 12v24l-20 12l-20-12v-24z"/>
+    <!-- Circular arrow (monthly cycle) -->
+    <path d="M128 120a28 28 0 1 1-26 38"/>
+    <polyline points="92,160 102,156 98,146"/>
+  </g>
+</svg>

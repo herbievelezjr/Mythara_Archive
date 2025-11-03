@@ -1,0 +1,82 @@
+[
+  {
+    "timestamp": "2025-11-01T08:14:00Z",
+    "clause_id": "provision-legacy-011",
+    "messenger": "Healer + Witness",
+    "delta": 4.2,
+    "emotional_fidelity": 0.96,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T09:03:00Z",
+    "clause_id": "grief-capsule-004",
+    "messenger": "Healer + Scribe",
+    "delta": 3.8,
+    "emotional_fidelity": 0.94,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T09:45:00Z",
+    "clause_id": "sanctify-legacy-009",
+    "messenger": "Custodian + Witness",
+    "delta": 1.5,
+    "emotional_fidelity": 0.98,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T10:22:00Z",
+    "clause_id": "resurrect-bio-006",
+    "messenger": "Healer + Custodian",
+    "delta": 5.1,
+    "emotional_fidelity": 0.92,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T11:10:00Z",
+    "clause_id": "chameleon-cyber-022",
+    "messenger": "Watcher + Avenger",
+    "delta": 2.7,
+    "emotional_fidelity": 0.91,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T11:58:00Z",
+    "clause_id": "ele-capsule-013",
+    "messenger": "Watcher + Avenger",
+    "delta": 0.0,
+    "emotional_fidelity": 0.89,
+    "reservoir_state": "Frozen"
+  },
+  {
+    "timestamp": "2025-11-01T12:33:00Z",
+    "clause_id": "compliance-edu-017",
+    "messenger": "Herald + Custodian",
+    "delta": 1.2,
+    "emotional_fidelity": 0.95,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T13:05:00Z",
+    "clause_id": "provision-ferment-015",
+    "messenger": "Healer + Witness",
+    "delta": 3.9,
+    "emotional_fidelity": 0.93,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T13:42:00Z",
+    "clause_id": "grief-capsule-007",
+    "messenger": "Healer + Scribe",
+    "delta": 3.5,
+    "emotional_fidelity": 0.92,
+    "reservoir_state": "Active"
+  },
+  {
+    "timestamp": "2025-11-01T14:00:00Z",
+    "clause_id": "sanctify-urban-010",
+    "messenger": "Custodian + Witness",
+    "delta": 1.6,
+    "emotional_fidelity": 0.97,
+    "reservoir_state": "Active"
+  }
+]

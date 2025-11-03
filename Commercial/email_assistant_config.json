@@ -1,0 +1,14 @@
+{
+  "email_address": "mythara.engine@yahoo.com",
+  "outreach_label": "Mythara-Outreach",
+  "search_days_back": 7,
+  "templates": {
+    "interested": "book_call",
+    "question": "answer_question",
+    "not_interested": "polite_close"
+  },
+  "pricing": {
+    "early_adopter": 500,
+    "standard": 2500
+  }
+}

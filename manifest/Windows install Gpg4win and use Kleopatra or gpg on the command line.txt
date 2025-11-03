@@ -1,0 +1,100 @@
+### Quick answer
+Sign the file with your private PGP key using GnuPG. At a minimum run these commands from the archive root:
+
+1. Ensure your private key is present  
+2. Create an ASCII-armored detached signature  
+3. Verify the signature and checksum  
+
+Full commands and guidance below.
+
+---
+
+### 1. Confirm prerequisites and choose a key
+- Install GnuPG if you don’t have it.
+  - Linux macOS: gpg is usually available; on Debian/Ubuntu: `sudo apt-get install gnupg`  
+  - Windows: install Gpg4win and use Kleopatra or gpg on the command line
+- Decide which key you will sign with. Use an existing key or create a new one.
+
+List available keys
+```bash
+gpg --list-secret-keys --keyid-format LONG
+```
+Note the Key ID you want to use (the long form after /). Example: 0x1234ABCDEF567890
+
+If you do not have a key, create one
+```bash
+gpg --full-generate-key
+```
+Follow prompts (RSA 3072 or 4096, expiration as desired, your name/email, passphrase). The command is interactive.
+
+Export the public key to share with verifiers
+```bash
+gpg --armor --export you@example.com > signer_public_key.asc
+```
+
+---
+
+### 2. Create the detached ASCII-armored signature
+Run this from the directory containing manifest/checksums.sha256 (adjust path if needed).
+
+If you want to force a particular key
+```bash
+gpg --default-key 0xYOURKEYID --armor --detach-sign manifest/checksums.sha256
+```
+
+If you want GnuPG to pick the default key
+```bash
+gpg --armor --detach-sign manifest/checksums.sha256
+```
+
+This produces:
+- manifest/checksums.sha256.asc
+
+What the command does
+- `--armor` creates an ASCII-armored signature block suitable for text files and email  
+- `--detach-sign` makes a detached signature so the signed file remains separate
+
+---
+
+### 3. Verify the signature locally
+Import the public key to the verifying GPG keyring if needed
+```bash
+gpg --import signer_public_key.asc
+```
+
+Verify signature
+```bash
+gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256
+```
+Expected output on success
+- `gpg: Good signature from "Your Name <you@example.com>"`
+If it reports an unknown public key, import the signer's public key as shown above.
+
+Verify checksums match files listed inside
+```bash
+sha256sum -c manifest/checksums.sha256
+```
+Each checked file should print `OK`.
+
+---
+
+### 4. Common troubleshooting
+- gpg asks for your passphrase when signing. If it fails, make sure your gpg agent is running or provide the passphrase when prompted.
+- `No public key` during verify means the verifier does not have the signer's public key; share signer_public_key.asc.
+- Signature says `BAD signature` or verification fails; check you signed the intended checksums file and that the file hasn’t changed since signing.
+- On CI or scripts for unattended signing, use GPG batch options carefully and secure the private key; avoid storing an unprotected private key on build servers.
+
+Example unattended signing pattern for ephemeral CI keys is advanced and requires secure key management. Ask if you want a short example for CI.
+
+---
+
+### 5. Secure sharing and audit notes
+- Share only the public key `signer_public_key.asc` with auditors so they can verify signatures.  
+- Include these three artifacts together when shipping: `manifest/checksums.sha256`, `manifest/checksums.sha256.asc`, `signer_public_key.asc`.  
+- Keep your private key secure; consider using a hardware token such as a YubiKey for production signing.
+
+---
+
+If you want, I can:
+- Provide the exact commands to generate a new key with specific parameters, or  
+- Provide a small script that signs the file, exports the public key, and runs verification in one go.

@@ -1,0 +1,21 @@
+{
+  "successful_patterns": {
+    "unknown|unknown|medium": 3
+  },
+  "failed_patterns": {},
+  "a_b_tests": {},
+  "learned_optimizations": [
+    {
+      "pattern": "unknown|unknown|medium",
+      "success_count": 3,
+      "learned_at": "2025-11-03T02:51:00.130864",
+      "apply": true
+    }
+  ],
+  "last_model_update": null,
+  "performance_metrics": {
+    "response_rate": 1.0,
+    "call_booking_rate": 0.0,
+    "close_rate": 0.0
+  }
+}
