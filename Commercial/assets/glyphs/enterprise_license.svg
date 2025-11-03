@@ -1,0 +1,14 @@
+<!--
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Proprietary and Confidential.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Enterprise License">
+  <g fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Shield badge -->
+    <path d="M128 28c-18 12-40 20-64 24v52c0 56 44 88 64 100c20-12 64-44 64-100V52c-24-4-46-12-64-24z"/>
+    <!-- Crown -->
+    <path d="M88 96l16-12l24 16l24-16l16 12v16H88z"/>
+    <!-- Ribbon -->
+    <path d="M92 164l-12 28l28-12m56-16l12 28l-28-12"/>
+  </g>
+</svg>

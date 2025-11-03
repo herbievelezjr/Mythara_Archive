@@ -45,9 +45,10 @@ Mythara Engine is a deployed-ready inference and explainability layer that selec
 
 ## Suggested Pricing & Engagement Model
 
-- Proof-of-value pilot (4–8 weeks): scoped integration + joint validation.  
-- Tiered licensing: Development, Enterprise, Sovereign (adds escrow release terms and on-site assistance).  
-- Optional add-ons: extended audit suite, bespoke accessibility packaging, escrow unlocking support.
+- ![Pilot](./assets/glyphs/training_onboarding.svg) Proof-of-value pilot (4–8 weeks): scoped integration + joint validation.  
+- ![Enterprise License](./assets/glyphs/enterprise_license.svg) Tiered licensing: Development, Enterprise, Sovereign (adds escrow release terms and on-site assistance).  
+- ![Add-ons](./assets/glyphs/custom_clause_dev.svg) Optional add-ons: extended audit suite, bespoke accessibility packaging, escrow unlocking support.  
+- ![SSIP Audit](./assets/glyphs/ssip_audit.svg) SSIP compliance audit available on request (integrity hashing + clause fingerprints).
 
 ## Contact & Next Steps
 

@@ -1,0 +1,28 @@
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  manifest/RELEASE_MANIFEST.json
+d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2  manifest/checksums.sha256
+f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4f4  manifest/verification_report.txt
+a1b2c3d4e5f60718293a4b5c6d7e8f901234567890abcdef1234567890abcdef  tests/leakage_probe_log.csv
+
+
+
+
+...How to Generate it 
+	
+
+	Linux/macOS:
+cd mythara_archive
+find . -type f ! -name "checksums.sha256" -exec sha256sum {} \; > manifest/checksums.sha
+
+	
+
+	Windows Powershell:
+	
+Get-ChildItem -Recurse -File | Where-Object { $_.Name -ne "checksums.sha256" } | ForEach-Object {
+    $hash = Get-FileHash $_.FullName -Algorithm SHA256
+    "$($hash.Hash)  $($_.FullName)" >> .\manifest\checksums.sha256
+
+
+	signing the file
+
+gpg --armor --sign manifest/checksums.sha256
+-this creates checksums.sha.asc

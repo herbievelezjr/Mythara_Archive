@@ -99,7 +99,7 @@ The following components are proprietary and confidential:
 To obtain a production license, contact:
 
 **Herbert Velez Jr.**  
-Email: legal@mythara.engine  
+Email: Mythara.Engine@yahoo.com  
 PGP Fingerprint: `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
 
 ### Available License Tiers

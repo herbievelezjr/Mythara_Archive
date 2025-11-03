@@ -1,0 +1,13 @@
+Name,SKU,Category,Price,Track stock,Cost,Tax,Sold by weight,Barcode,Composite item,Description
+"Mythara SSIP Compliance Audit",MYTH-AUDIT-001,"Professional Services",2500,No,0,No,No,,,Single AI model validation with cryptographic proof. Includes integrity hash chain and compliance certificate.
+"Mythara Engine - Monthly",MYTH-SUB-MONTH,"SaaS Subscription",500,No,0,No,No,,,Unlimited model validations with API access and 24-hour support.
+"Mythara Engine - Annual",MYTH-SUB-YEAR,"SaaS Subscription",5000,No,0,No,No,,,Annual subscription with priority support and custom clause per quarter. Save $1000 vs monthly.
+"Mythara Enterprise License",MYTH-ENT-YEAR,Enterprise,25000,No,0,No,No,,,Full platform with on-premise deployment and unlimited custom clauses. Includes dedicated account manager.
+"Custom Clause Development",MYTH-CUSTOM-001,"Custom Development",10000,No,0,No,No,,,Domain-specific SSIP clause engineering with testing suite and 30-day support.
+"Training & Onboarding",MYTH-TRAIN-001,Training,1000,No,0,No,No,,,Live workshop with API integration and best practices guide. Includes recorded session.
+"VoIP Bot License",MYTH-VOIP-2026,"Enterprise Software",1500000,No,0,No,No,,,Full VoIP bot source code with 5 voice personas and 6 months support. Ships Q1 2026.
+"Extended Audit Suite",MYTH-ADDON-AUDIT,"Add-Ons",5000,No,0,No,No,,,Quarterly compliance audits for ongoing validation.
+"Bespoke Accessibility",MYTH-ADDON-ACCESS,"Add-Ons",3000,No,0,No,No,,,Custom braille and audio token generation.
+"Priority SLA",MYTH-ADDON-SLA,"Add-Ons",2000,No,0,No,No,,,1-hour response time guarantee.
+"Dedicated Infrastructure",MYTH-ADDON-INFRA,"Add-Ons",8000,No,0,No,No,,,Private AWS/Azure deployment.
+"Source Code Escrow Unlock",MYTH-ADDON-ESCROW,"Add-Ons",15000,No,0,No,No,,,Full source code access with rebuild rights.
