@@ -9,14 +9,17 @@ Execute via Windows Task Scheduler: Weekly Sunday 12:00 AM
 import sys
 import os
 
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add Commercial directory to path
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+COMMERCIAL_PATH = os.path.join(CURRENT_DIR, "Commercial")
+if COMMERCIAL_PATH not in sys.path:
+    sys.path.insert(0, COMMERCIAL_PATH)
 
-from core.source_proprietary.mythara_seo_bot import MytharaSEOBot
+from mythara_seo_bot import MytharaSEOMasterBot
 
 if __name__ == "__main__":
     print("Starting Mythara SEO Master Bot...")
-    bot = MytharaSEOBot()
+    bot = MytharaSEOMasterBot()
     
     # Generate weekly SEO report
     report = bot.generate_seo_report()
