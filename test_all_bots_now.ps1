@@ -47,9 +47,6 @@ foreach ($bot in $bots) {
     
     Write-Host "=" * 80 -ForegroundColor Gray
     $counter++
-    
-    # Small pause between bots
-    Start-Sleep -Seconds 1
 }
 
 Write-Host "`n" + "=" * 80 -ForegroundColor Cyan
