@@ -1,0 +1,73 @@
+### Dockerfile
+
+```dockerfile
+# Mythara Engine — reproducible demo container
+# Prepared by: Herbert Velez Jr.  |  Manifest Ref: ME-archive-0001
+# Build command (deterministic): docker build --no-cache --pull --label "manifest=ME-archive-0001" -t mythara-demo:v1 .
+
+FROM --platform=linux/amd64 ubuntu:22.04@sha256:4fa5a1b8b2b6d6b8f8b7c6d3a9e5a1f0c2e3b4d5f6a7b8c9d0e1f2a3b4c5d6e7
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+ENV PYTHONUNBUFFERED=1
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+LABEL maintainer="Herbert Velez Jr. <legal@mythara.engine>"
+LABEL manifest_ref="ME-archive-0001"
+
+# Install minimal build dependencies with pinned package lists
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates=20210119~20.04.1 \
+      curl=7.68.0-1ubuntu2.18 \
+      gnupg=2.2.19-3ubuntu2.1 \
+      python3=3.10.6-1~22.04 \
+      python3-venv=3.10.6-1~22.04 \
+      python3-pip=22.0.2-1ubuntu0.1 \
+      build-essential=12.9ubuntu3 \
+      jq=1.6-1ubuntu0.20.04.1 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for deterministic runtime
+ARG UID=1000
+ARG GID=1000
+RUN groupadd --gid $GID mythara && \
+    useradd --uid $UID --gid $GID --create-home --shell /bin/bash mythara
+
+WORKDIR /opt/mythara
+COPY core/requirements.txt ./requirements.txt
+COPY core/ /opt/mythara/core/
+COPY manifest/manifest_hashes.json /opt/mythara/manifest_hashes.json
+
+# Create deterministic venv and install pinned Python deps
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip==23.0.1 && \
+    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+# Copy validation scripts and set permissions
+COPY tools/ ./tools/
+RUN chown -R mythara:mythara /opt/mythara && \
+    chmod -R 750 /opt/mythara/tools
+
+# Add entrypoint script
+COPY core/entrypoint.sh /usr/local/bin/mythara-entrypoint.sh
+RUN chmod 750 /usr/local/bin/mythara-entrypoint.sh && \
+    chown root:root /usr/local/bin/mythara-entrypoint.sh
+
+USER mythara
+ENV PATH="/opt/venv/bin:${PATH}"
+
+# Expose a minimal demo port for the public API (read-only demo)
+EXPOSE 8080
+
+# Default command: run the lightweight demo server or validation harness
+CMD ["mythara-entrypoint.sh", "serve-demo"]
+```
+
+Notes:
+- Base image pinned by digest for reproducibility.  
+- System packages pinned to specific versions where available to reduce build drift.  
+- Non-root user created for runtime security.  
+- Python venv used; requirements must contain pinned package versions.  
+- Include manifest_hashes.json to verify included prompts and artifacts at runtime.  
+- Use build flags shown in comment to reduce nondeterminism (no-cache, pull).

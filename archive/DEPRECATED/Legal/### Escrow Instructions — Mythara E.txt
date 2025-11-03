@@ -1,0 +1,180 @@
+### Escrow Instructions — Mythara Engine (print-ready content and PDF build steps)
+
+**Prepared by:** Mythara Labs LLC  
+**Manifest Ref:** ME-archive-0001  
+**Date:** 2025-10-30
+
+---
+
+## Executive summary
+This document describes the procedures, artifacts, and acceptance checks for depositing, maintaining, and releasing the Mythara Engine escrow bundle. It is intended for the escrow agent, Licensor (Mythara Labs), and Licensee. The instructions ensure reproducibility, integrity, secure handling, and conditional release of escrowed materials.
+
+---
+
+## Parties and roles
+- **Depositor / Licensor:** Mythara Labs LLC — prepares and deposits Escrow Bundle.  
+- **Escrow Agent:** Mutually selected third-party custodian — stores, verifies, and releases artifacts according to triggers.  
+- **Beneficiary / Licensee:** Named licensee or designated sovereign entity — may request verification or release under agreed triggers.  
+- **Independent Verifier (optional):** Third-party auditor engaged to validate reproducibility on release.
+
+---
+
+## Escrow bundle contents (required)
+Place the following files and directories in the escrow container (physical media or secure cloud vault). Each item must be present, checksummed, and PGP-signed as indicated.
+
+- manifest/RELEASE_MANIFEST.json (signed)  
+- manifest/checksums.sha256 (one-line sha256 for each file)  
+- manifest/checksums.sha256.asc (ASCII-armored detached signature of checksums.sha256)  
+- verification_report.txt (signed)  
+- core/Dockerfile and core/ (source code and build context)  
+- tools/run_validation_suite.sh and tools/ (validation scripts)  
+- EXPLAINABILITY_GUIDE.md  
+- tests/ (determinism_report.txt; stress_test_log.csv; explainability_ratings.csv; accessibility_delivery_report.csv; leakage_probe_log.csv)  
+- redaction_log.txt and escrow_inventory.csv (mapping of redacted vs. escrowed items)  
+- README_ESCROW.md (rebuild and verification steps)  
+- legal/ (MSA, NDA, Pilot_SOW, Remittance instructions) — signed where applicable  
+- Optional: demo_container.tar.gz (if included; note inclusion must be explicit in Exhibit B and checksumed)  
+- signer_public_key.asc (public key corresponding to the private key used to sign checksums.sha256)
+
+All files must match entries in manifest/checksums.sha256.
+
+---
+
+## Packaging and integrity requirements
+- Produce checksums using sha256sum; manifest/checksums.sha256 must use the canonical one-line format: "<sha256>  <relative/path/to/file>" and sorted lexicographically by path.  
+- Create ASCII-armored detached signature for manifest/checksums.sha256 using the Licensor’s private PGP key (manifest/checksums.sha256.asc). Include signer_public_key.asc in the bundle.  
+- All artifacts must be stored in a single escrow container (tar.gz or signed archive) and added to the manifest with exact filenames and relative paths.  
+- Record file ownership, creation timestamps, and any deterministic build flags in manifest/RELEASE_MANIFEST.json.  
+- Avoid storing secret credentials or private keys in escrow. If private signing keys are required for future verification, store only public keys; escrow release may include additional instructions to obtain keys via secure channels if mutually agreed.
+
+---
+
+## Verification steps for escrow agent (initial deposit)
+1. Confirm receipt of escrow inventory and that files listed match files present.  
+2. Verify checksums:
+   - Import signer_public_key.asc into a temporary keyring for verification only.  
+   - Run: gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256 and confirm Good signature【signature must match depositor identity】.  
+   - Run: sha256sum -c manifest/checksums.sha256 and confirm all files return OK.  
+3. Confirm manifest/RELEASE_MANIFEST.json.manifest_id and the manifest.checksums listing align.  
+4. Validate presence of README_ESCROW.md and tools/run_validation_suite.sh. Attempt a dry-run of run_validation_suite.sh in an isolated environment if permitted by deposit policy to ensure scripts are present and runnable without secrets. Record log of dry-run results.  
+5. Timestamp the deposit, create an escrow receipt signed by the agent, and provide an indexed inventory and receipt to both Licensor and Licensee.
+
+---
+
+## Secure storage and access controls
+- Escrow agent must store artifacts in an append-only, tamper-evident system with backup copies in geographically separated locations.  
+- Access to escrowed materials requires two-party authorization for release actions (e.g., dual-signature controls) unless otherwise specified in Exhibit C.  
+- Maintain an audit log of all access attempts and administrative actions; logs must be signed and retained for the agreed retention period.
+
+---
+
+## Release triggers and procedures
+Standard release triggers (custom triggers may be defined in Exhibit C):
+
+1. **Buyout / Mutual Release:** Written instruction signed by Licensor and Licensee.  
+2. **Licensor Material Breach:** Evidence of Licensor insolvency, failure to support required Deliverables, or other contractually defined breach; requires documented claim and agent validation per Exhibit C.  
+3. **Sovereign Unlock Condition:** Specific government or sovereign verification event described in Exhibit C.  
+4. **Court Order or Compelled Disclosure:** Agent follows legal process with notice to both Parties and redaction if legally permitted.
+
+Release procedure:
+- Beneficiary or Licensor submits a release request in writing to escrow agent with the trigger justification and required supporting evidence.  
+- Escrow agent acknowledges receipt and performs verification of trigger conditions per the agreed SOW. For breach triggers, agent will request supporting evidence and may consult Independent Verifier.  
+- If conditions are met, agent performs a staged release: first provide verification artifacts (checksums, manifests, verification_report) then, if release requires, deliver the remaining escrow contents. All deliveries are logged, checksum-verified at receipt, and accompanied by the agent’s signed release confirmation.  
+- If agent determines conditions are not met, agent will deny release and provide reasoning to both Parties, including appeals process as described in Exhibit C.
+
+---
+
+## Reproducibility verification on release
+- The agent or independent verifier should attempt a rebuild using README_ESCROW.md and tools/run_validation_suite.sh in an isolated, reproducible environment (air-gapped sandbox if needed).  
+- Rebuild steps:
+  1. Verify checksums and manifest signature.  
+  2. Extract container and artifacts to a clean environment.  
+  3. Run the documented deterministic build steps (use pinned base images and build flags indicated in RELEASE_MANIFEST.json).  
+  4. Run validation scripts (determinism and reproducibility checks) and compare outputs to canonical outputs referenced in manifest/checksums.sha256.  
+- Record a reproducibility_report.txt summarizing any divergences, token-level similarity metrics, and remediation suggestions. Attach reproducibility_report.txt to the agent’s release package.
+
+---
+
+## Handling redacted internals and partial releases
+- Redacted items remain withheld except under explicit escrow unlock triggers. The redaction_log.txt in escrow_inventory.csv must map redacted filenames to escrowed originals and state any conditions for release.  
+- For partial releases (e.g., verification-only access to select artifacts), the agent provides only the agreed subset and logs the action. All partial access must follow the dual-authorization model.
+
+---
+
+## Chain-of-custody and audit trail
+- Each deposit, access, verification, or release action must generate an append-only audit record including:
+  - action_type, actor_id, timestamp (UTC), artifacts affected, and signed hash of action record.  
+- Audit records must be exportable and provided to both Parties on request.
+
+---
+
+## Escrow fees, retention, and termination
+- Fees and billing schedule for escrow services should be agreed in the Escrow SOW (Exhibit C). Typical models include annual custody fees and one-time deposit and release fees.  
+- Retention period: default retention until license termination plus 7 years, or as agreed in Exhibit C.  
+- On termination of escrow services, the agent will provide secure export of artifacts to Licensor and Licensee and confirm secure deletion from agent systems.
+
+---
+
+## Emergency procedures and incident response
+- If an escrow artifact is suspected compromised, the agent will:  
+  1. Quarantine the affected copy;  
+  2. Notify Licensor and Licensee immediately;  
+  3. Halt any release actions;  
+  4. Coordinate with Licensor to issue revised artifacts and checksums;  
+  5. Record incident and remediation in an incident report and notify all stakeholders.
+
+---
+
+## Acceptance checklist for escrow agent (summary)
+- [ ] manifest/RELEASE_MANIFEST.json present and signed  
+- [ ] manifest/checksums.sha256 present, sorted, and matches all artifacts  
+- [ ] manifest/checksums.sha256.asc verifies with signer_public_key.asc  
+- [ ] verification_report.txt present and signed  
+- [ ] README_ESCROW.md and tools/run_validation_suite.sh present and runnable (dry-run logged)  
+- [ ] redaction_log.txt and escrow_inventory.csv present and consistent with manifest  
+- [ ] signer_public_key.asc included for verification purposes  
+- [ ] Deposit receipt created, timestamped, and signed by the agent
+
+---
+
+## Contacts and escalation
+- Licensor primary contact: Herbert Velez Jr. — legal@mythara.engine  
+- Escrow agent technical contact: [Escrow Agent Contact] (to be filled)  
+- Licensee contact: [Licensee Contact] (to be filled)  
+- Emergency escalation: agent escalation procedures per Exhibit C
+
+---
+
+## Appendices
+- Appendix A — Example deposit commands and checksum generation snippet (canonical usage)
+```bash
+# from repo root
+find . -type f -print0 | sort -z | xargs -0 sha256sum | awk '{print $1 "  " $2}' > manifest/checksums.sha256
+gpg --armor --detach-sign manifest/checksums.sha256
+tar -czf escrow_deposit_ME-archive-0001_20251030.tar.gz manifest core tools tests README_ESCROW.md legal signer_public_key.asc
+sha256sum escrow_deposit_ME-archive-0001_20251030.tar.gz > escrow_deposit_ME-archive-0001_20251030.tar.gz.sha256
+gpg --armor --detach-sign escrow_deposit_ME-archive-0001_20251030.tar.gz.sha256
+```
+
+- Appendix B — Minimal README_ESCROW.md checklist (what the Licensee will run during verification)
+  - Import signer_public_key.asc  
+  - gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256  
+  - sha256sum -c manifest/checksums.sha256  
+  - Run tools/run_validation_suite.sh and compare outputs to canonical files referenced in manifest
+
+---
+
+## Build a PDF (quick)
+1. Save this content as Escrow_Instructions.md (or .html).  
+2. Convert with Pandoc:
+```bash
+pandoc Escrow_Instructions.md -o Escrow_Instructions_ME-archive-0001.pdf --pdf-engine=xelatex --variable geometry:"margin=1in"
+```
+Or create an HTML file and convert with headless Chromium:
+```bash
+chromium --headless --disable-gpu --print-to-pdf=Escrow_Instructions_ME-archive-0001.pdf Escrow_Instructions.html
+```
+
+---
+
+If you want, I can produce a ready-to-save Markdown file (Escrow_Instructions.md) or an HTML file formatted for direct PDF export. Which would you like?

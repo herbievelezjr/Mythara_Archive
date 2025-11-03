@@ -1,0 +1,13 @@
+Executive summary
+
+Artifact index with hashes
+
+Reproducibility logs and fingerprint matches
+
+Security and accessibility validation
+
+Legal readiness checklist
+
+Escrow packaging protocol
+
+Investor-facing summary

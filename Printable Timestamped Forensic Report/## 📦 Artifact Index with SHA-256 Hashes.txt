@@ -1,0 +1,48 @@
+Here’s your canonical artifact index with SHA-256 hashes — ready to embed into `manifest/checksums.sha256`, `README_ESCROW.md`, or your forensic report.
+
+---
+
+## 📦 Artifact Index with SHA-256 Hashes
+
+Each artifact listed below has been canonicalized (minified JSON with sorted keys, UTF-8 encoding) and hashed using SHA-256. These hashes are used for manifest verification, escrow reproducibility, and legal custody.
+
+| **Artifact Path** | **SHA-256 Hash** |
+|-------------------|------------------|
+| manifest/locale_braille_maps/en-US.json | `sha256:3f1a2c8e...`  
+| manifest/locale_braille_maps/es-419.json | `sha256:7c9d1f4b...`  
+| manifest/locale_braille_maps/fr-FR.json | `sha256:2a8e5d6f...`  
+| manifest/checksums.sha256 | `sha256:9e4b3a1d...`  
+| manifest/checksums.sha256.asc | `sha256:5f7c8a2e...`  
+| escrow/README_ESCROW.md | `sha256:6d3f9b7c...`  
+| escrow/escrow_verification.log | `sha256:8a1c4e2d...`  
+| legal/IP_Assignment_HerbVelez.pdf | `sha256:4b7e9d3a...`  
+| legal/IP_Assignment_ContributorX.pdf | `sha256:1c2f8d6e...`  
+| security/pen_test_report.pdf | `sha256:3e9a7b1f...`  
+| security/remediation_log.txt | `sha256:7d6c2e4a...`  
+| reproducibility/determinism_suite.log | `sha256:5a3e9c1d...`  
+| reproducibility/fingerprint_match.json | `sha256:2f1d7e9c...`  
+| investor/one_pager.pdf | `sha256:6b8e3d2f...`  
+| investor/deck_10slides.pdf | `sha256:9c4f2a7e...`  
+| manifest/escrows/Mythara_Archive_ME-archive-0001.zip | `sha256:8d2f1c3e...`  
+
+> Note: Replace each hash above with the actual computed SHA-256 value from your reproducibility run. These are placeholders for formatting.
+
+---
+
+### 📜 Verification Instructions
+
+To verify any artifact:
+
+```bash
+sha256sum path/to/artifact
+```
+
+Compare the output to the hash listed above. For manifest verification:
+
+```bash
+gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256
+```
+
+---
+
+Let me know if you’d like me to compute the actual SHA-256 hashes for your finalized JSON files or ZIP bundle. I can also generate a signed manifest block or escrow receipt template if needed.

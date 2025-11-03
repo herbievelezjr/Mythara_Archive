@@ -1,0 +1,60 @@
+### Mutual Non-Disclosure Agreement (Short Form)
+
+Prepared by: Mythara Labs LLC  
+Manifest Ref: ME-archive-0001  
+Date: 2025-10-30
+
+1. Parties  
+   - Discloser: the party disclosing Confidential Information.  
+   - Recipient: the party receiving Confidential Information.  
+   - Each a “Party”; together the “Parties”.
+
+2. Purpose  
+   - The Parties will evaluate and/or negotiate a potential business relationship concerning the Mythara Engine and related artifacts (the “Purpose”).
+
+3. Definition of Confidential Information  
+   - “Confidential Information” means non-public business, technical, financial, and legal information disclosed in any form by Discloser to Recipient, including but not limited to: prototypes, software, specifications, test data, manifests, prompt templates, redaction logs, audit artifacts, pricing, and contract terms.  
+   - Confidential Information does not include information that Recipient can show by competent proof: (a) is or becomes publicly known through no breach by Recipient; (b) was rightfully in Recipient’s possession before disclosure; (c) is rightfully received from a third party free of confidentiality obligations; or (d) is independently developed by Recipient without using Discloser’s Confidential Information.
+
+4. Confidentiality Obligations  
+   - Recipient will: (a) use Confidential Information solely for the Purpose; (b) restrict disclosure to its employees, contractors, and advisors with a need-to-know who are bound by confidentiality obligations at least as protective as this Agreement; (c) protect Confidential Information using at least the same degree of care it uses to protect its own confidential information, but no less than reasonable care; (d) not reverse engineer, decompile, or disassemble any software or redacted internals received.
+
+5. Permitted Disclosures  
+   - Recipient may disclose Confidential Information to the extent compelled by law or valid order of a court or governmental authority, provided Recipient gives prompt written notice and cooperates with Discloser to seek protective measures or redaction.
+
+6. Term and Return/Destruction  
+   - Term: Confidentiality obligations apply for three (3) years from the date of disclosure (or such longer period as required by applicable law for trade secrets).  
+   - Upon written request or termination of discussions, Recipient will return or certify destruction of all Confidential Information and copies, except one archival copy may be retained solely for legal or regulatory compliance.
+
+7. No License or Transfer  
+   - All Confidential Information remains the sole property of Discloser. No license, implied or otherwise, is granted under any patent, copyright, trademark, or other IP right by the disclosure.
+
+8. Remedies and Equitable Relief  
+   - Recipient acknowledges that unauthorized disclosure may cause irreparable harm. Discloser is entitled to seek injunctive relief and any other remedies available at law or in equity, in addition to damages.
+
+9. Disclaimer and Limitation of Liability  
+   - CONFIDENTIAL INFORMATION IS PROVIDED “AS IS.” EXCEPT FOR THE PURPOSES SET FORTH HEREIN, DISCLOSER MAKES NO WARRANTIES. NEITHER PARTY WILL BE LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING FROM THE OTHER PARTY’S USE OF CONFIDENTIAL INFORMATION, EXCEPT FOR WILLFUL MISCONDUCT.
+
+10. Miscellaneous  
+   - Governing Law: [insert jurisdiction].  
+   - Assignment: Neither Party may assign this Agreement without the other Party’s prior written consent except to an affiliate or in connection with a sale of substantially all assets.  
+   - Entire Agreement: This Agreement constitutes the entire understanding between the Parties concerning confidentiality and supersedes prior communications on the same subject.  
+   - Counterparts and Electronic Signatures: This Agreement may be executed in counterparts and by electronic signature.
+
+11. Signatures
+
+Discloser: Mythara Labs LLC  
+By: ____________________________  
+Name: Herbert Velez Jr.  
+Title: Founder & Product Owner  
+Date: ___________________________
+
+Recipient: [Licensee Legal Name]  
+By: ____________________________  
+Name: __________________________  
+Title: ___________________________  
+Date: ___________________________
+
+Contact for Notices (Licensor): legal@mythara.engine
+
+— End of Mutual NDA (Short Form) —

@@ -1,0 +1,10 @@
+%echo Generating a GPG key for Mythara Engine
+Key-Type: RSA
+Key-Length: 4096
+Name-Real: Mythara Engine
+Name-Email: Mythara.Engine@yahoo.com
+# Recommended expiry: 1 year to limit exposure and force rotation after initial use
+Expire-Date: 1y
+Passphrase: MytharaEngine1
+%commit
+%echo done

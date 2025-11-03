@@ -1,0 +1,104 @@
+### CI workflow: locale-braille-smoke-tests.yml
+
+```yaml
+name: Locale Braille Smoke Tests & Manifest Verification
+
+on:
+  push:
+    paths:
+      - 'manifest/locale_braille_maps/**'
+      - 'core/**'
+      - '.github/workflows/locale-braille-smoke-tests.yml'
+  pull_request:
+    paths:
+      - 'manifest/locale_braille_maps/**'
+      - 'core/**'
+
+jobs:
+  locale-smoke-and-manifest-check:
+    name: Run locale encoding smoke tests and verify manifest checksums
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[test] || pip install -e .
+          pip install pytest
+
+      - name: Run locale braille unit tests
+        working-directory: .
+        run: |
+          pytest -q core/tests/test_locale_braille.py
+
+      - name: Compute expected checksums for manifest locale maps
+        id: checksums
+        run: |
+          set -euo pipefail
+          MANIFEST_DIR=manifest/locale_braille_maps
+          TMPFILE=$(mktemp)
+          # compute canonicalized JSON (minified, sorted keys) then sha256 for each file
+          for f in "$MANIFEST_DIR"/*.json; do
+            fname=$(basename "$f")
+            python - <<PY > "$TMPFILE"
+import json,sys,hashlib
+p = sys.argv[1]
+with open(p,'r',encoding='utf-8') as fh:
+    obj = json.load(fh)
+canon = json.dumps(obj, separators=(',', ':'), sort_keys=True, ensure_ascii=False).encode('utf-8')
+print(hashlib.sha256(canon).hexdigest(), p)
+PY
+"$f"
+            done > computed_checksums.txt
+          # Format into manifest-style lines: sha256:hex  path
+          awk '{print "sha256:"$1"  "$2}' computed_checksums.txt > computed_checksums_formatted.txt
+          cat computed_checksums_formatted.txt
+          echo "::set-output name=checksums_file::computed_checksums_formatted.txt"
+
+      - name: Verify computed checksums against manifest/checksums.sha256
+        run: |
+          set -euo pipefail
+          # ensure manifest/checksums.sha256 exists
+          if [ ! -f manifest/checksums.sha256 ]; then
+            echo "manifest/checksums.sha256 not found" >&2
+            exit 2
+          fi
+          # filter only the locale files lines from manifest/checksums.sha256
+          grep 'manifest/locale_braille_maps/' manifest/checksums.sha256 > manifest_locale_checksums.txt || true
+          if [ ! -s manifest_locale_checksums.txt ]; then
+            echo "No locale_braille_maps entries found in manifest/checksums.sha256" >&2
+            exit 2
+          fi
+          # normalize whitespace for comparison
+          sed -E 's/[[:space:]]+/  /g' manifest_locale_checksums.txt | sort > manifest_locale_sorted.txt
+          sed -E 's/[[:space:]]+/  /g' computed_checksums_formatted.txt | sort > computed_locale_sorted.txt
+          echo "Manifest entries:"
+          cat manifest_locale_sorted.txt
+          echo "Computed entries:"
+          cat computed_locale_sorted.txt
+          if ! diff -u manifest_locale_sorted.txt computed_locale_sorted.txt; then
+            echo "Locale manifest checksum mismatch: computed checksums differ from manifest/checksums.sha256" >&2
+            exit 3
+          fi
+          echo "Locale manifest checksums match."
+
+      - name: Success summary
+        run: echo "Locale encoding smoke tests passed and manifest locale checksums verified."
+```
+
+### Notes and integration
+- Place this file at .github/workflows/locale-braille-smoke-tests.yml in your Mythara_Archive repo.  
+- The job runs pytest for the locale braille tests, computes canonical SHA-256 of each JSON map (canonicalized: minified with sorted keys), and compares those checksums against lines in manifest/checksums.sha256 that reference manifest/locale_braille_maps/.  
+- If manifest/checksums.sha256 is missing or any checksum differs, the job fails with a clear error code and diff output for debugging.  
+- Adjust Python version, test paths, or pip extras to match your repository layout and CI environment.

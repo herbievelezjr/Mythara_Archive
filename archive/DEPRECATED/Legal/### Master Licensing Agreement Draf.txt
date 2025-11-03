@@ -1,0 +1,161 @@
+### Master Licensing Agreement Draft
+
+**Prepared by:** Mythara Labs LLC  
+**Manifest Ref:** ME-archive-0001  
+**Draft Date:** 2025-10-30
+
+# Parties and Purpose
+This Master Licensing Agreement (“Agreement”) is entered into as of the Effective Date stated in the signature block, by and between Mythara Labs LLC, a [jurisdiction] limited liability company with a principal place of business at [address] (“Licensor”), and the licensee identified in the signature block (“Licensee”). The purpose of this Agreement is to license the Mythara Engine software, related artifacts, documentation, and services (collectively, the “Deliverables”) under the terms set forth below for commercial, evaluation, or sovereign deployment uses.
+
+# Definitions and Scope
+- Definitions
+  - “Deliverables” means the software, APIs, documentation, test artifacts, manifests, signed checksums, and other materials described in Exhibit A.
+  - “API Surface” means the public-facing endpoints and observables documented in API_SPEC_PUBLIC.md.
+  - “Redacted Internals” means proprietary prompt templates, BR internals, and other items listed as REDACTED in redaction_log.txt.
+  - “Escrow Bundle” means the artifacts, redacted or unredacted as required by the Escrow Terms, placed with the mutually agreed escrow agent.
+  - “Sovereign Deployment” means Licensee’s deployment in an air-gapped, government, or classified environment subject to special release terms.
+  - “Effective Date” means the date the last Party signs this Agreement.
+- Scope
+  - This Agreement governs Licensee’s use of the Deliverables for the License Term and pursuant to the selected Tier defined in Exhibit B (Pricing Tiers).
+
+# License Grant, Restrictions, and Delivery
+- License Grant
+  - Subject to Licensee’s timely payment of Fees and compliance with this Agreement, Licensor grants Licensee a non-exclusive, non-transferable (except as permitted in Section Transfer below), worldwide license to use the Deliverables for internal operation and end-user interactions as specified in the selected Tier.
+  - For Sovereign Tier, Licensor grants a deployable package and escrowed release conditions for air-gapped rebuilds.
+- Deliverables and Access
+  - Licensor will deliver: (a) signed RELEASE_MANIFEST.json; (b) manifest/checksums.sha256 and manifest/checksums.sha256.asc; (c) verification_report.txt; (d) core/Dockerfile and tools; (e) redaction_log.txt; (f) EXPLAINABILITY_GUIDE.md and API_SPEC_PUBLIC.md; (g) tests/ delivery artifacts; and (h) any prebuilt container artifacts if included per Exhibit B.
+- Restrictions
+  - Licensee shall not (i) copy, reverse engineer, decompile, or disassemble Redacted Internals; (ii) remove, alter, or obscure Licensor’s notices or signatures; (iii) use the Deliverables to create a competing product for direct resale without a separate license.
+  - Licensee may not sublicense any rights except as provided in Transfer and Permitted Subcontracting below.
+- Transfer and Permitted Subcontracting
+  - Transfer only permitted to an affiliate or in connection with a sale of substantially all assets with prior written notice to Licensor and subject to assumption of obligations. Subcontractors may be engaged when necessary; Licensee remains responsible for compliance.
+
+# Fees, Payment, and Remittance
+- Fees and Invoicing
+  - Fees payable as set forth in Exhibit B. Unless otherwise agreed, fees are invoiced: 50% due on signing, remaining 50% due upon delivery of escrowed artifacts and verification acceptance.
+- Payment Terms
+  - Payments due Net 30. Late payments incur 1.5% monthly interest or the maximum lawful rate.
+- Remittance
+  - Payment instructions and remittance contact are provided in remittance_block.txt. Licensee must confirm wire or ACH details before transmitting funds.
+- Taxes
+  - Licensee is responsible for taxes on the license fee (excluding Licensor’s income taxes). Withholding taxes require prior written notice and documentation.
+
+# Escrow, Redaction, and Reproducibility
+- Escrow Deposit
+  - On execution, Licensor shall deposit the agreed Escrow Bundle with the mutually selected escrow agent within the period set in Exhibit C.
+- Escrow Unlock Triggers
+  - Standard unlock triggers: (a) agreed buyout; (b) material breach by Licensor as defined in Escrow SOW; (c) insolvency; (d) mutually agreed sovereign deployment trigger. Specific trigger definitions and verification procedures are in Exhibit C.
+- Redaction and Release Policy
+  - Redacted Internals remain withheld except under escrow unlock triggers or explicit written license terms. Release processes require escrow agent confirmation and dual-signature release instructions or other conditions in Exhibit C.
+- Reproducibility and Verification
+  - Licensor will provide verification scripts (e.g., run_validation_suite.sh), checksums, and signed manifests. Licensee may run independent reproducibility tests and may retain a third-party auditor to verify builds; auditor access limited to artifacts permitted by this Agreement and escrow terms.
+
+# Security, Data, and Privacy
+- Security Obligations
+  - Licensor will maintain reasonable security measures for Deliverables and will provide security summary and test artifacts (leakage_probe_log.csv, safety_corpus_log.csv).
+  - Licensee will implement reasonable security controls when deploying the Deliverables and will not intentionally attempt to extract Redacted Internals.
+- Data Handling
+  - If Deliverables process Licensee data, parties will handle such data per the Data Processing Addendum (DPA) attached when applicable. Licensee remains the controller of its data.
+- Incident Response
+  - Parties will notify each other of security incidents materially affecting the Deliverables or production systems within the timelines specified in Exhibit D and cooperate in mitigation.
+
+# Warranties, Disclaimers, and Liability
+- Mutual Representations
+  - Each Party represents it has the full authority to enter this Agreement.
+- Limited Warranty
+  - Licensor warrants that it has the right to license the Deliverables and that, to Licensor’s knowledge, the Deliverables do not knowingly infringe third-party IP. Licensor does not warrant results, specific performance thresholds beyond those expressly documented as guaranteed in Exhibit E.
+- Performance and Validation
+  - Validation metrics published (e.g., determinism_report.txt, stress_test_log.csv) are sample results validated under documented test conditions; they do not guarantee identical outcomes in all customer environments.
+- Disclaimer
+  - EXCEPT FOR THE LIMITED WARRANTY ABOVE, THE DELIVERABLES ARE PROVIDED “AS IS.” LICENSOR DISCLAIMS ALL OTHER WARRANTIES, EXPRESS OR IMPLIED.
+- Limitation of Liability
+  - IN NO EVENT WILL EITHER PARTY’S AGGREGATE LIABILITY EXCEED THE TOTAL AMOUNTS PAID BY LICENSEE UNDER THIS AGREEMENT IN THE PRIOR 12 MONTHS. LIABILITY FOR BODILY INJURY, DEATH, OR WILLFUL MISCONDUCT IS EXCEPTED. CONSEQUENTIAL, INCIDENTAL, OR SPECIAL DAMAGES ARE DISCLAIMED TO THE MAXIMUM EXTENT PERMITTED BY LAW.
+
+# Confidentiality and Publicity
+- Confidential Information
+  - “Confidential Information” includes non-public business and technical information, Redacted Internals, pricing, and all artifacts marked CONFIDENTIAL. Each Party will protect Confidential Information with at least the same care as its own confidential information (no less than reasonable care).
+- Exclusions
+  - Information becomes non-confidential if publicly available through no breach, independently developed, or lawfully received from a third party without obligation of confidentiality.
+- Compelled Disclosure
+  - Compelled disclosures require prompt notice and opportunity for protective order or to seek redaction. Disclosures of signatures, manifests, and checksums required for audit are permitted per the Escrow and Verification sections.
+- Publicity
+  - Neither Party will use the other’s name or trademarks without prior written consent, except as mutually agreed for case studies or press releases.
+
+# Audit, Explainability, and Compliance
+- Audit Rights
+  - Licensee may audit Licensor-delivered artifacts for compliance with this Agreement and the manifest; Licensor will provide documentation, verification logs, and reasonable access to support audits. Audits not to exceed one (1) per 12 months absent material concern and require reasonable notice and confidentiality protections.
+- Explainability and Observables
+  - Licensor will continue to provide the public API observables and EXPLAINABILITY_GUIDE.md. Redacted prompt templates and internal scaffolds remain protected but are reproducible under escrow release conditions.
+- Regulatory Compliance
+  - Each Party will comply with applicable laws and regulations. For Sovereign Tier, additional export, import, and government compliance requirements may apply and are documented in Exhibit F.
+
+# Term, Termination, and Post-Termination
+- Term
+  - The Agreement commences on the Effective Date and continues for the initial license term set in Exhibit B and renews per the renewal terms therein.
+- Termination for Cause
+  - Either Party may terminate for material breach if not cured within 30 days after written notice. Termination for insolvency or bankruptcy may occur immediately.
+- Effects of Termination
+  - Upon termination, Licensee will cease use of the Deliverables unless an escrow unlock permits continued use. Sections concerning Fees (for accrued obligations), Confidentiality, IP, Limitation of Liability, and Escrow survive termination.
+- Return or Destruction
+  - Unless otherwise required by escrow release, Licensee will destroy or return Licensor confidential materials within 30 days and certify destruction.
+
+# Intellectual Property and Rights
+- Ownership
+  - Licensor retains all rights, title, and interest in the Deliverables and all enhancements, modifications, and derivative works, except Licensee’s pre-existing data and materials.
+- Feedback
+  - Licensee grants Licensor a royalty-free, worldwide license to use feedback for product improvement.
+- Contributor and Third-Party IP
+  - Licensor represents it has procured necessary third-party licenses for bundled components; third-party terms are listed in Exhibit G.
+
+# Indemnification
+- Licensor Indemnity
+  - Licensor will indemnify Licensee against third-party IP infringement claims for the Deliverables as delivered, subject to Licensee providing prompt notice and cooperation.
+- Licensee Indemnity
+  - Licensee will indemnify Licensor for claims arising from Licensee data, misuse, or unauthorized redistribution.
+- Remedies
+  - Parties’ remedies are limited to repair, replacement, or, if unavailable, refund of fees paid for the infringing Deliverable.
+
+# Miscellaneous
+- Notices
+  - Notices to Licensor and Licensee addresses appear in the signature block and will be effective upon delivery by email with confirmed receipt or by overnight courier.
+- Assignment
+  - No assignment except as permitted in Transfer above without the other Party’s prior consent not to be unreasonably withheld.
+- Governing Law and Dispute Resolution
+  - Governing law: [State/Country]. Parties will first attempt to resolve disputes by good-faith negotiation, then by binding arbitration in [venue] under [arbitration rules], except injunctive relief may be sought in courts of competent jurisdiction.
+- Entire Agreement; Amendment
+  - This Agreement, Exhibits, and mutually executed SOWs constitute the entire agreement and supersede prior agreements. Amendments must be in writing and signed by authorized representatives.
+- Counterparts and Electronic Signatures
+  - Agreement may be executed in counterparts and by electronic signature; counterparts together constitute one instrument.
+
+# Exhibits (described; include attached files in the final package)
+- Exhibit A — Deliverables Inventory (detailed file list and locations within archive)
+- Exhibit B — Pricing Tiers, Fees, Payment Schedule, and Included Artifacts per Tier
+- Exhibit C — Escrow Statement of Work, Agent, Unlock Triggers, and Release Procedures
+- Exhibit D — Incident Response SLAs and Notification Timelines
+- Exhibit E — Guaranteed Performance Metrics (if any) and Test Conditions
+- Exhibit F — Sovereign Deployment Compliance Requirements
+- Exhibit G — Third-Party Components and Open Source Notices
+
+# Signature Block
+IN WITNESS WHEREOF, the Parties have executed this Master Licensing Agreement as of the Effective Date.
+
+Licensor: Mythara Labs LLC  
+By: ________________________________  
+Name: Herbert Velez Jr.  
+Title: Founder & Product Owner  
+Date: _______________________________
+
+Licensee: [Licensee Legal Name]  
+By: ________________________________  
+Name: ______________________________  
+Title: _______________________________  
+Date: _______________________________
+
+Contact for Notices (Licensor): legal@mythara.engine  
+Contact for Billing (Licensor): billing@mythara.engine
+
+---
+
+If you want, I can:
+- Convert this draft into a printer-ready PDF layout (Markdown → Pandoc instructions and a sample command), or  
+- Expand any Exhibit (for example: produce Exhibit C — Escrow SOW with detailed unlock criteria and verification steps).

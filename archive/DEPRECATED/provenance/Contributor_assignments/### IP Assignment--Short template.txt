@@ -1,0 +1,122 @@
+### Response scope
+I won’t create or forge signed documents. Below are ready-to-copy, legally framed IP assignment templates, signature blocks, witness/notary blocks, and an operational checklist you can use to collect valid signatures from collaborators (e-sign or in-person notarization). Use these with your legal counsel before execution.
+
+---
+
+### IP Assignment — short template
+```text
+INTELLECTUAL PROPERTY ASSIGNMENT AGREEMENT
+
+This Intellectual Property Assignment Agreement ("Agreement") is made as of [Date] between:
+Assignor: [Collaborator Full Name], Address: [Address]
+Assignee: Mythara Labs LLC, Address: [Address]
+
+1. Assignment. Assignor hereby assigns to Assignee all right, title and interest in and to all intellectual property, including but not limited to copyrights, inventions, designs, know‑how, trade secrets, and moral rights, created, developed, or contributed by Assignor, whether alone or with others, relating to the project identified as "Mythara Engine" and manifest reference ME-archive-0001 (the "Work"), during the period [start date] to [end date or "ongoing"].
+
+2. Consideration. In consideration for this assignment, Assignee shall provide [describe consideration: payment, equity, credit, etc.], receipt of which Assignor hereby acknowledges.
+
+3. Waiver of Moral Rights. To the extent permitted by law, Assignor waives any moral rights in the Work and grants Assignee the right to alter, adapt, publish, or otherwise exploit the Work.
+
+4. Representations and Warranties. Assignor represents that (a) the Work is original to Assignor or properly licensed to Assignor, (b) Assignor has full authority to assign the Work, and (c) assignment does not violate rights of third parties.
+
+5. Further Assurances. Assignor agrees to execute documents and perform acts reasonably required to effectuate this assignment (including assignment affidavits and inventor’s declarations).
+
+6. Governing Law. This Agreement is governed by the laws of [State/Country]. Venue for disputes: [county/state].
+
+7. Entire Agreement. This Agreement constitutes the entire agreement between the parties regarding the subject matter.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.
+```
+
+---
+
+### Signature block (for collaborator)
+```text
+Assignor:
+____________________________________
+[Full Name Printed]
+Signature: __________________________
+Date: _____________________________
+
+Assignee:
+Mythara Labs LLC
+By: __________________________________
+Name: [Authorized Representative]
+Title: [Title]
+Signature: __________________________
+Date: _____________________________
+```
+
+---
+
+### Optional witness / notary block
+```text
+Witnessed by:
+Name: _____________________________
+Signature: _________________________
+Date: _____________________________
+
+State of _______________ )
+County of _____________ ) ss.
+
+On this ____ day of __________, 20__, before me, a Notary Public, personally appeared [Name(s)], proved to me on the basis of satisfactory evidence to be the person(s) whose name(s) is/are subscribed to this instrument, and acknowledged to me that they executed the same.
+
+Notary Public Signature: ____________________
+Printed Name: ______________________________
+My commission expires: _____________________
+(Seal)
+```
+
+---
+
+### Assignment addenda (pick as needed)
+- Inventor/Contributor Schedule: attach a one‑page schedule listing collaborator contributions, dates, and brief description of each contribution (clause_id, prompt_name, file references).
+- Consideration Exhibit: specify payment terms, milestone schedule, or equity schedule.
+- Moral Rights Assignment Rider: language mapped to jurisdiction-specific waiver form.
+
+---
+
+### Operational checklist to collect valid signatures
+- Decide signature method: (A) in-person notarized wet signatures, or (B) reputable e-sign (DocuSign, Adobe Sign, HelloSign). Prefer HSM/e‑signature provider with audit trail.
+- Prepare one executed copy per party; store master in encrypted, access‑controlled repository.
+- Require government ID check for external collaborators when notarizing or using e-sign KYC.
+- Record metadata: timestamp (UTC), signer IP (for remote e-sign), signer email, signer verification method, document hash (sha256) and detached signature if available.
+- Canonicalize and record: before signing, canonicalize final PDF (flatten fields), compute SHA-256, and record hash in RELEASE_MANIFEST.json and escrow bundle.
+- Notarization: if notarized, capture notarization affidavit, notary seal image, and notary commission details; store signed PDF and notarization metadata.
+- Witnessing: if witness signatures used, capture witness name, contact, and relationship to signer.
+- Retention: store original signed documents in write-once or immutability-tier storage; retain copies in legal folder and in escrow with dual-signature release controls.
+- Post-signing verification: run signature verification on e-sign logs, verify PDF flattening, verify checksum matches recorded manifest hash, and log verification artifact to audit_chain.
+
+---
+
+### Sample email to request collaborator signature
+```text
+Subject: Request to Execute IP Assignment for Mythara Engine (ME-archive-0001)
+
+Hi [Name],
+
+Thank you for your contributions to Mythara Engine. Please review, sign, and return the attached IP Assignment Agreement (ME-archive-0001). We prefer electronic signing via [DocuSign/Adobe Sign]—I will send the document to your email for verification.
+
+If you prefer in-person notarization, let me know and we will arrange a time. After signature, we will record the document hash (SHA‑256) in our release manifest and provide you a signed copy.
+
+Regards,
+[Your Name]
+[Title]
+Mythara Labs LLC
+```
+
+---
+
+### Quick technical steps to anchor signed file into manifest and escrow
+- Flatten signed PDF → compute SHA-256:
+  - sha256sum Signed_IP_Assignment_[Name].pdf
+- Add entry to manifest/checksums.sha256:
+  - sha256hex  path/to/Signed_IP_Assignment_[Name].pdf
+- Sign updated checksums file with your signing key and include detached signature in manifest.
+- Archive signed PDFs into escrow bundle and record their checksums and verification steps in escrow README.
+
+---
+
+If you want, I can:
+- produce a filled draft with collaborator names and contribution schedule (I will not produce signatures), or
+- format these templates into a single printable PDF-ready Markdown file for you to send to collaborators.

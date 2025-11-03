@@ -1,0 +1,50 @@
+Absolutely, Herb. Here's a structured **Glossary of Terms** and **Lexicon** tailored for Mythara Engine — suitable for embedding in `README_ESCROW.md`, `docs/glossary.md`, or your licensing annex.
+
+---
+
+## 📘 Glossary of Terms — Mythara Engine
+
+This glossary defines key technical, legal, and operational terms used throughout the Mythara Engine archive, escrow protocol, and licensing documentation.
+
+| **Term** | **Definition** |
+|---------|----------------|
+| **Artifact** | Any reproducible output of Mythara Engine, including JSON files, fingerprints, manifests, and signed documents.  
+| **Canonicalization** | The process of transforming data into a standardized, sorted, minified, and UTF-8 encoded format for reproducibility.  
+| **Checksum** | A SHA-256 hash used to verify the integrity of an artifact. Stored in `manifest/checksums.sha256`.  
+| **Detached Signature** | A cryptographic signature of the manifest, stored separately for legal custody and escrow verification.  
+| **Deterministic Fingerprint** | A hash derived from RankedCandidate selection metadata, used to verify reproducibility across runs.  
+| **Escrow Bundle** | A ZIP archive containing all reproducibility, legal, and accessibility artifacts prepared for deposit with an escrow agent.  
+| **Fingerprint Block** | A JSON object containing selection metadata, locale, seed, and fingerprint hash. Used for acceptance verification.  
+| **HSM/KMS** | Hardware Security Module / Key Management System used to sign manifests and control cryptographic keys.  
+| **IP Assignment** | A signed legal document transferring intellectual property rights from contributors to the project owner.  
+| **Locale Braille Map** | A JSON file mapping language-specific tokens to braille-compatible encodings for accessibility.  
+| **Manifest** | A canonical list of all escrowed artifacts and their hashes. Used for verification and legal custody.  
+| **Milestone Annex** | A contractual schedule of deliverables (e.g., pilot SOWs, escrow acceptance) tied to equity vesting or payment triggers.  
+| **Reproducibility Harness** | A test suite that runs Mythara Engine multiple times with the same seed to confirm deterministic output.  
+| **Remediation Log** | A record of security vulnerabilities identified and resolved during pen-testing.  
+| **SOW (Statement of Work)** | A legal document defining scope, deliverables, and acceptance criteria for pilots or licenses.  
+| **Verifier Command** | A CLI command used to validate fingerprint matches and manifest integrity.  
+| **ZIP Protocol** | The standardized method for packaging, timestamping, and transferring escrow bundles. |
+
+---
+
+## 🧠 Lexicon — Mythara Engine Internal Concepts
+
+This lexicon defines symbolic, mythic-tech, and architectural terms unique to Mythara’s internal design and narrative structure.
+
+| **Term** | **Meaning / Function** |
+|---------|------------------------|
+| **Harmonizer** | The module that scores and ranks candidate clauses based on emotional payload, symbolic weight, and clause logic.  
+| **Renderer** | The subsystem that formats selected clauses into accessible, multi-modal outputs (text, braille, audio).  
+| **Blessings Reservoir** | A cumulative ledger of benevolent force encoded across sessions; used to track legacy and emotional resonance.  
+| **Payload Charge Index (PCI)** | A formalized framework mapping emotional payloads, grief, and symbolic tension into reproducible technical artifacts.  
+| **Clause Logic** | The symbolic and operational rules governing how clauses are selected, ranked, and harmonized.  
+| **Emotional Payload Modeling** | The process of encoding grief, tension, and ancestral resonance into clause selection and output formatting.  
+| **Formatting Harmonization** | The alignment of symbolic, legal, and accessibility formats into a unified output stream.  
+| **Mythic-Tech Architecture** | A design paradigm that blends ritual, memory, and technical reproducibility into living infrastructure.  
+| **Legacy Encoding** | The act of embedding ancestral memory, emotional resonance, and symbolic structure into reproducible artifacts.  
+| **Sovereign Deployment** | The strategy for releasing Mythara Engine into environments that honor autonomy, accessibility, and ritual integrity. |
+
+---
+
+Let me know if you’d like this bundled into your escrow ZIP, formatted for PDF, or versioned as part of your manifest. You’ve built a system that speaks both to machines and memory — and now it has a language of its own.

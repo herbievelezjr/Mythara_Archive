@@ -1,0 +1,62 @@
+### Notarized Timestamp — content and PDF build instructions
+
+#### Document content (copy into Notarized_Timestamp.md)
+```markdown
+# Notarized Timestamp
+
+Document Title: Notarized Timestamp for ME-archive-0001  
+Subject: Canonical release artifacts deposit verification and notarized timestamping  
+Manifest Reference: ME-archive-0001  
+Timestamp (UTC): 2025-10-30T02:00:00Z  
+Verifier: ops-verify-001 (Mythara Labs LLC)  
+Verifier Key (public): signer_public_key.asc
+
+Artifacts covered:
+- manifest/RELEASE_MANIFEST.json (checksum listed in manifest/checksums.sha256)
+- manifest/checksums.sha256 and manifest/checksums.sha256.asc
+- prompt_hashes_manifest.json
+- escrow verification bundle: escrow_verification/ME-archive-0001/20251030/
+
+Canonical digest summary (SHA-256):
+- manifest/checksums.sha256: sha256:manifest_checksums_hash_placeholder
+- prompt_hashes_manifest.json: sha256:prompthashes_manifest_hash_placeholder
+- escrow bundle archive (tar.gz): sha256:escrow_bundle_hash_placeholder
+
+Notarization statement:
+I, ops-verify-001, attest that on 2025-10-30T02:00:00Z (UTC) I verified the listed artifacts against the provided checksums and signatures, and reproduced canonical outputs per README_ESCROW.md procedures. Signature and verification artifacts are attached or available in the escrow verification folder.
+
+Verification artifacts:
+- gpg verification log: gpg_verify.log
+- checksum verification: sha256_check.log
+- reproducibility report: reproducibility_report.txt
+- container build log: container_build_log.txt
+
+Verifier signature block (ASCII-armored GPG detached signature)
+-----BEGIN PGP SIGNATURE-----
+
+[verifier detached signature placeholder]
+-----END PGP SIGNATURE-----
+
+End of notarized timestamp document.
+```
+
+---
+
+### Quick steps to produce a signed PDF (recommended)
+1. Save the content above to Notarized_Timestamp.md.  
+2. Create a detached GPG signature (replace keyring/use your signer):
+```bash
+gpg --output Notarized_Timestamp.md.sig --detach-sign Notarized_Timestamp.md
+```
+3. Convert Markdown to PDF with Pandoc:
+```bash
+pandoc Notarized_Timestamp.md -o Notarized_Timestamp.pdf --pdf-engine=xelatex --variable geometry:"margin=1in"
+```
+4. Package PDF and detached signature for notarized delivery:
+```bash
+tar -czf notarized_timestamp_package_ME-archive-0001.tar.gz Notarized_Timestamp.pdf Notarized_Timestamp.md Notarized_Timestamp.md.sig
+sha256sum notarized_timestamp_package_ME-archive-0001.tar.gz > notarized_timestamp_package_checksums.sha256
+gpg --detach-sign notarized_timestamp_package_checksums.sha256
+```
+
+If you want, I can: (A) fill the placeholder digests with values from your artifacts if you provide them, or (B) generate a ready-to-download notarized PDF for the current document content. Which do you prefer?

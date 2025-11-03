@@ -1,0 +1,106 @@
+### Penetration Test Summary
+
+#### Prepared by
+Mythara Labs LLC — Security Team  
+Manifest Ref: ME-archive-0001  
+Date: 2025-10-30
+
+---
+
+### Scope
+- Targets: Mythara Engine runtime, sandboxed renderer container, public API surface, authentication & key-management endpoints, escrow bundle handling workflow, and admin/ingestion interfaces.  
+- Exclusions: Third-party hosted infrastructure not under direct control; customer production data stores.  
+- Test types: black-box external probes, authenticated internal tests, red-team leakage probes, fuzzing of input vectors, and CI-integrated regression checks.
+
+---
+
+### Methodology
+- Reconnaissance and enumeration of exposed endpoints.  
+- Authenticated session testing using least-privilege accounts and simulated operator roles.  
+- Dynamic application testing (DAST) for injection, path traversal, and API abuse.  
+- Static review of high-risk artifacts (manifest handling, signature verification, audit ingestion).  
+- Focused leakage and sanitization probes using crafted prompt sets and escalation payloads.  
+- Post-exploit verification limited to non-destructive evidence capture and detailed logging.
+
+---
+
+### Test Coverage Summary
+- Endpoints: API surface, admin ingest endpoints, artifact upload endpoints.  
+- Containers: core/Dockerfile-derived images, build contexts, and runtime privileges.  
+- Key management: signing workflows, signer_public_key.asc usage, private key access controls.  
+- Audit and logging: audit_chain ingestion, append-only behavior, log signing and canonicalization.  
+- Sanitization: PII/secret scrubbing, template redaction, leakage probe campaign.
+
+---
+
+### Findings — Critical / High
+- Private key request probe blocked but recorded as high-risk attempt; sanitizer escalated appropriately (evidence: lp-0019 / se-0012). No key compromise observed.  
+- Audit-chain ingestion race condition allowed one record mismatch (AC-9832) indicating a potential integrity weakness in the logging pipeline; remediation completed and verified.
+
+Status: incidents contained and remediated; no persistent critical exposures detected.
+
+---
+
+### Findings — Medium
+- Clause drift spikes (clause_008, clause_002) introduced behavioral variance that could alter clause selection and safety routing; tied to harmonization algorithm changes. Mitigation: rollback and controlled redeploy workflows instituted.  
+- False-positive conservative redactions (0.6% substitution rate) can degrade user experience and may block legitimate content; thresholds adjusted and human-review sampling introduced.
+
+---
+
+### Findings — Low
+- Locale-dependent formatting introduced nondeterminism in renderer outputs (det-incident-0427); resolved via ordered caches and explicit formatting templates.  
+- Minor CI gating gaps: some deterministic checks were not enforced pre-merge; action item to add run_renderer_repeat.py gating.
+
+---
+
+### Exploitable Path Summary
+- No chain combining high-likelihood, high-impact steps resulting in data exfiltration or key extraction was found.  
+- Most high-risk probes were mitigated by policy layers, sanitizer gates, and audit escalation.  
+- Attack surface with greatest attention: artifact ingest and admin interfaces — require hardened authentication and strict input canonicalization.
+
+---
+
+### Remediations Completed
+- Enforced ordered mapping and deterministic formatting in renderer (v1.7.3).  
+- Patched audit ingestion for atomic canonicalized writes; reissued problematic record and preserved spool evidence.  
+- Tuned sanitizer thresholds; instituted human-review sampling for rule changes.  
+- Locked fallback selection to deterministic tie-breaker ordering.  
+- Documented reproducibility and build clean-worktree requirement in README_ESCROW.md.
+
+---
+
+### Outstanding Recommendations (priority ordered)
+1. Integrate determinism and audit-chain validation into CI pre-merge gating (DevOps) — high.  
+2. Move manifest signing into an HSM-backed key process for non-repudiation (Security) — high.  
+3. Harden admin/ingest endpoints with MFA, strict RBAC, and logging-to-write-once storage (Ops/Security) — high.  
+4. Automate cross-reference checks between audit_chain, sanitizer_events.csv, and leakage logs during release (QA/Security) — medium.  
+5. Maintain quarterly red-team leakage campaigns and determinism re-runs (Security/QA) — medium.
+
+---
+
+### Evidence and Artifacts
+- leakage_probe_log.csv; sanitizer_events.csv; audit_chain/*.log (including AC-9832 and AC-9832-R); determinism_report.txt; escrow_reproducibility_log.txt; core/renderer.py patch diffs; verification_report.txt.
+
+---
+
+### Acceptance Criteria for Closure
+- CI gating in place for determinism and audit validation.  
+- HSM-backed signing plan approved and scheduled.  
+- Admin/ingest endpoints require hardened MFA and RBAC; penetration re-test shows no privilege escalation path.  
+- False-positive substitution rate reduced below 0.3% or mitigated by human-review flow.
+
+---
+
+### Next Steps
+- Schedule remediation verification window with security and ops teams; run targeted penetration re-test on admin endpoints post-hardening.  
+- Finalize escrow agent contract with dual-signature release workflow and include reproducibility verification as a standard receipt attachment.
+
+---
+
+### Build a PDF
+Save this content as Pen_Test_Summary.md and convert with Pandoc:
+```bash
+pandoc Pen_Test_Summary.md -o Pen_Test_Summary_ME-archive-0001.pdf --pdf-engine=xelatex --variable geometry:"margin=1in"
+```
+
+End of summary.

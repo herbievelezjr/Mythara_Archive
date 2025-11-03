@@ -1,0 +1,59 @@
+### prompt_hashes_manifest.json
+
+```json
+{
+  "manifest_ref": "ME-archive-0001",
+  "created_utc": "2025-10-30T02:00:00Z",
+  "signer_key": "signer_public_key.asc",
+  "prompts": [
+    {
+      "prompt_name": "renderer_prompt_v1",
+      "prompt_hash": "sha256:prompthash_v1",
+      "description": "Canonical renderer prompt template used for explainability and clause selection",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "safety_probe_prompt",
+      "prompt_hash": "sha256:safetyprompthash_v1",
+      "description": "Adversarial safety probe prompt template for recall testing",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "accessibility_prompt",
+      "prompt_hash": "sha256:accessprompthash_v1",
+      "description": "Prompt template for braille and audio token generation",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "determinism_test_prompt",
+      "prompt_hash": "sha256:detprompthash_v1",
+      "description": "Determinism test harness prompt variant with fixed scaffolding",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "explainability_rating_prompt",
+      "prompt_hash": "sha256:explainrateprompthash_v1",
+      "description": "Prompt used to generate human-facing explanations for rater evaluation",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "leakage_probe_prompt",
+      "prompt_hash": "sha256:leakageprompthash_v1",
+      "description": "Crafted probe prompt set for leakage detection campaigns",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "pilot_integration_prompt",
+      "prompt_hash": "sha256:pilotprompthash_v1",
+      "description": "Integration-focused prompt template for pilot validation flows",
+      "version": "1.0"
+    },
+    {
+      "prompt_name": "perception_prompt_v1",
+      "prompt_hash": "sha256:perceptionprompthash_v1",
+      "description": "Perception layer prompt guiding clause scoring and safety assessments",
+      "version": "1.0"
+    }
+  ]
+}
+```

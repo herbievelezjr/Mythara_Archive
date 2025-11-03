@@ -1,0 +1,63 @@
+### Copyright Receipt Manuscript
+
+#### Title
+Copyright Receipt for Mythara Engine — ME-archive-0001
+
+#### Parties
+- Copyright Owner: Mythara Labs LLC  
+- Recipient: [Escrow Agent / Licensee Name]  
+- Contact: legal@mythara.engine
+
+#### Work Description
+- Title of Work: Mythara Engine canonical artifacts and associated prompts, manifests, and verification materials  
+- Manifest Reference: ME-archive-0001  
+- Included Artifacts: renderer_prompt_v1; perception_prompt_v1; determinism test harness; fallback_clause_catalog; core renderer source (core/); manifest/RELEASE_MANIFEST.json; checksums.sha256 and detached signature; audit_chain slices referenced in verification artifacts; reproducibility instructions README_ESCROW.md; escrow verification artifacts dated 2025-10-30
+
+#### Rights Conveyed
+- Copyright owner grants the recipient a non-exclusive, revocable custody license to hold and verify the escrowed artifacts for the purpose of reproducibility verification, audit, and escrow custody.  
+- Recipient may read, verify, and reproduce canonical outputs using the provided escrow instructions for verification purposes only.  
+- Recipient must not publish, redistribute, or create derivative commercial products from the copyrighted materials without express written permission from Mythara Labs LLC.  
+- Any authorized release of artifacts to third parties requires dual-signature release as defined in the Escrow SOW.
+
+#### Term and Conditions
+- Custody term: until formal release or request for return by Mythara Labs LLC under the Escrow SOW conditions.  
+- Security obligations: recipient must store private keys and sensitive artifacts in encrypted, access-controlled storage; public keys and signed manifests may be retained for verification.  
+- Access controls: recipient must implement least-privilege role separation for access to escrow contents and log all access events.  
+- Audit rights: Mythara Labs LLC retains the right to request access logs and verification outcomes for audits.
+
+#### Warranties and Representations
+- Mythara Labs LLC warrants it is the rightful copyright holder of the deposited artifacts and has authority to deposit them into escrow.  
+- Recipient warrants it will not attempt to extract signer private keys, secrets, or other confidential runtime credentials from the escrow bundle.  
+- Both parties warrant to act in good faith and comply with applicable laws and contractual obligations.
+
+#### Liability and Indemnity
+- Liability for negligent handling of private keys or unauthorized disclosure is the responsibility of the breaching party.  
+- Each party agrees to indemnify the other for third-party claims arising from their breach of these terms.
+
+#### Signatures
+- Copyright Owner Representative:  
+  Name: ______________________  
+  Title: ______________________  
+  Date: ______________________  
+  Signature: ______________________
+
+- Recipient Representative:  
+  Name: ______________________  
+  Title: ______________________  
+  Date: ______________________  
+  Signature: ______________________
+
+---
+
+### Build PDF (if you want a local PDF)
+1. Save this content to Copyright_Receipt_Manuscript.md.  
+2. Convert to PDF using Pandoc:
+```bash
+pandoc Copyright_Receipt_Manuscript.md -o Copyright_Receipt_Manuscript_ME-archive-0001.pdf --pdf-engine=xelatex --variable geometry:"margin=1in"
+```
+3. Or render and print to PDF with headless Chromium:
+```bash
+chromium --headless --disable-gpu --print-to-pdf=Copyright_Receipt_Manuscript_ME-archive-0001.pdf file:///path/to/Copyright_Receipt_Manuscript.html
+```
+
+If you want, I can produce a version with filled placeholders (recipient name, signatories, dates) and a suggested escrow clause checklist for insertion into the Escrow SOW.

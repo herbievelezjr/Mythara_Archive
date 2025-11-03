@@ -1,0 +1,12 @@
+Step 3: Legal & Commercial Controls
+Create a folder: mythara_archive/legal/
+
+Files to include:
+
+Master_Licensing_Agreement_draft.pdf
+
+Mutual_NDA_shortform.pdf
+
+Pilot_SOW_template.pdf
+
+Escrow_Instructions.pdf

@@ -1,0 +1,8 @@
+📁 Step 7: Master Summary & Checklist
+Create a folder: mythara_archive/summary/
+
+Files to include:
+
+mythara_master_summary.csv — tracks all completed tests, output files, and key findings.
+
+mythara_test_completion_checklist.csv — status tracker for each test (Not Started, In Progress, Complete)
