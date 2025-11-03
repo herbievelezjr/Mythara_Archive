@@ -33,6 +33,12 @@ foreach ($doc in $docs) {
     }
 }
 
+# Copy validation report if it exists
+if (Test-Path "Mythara_Engine_Validation_Report_v1.0.0.txt") {
+    Copy-Item -Path "Mythara_Engine_Validation_Report_v1.0.0.txt" -Destination "$releaseDir\" -Force
+    Write-Host "  + Mythara_Engine_Validation_Report_v1.0.0.txt"
+}
+
 # Copy core directories
 Write-Host "Copying core components..."
 $coreDirs = @("core", "docs", "Commercial", "Legal", "manifest", "validate_suite")

@@ -1,0 +1,49 @@
+Redaction Log: Mythara Engine Master Archive
+Prepared by: Herbert Velez Jr.
+Entity: Mythara Labs LLC
+Date: 2025-10-30
+Manifest Ref: ME-archive-0001
+
+Purpose:
+This log documents all files classified as REDACTED in the RELEASE_MANIFEST.json. These files are withheld from public distribution due to proprietary, security, or licensing constraints. They are available to escrow agents and strategic partners under specific conditions outlined below.
+
+Redacted Files:
+------------------------------------------------------------
+1. core/source_proprietary/Mythara.Blessings.Harmonizer/
+   Reason: Contains proprietary BR harmonization logic and clause scaffolds.
+   Release Conditions: Buyout, breach, or mutual licensing agreement.
+
+2. core/source_proprietary/Mythara.GestureTaxonomy/
+   Reason: Encodes gesture-to-modifier mappings and BR inflow logic.
+   Release Conditions: Escrow trigger or signed licensing agreement.
+
+3. core/source_proprietary/Mythara.BR/
+   Reason: Contains BR saturation, decay, and clause impact algorithms.
+   Release Conditions: Escrow trigger or sovereign deployment agreement.
+
+4. evidence/prompt_templates/perception_prompt_v1.txt
+   Reason: Proprietary perception scaffold used in clause selection.
+   Release Conditions: Escrow trigger or signed audit agreement.
+
+5. evidence/prompt_templates/renderer_prompt_v1.txt
+   Reason: Proprietary renderer scaffold used in explanation generation.
+   Release Conditions: Escrow trigger or signed audit agreement.
+
+6. provenance/contributor_assignments/
+   Reason: Contains signed IP transfer forms from collaborators.
+   Release Conditions: Legal review or licensing due diligence.
+
+Redaction Policy:
+All REDACTED files are escrow-accessible and may be released under the following conditions:
+- Buyout or acquisition of Mythara Labs LLC
+- Breach of licensing terms by Mythara Labs LLC
+- Mutual agreement between Mythara Labs LLC and licensee
+- Sovereign deployment requiring full reproducibility
+- Legal or audit review authorized by both parties
+
+Signature:
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+[REPLACE WITH ACTUAL SIGNATURE BLOCK]
+-----END PGP SIGNATURE-----

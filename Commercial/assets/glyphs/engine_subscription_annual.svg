@@ -1,0 +1,18 @@
+<!--
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Proprietary and Confidential.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Engine Subscription Annual">
+  <g fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Calendar base -->
+    <rect x="40" y="64" width="176" height="132" rx="12"/>
+    <path d="M40 96h176"/>
+    <line x1="88" y1="56" x2="88" y2="80"/>
+    <line x1="168" y1="56" x2="168" y2="80"/>
+    <!-- Laurel ring for annual -->
+    <circle cx="128" cy="150" r="36"/>
+    <path d="M112 130c-8 8-12 16-12 20m72-20c8 8 12 16 12 20"/>
+    <!-- Hex emblem inside -->
+    <path d="M128 140l16 10v20l-16 10l-16-10v-20z"/>
+  </g>
+</svg>

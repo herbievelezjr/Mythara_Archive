@@ -16,21 +16,21 @@ from datetime import datetime
 def run_command(cmd, description):
     """Run a command and return exit code."""
     print(f"\n{'=' * 60}")
-    print(f"🔍 {description}")
+    print(f"[TEST] {description}")
     print(f"{'=' * 60}\n")
     
     try:
         result = subprocess.run(cmd, shell=True, check=False)
         return result.returncode
     except Exception as e:
-        print(f"❌ Error running {description}: {e}")
+        print(f"[ERROR] running {description}: {e}")
         return 1
 
 
 def main():
     """Run complete validation suite."""
     
-    print("🚀 Mythara Engine - Validation Suite")
+    print("==> Mythara Engine - Validation Suite")
     print(f"Started: {datetime.utcnow().isoformat()}Z\n")
     
     # Ensure output directory exists
@@ -66,27 +66,36 @@ def main():
     )
     results['accessibility'] = exit_code == 0
     
+    # 5. Adversarial/Security Tests
+    exit_code = run_command(
+        "python tests/run_adversarial_tests.py",
+        "Adversarial Attack & Hardening Tests"
+    )
+    results['adversarial'] = exit_code == 0
+    
     # Summary
     print(f"\n{'=' * 60}")
-    print("📊 VALIDATION SUITE SUMMARY")
+    print("VALIDATION SUITE SUMMARY")
     print(f"{'=' * 60}\n")
     
     print("Test Results:")
-    print(f"  Determinism:    {'✅ PASS' if results['determinism'] else '❌ FAIL'}")
-    print(f"  Security:       {'✅ PASS' if results['security'] else '❌ FAIL'}")
-    print(f"  SSIP Audit:     {'✅ PASS' if results['ssip'] else '❌ FAIL'}")
-    print(f"  Accessibility:  {'✅ PASS' if results['accessibility'] else '❌ FAIL'}")
+    print(f"  Determinism:    {'[PASS]' if results['determinism'] else '[FAIL]'}")
+    print(f"  Security:       {'[PASS]' if results['security'] else '[FAIL]'}")
+    print(f"  SSIP Audit:     {'[PASS]' if results['ssip'] else '[FAIL]'}")
+    print(f"  Accessibility:  {'[PASS]' if results['accessibility'] else '[FAIL]'}")
+    print(f"  Adversarial:    {'[PASS]' if results['adversarial'] else '[FAIL]'}")
     
     all_passed = all(results.values())
     
-    print(f"\nOverall Status: {'✅ ALL TESTS PASSED' if all_passed else '❌ SOME TESTS FAILED'}")
+    print(f"\nOverall Status: {'[ALL TESTS PASSED]' if all_passed else '[SOME TESTS FAILED]'}")
     print(f"Completed: {datetime.utcnow().isoformat()}Z\n")
     
-    print("📁 Results saved to: tests/output/")
+    print("Results saved to: tests/output/")
     print("   - determinism_report.txt")
     print("   - leakage_probe_log.csv")
     print("   - ssip_audit_report.md")
-    print("   - accessibility_delivery_report.csv\n")
+    print("   - accessibility_delivery_report.csv")
+    print("   - adversarial_test_summary.txt (console output)\n")
     
     # Return exit code (0 if all passed, 1 if any failed)
     sys.exit(0 if all_passed else 1)

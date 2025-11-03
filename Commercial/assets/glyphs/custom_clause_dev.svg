@@ -1,0 +1,14 @@
+<!--
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Proprietary and Confidential.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Custom Clause Development">
+  <g fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Gear -->
+    <circle cx="160" cy="100" r="28"/>
+    <path d="M160 64v12m0 48v12m-24-24h-12m72 0h12m-53-17l-8-8m42 42l8 8m-42 0l-8 8m42-42l8-8"/>
+    <!-- Quill pen -->
+    <path d="M44 188c36-44 84-60 120-72c-28 24-52 52-74 86l-46-14z"/>
+    <path d="M90 178l-10 18"/>
+  </g>
+</svg>
