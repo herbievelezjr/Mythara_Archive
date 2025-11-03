@@ -1,0 +1,256 @@
+﻿[
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial\\### Closing Readiness Scorecard.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Commercial\\### Closing Readiness Scorecard.txt",
+        "normalized":  null,
+        "sha256":  "0BB4906112220E1A5BB7B0B3783EAF9245079CD7540D5A55CBD4756123D19CD7"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial\\### Pricing Tiers.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Commercial\\### Pricing Tiers.txt",
+        "normalized":  null,
+        "sha256":  "2190D21077AB986099EC54B811BCF308841A39DFCC775D333EA45E3DF2FD51CA"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial\\### Remittance Instructions.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Commercial\\### Remittance Instructions.txt",
+        "normalized":  null,
+        "sha256":  "ACEA2121F250FC7F6545B676FC645CA521A729ABF82F69B3E3B78AB7829C185D"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial\\### Validation Summary Slide — cont.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Commercial\\### Validation Summary Slide — cont.txt",
+        "normalized":  null,
+        "sha256":  "B69294998AC0CB2FF8F85E0CA358368C131457E768E01EE96D145151B805CD72"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\### Demo container export and packa.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\### Demo container export and packa.txt",
+        "normalized":  null,
+        "sha256":  "7358C96C0FAEDF1634D12DE4C3A3A00904D07FFBD3CA6D4771C4E12304A44772"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\### Dockerfile.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\### Dockerfile.txt",
+        "normalized":  null,
+        "sha256":  "BB57B66E1AFA3FDBF9898E77A1EFAE48D6E68C8F2C39E8E4176B30133860EAE0"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mythara.Blessings.Harmonizer\\### Module specification.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mythara.Blessings.Harmonizer\\### Module specification.txt",
+        "normalized":  null,
+        "sha256":  "4716608A046FF00DC38408EAF2486A2475BE9D2D865E6CDB36CF40E0F95846B7"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mythara.Blessings.Harmonizer\\### Package skeleton and files.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mythara.Blessings.Harmonizer\\### Package skeleton and files.txt",
+        "normalized":  null,
+        "sha256":  "6E1D0C504AA9B3250EC7AE39A836752FB9C8CCF7E2099971F0BFD557B8775863"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mytrhara.BR\\### Added files — manifestlocale_br.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mytrhara.BR\\### Added files — manifestlocale_br.txt",
+        "normalized":  null,
+        "sha256":  "DB54A4D8E2B90967A890C03FA4472B4B0E3424308D260A5FCDB672F10BBD87C8"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mytrhara.BR\\### CI workflow locale-braille-smok.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mytrhara.BR\\### CI workflow locale-braille-smok.txt",
+        "normalized":  null,
+        "sha256":  "1E03D380C77C304F9224F274ADB36B521495B7B0AF732D7ED0C0649E2C6285DC"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mytrhara.BR\\### coremytharabrencoder.py.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mytrhara.BR\\### coremytharabrencoder.py.txt",
+        "normalized":  null,
+        "sha256":  "80363C07F09E7E7E5662B563563FCC3C006D4113E4F4CE33F61A49A0F76135E4"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\core\\source_proprietary\\Mytrhara.BR\\### Multilingual braille support —.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\core\\source_proprietary\\Mytrhara.BR\\### Multilingual braille support —.txt",
+        "normalized":  null,
+        "sha256":  "AEE66FEE5C6A6EBA326D395ECF563C738A434283595F1CF6C9ABFE3DF3788891"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\### Penetration Test Summary.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\### Penetration Test Summary.txt",
+        "normalized":  null,
+        "sha256":  "9691A2BBFB6A3A26ECFAED5F0BCE2CA2E63BE13C9C984DE36EECEB3CB8BD7225"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\### Repository Hardening Checklist.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\### Repository Hardening Checklist.txt",
+        "normalized":  null,
+        "sha256":  "E75B6B282B277BADF3FDAED79E9A1EA1ABF227F735DBF7D5A724286A134E384B"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\### Security Audit Summary — Mythar.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\### Security Audit Summary — Mythar.txt",
+        "normalized":  null,
+        "sha256":  "1030938C5E49B21DDB5B6359380E136B7AA8F8DBB2D14765BFA26296F0557A17"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\prompt_templates\\### Perception Prompt v1.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\prompt_templates\\### Perception Prompt v1.txt",
+        "normalized":  null,
+        "sha256":  "08C33EB747378C5D51D343FC6E1CBF1B5E7D6696901C55FD08CF4E799D545AFE"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\prompt_templates\\### prompt_hashes_manifest.json.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\prompt_templates\\### prompt_hashes_manifest.json.txt",
+        "normalized":  null,
+        "sha256":  "94CA949212FBB793E358541834E1B91FB43F955E68B6C4F47EEF5699FE77B556"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Evidence\\prompt_templates\\### Renderer Prompt v1.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Evidence\\prompt_templates\\### Renderer Prompt v1.txt",
+        "normalized":  null,
+        "sha256":  "1E28842DDBAFFE03B789EC4689D752422D81FD3E6DB8BCC37DA140971D9EB7B2"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\FundRaising objective and focus\\### Fundraising objective and focus.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\FundRaising objective and focus\\### Fundraising objective and focus.txt",
+        "normalized":  null,
+        "sha256":  "8D0BB304A9A38AC193098AD9B03C696523E0B0C1566CFC07CD4A8FB8C8B49280"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\FundRaising objective and focus\\### One Pager and slide deck instrucktions..txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\FundRaising objective and focus\\### One Pager and slide deck instrucktions..txt",
+        "normalized":  null,
+        "sha256":  "CB3BB0E75C849A650ACC7C4FBB0F7320BC52F41BFEBFCC65355BB139DC377E37"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\FundRaising objective and focus\\### Unique value proposition.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\FundRaising objective and focus\\### Unique value proposition.txt",
+        "normalized":  null,
+        "sha256":  "62F734024600F466D46000F61DF5C8D1E53D845370061F92DCBF7D1540E13739"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\FundRaising objective and focus\\### 📁 6. `FundRaising Objective`.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\FundRaising objective and focus\\### 📁 6. `FundRaising Objective`.txt",
+        "normalized":  null,
+        "sha256":  "AC371C768254624ACB185843C74923077A8793D6ACC1CB8EB5FBEA4C19DB87B7"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Legal\\### Escrow Instructions — Mythara E.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Legal\\### Escrow Instructions — Mythara E.txt",
+        "normalized":  null,
+        "sha256":  "DEB930EBEC26B7C097C7B49928B5083E899BAB9332C873998C1CC15DF6508522"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Legal\\### Master Licensing Agreement Draf.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Legal\\### Master Licensing Agreement Draf.txt",
+        "normalized":  null,
+        "sha256":  "ECDD13134C0BA6DCD9E12F79E6CC16151D8B3C6DDA44211F22CE92C2AE16B0F1"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Legal\\### Mutual Non-Disclosure Agreement.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Legal\\### Mutual Non-Disclosure Agreement.txt",
+        "normalized":  null,
+        "sha256":  "FD31C781690C9C313CA8B6F451DDF1F1F5D50A5CFC72643CA640F6F698A1F5A6"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Legal\\### Pilot SOW Template.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\Legal\\### Pilot SOW Template.txt",
+        "normalized":  null,
+        "sha256":  "B036648F32C65AE05E719C7B1676400B54DC92E3395FF42A863370367F3F8977"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\provenance\\### Copyright Receipt Manuscript.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\provenance\\### Copyright Receipt Manuscript.txt",
+        "normalized":  null,
+        "sha256":  "5447A0A70C282A463855D057FAC1DB70B621AB36D9F2A58B0C268D967D2183AD"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\provenance\\### Copyright Receipt — Code Snippet.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\provenance\\### Copyright Receipt — Code Snippet.txt",
+        "normalized":  null,
+        "sha256":  "13680DF71F8B82108C778BCE5D74F89046C400FE3FD2AB78DC173C0E98521001"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\provenance\\### Notarized Timestamp —.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\provenance\\### Notarized Timestamp —.txt",
+        "normalized":  null,
+        "sha256":  "33DDE08B7CC0D19D02DC1031BDF37F8AB023DE7E4062087C6C6C933555400174"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\provenance\\Contributor_assignments\\### IP Assignment--Short template.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\provenance\\Contributor_assignments\\### IP Assignment--Short template.txt",
+        "normalized":  null,
+        "sha256":  "2F78F9974F403B3CD178ECC8096C603BC6C183D9210FFA51D1254235A26CD6A0"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\summary\\mythara_master_summary.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\summary\\mythara_master_summary.csv.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\summary\\mythara_master_summary.csv.txt",
+        "sha256":  "790D5702CF49D1E32D9A7023EBFE8FAC0DB6A1074A593F297E3492CE45A4FA3D"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\summary\\mythara_test_completion_checklist.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\summary\\mythara_test_completion_checklist.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\summary\\mythara_test_completion_checklist.txt",
+        "sha256":  "F14D2D701E097DCE4753E14DB4C6ADAAE061C64EF3F945D8D86A8676DE94D48F"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\### Audit Chain Integrity Report.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\### Audit Chain Integrity Report.txt",
+        "normalized":  null,
+        "sha256":  "ECF8C7839C4C64E04C476E7A1D05F49E21A69DEFE49D24BC9FAD7CD02FED744B"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\### br_timeseries.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\### br_timeseries.csv.txt",
+        "normalized":  null,
+        "sha256":  "69124CB073890E5A571059345E7A36310BAC8DA49EB4F3AF1723B384F409F889"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\### clause_drift_log.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\### clause_drift_log.csv.txt",
+        "normalized":  null,
+        "sha256":  "B4C8A4463056387EBA72B180543FAA2EF1BCF0CF8062B17AE26B74A387AAA5D3"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\Escrow Reproducibility Log.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\Escrow Reproducibility Log.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\Escrow Reproducibility Log.txt",
+        "sha256":  "9705D00AAA5EE2AB8577B5C7F0AD4B5CAC59541C0DF42BB41BE66BD3E1F995B0"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\explainability_ratings.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\explainability_ratings.csv.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\explainability_ratings.csv.txt",
+        "sha256":  "5A6861599F5E10D4D240DE6D5D85713E679B12FA22260FEAAC8ABE61E1D0CF8E"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\leakage_probe_log.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\leakage_probe_log.csv.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\leakage_probe_log.csv.txt",
+        "sha256":  "7A6E7AA1A6E0586BFAAA2A62CFAA3102AF98A15D6E23381C4FB24CA7D3A18640"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\prompt_hashes.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\prompt_hashes.csv.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\prompt_hashes.csv.txt",
+        "sha256":  "2EDBE1B126C8D51CBEE939D875BD223B45B93D3E71D1AE5CB1DC69AED22B44FB"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\sanitizer_events.csv.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\sanitizer_events.csv.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\sanitizer_events.csv.txt",
+        "sha256":  "701F9392682920F62CE1A0771D3159AF18123AEB866A0D96665CDF48C5F41B3A"
+    },
+    {
+        "source":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\Shadow Resolver Report.txt",
+        "archived":  "C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\archive\\DEPRECATED\\tests\\Shadow Resolver Report.txt",
+        "normalized":  "c:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\tests\\Shadow Resolver Report.txt",
+        "sha256":  "BB46E60F4FD44BA941CFAB9C3C65FBCE6B5DBA5670454C60EE180AA0803181B6"
+    }
+]
+
+
+
+
+
+
+
+

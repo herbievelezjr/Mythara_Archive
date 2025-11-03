@@ -1,0 +1,44 @@
+### Pricing Tiers
+
+| Tier | Price (annual/license) | Support & SLA | Escrow & Reproducibility | Validation Deliverables |
+|---|---:|---|---|---|
+| **Dev** | $15k–$35k | Email support; 5 business-day SLA; quarterly updates | Manifest + checksums; escrow-ready docs; escrow deposit on request | Baseline test logs; determinism summary; explainability index |
+| **Enterprise** | $75k–$250k | 24/7 email + phone; 24-hour SLA; quarterly security patching | Full escrow bundle; escrow unlocking on agreed triggers; signed manifests | Full test suite; stress test report; leakage probes; accessibility report |
+| **Sovereign** | $250k–$750k+ | Dedicated account team; on-site support; custom SLA | Air-gapped escrow release; turnkey on-prem deployment support; audited escrow process | Third-party reproduction report; extended determinism runs; legal & compliance pack |
+| **Pilot (short-term)** | $25k–$60k (4–8 weeks) | Joint integration sprint; weekly checkpoints | Temporary escrow snapshot; signed demo artifacts | Focused validation: integration tests; smoke determinism; explainability sample |
+
+### Tier Details
+
+#### Dev
+- **Audience:** R&D teams, early integrations, internal proof-of-concepts.  
+- **Includes:** API access to public endpoints, developer onboarding guide, monthly usage reports.  
+- **Limits:** Redacted internals remain escrowed; SLA limited; no on-site work.
+
+#### Enterprise
+- **Audience:** Regulated industries, commercial deployments requiring high assurance.  
+- **Includes:** Escrow-ready artifacts; priority remediation; security review support; license for production use.  
+- **Optional Add-ons:** Extended retention of logs, quarterly third-party audits, custom accessibility packaging.
+
+#### Sovereign
+- **Audience:** Government, sovereign cloud, air-gapped or classified environments.  
+- **Includes:** Full escrow release under contract terms, on-site rebuild and validation, assistance with legal/sovereignty clauses.  
+- **Deliverables:** Hands-on escrow transfer, reproducibility attestation, packaged notarized timestamps.
+
+#### Pilot
+- **Purpose:** Rapid validation to prove integration, safety alignment, and explainability fit.  
+- **Deliverables:** Short-form SOW, scoped test plan, pilot verification report, recommendation brief.  
+- **Conversion:** Pilot fees may be credited toward a follow-on Enterprise/Sovereign license.
+
+### Common Add-Ons (priced separately)
+- Escrow agent facilitation and fees; annual maintenance; extended SLA; bespoke compliance reports; multi-language accessibility packaging; extended determinism / stress test campaigns; legally notarized provenance stamping.
+
+### Commercial Terms (high level)
+- **License term:** 12 months minimum; multi-year discounts available.  
+- **Payment:** 50% on signing, 50% on delivery (or milestone schedule). ACH/ wire instructions embedded in SOW.  
+- **Escrow triggers:** Buyout, breach, mutual agreement, sovereign deployment clause; specific unlocking workflow defined in SOW.  
+- **IP & Redaction:** Core prompt templates and BR internals remain REDACTED and escrowed; license grants observable and API surfaces as defined in API_SPEC_PUBLIC.md.
+
+### Recommended Next Steps
+- Choose target tier and request a tailored SOW.  
+- Schedule an escrow agent intro call and agree on unlock triggers.  
+- Run a pilot (4–8 weeks) to validate integration and collect enterprise artifacts required for Enterprise or Sovereign contracting.

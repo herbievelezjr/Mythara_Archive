@@ -1,0 +1,13 @@
+mythara_archive/provenance/
+
+Files to include:
+
+copyright_receipt_manuscript.pdf
+
+copyright_receipt_code_snippets.pdf
+
+notarized_timestamp.pdf
+---------------------------------------------------------------------------------------------------------------------
+Subfolder: contributor_assignments/
+
+Signed IP transfer forms from collaborators (if any)

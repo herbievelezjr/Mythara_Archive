@@ -1,0 +1,84 @@
+### Multilingual braille support — recommended placement
+
+Put the multilingual braille implementation in a dedicated, versioned subpackage under core (so it’s treated as a core runtime dependency) and keep language maps and data in a separate immutable data folder that can be escrowed and versioned.
+
+Suggested placement:
+- **core/mythara/br/** — runtime library, encoders, canonicalization, and API used by renderer  
+- **manifest/locale_braille_maps/** — language-specific, immutable mapping files (JSON/CSV); each file versioned and hashed for the manifest  
+- **core/tests/locale_fixtures/** — unit/integration test fixtures for each supported language
+
+---
+
+### What to include (concrete files)
+
+- core/mythara/br/
+  - __init__.py  
+  - encoder.py  — language-aware encoder with pluggable adapter interface  
+  - transliteration.py — optional transliteration layer for languages without direct braille mapping  
+  - rules.py — formatting rules (contractions, capitalization, numbers, punctuation) per language profile  
+  - canonical.py — canonicalize + fingerprint helpers (shared with other core modules)  
+  - config.py — BrConfig extended with language fallbacks and precedence
+
+- manifest/locale_braille_maps/
+  - en-US.json; es-419.json; fr-FR.json; ar-SA.json; zh-Hans.json; etc.  
+  - Each file: mapping table, encoding standard reference, version, date, checksum
+
+- core/tests/locale_fixtures/
+  - sample_en.json, sample_es.json, sample_fr.json, sample_ar.json, sample_zh.json
+
+---
+
+### Design principles & behavior
+
+- **Pluggable adapters** — encoder picks adapter by locale (e.g., "en-US" → Unified English Braille; "fr-FR" → French Braille). New adapters register via a simple registry.  
+- **Deterministic output** — canonicalization and fingerprinting across locales; every locale map is immutable in the manifest version.  
+- **Transliteration fallback** — if no direct braille map exists, apply a deterministic transliteration (documented) then encode. Always record fallback in metadata.  
+- **Safety & privacy** — treat braille tokens like any rendered output: apply sanitizer rules before encoding; redact sensitive bits with [REDACTED] placeholder then braille-encode placeholder.  
+- **Accessibility tokens** — token format and placement unchanged (<<BRAILLE:...>>). For RTL locales or scripts, include explicit reading-order metadata in token or adjacent metadata field.  
+- **Size limits & truncation policy** — enforce token size caps in config; record truncation events in render_metadata.
+
+---
+
+### Config additions (harness_config.yml snippet)
+```yaml
+braille:
+  enabled: true
+  default_locale: "en-US"
+  adapters:
+    en-US: unified_braille
+    es-419: spanish_braille
+    fr-FR: french_braille
+  max_token_length: 8192
+  transliteration_policy: "latinize_then_encode"  # options: none|latinize_then_encode|block
+  manifest_maps_path: "manifest/locale_braille_maps/"
+```
+
+---
+
+### Tests and acceptance criteria
+
+- **Unit**: encoder produces expected braille for representative strings per locale.  
+- **Integration**: renderer + harmonizer pipeline appends braille tokens and fingerprints match canonicalization.  
+- **Determinism**: run 3× with same seed + same locale → identical tokens and fingerprints.  
+- **Fallback**: missing map triggers transliteration path with explicit metadata field `braille_adapter_used` = "transliteration".  
+- **Coverage**: include punctuation, numbers, mixed-script examples, and long-text truncation cases.
+
+---
+
+### CI / release / escrow actions
+
+- Add validation step to CI that:
+  - verifies each locale map file checksum against manifest/prompthashes_manifest.json entries, and
+  - runs a sample encoding per locale fixture.
+- When adding or updating maps:
+  - increment prompt_hash/manifest entry for braille maps, re-run reproducibility suite, sign updated manifest, and include in escrow bundle.
+
+---
+
+### Minimal roadmap (next 3 tasks)
+
+1. Create adapter interface and wiring in core/mythara/br/encoder.py.  
+2. Add two additional locale map files (es-419.json, fr-FR.json) in manifest/locale_braille_maps/ and fixture tests.  
+3. Add CI job to run locale encoding smoke tests and verify manifest checksums.
+
+If you want, I can generate the adapter interface and two sample locale map files (en-US, es-419) plus unit tests and a CI job YAML snippet next. Which should I produce?

@@ -1,0 +1,146 @@
+### Pilot SOW Template
+
+**Prepared by:** Mythara Labs LLC  
+**Manifest Ref:** ME-archive-0001  
+**Document:** Pilot Statement of Work (SOW) — Template  
+**Date:** 2025-10-30
+
+---
+
+### 1. Purpose
+This Statement of Work describes the scope, deliverables, timeline, responsibilities, acceptance criteria, pricing, and governance for a Pilot engagement between Mythara Labs LLC (“Licensor”) and the Licensee named in the signature block (“Licensee”). The Pilot validates integration, safety alignment, explainability, and reproducibility for the Mythara Engine in the Licensee environment.
+
+---
+
+### 2. Scope of Work
+- Objectives
+  - Validate API integration and end-to-end inference for targeted use cases.
+  - Verify explainability outputs meet the Licensee’s clarity and auditability requirements.
+  - Run determinism and safety recall checks against Licensee-selected inputs.
+  - Demonstrate reproducibility using the provided verification artifacts and manifest.
+- Inclusions
+  - Technical onboarding and environment review.
+  - Integration of public API surface and sample data flows.
+  - Execution of a focused validation test plan (detailed in Section 6).
+  - Delivery of Pilot report including test logs, explainability samples, and remediation recommendations.
+- Exclusions
+  - Full product customization beyond scoped connectors.
+  - Long-term support, production SLA commitments, or escrow release actions (covered by Enterprise/Sovereign tier).
+
+---
+
+### 3. Deliverables and Artifacts
+- Onboarding kit: integration checklist, API_SPEC_PUBLIC.md, runbook excerpt.
+- Test harness: run_validation_suite.sh configured for Pilot scope.
+- Validation artifacts: determinism_report.txt (Pilot runs), safety_recall_report.csv, explainability_samples.json, accessibility_token_report.csv.
+- Final Pilot Report: executive summary, detailed findings, remediation plan, acceptance statement.
+- Optional: demo_container.tar.gz (only if agreed and permitted) with checksum and signature.
+
+---
+
+### 4. Roles and Responsibilities
+- Licensor (Mythara Labs)
+  - Provide technical onboarding, API keys (demo), integration support, validation scripts, and test harness configuration.
+  - Run or assist with determinism and safety runs as agreed.
+  - Deliver Pilot Report and remediation recommendations.
+- Licensee
+  - Provide test environment, sample datasets, and list of prioritized use cases.
+  - Appoint technical and business points of contact and provide timely access to systems (if needed).
+  - Execute agreed test runs with Licensor support and validate results against acceptance criteria.
+
+---
+
+### 5. Timeline and Milestones
+- Kickoff and onboarding: Day 0–3
+- Integration & configuration: Day 4–14
+- Pilot validation execution (test runs): Day 15–28
+- Analysis & remediation iteration: Day 29–35
+- Final report & acceptance: Day 36–42
+
+(Milestones may be adjusted by mutual written agreement; pilot duration defaults to 4–8 weeks)
+
+---
+
+### 6. Test Plan (Pilot Scope)
+- Determinism: 3× renderer runs across a representative sample; compute token-level similarity; threshold ≥99.5% for Pilot pass.
+- Safety recall: Run 10,000 probe suite (or an agreed sample) with target recall threshold ≥99.5%.
+- Explainability: 50 human-rated samples (or automated proxy) for Clarity and Relevance metrics; average clarity ≥4/5 target.
+- Accessibility: braille/audio token generation for sample outputs; delivery success ≥98% for Pilot.
+- Leakage probes: run focused leakage suite (sample size agreed); zero critical leaks expected.
+- All tests must be executed against the agreed dataset and environment; deviations will be documented.
+
+---
+
+### 7. Acceptance Criteria
+- All critical test categories (Determinism, Safety, Explainability, Accessibility) meet or exceed Pilot thresholds defined in Section 6 or have documented remediation plans accepted by Licensee.
+- Final Pilot Report delivered and Licensee issues written acceptance within 7 business days, or provides a list of open issues to be remediated.
+- If acceptance is conditional, remedial actions, timelines, and success metrics will be appended as an addendum.
+
+---
+
+### 8. Pricing, Invoicing, and Payment Terms
+- Pilot Fee (example ranges; populate per engagement): $25,000 – $60,000 (fixed fee)  
+- Payment schedule: 50% on SOW execution; 50% on delivery of Final Pilot Report or on mutually agreed acceptance milestone.
+- Additional costs (optional, charged separately): travel, on-site support, third-party audit fees, or additional test campaigns beyond scope.
+- Standard payment terms: Net 30 from invoice date.
+
+---
+
+### 9. Confidentiality, IP, and Data Handling
+- All exchanged materials are subject to the Mutual NDA (Short Form) or equivalent agreement in effect.  
+- Licensee retains ownership of Licensee data; Licensor retains ownership of Deliverables and Deliverable-derived artifacts.  
+- Pilot outputs may include redacted internals; full prompt templates and proprietary internals remain escrowed unless release conditions are met.
+
+---
+
+### 10. Risk, Dependencies, and Assumptions
+- Dependencies
+  - Licensee provides access to required test data and a point of contact within 5 business days of SOW execution.
+  - Both parties will allocate necessary resources and decision-makers for timely approvals.
+- Assumptions
+  - Pilot uses non-production/demo API keys and does not represent production SLAs.
+  - Any prebuilt container artifacts are subject to export and inclusion permissions.
+- Risks & Mitigations
+  - If determinism or safety metrics fall below threshold, Licensor will provide a remediation plan and run a single re-test cycle within an agreed timeframe.
+
+---
+
+### 11. Change Control
+- Scope changes will be recorded via a written Change Order signed by both parties, with associated adjustments to timeline and fees.
+
+---
+
+### 12. Termination
+- Either party may terminate the Pilot for material breach if not cured within 10 business days following written notice.  
+- On termination, Licensee pays for work completed through termination date; Licensor returns or destroys Licensee data as instructed.
+
+---
+
+### 13. Governance and Escalation
+- Weekly status meetings during active phases; ad-hoc technical working sessions as needed.
+- Escalation path: Technical lead → Program lead → Executive sponsor (contacts to be listed in SOW signature block).
+
+---
+
+### 14. Signatures
+By signing below, the Parties agree to the terms of this Pilot SOW.
+
+Licensor: Mythara Labs LLC  
+By: ________________________________  
+Name: Herbert Velez Jr.  
+Title: Founder & Product Owner  
+Date: _______________________________
+
+Licensee: [Licensee Legal Name]  
+By: ________________________________  
+Name: _______________________________  
+Title: _______________________________  
+Date: _______________________________
+
+Contact details and technical points of contact (add below as needed)
+
+--- 
+
+If you want, I can:
+- Render this into a printable PDF layout and provide Pandoc/wkhtmltopdf commands, or  
+- Generate a completed SOW with specific dates, fee amounts, and contact names filled in — provide the details and I’ll assemble it.

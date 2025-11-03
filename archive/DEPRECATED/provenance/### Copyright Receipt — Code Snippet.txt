@@ -1,0 +1,105 @@
+### Copyright Receipt — Code Snippets
+
+Below are compact, copy‑pasteable code snippets and text blocks you can include in the Copyright Receipt PDF or attach as technical appendices. Each snippet is annotated with a one‑line purpose. Use them as-is or adapt to your repo and signing practices.
+
+---
+
+#### Verification commands (shell)
+Purpose: verify manifest signature and checksums before accepting an escrow bundle.
+```bash
+# import public key (temporary keyring)
+gpg --no-default-keyring --keyring ./escrow-keyring.gpg --import signer_public_key.asc
+
+# verify detached signature on manifest/checksums.sha256
+gpg --no-default-keyring --keyring ./escrow-keyring.gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256
+
+# verify all listed checksums (run from repo root)
+sha256sum -c manifest/checksums.sha256
+```
+
+---
+
+#### Deterministic reproducibility harness (bash)
+Purpose: build container, run deterministic validation, capture outputs.
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+WORKDIR="$(pwd)"
+SEED=${1:-20251030}
+OUTDIR="${WORKDIR}/escrow_verify_results_${SEED}"
+mkdir -p "$OUTDIR"
+
+# Build container (ensure Dockerfile is pinned and worktree clean)
+docker build -t mythara/renderer:verify -f core/Dockerfile core/
+
+# Run validation script inside container with fixed seed
+docker run --rm -v "$WORKDIR":/work mythara/renderer:verify \
+  /work/tools/run_validation_suite.sh --seed "${SEED}" --out /work/"${OUTDIR}"
+
+# Collect artifacts and compute checksums for comparison
+sha256sum "${OUTDIR}"/* > "${OUTDIR}/verification_checksums.sha256"
+```
+
+---
+
+#### Render metadata canonicalization (Python)
+Purpose: canonicalize JSON, compute SHA-256 fingerprint used for audit records.
+```python
+# canonicalize_and_hash.py
+import json, hashlib, sys
+
+def canonicalize(obj):
+    return json.dumps(obj, separators=(',', ':'), sort_keys=True)
+
+def fingerprint(obj):
+    canon = canonicalize(obj).encode('utf-8')
+    return 'sha256:' + hashlib.sha256(canon).hexdigest()
+
+if __name__ == '__main__':
+    data = json.load(sys.stdin)
+    print(canonicalize(data))
+    print(fingerprint(data))
+```
+
+---
+
+#### Audit-chain write (pseudo-code)
+Purpose: atomically write canonical audit record with previous_record_hash and signature_hash.
+```text
+1. Compute canonical = canonicalize(record_json) using sorted keys, no insignificant whitespace.
+2. Compute signature_hash = SHA256(canonical).
+3. Attach previous_record_hash (read last record atomically).
+4. Atomically append full_record = { "payload": canonical, "signature_hash": signature_hash, "previous_record_hash": previous_record_hash, ... } to audit log.
+5. Ensure operation is atomic (single write syscall or transaction) and persist to write-once or immutability tier when possible.
+```
+
+---
+
+#### Escrow verification README excerpt (text block)
+Purpose: short, explicit instructions for escrow agents to reproduce verification.
+```text
+Escrow Verification Quick Steps
+1. Import signer_public_key.asc into a temporary keyring.
+2. Run: gpg --no-default-keyring --keyring ./escrow-keyring.gpg --verify manifest/checksums.sha256.asc manifest/checksums.sha256
+3. Run: sha256sum -c manifest/checksums.sha256
+4. Build container: docker build -t mythara/renderer:verify -f core/Dockerfile core/
+5. Run deterministic suite: tools/run_validation_suite.sh --seed 20251030 --out /tmp/escrow_verify_results
+6. Compare produced checksums to manifest; record verifier signature on verification bundle.
+```
+
+---
+
+#### Legal header snippet (for PDF insertion)
+Purpose: short, formal copyright and custody statement for the front page.
+```text
+Copyright Receipt for Mythara Engine — ME-archive-0001
+Copyright Owner: Mythara Labs LLC
+Recipient (Escrow Agent): [Name]
+Manifest Reference: ME-archive-0001
+Date of Deposit: 2025-10-30
+Scope: canonical prompts, manifests, signed checksums, reproducibility tools, audit slices, and verification artifacts.
+```
+
+---
+
+If you want, I can (1) produce a single concatenated Markdown file containing all snippets ready for conversion to PDF, or (2) lay these into a one‑page printable layout with the legal header, verification commands, and the README excerpt grouped for the escrow agent. Which would you prefer?

@@ -1,0 +1,68 @@
+Create a folder: mythara_archive/tests/
+
+Files to include:
+
+determinism_report.txt
+
+br_timeseries.csv
+
+explainability_ratings.csv
+
+leakage_probe_log.csv
+
+sanitizer_events.csv
+
+prompt_hashes.csv
+
+clause_drift_log.csv
+
+shadow_resolver_report.txt
+
+audit_chain_integrity_report.txt
+
+escrow_reproducibility_log.txt
+
+Step 5: Security & Escrow Readiness
+Create a folder: mythara_archive/evidence/
+
+Files to include:
+
+security_audit_summary.pdf (if available)
+
+pen_test_summary.pdf (if available)
+
+repo_hardening_checklist.md
+
+sandbox_isolation_diagram.png
+
+Subfolder (redacted): prompt_templates/
+
+perception_prompt_v1.txt
+
+renderer_prompt_v1.txt
+
+File: prompt_hashes_manifest.json
+
+📁 Step 6: Provenance & IP Chain-of-Title
+Create a folder: mythara_archive/provenance/
+
+Files to include:
+
+copyright_receipt_manuscript.pdf
+
+copyright_receipt_code_snippets.pdf
+
+notarized_timestamp.pdf
+
+Subfolder: contributor_assignments/
+
+Signed IP transfer forms from collaborators (if any)
+
+📁 Step 7: Master Summary & Checklist
+Create a folder: mythara_archive/summary/
+
+Files to include:
+
+mythara_master_summary.csv — tracks all completed tests, output files, and key findings.
+
+mythara_test_completion_checklist.csv — status tracker for each test (Not Started, In Progress, Complete)

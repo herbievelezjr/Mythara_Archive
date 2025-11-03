@@ -1,0 +1,35 @@
+# Mythara Engine - API Dependencies
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+# Proprietary and Confidential.
+
+# FastAPI framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Security & Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+cryptography==41.0.7
+
+# HTTP & CORS
+httpx==0.25.2
+python-dotenv==1.0.0
+
+# Validation & Serialization
+email-validator==2.1.0
+
+# Logging & Monitoring
+python-json-logger==2.0.7
+
+# Database (optional - for production)
+# sqlalchemy==2.0.23
+# psycopg2-binary==2.9.9
+# redis==5.0.1
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2

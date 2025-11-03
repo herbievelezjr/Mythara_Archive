@@ -1,0 +1,14 @@
+Step 2: Core Artifacts
+Create a folder: mythara_archive/core/
+
+Files to include:
+
+README_ESCROW.md — instructions for rebuilding the demo container.
+
+API_SPEC_PUBLIC.md — public-facing API surface and observables.
+
+EXPLAINABILITY_GUIDE.md — how explanations are constructed and scored.
+
+Dockerfile — reproducible build for demo container.
+
+demo_container.tar.gz — optional prebuilt container (if allowed).

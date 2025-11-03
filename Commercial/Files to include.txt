@@ -1,0 +1,11 @@
+Files to include:
+
+one_pager.pdf
+
+validation_summary_slide.pdf
+
+pricing_tiers.md
+
+remittance_block.txt
+
+closing_readiness_scorecard.md

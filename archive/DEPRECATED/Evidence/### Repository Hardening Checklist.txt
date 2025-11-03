@@ -1,0 +1,59 @@
+### Repository Hardening Checklist
+
+A compact, prioritized checklist to bring the Mythara Engine repository and release pipeline to a hardened, audit-ready posture. Each item is actionable, ownerable, and measurable.
+
+---
+
+### Access and Key Management
+- **Enforce least-privilege SCM roles** — remove broad write access; use role-based teams and time-limited elevated access for emergency changes.  
+- **Require MFA for all accounts** with repo or CI access and enforce strong device hygiene for maintainers.  
+- **Use scoped deploy/service accounts** for CI agents and automation; avoid human credentials in automation.  
+- **HSM-backed signing for releases** — store signing keys in an HSM or cloud KMS; require hardware-backed operations for manifest and artifact signing.  
+- **Rotate and audit keys** quarterly; maintain a key inventory with issuance date, owner, and rotation history.
+
+---
+
+### CI, Builds, and Reproducibility
+- **Gate merges with determinism and audit checks** — require run_renderer_repeat.py and audit_chain validation to pass on the PR CI for any change touching core/ or fallback catalogs.  
+- **Enforce clean worktree builds** — CI must fail when uncommitted files or local build artifacts are present; require pinned base images and digests.  
+- **Pin dependencies and base images** — use digest pinning for OS and language runtimes; record digests in RELEASE_MANIFEST.json.  
+- **Deterministic build flags and artifacts** — enable reproducible build flags, canonical timestamps, sorted file listings, and recorded build environment in manifest.  
+- **Immutable artifact promotion** — publish signed, immutable artifacts to an artifact registry; use content-addressable names and store signatures alongside artifacts.
+
+---
+
+### Secrets, Credentials, and Artifact Handling
+- **No secrets in repo or escrow** — scan with SCA tools; reject PRs containing secrets; store only public keys in escrow bundles.  
+- **Use secret stores for runtime secrets** — bind secrets at deploy time via vault/KMS; CI retrieves secrets via short-lived tokens only.  
+- **Protect signer private keys** — never store private signing keys in repo or escrow; use HSM/KMS for signing operations and only include public keys in artifacts.  
+- **Artifact checksum and detached signature policy** — generate canonical manifest/checksums.sha256 and an ASCII-armored detached PGP signature; require signed verification step in CI and by escrow agent.
+
+---
+
+### Audit Logging and Integrity
+- **Canonicalized audit records** — write audit entries using deterministic JSON serialization (sorted keys, stable whitespace) and compute per-record SHA-256; store previous_record_hash chain.  
+- **Atomic audit writes** — ensure logger writes canonical payload and hash atomically; include monotonic sequence numbers to prevent ingestion duplication.  
+- **Daily audit validation** — run automated checks that validate audit_chain linkage, per-record hashes, and cross-references to sanitizer and leakage logs.  
+- **Store audit backups in write-once storage** — mirror critical audit slices to WORM or object immutability tier for forensic retention.  
+- **Alerting on integrity anomalies** — trigger pager and create a forensics ticket for any mismatch or sequence anomaly.
+
+---
+
+### Testing, Leakage, and Explainability Controls
+- **Automate leakage probe suite** — run the leakage_probe_prompt set and sanitizer event simulations on every release candidate; fail release on any high-severity detection.  
+- **CI-driven determinism suite** — run 3× deterministic renderer runs on representative subset; require token-level similarity gate (configurable threshold).  
+- **Human-review sampling for redaction tuning** — if substitution rate > 0.3% in CI runs, open a human-review batch before publishing.  
+- **Explainability artifact checks** — validate explainability_samples.json formatting, accessibility token outputs, and match them to canonical checksums during verification.
+
+---
+
+### Documentation Governance and Operational Playbooks
+- **Mandate README_ESCROW.md and reproducibility checklist** — include exact build commands, pinned seeds, locale handling notes, and clean-worktree requirement.  
+- **Change-control for fallback and clauses** — require CI gates, determinism runs, and signed manifest entry for any fallback_clause_catalog or clause update; log changes to clause_drift_log.csv.  
+- **Escrow and release playbooks** — maintain an Escrow SOW, dual-signature release workflow, and a reproducibility verification playbook used by escrow agents.  
+- **Runbook for incidents** — include audit-chain remediation, key compromise steps, release rollback, and communication templates for legal and customers.  
+- **Retention and archive policy** — define retention windows for artifacts, audit logs, and escrowed verification bundles; tie to legal/sovereign requirements.
+
+---
+
+Action items and owners should be tracked in your project board with due dates and acceptance criteria (e.g., CI gate configured and passing for 3 consecutive releases). If you want, I can convert this into a prioritized ticket list (Jira/Trello format) with suggested estimates and acceptance tests.

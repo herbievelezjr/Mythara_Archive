@@ -1,0 +1,345 @@
+### Package skeleton and files
+
+Below is a ready-to-create skeleton for the mythara.blessings.harmonizer Python package. Create the directory structure and paste the files as shown.
+
+#### Directory layout
+```
+mythara_blessings_harmonizer/
+├─ pyproject.toml
+├─ README.md
+├─ setup.cfg
+├─ MANIFEST.in
+├─ src/
+│  └─ mythara/
+│     └─ blessings/
+│        └─ harmonizer/
+│           ├─ __init__.py
+│           ├─ config.py
+│           ├─ datatypes.py
+│           ├─ harmonizer.py
+│           ├─ utils.py
+│           ├─ cli.py
+│           └─ tests/
+│              ├─ __init__.py
+│              ├─ test_score.py
+│              ├─ test_determinism.py
+│              └─ fixtures/
+│                 └─ sample_input.json
+└─ tests/
+   └─ integration_test.py
+```
+
+---
+
+### pyproject.toml
+```toml
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mythara-blessings-harmonizer"
+version = "0.0.0"
+description = "Deterministic clause harmonization engine for Mythara Engine"
+authors = [{name="Mythara Labs", email="legal@mythara.engine"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["click>=8.0"]
+```
+
+---
+
+### src/mythara/blessings/harmonizer/__init__.py
+```python
+__all__ = ["Harmonizer", "HarmonizerConfig", "ClauseProposal", "RankedCandidate"]
+from .harmonizer import Harmonizer
+from .datatypes import HarmonizerConfig, ClauseProposal, RankedCandidate, SelectionResult, FilterResult
+```
+
+---
+
+### src/mythara/blessings/harmonizer/datatypes.py
+```python
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import List, Optional, Dict, Any
+
+@dataclass
+class ClauseProposal:
+    clause_id: str
+    clause_hash: str
+    clause_text: str
+    base_score: float
+    tags: List[str] = field(default_factory=list)
+
+@dataclass
+class RankedCandidate(ClauseProposal):
+    harmonization_score: float = 0.0
+    selection_rationale: Optional[str] = None
+    provenance: Dict[str, str] = field(default_factory=dict)
+
+@dataclass
+class SelectionResult:
+    selected: Optional[RankedCandidate]
+    resolver_hint: Optional[str]
+    blocked: bool
+    explainability_snippet: Optional[str]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass
+class FilterResult:
+    passed: List[RankedCandidate]
+    blocked: List[ClauseProposal]
+    applied_rules: List[str] = field(default_factory=list)
+
+@dataclass
+class HarmonizerConfig:
+    manifest_ref: str
+    perception_prompt_hash: str
+    harmonization_delta_cutoff: float = 0.15
+    safety_severity_cutoff: float = 0.7
+    locale_default: str = "en-US"
+    score_weights: Dict[str, float] = field(default_factory=lambda: {
+        "base_score": 0.5, "confidence": 0.25, "harmonization_status": 0.15, "locale_bonus": 0.10
+    })
+    fallback_catalog_path: str = "manifest/fallback_clause_catalog.json"
+    determinism_seed: Optional[int] = None
+    human_review_threshold: float = 0.003
+```
+
+---
+
+### src/mythara/blessings/harmonizer/utils.py
+```python
+import json, hashlib
+from typing import Any
+
+def canonicalize_json(obj: Any) -> str:
+    return json.dumps(obj, separators=(",", ":"), sort_keys=True, ensure_ascii=False)
+
+def fingerprint(obj: Any) -> str:
+    canon = canonicalize_json(obj).encode("utf-8")
+    return "sha256:" + hashlib.sha256(canon).hexdigest()
+```
+
+---
+
+### src/mythara/blessings/harmonizer/harmonizer.py
+```python
+from __future__ import annotations
+import random, time
+from typing import List, Optional, Dict, Any
+from .datatypes import (ClauseProposal, RankedCandidate, SelectionResult, FilterResult, HarmonizerConfig)
+from .utils import canonicalize_json, fingerprint
+
+class Harmonizer:
+    def __init__(self, config: HarmonizerConfig, audit_writer=None):
+        self.config = config
+        self.audit_writer = audit_writer
+        self._precomputed = {}  # cache for clause static features
+
+    def score_candidates(self, observables: dict, candidates: List[ClauseProposal]) -> List[RankedCandidate]:
+        ranked = []
+        for c in candidates:
+            score = self._compute_score(c, observables)
+            rc = RankedCandidate(**{**c.__dict__, "harmonization_score": score, "provenance": {
+                "manifest_ref": self.config.manifest_ref,
+                "prompt_hash": self.config.perception_prompt_hash
+            }})
+            ranked.append(rc)
+        ranked.sort(key=lambda x: x.harmonization_score, reverse=True)
+        return ranked
+
+    def _compute_score(self, c: ClauseProposal, observables: dict) -> float:
+        w = self.config.score_weights
+        base = c.base_score
+        confidence = float(observables.get("confidence", 0.5))
+        harmon_status = 1.0 if observables.get("harmonization_status") == "ok" else 0.5
+        locale_bonus = 0.1 if (observables.get("locale") or self.config.locale_default) in c.tags else 0.0
+        score = (w["base_score"]*base + w["confidence"]*confidence + w["harmonization_status"]*harm_status + w["locale_bonus"]*locale_bonus)
+        # apply delta cutoff penalty (placeholder logic)
+        if abs(base - confidence) > self.config.harmonization_delta_cutoff:
+            score -= 0.1
+        return max(0.0, min(1.0, score))
+
+    def apply_safety_filters(self, ranked: List[RankedCandidate], sanitizer_flags: List[str], leakage_flags: List[str]) -> FilterResult:
+        applied = []
+        blocked = []
+        high_rules = [r for r in sanitizer_flags + leakage_flags if r.startswith("HIGH") or r.startswith("CRIT")]
+        if high_rules:
+            # block all primary candidates in presence of high-level rules
+            return FilterResult(passed=[], blocked=[rc for rc in ranked], applied_rules=high_rules)
+        # otherwise allow all (placeholder) — real logic inspects rule ids
+        return FilterResult(passed=ranked, blocked=[], applied_rules=applied)
+
+    def select_candidate(self, ranked: List[RankedCandidate], seed: Optional[int] = None) -> SelectionResult:
+        start = time.time()
+        if not ranked:
+            return SelectionResult(selected=None, resolver_hint=None, blocked=False, explainability_snippet="No candidates", metadata={})
+        # deterministic tie-breaking
+        if seed is None and self.config.determinism_seed is not None:
+            seed = self.config.determinism_seed
+        if seed is not None:
+            rng = random.Random(seed)
+            # deterministic shuffle while preserving scores ordering groups
+            groups = {}
+            for rc in ranked:
+                groups.setdefault(rc.harmonization_score, []).append(rc)
+            ordered = []
+            for score in sorted(groups.keys(), reverse=True):
+                bucket = groups[score]
+                if len(bucket) > 1:
+                    bucket = sorted(bucket, key=lambda x: x.clause_id)
+                    rng.shuffle(bucket)
+                ordered.extend(bucket)
+            chosen = ordered[0]
+        else:
+            # lexical tie-breaker fallback
+            max_score = max(rc.harmonization_score for rc in ranked)
+            top = [rc for rc in ranked if rc.harmonization_score == max_score]
+            chosen = sorted(top, key=lambda x: x.clause_id)[0]
+        latency_ms = int((time.time() - start) * 1000)
+        metadata = {
+            "manifest_ref": self.config.manifest_ref,
+            "prompt_hash": self.config.perception_prompt_hash,
+            "determinism_seed": seed,
+        }
+        canon = canonicalize_json({
+            "selected": chosen.__dict__,
+            "metadata": metadata
+        })
+        metadata["deterministic_fingerprint"] = fingerprint(canon)
+        metadata["render_latency_ms_estimate"] = latency_ms
+        # log audit record (non-blocking best-effort)
+        if self.audit_writer:
+            try:
+                record = self.to_audit_record(chosen, metadata)
+                self.audit_writer.append(record)
+            except Exception:
+                pass
+        return SelectionResult(selected=chosen, resolver_hint=None, blocked=False, explainability_snippet=chosen.selection_rationale, metadata=metadata)
+
+    def to_audit_record(self, selection: RankedCandidate, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        rec = {
+            "selection": selection.__dict__,
+            "metadata": metadata
+        }
+        return {"payload": canonicalize_json(rec), "fingerprint": fingerprint(rec)}
+```
+
+---
+
+### src/mythara/blessings/harmonizer/cli.py
+```python
+import json, sys
+import click
+from .datatypes import HarmonizerConfig, ClauseProposal
+from .harmonizer import Harmonizer
+from .utils import canonicalize_json
+
+@click.group()
+def cli():
+    pass
+
+@cli.command("score")
+@click.option("--input", "-i", required=True, help="Input JSON with observables and candidates")
+@click.option("--output", "-o", required=True, help="Output ranked JSON")
+@click.option("--seed", "-s", type=int, required=False, help="Determinism seed")
+def score_cmd(input, output, seed):
+    payload = json.load(open(input, "r", encoding="utf-8"))
+    config = HarmonizerConfig(manifest_ref=payload.get("manifest_ref","ME-archive-0001"),
+                              perception_prompt_hash=payload.get("perception_prompt_hash","sha256:perceptionprompthash_v1"))
+    harmonizer = Harmonizer(config)
+    candidates = [ClauseProposal(**c) for c in payload.get("clause_proposals",[])]
+    ranked = harmonizer.score_candidates(payload.get("observables",{}), candidates)
+    out = [r.__dict__ for r in ranked]
+    open(output, "w", encoding="utf-8").write(canonicalize_json(out))
+    click.echo(f"Wrote {len(out)} ranked candidates to {output}")
+
+@cli.command("select")
+@click.option("--ranked", "-r", required=True, help="Ranked JSON from score")
+@click.option("--output", "-o", required=True, help="Selection JSON output")
+@click.option("--seed", "-s", type=int, required=False, help="Determinism seed")
+def select_cmd(ranked, output, seed):
+    data = json.load(open(ranked, "r", encoding="utf-8"))
+    from .datatypes import RankedCandidate
+    rcandidates = [RankedCandidate(**d) for d in data]
+    config = HarmonizerConfig(manifest_ref="ME-archive-0001", perception_prompt_hash="sha256:perceptionprompthash_v1")
+    harmonizer = Harmonizer(config)
+    sel = harmonizer.select_candidate(rcandidates, seed=seed)
+    open(output, "w", encoding="utf-8").write(canonicalize_json(sel.__dict__))
+    click.echo(f"Wrote selection to {output}")
+
+if __name__ == "__main__":
+    cli()
+```
+
+---
+
+### src/mythara/blessings/harmonizer/config.py
+```python
+import yaml
+from .datatypes import HarmonizerConfig
+
+def load_config(path: str) -> HarmonizerConfig:
+    with open(path, "r", encoding="utf-8") as fh:
+        raw = yaml.safe_load(fh)
+    return HarmonizerConfig(**raw)
+```
+
+---
+
+### tests (unit & determinism)
+
+- tests/test_score.py: unit tests for _compute_score, locale bonus/penalty, delta penalty.
+- tests/test_determinism.py: run score+select 3× with same seed and assert JSON equality.
+- tests/fixtures/sample_input.json: representative observables and clause_proposals.
+
+(Implement tests using pytest; examples are trivial to write against the provided API.)
+
+---
+
+### Canonical YAML config (example)
+Create `harness_config.yml` at repo root:
+```yaml
+manifest_ref: "ME-archive-0001"
+perception_prompt_hash: "sha256:perceptionprompthash_v1"
+harmonization_delta_cutoff: 0.15
+safety_severity_cutoff: 0.7
+locale_default: "en-US"
+score_weights:
+  base_score: 0.5
+  confidence: 0.25
+  harmonization_status: 0.15
+  locale_bonus: 0.10
+fallback_catalog_path: "manifest/fallback_clause_catalog.json"
+determinism_seed: 20251030
+human_review_threshold: 0.003
+```
+
+---
+
+### Quick dev commands
+
+- Install editable package:
+  - python -m pip install -e ".[]"
+- Run CLI:
+  - python -m mythara.blessings.harmonizer.cli score -i tests/fixtures/sample_input.json -o /tmp/ranked.json -s 20251030
+  - python -m mythara.blessings.harmonizer.cli select -r /tmp/ranked.json -o /tmp/selection.json -s 20251030
+- Run tests:
+  - pytest -q
+
+---
+
+### README_ESCROW.md excerpt (for escrow manifest)
+```markdown
+Harmonizer Reproducibility Notes
+1. Use the provided harness_config.yml and determinism_seed (20251030) for reproducible runs.
+2. To reproduce: install package (pip install -e .), run CLI score then select with the same seed; selection JSON must be byte-for-byte identical across 3 runs.
+3. Audit writer interface: Harmonizer accepts an audit_writer with append(record: dict) that returns stored_record_id. For escrow verification, a file-backed writer is sufficient: append canonicalized record lines to audit_chain/ with atomic write.
+4. Fingerprint check: verify deterministic_fingerprint in selection.metadata matches SHA-256 of canonicalized selection.
+```
+
+---
+
+If you want, I will: (A) generate the actual file contents as downloadable files packaged into a zip, or (B) expand the unit tests with concrete assertions and fixture content now. Which should I produce next?

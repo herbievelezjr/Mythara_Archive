@@ -1,0 +1,106 @@
+﻿Forensic Workup Report
+Generated: 2025-11-02T15:31:42.5685629-08:00
+Root: c:\Users\HVele\OneDrive\Desktop\Mythara_Archive
+
+Counts:
+  Archived originals: 41
+  Normalized copies present: 8
+  Double-extension (*.md.md) files found: 2
+
+Top 10 largest archived files:
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\Legal\### Master Licensing Agreement Draf.txt (13404 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\core\source_proprietary\Mythara.Blessings.Harmonizer\### Package skeleton and files.txt (13367 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\Legal\### Escrow Instructions — Mythara E.txt (11479 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\core\### Demo container export and packa.txt (10943 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\tests\### Audit Chain Integrity Report.txt (8479 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\core\source_proprietary\Mytrhara.BR\### coremytharabrencoder.py.txt (8234 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\tests\### Shadow Resolver Report.txt (7653 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\Legal\### Pilot SOW Template.txt (7296 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\Commercial\### Validation Summary Slide — cont.txt (7219 bytes)
+  C:\Users\HVele\OneDrive\Desktop\Mythara_Archive\archive\DEPRECATED\FundRaising objective and focus\### One Pager and slide deck instrucktions..txt (6827 bytes)
+
+Duplicate-content groups (by SHA-256):
+  None detected
+
+Sensitive indicator hits:
+  No hits found for configured patterns
+
+Sample artifacts (first 5 entries):
+  Path: archive\DEPRECATED\Commercial\### Closing Readiness Scorecard.txt
+    Size: 5413 bytes
+    LastWriteUTC: 2025-10-31T04:44:06.0417760Z
+    SHA256: 0BB4906112220E1A5BB7B0B3783EAF9245079CD7540D5A55CBD4756123D19CD7
+    Sample:
+-----
+### Closing Readiness Scorecard
+
+**Prepared by:** Mythara Labs LLC  
+**Manifest Ref:** ME-archive-0001  
+**Date:** 2025-10-30
+
+-----
+  Path: archive\DEPRECATED\Commercial\### Pricing Tiers.txt
+    Size: 3494 bytes
+    LastWriteUTC: 2025-10-31T04:38:00.8220645Z
+    SHA256: 2190D21077AB986099EC54B811BCF308841A39DFCC775D333EA45E3DF2FD51CA
+    Sample:
+-----
+### Pricing Tiers
+
+| Tier | Price (annual/license) | Support & SLA | Escrow & Reproducibility | Validation Deliverables |
+|---|---:|---|---|---|
+| **Dev** | $15kâ€“$35k | Email support; 5 business-day SLA; quarterly updates | Manifest + checksums; escrow-ready docs; escrow deposit on request | Baseline test logs; determinism summary; explainability index |
+| **Enterprise** | $75kâ€“$250k | 24/7 email + phone; 24-hour SLA; quarterly security patching | Full escrow bundle; escrow unlocking on agreed triggers; signed manifests | Full test suite; stress test report; leakage probes; accessibility report |
+-----
+  Path: archive\DEPRECATED\Commercial\### Remittance Instructions.txt
+    Size: 2842 bytes
+    LastWriteUTC: 2025-10-31T04:40:20.2554606Z
+    SHA256: ACEA2121F250FC7F6545B676FC645CA521A729ABF82F69B3E3B78AB7829C185D
+    Sample:
+-----
+### Remittance Instructions
+
+Prepared for: **Mythara Labs LLC**  
+Manifest Ref: **ME-archive-0001**  
+Version: 1.0 â€” Date: 2025-10-30
+
+-----
+  Path: archive\DEPRECATED\Commercial\### Validation Summary Slide — cont.txt
+    Size: 7219 bytes
+    LastWriteUTC: 2025-10-31T04:36:08.5569077Z
+    SHA256: B69294998AC0CB2FF8F85E0CA358368C131457E768E01EE96D145151B805CD72
+    Sample:
+-----
+### Validation Summary Slide â€” content and build instructions
+
+Below is a single-slide, print- and presentation-ready layout for your Validation Summary. I include the exact slide content (ready to paste), a recommended layout, and two simple build options you can run locally to produce a PDF slide: Pandoc â†’ Beamer (LaTeX) or reveal.js â†’ PDF (headless Chromium). Choose the one that fits your toolchain.
+
+---
+
+-----
+  Path: archive\DEPRECATED\core\### Demo container export and packa.txt
+    Size: 10943 bytes
+    LastWriteUTC: 2025-10-31T04:09:15.3572527Z
+    SHA256: 7358C96C0FAEDF1634D12DE4C3A3A00904D07FFBD3CA6D4771C4E12304A44772
+    Sample:
+-----
+### Demo container export and packaging (terminal-friendly)
+
+Below are exact, copy-pasteable commands you can run to export a local Docker image, compress it into a gz archive, compute a checksum, and produce a PGP signature. Replace placeholders in angle brackets with your chosen names.
+
+---
+
+-----
+
+Recommendations:
+  - Preserve archive zip and backup forensic_manifest.json; sign the manifest with GPG for auditability.
+  - If any sensitive indicators (private keys) were found, rotate keys and review access logs immediately.
+  - Consider removing secrets from repo and rotate any credentials referenced in sanitizer/leakage logs.
+  - Run a full repository linter and a security scan (secret scanning) as a follow-up.
+
+---
+Remediation actions performed:
+  - Consolidated duplicate-content groups. For each duplicate group a canonical artifact was kept and other instances were backed up under archive/DEPRECATED/duplicate_backups and replaced with a `# DEPRECATED DUPLICATE FILE` marker pointing to the canonical path.
+  - Duplicate backups listing written to remediation_log.txt
+  - No PEM private-key blobs were found in files; only log entries indicating blocked attempts were present in sanitizer/leakage logs.
+

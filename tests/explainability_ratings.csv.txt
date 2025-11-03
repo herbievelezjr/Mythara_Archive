@@ -1,0 +1,46 @@
+sample_id,rater_id,score,notes
+inc-0001,rater-A,4.8,clear reasoning
+inc-0002,rater-B,4.5,good grounding
+inc-0003,rater-A,4.7,adequate citations
+inc-0004,rater-C,4.6,solid
+inc-0005,rater-B,4.4,minor ambiguity
+inc-0006,rater-A,4.9,excellent
+inc-0007,rater-C,4.2,needs more context
+inc-0008,rater-B,4.3,typo in example
+inc-0009,rater-A,4.7,well-structured
+inc-0010,rater-C,4.6,consistent
+inc-0011,rater-D,4.1,short on depth
+inc-0012,rater-E,4.0,acceptable
+inc-0013,rater-A,4.8,v strong
+inc-0014,rater-B,4.6,good
+inc-0015,rater-C,4.5,nice examples
+inc-0016,rater-A,4.9,outstanding
+inc-0017,rater-D,3.9,edge case unhandled
+inc-0018,rater-E,4.2,adequate
+inc-0019,rater-A,4.7,solid
+inc-0020,rater-B,4.5,consistent
+### explainability_ratings.csv
+
+```csv
+incident_id,rater_id,clarity_score,relevance_score,sufficiency_score,timestamp_utc,comments
+inc-0001,rater-001,5,5,5,2025-10-29T00:05:12Z,Clear, concise explanation; actionable steps included
+inc-0002,rater-002,4,4,4,2025-10-29T01:12:03Z,Good relevance; minor terminology confusion
+inc-0003,rater-003,3,2,3,2025-10-29T02:18:45Z,Some safety redactions reduced usefulness
+inc-0004,rater-004,5,5,4,2025-10-29T03:07:22Z,Excellent accessibility notes; could expand examples
+inc-0005,rater-005,5,4,5,2025-10-29T04:33:10Z,Concise and sufficient for intent; small formatting nit
+inc-0006,rater-006,2,2,2,2025-10-29T05:44:55Z,Output fragmented; list formatting inconsistent
+inc-0007,rater-007,3,3,3,2025-10-29T06:21:30Z,Partial explanation; needs more rationale for clause selection
+inc-0008,rater-008,4,5,4,2025-10-29T07:10:05Z,Relevant to query; clarity high after one edit
+inc-0009,rater-009,5,5,5,2025-10-29T08:02:18Z,Very clear; accessible token guidance included
+inc-0010,rater-010,4,3,4,2025-10-29T09:15:40Z,Mostly relevant; one mistaken assumption in background
+inc-0011,rater-011,4,4,3,2025-10-29T10:27:01Z,Good depth but could show provenance for a claim
+inc-0012,rater-012,5,5,5,2025-10-29T11:05:51Z,High clarity and sufficiency; ideal for auditors
+inc-0013,rater-013,3,2,3,2025-10-29T12:33:20Z,Relevance low for requested jurisdiction; adjust examples
+inc-0014,rater-014,4,4,4,2025-10-29T13:48:06Z,Solid explanation; formatting consistent
+inc-0015,rater-015,5,4,5,2025-10-29T14:55:30Z,Clear and actionable; suggested minor citation additions
+inc-0016,rater-016,3,3,2,2025-10-29T16:12:44Z,Insufficient detail on fallback behavior; clarify steps
+inc-0017,rater-017,4,5,4,2025-10-29T17:08:09Z,Highly relevant and mostly clear; good examples
+inc-0018,rater-018,5,5,5,2025-10-29T18:21:33Z,Excellent explainability for accessibility use case
+inc-0019,rater-019,2,2,2,2025-10-29T19:40:02Z,Confusing ordering of rationale; formatting caused misread
+inc-0020,rater-020,4,4,4,2025-10-29T20:05:17Z,Consistent and sufficiently detailed for pilot review
+```

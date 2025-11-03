@@ -1,0 +1,39 @@
+Mythara Test Completion Checklist
+
+This checklist summarizes verification status for core test families required for release readiness.
+
+- Determinism suite: completed
+- Reproducibility run: completed (see tests/Escrow Reproducibility Log.txt)
+- Leakage probe subset: completed; no unexpected exposures
+- Sanitizer event sweep: completed; 1 critical private_key_detector blocked
+- Explainability ratings: completed; median score 4.6/5 across samples
+- Accessibility delivery tests: completed; within acceptance thresholds
+
+Next steps:
+- Run full linter pass across repository and address remaining MD041/MD055 minor issues
+- Produce rename_map.json for automated filename normalizations
+### mythara_test_completion_checklist.csv
+
+```csv
+test_id,test_name,status,owner,completion_date,notes
+TST-001,Determinism Suite - Full Corpus,completed,QA,2025-10-30,pairwise similarity >= 0.99; det-incident-0427 remediated
+TST-002,Determinism Suite - Regression Subset,completed,QA,2025-10-30,3× repeat runs with seeded reproducibility
+TST-003,Leakage Probe Campaign,completed,Security,2025-10-29,20,000 probes; 0 high-severity exposures
+TST-004,Sanitizer Rules Validation,completed,Security,2025-10-29,thresholds tuned; human-review sampling enabled
+TST-005,Shadow Resolver Fallbacks,completed,Engineering,2025-10-30,fallback selection determinism and provenance headers verified
+TST-006,Audit Chain Integrity Check,completed,Security,2025-10-30,12,432 records inspected; AC-9832 flagged and remediated
+TST-007,Escrow Reproducibility Run,completed,Ops,2025-10-30,canonical outputs reproduced after two minor remediations
+TST-008,Container Build Reproducibility,completed,Ops,2025-10-30,image digest sha256:imgdigest_demo_v1.7.3 verified
+TST-009,Accessibility Token Insertion,completed,Accessibility,2025-10-29,braille/audio tokens present in 5,000 scenarios
+TST-010,Renderer Safety Enforcement,completed,Engineering,2025-10-30,high/critical sanitizer flags trigger standardized placeholders
+TST-011,Perception Scoring and Safety,completed,ML,2025-10-29,perception outputs include provenance and resolver_hint
+TST-012,Clause Drift Detection and Rollback,completed,QA,2025-10-28,high-drift clauses reverted; drift log updated
+TST-013,CI Gating Integration Test,in-progress,DevOps,2025-10-30,run_renderer_repeat.py gating under merge pipeline (blocking PRs until green)
+TST-014,Penetration Retest on Admin Endpoints,planned,Security,2025-11-07,requires MFA/RBAC hardening completion
+TST-015,HSM Signing Pilot for Manifests,planned,Security,2025-11-14,procurement and HSM integration tasks scheduled
+TST-016,Nightly Audit Validation Automation,planned,DevOps,2025-11-03,automate audit_chain linkage and cross-reference checks
+TST-017,Human Review Sampling Workflow Validation,completed,Product,2025-10-30,sampling pipeline active when substitution rate > 0.3%
+TST-018,Explainability Rater Batch,completed,ML,2025-10-29,additional human ratings for list-to-paragraph conversions
+TST-019,Leakage Probe Continuous Monitoring,planned,Security,2025-11-01,deploy continuous probe runner to staging
+TST-020,Final Release Readiness Audit,planned,Security/Legal,2025-11-10,requires CI gating, escrow SOW, dual-signature release
+```

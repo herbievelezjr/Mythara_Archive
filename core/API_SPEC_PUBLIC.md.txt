@@ -1,0 +1,166 @@
+API_SPEC_PUBLIC.md
+
+# Mythara Engine — Public API Specification
+
+**Prepared by:** Herbert Velez Jr.  
+**Entity:** Mythara Labs LLC  
+**Manifest Ref:** ME-archive-0001  
+**Date:** 2025-10-30
+
+---
+
+## 🔗 Base URL
+
+```
+https://api.mythara.engine/v1/
+```
+
+---
+
+## 🔐 Authentication
+
+All endpoints require a valid API key passed via header:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+---
+
+## 📡 Endpoints
+
+### 1. `POST /perceive`
+
+**Purpose:** Accepts user input and returns clause selection, BR inflow, and observables.
+
+**Request Body:**
+
+```json
+{
+  "input_text": "string",
+  "language": "en",
+  "modifiers": ["gesture_id_001", "gesture_id_002"]
+}
+```
+
+**Response:**
+
+```json
+{
+  "clause_id": "clause_045",
+  "br_inflow": 0.87,
+  "explanation": "string",
+  "observables": {
+    "gesture_ids": [...],
+    "harmonization_status": "stable",
+    "fallback_triggered": false
+  }
+}
+```
+
+---
+
+### 2. `GET /clause/{clause_id}`
+
+**Purpose:** Returns metadata and explanation scaffold for a given clause.
+
+**Response:**
+
+```json
+{
+  "clause_id": "clause_045",
+  "description": "string",
+  "harmonization_tags": ["grief", "legacy"],
+  "fallback_clause": "clause_999"
+}
+```
+
+---
+
+### 3. `POST /render`
+
+**Purpose:** Generates a final output using selected clause and renderer prompt.
+
+**Request Body:**
+
+```json
+{
+  "clause_id": "clause_045",
+  "br_state": 0.87,
+  "language": "en"
+}
+```
+
+**Response:**
+
+```json
+{
+  "output_text": "string",
+  "explanation": "string",
+  "audit_chain": {
+    "manifest_ref": "ME-archive-0001",
+    "prompt_hash": "sha256:abc123...",
+    "timestamp": "2025-10-30T20:15:00Z"
+  }
+}
+```
+
+---
+
+### 4. `GET /observables/{incident_id}`
+
+**Purpose:** Returns all observables for a given incident.
+
+**Response:**
+
+```json
+{
+  "incident_id": "incident_20251030_001",
+  "gesture_ids": [...],
+  "br_inflow": 0.87,
+  "clause_id": "clause_045",
+  "fallback_triggered": false,
+  "harmonization_status": "stable"
+}
+```
+
+---
+
+## 📊 Observables
+
+Mythara exposes the following observables for audit and explainability:
+
+| Observable          | Type     | Description |
+|---------------------|----------|-------------|
+| `clause_id`         | string   | Selected clause for output |
+| `br_inflow`         | float    | Benevolent force inflow (0.0–1.0) |
+| `gesture_ids`       | array    | Activated gesture modifiers |
+| `fallback_triggered`| boolean  | Whether a safety fallback was used |
+| `harmonization_status` | string | Status of clause harmonization |
+| `manifest_ref`      | string   | Reference to signed manifest |
+| `prompt_hash`       | string   | Hash of prompt scaffold used |
+| `timestamp`         | datetime | UTC timestamp of incident |
+
+---
+
+## 🧾 Licensing Notes
+
+- All observables are auditable and traceable to signed artifacts.  
+- Clause scaffolds and prompt templates are redacted but reproducible under escrow.  
+- API surface is stable and versioned. Sovereign deployment supported.
+
+---
+
+## 📬 Support
+
+```plaintext
+Mythara Labs LLC
+api@mythara.engine
+PGP Fingerprint: 571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C
+```
+
+---
+
+## 🔏 Signature
+
+This file is covered by the signature in `RELEASE_MANIFEST.json.asc`.

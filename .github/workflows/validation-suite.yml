@@ -1,0 +1,292 @@
+# GitHub Actions CI/CD — Mythara Validation Suite
+
+name: Mythara Validation Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+env:
+  MYTHARA_MANIFEST_REF: ME-archive-0001
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Run markdownlint
+        uses: articulate/actions-markdownlint@v1
+        with:
+          config: .markdownlint.json
+          files: '**/*.md'
+          ignore: 'archive/**'
+      
+      - name: Check file formatting
+        run: |
+          echo "Checking for trailing spaces and EOF newlines..."
+          ! grep -r -n -P '\s+$' --include="*.md" --exclude-dir=archive . || exit 1
+          
+  determinism-test:
+    name: Determinism & Reproducibility
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run determinism suite
+        run: |
+          python tests/run_determinism_test.py --iterations 3
+          
+      - name: Verify reproducibility
+        run: |
+          python tests/verify_clause_fingerprints.py
+          
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: determinism-results
+          path: tests/output/determinism_*.txt
+          
+  security-validation:
+    name: Security & Leakage Probes
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run leakage probe suite
+        run: |
+          python tests/run_leakage_probes.py --count 1000
+          
+      - name: Run shadow resolver tests
+        run: |
+          python tests/test_shadow_resolver.py
+          
+      - name: Check for high-severity leaks
+        run: |
+          if grep -q "HIGH_SEVERITY" tests/output/leakage_probe_log.csv; then
+            echo "HIGH_SEVERITY leak detected!"
+            exit 1
+          fi
+          
+      - name: Upload security results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-results
+          path: tests/output/leakage_*.csv
+          
+  ssip-audit:
+    name: SSIP Integrity Audit
+    runs-on: ubuntu-latest
+    needs: [determinism-test, security-validation]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run SSIP audit (24h check)
+        run: |
+          python tests/run_ssip_audit.py --interval 24h
+          
+      - name: Verify messenger pairing accuracy
+        run: |
+          python tests/verify_messenger_pairing.py --threshold 0.989
+          
+      - name: Check emotional fidelity
+        run: |
+          python tests/check_emotional_fidelity.py --min-score 0.91
+          
+      - name: Upload SSIP results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssip-audit-results
+          path: tests/output/ssip_*.md
+          
+  accessibility-validation:
+    name: Accessibility Token Delivery
+    runs-on: ubuntu-latest
+    needs: lint-and-format
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run accessibility tests
+        run: |
+          python tests/test_accessibility_delivery.py
+          
+      - name: Verify braille token generation
+        run: |
+          python tests/verify_braille_tokens.py
+          
+      - name: Check delivery success rate
+        run: |
+          python tests/check_accessibility_rate.py --min-rate 0.99
+          
+      - name: Upload accessibility results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-results
+          path: tests/output/accessibility_*.csv
+          
+  manifest-verification:
+    name: Verify Checksums & Signatures
+    runs-on: ubuntu-latest
+    needs: [ssip-audit, accessibility-validation]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install GPG
+        run: sudo apt-get update && sudo apt-get install -y gnupg
+      
+      - name: Import public key
+        run: |
+          gpg --import forensic_public_key.asc
+          
+      - name: Verify manifest signature
+        run: |
+          gpg --verify forensic_manifest.json.asc forensic_manifest.json
+          
+      - name: Verify checksums
+        run: |
+          cd manifest
+          sha256sum -c checksums.sha256
+          
+      - name: Upload verification log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-log
+          path: manifest/verification_report.txt
+          
+  final-report:
+    name: Generate Test Summary
+    runs-on: ubuntu-latest
+    needs: [determinism-test, security-validation, ssip-audit, accessibility-validation, manifest-verification]
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results
+      
+      - name: Generate summary report
+        run: |
+          echo "# Mythara Validation Suite — Test Summary" > test-summary.md
+          echo "**Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> test-summary.md
+          echo "**Manifest Ref**: $MYTHARA_MANIFEST_REF" >> test-summary.md
+          echo "" >> test-summary.md
+          echo "## Test Results" >> test-summary.md
+          echo "" >> test-summary.md
+          
+          if [ -d "test-results/determinism-results" ]; then
+            echo "✅ Determinism tests completed" >> test-summary.md
+          fi
+          
+          if [ -d "test-results/security-results" ]; then
+            echo "✅ Security validation completed" >> test-summary.md
+          fi
+          
+          if [ -d "test-results/ssip-audit-results" ]; then
+            echo "✅ SSIP audit completed" >> test-summary.md
+          fi
+          
+          if [ -d "test-results/accessibility-results" ]; then
+            echo "✅ Accessibility validation completed" >> test-summary.md
+          fi
+          
+          if [ -d "test-results/verification-log" ]; then
+            echo "✅ Manifest verification completed" >> test-summary.md
+          fi
+          
+          cat test-summary.md
+      
+      - name: Upload final summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-summary
+          path: test-summary.md
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('test-summary.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
