@@ -1,95 +1,58 @@
 # GitHub Copilot Instructions for Mythara Engine
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**
-
----
-
-## Project Context
-
-This is a **proprietary, private repository** for the Mythara Engine - a symbolic safety integrity protocol (SSIP) orchestration system with FastAPI implementation.
-
----
-
-## Code Standards
-
-### Copyright Headers
-
-**ALL new files must include this header:**
-
-```python
-# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
-```
-
-For markdown files:
-```markdown
-**Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
 **Proprietary and Confidential.**
-```
 
 ---
 
-## Architecture Patterns
+These instructions are a compact, actionable reference for AI coding agents working in this repo. Keep edits small and always preserve the repository copyright header in any new files.
 
-### API Endpoints
-- Follow REST conventions
-- Use Bearer token authentication
-- Return integrity hashes with responses
-- Include SSIP compliance metrics
+### Fast orientation (what matters)
+- The API server is implemented at `core/source_proprietary/main.py` (FastAPI). Key endpoints:
+	- POST `/v1/clauses/invoke` — clause invocation (see `ClauseInvocationRequest`/`Response` models).
+	- GET `/v1/manifest/clauses` — returns clause manifest + integrity hashes.
+	- Health/docs: `/health` and `/api/docs`.
+- In-memory stubs: `CLAUSE_DB` and `BR_STATE` in `main.py`. Production systems must replace these with a DB/Redis.
 
-### Clause Invocation
-- Emotional fidelity calculations required
-- Blessings reservoir updates on each invocation
-- Fallback to Shadow_Resolver on errors
-- Generate unique invocation IDs
+### How to run & common developer workflows
+- Run API locally (from `core/source_proprietary/` or set PYTHONPATH accordingly):
+	- python: `python core/source_proprietary/main.py` (this script calls uvicorn)
+	- uvicorn: `uvicorn core.source_proprietary.main:app --reload --host 0.0.0.0 --port 8000`
+- Build container: `docker build -f core/Dockerfile -t mythara:v1.0.0 .`
+- Run full validation suite (determinism, leakage, SSIP audits): `python run_validation_suite.py` (writes to `tests/output/`).
+- Run tests: `pytest -q` (repo root). Validation scripts call tests like `tests/run_determinism_test.py`.
+- Lint/typecheck: tools are listed in `requirements.txt` (black, ruff, mypy). Use the project's standard commands (e.g., `ruff check .`, `black . --check`).
 
-### Security
-- Never hardcode production API keys
-- Use environment variables for secrets
-- Validate all inputs with Pydantic models
-- Log all invocations with timestamps
+### Secrets & configuration
+- `core/source_proprietary/requirements-api.txt` shows runtime dependencies (fastapi/uvicorn, python-dotenv). The repository uses in-code `VALID_API_KEYS` for demos (see `main.py`).
+- DO NOT hardcode production API keys: use environment variables or a secrets manager; prefer `.env` for local dev (python-dotenv is present).
 
----
+### Project-specific conventions and patterns
+- Copyright header: every new file (python and markdown) must include the repo header shown above.
+- Integrity-first responses: endpoints generate SHA-256 integrity hashes for invocations and manifests — preserve this pattern when adding endpoints or background jobs.
+- SSIP-first telemetry: return or emit SSIP metrics (drift suppression, messenger pairing fidelity, emotional fidelity) on audit endpoints and logs.
+- Tests and validation produce artifacts in `tests/output/` (the validation runner documents expected file names).
 
-## File Organization
+### Integration points (observed in repo)
+- PGP/forensic verification: `manifest/checksums.sha256` and `forensic_manifest.json.asc` — reviewers use `gpg --verify` and `sha256sum -c` (see `README.md`).
+- Docker: `core/Dockerfile` for container builds.
+- Optional DB/Redis hooks: `main.py` contains comments showing where to plug Postgres/Redis for production state.
 
-```
-core/source_proprietary/  # API implementation
-tests/                    # Validation suite
-docs/                     # Documentation
-Legal/Compliance/         # Regulatory docs
-```
+### Minimal examples to cite in PRs and patches
+- Add an endpoint that mirrors existing patterns: validate input with pydantic, authenticate with `verify_api_key` (or env-backed replacement), compute integrity hash via `hashlib.sha256`, log via `logging` and return the integrity hash in response.
+- To run quick local validation in CI, call: `python run_validation_suite.py` and check `tests/output/` for reports.
 
----
-
-## Dependencies
-
-- Python 3.11+
-- FastAPI 0.104+
-- Pydantic 2.5+
-- All dependencies pinned in requirements files
-
----
-
-## Licensing
-
-This is **proprietary software**. Do not suggest:
-- Open source licenses
-- Public distribution methods
-- Removing copyright headers
-- Weakening authentication
+### Where to look for details
+- API code & behavior: `core/source_proprietary/main.py`
+- API dependencies: `core/source_proprietary/requirements-api.txt`
+- Root dependencies & dev tools: `requirements.txt`
+- Validation runner & orchestration: `run_validation_suite.py` and `tests/`
+- Build and escrow artifacts: `core/Dockerfile`, `manifest/`, `forensic_*` files
 
 ---
 
-## Suggestions Welcome For
-
-✅ Performance optimizations  
-✅ Security hardening  
-✅ SSIP compliance improvements  
-✅ Error handling  
-✅ Test coverage  
-✅ Documentation clarity
+If any section above is unclear or you'd like me to expand with exact CLI snippets tailored to CI or a Docker-compose flow, tell me which area to expand and I'll update the file. 
 
 ---
 
-**Remember: This is a private, NDA-protected codebase for enterprise licensing.**
+**Do not remove or alter the copyright header in new files.**
