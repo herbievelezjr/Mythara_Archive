@@ -816,6 +816,22 @@ async def stripe_webhook(request: Request):
                 logger.info(f"Pilot API key generated for {customer_email}: {api_key}")
                 logger.info(f"Pilot fee processed for {customer_email} (${amount_paid:,.2f})")
                 
+                # Send welcome email with API key and download link
+                try:
+                    from .pilot_email_sender import send_pilot_welcome_email
+                    email_sent = send_pilot_welcome_email(
+                        to_email=customer_email or CONTACT_EMAIL,
+                        api_key=api_key,
+                        customer_name=customer_name,
+                        payment_id=payment_id
+                    )
+                    if email_sent:
+                        logger.info(f"Welcome email sent to {customer_email}")
+                    else:
+                        logger.warning(f"Welcome email failed for {customer_email} - check logs")
+                except Exception as e:
+                    logger.error(f"Error sending welcome email: {e}")
+                
                 # Try to update Stripe session metadata with API key
                 # This allows the email template to use {{metadata.api_key}}
                 if stripe:

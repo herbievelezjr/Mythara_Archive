@@ -21,6 +21,59 @@ This archive contains all artifacts required for:
 
 ---
 
+
+## Quickstart for Developers
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+pip install -r core/source_proprietary/requirements-api.txt
+```
+
+### 2. Run the API server
+
+```bash
+python core/source_proprietary/main.py
+# or
+uvicorn core.source_proprietary.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 3. Run tests and validation suite
+
+```bash
+pytest -q
+python run_validation_suite.py
+```
+
+### 4. Build Docker image
+
+```bash
+docker build -f core/Dockerfile -t mythara:v1.0.0 .
+```
+
+### 5. API documentation and usage
+
+- Swagger UI: [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
+- ReDoc: [http://localhost:8000/api/redoc](http://localhost:8000/api/redoc)
+- See `core/source_proprietary/README_API.md` for endpoint details and example requests/responses.
+
+#### Example: Invoke a clause
+
+```bash
+curl -X POST http://localhost:8000/v1/clauses/invoke \
+   -H "Authorization: Bearer dev_test_key_001" \
+   -H "Content-Type: application/json" \
+   -d '{
+      "clause_id": "Legacy_Seed",
+      "messenger": "M-001",
+      "payload": {"emotion": "grief", "intensity": 0.87, "context": "ancestral_memory"},
+      "consent_token": "user_consent_xyz"
+   }'
+```
+
+---
+
 ## Quick Start
 
 ### For Investors & Licensing Partners
@@ -81,10 +134,12 @@ This archive contains all artifacts required for:
 
 ### 🔐 Security & Compliance
 
-- **Zero-trust architecture** (OMB M-25-04 aligned)  
+- **Authentication & authorization** — Bearer token authentication with role-based access control and rate limiting
+- **Audit logging** — Failed authentication attempts and permission violations logged for compliance
 - **HIPAA, FTC, FCC, NIST SP 800-53** embedded clause logic  
 - **Continuous monitoring** via SSIP audit protocols  
 - **Breach response** — automated ELE Capsule Mode & quarantine
+- **Integrity verification** — SHA-256 hashes on all responses and PGP-signed manifests
 
 ### 🧬 Symbolic Infrastructure
 

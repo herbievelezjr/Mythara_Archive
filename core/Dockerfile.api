@@ -1,0 +1,42 @@
+# Mythara Engine API - Production Dockerfile
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+# Proprietary and Confidential.
+
+FROM python:3.11.6-slim-bookworm
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy API requirements
+COPY core/source_proprietary/requirements-api.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip==23.3.1 && \
+    pip install --no-cache-dir -r requirements-api.txt
+
+# Copy API source code
+COPY core/source_proprietary/ /app/core/source_proprietary/
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
+
+# Expose port (Railway/Render will override with PORT env var)
+EXPOSE 8000
+
+# Run API server
+CMD ["python", "core/source_proprietary/main.py"]
+
+# Metadata
+LABEL maintainer="Herbert Velez Jr. <Mythara.Engine@yahoo.com>"
+LABEL version="1.0.0"
+LABEL description="Mythara Engine API - Pilot Paywall Production Server"
