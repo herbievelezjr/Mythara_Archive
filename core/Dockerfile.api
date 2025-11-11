@@ -22,6 +22,9 @@ RUN pip install --no-cache-dir --upgrade pip==23.3.1 && \
 # Copy API source code
 COPY core/source_proprietary/ /app/core/source_proprietary/
 
+# Copy static files (pilot package download)
+COPY core/static/ /app/core/static/
+
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
