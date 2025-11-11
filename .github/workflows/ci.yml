@@ -1,0 +1,62 @@
+# Mythara Engine Private CI
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+# Proprietary and Confidential.
+
+name: Mythara CI
+
+on:
+  push:
+    branches: [main, "copilot/*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-validate:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r core/source_proprietary/requirements-api.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Typecheck (mypy)
+        run: mypy core/source_proprietary/ || true
+
+      - name: Format check (black)
+        run: black . --check
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Run validation suite
+        run: python run_validation_suite.py
+
+      - name: Build Docker image
+        run: docker build -f core/Dockerfile -t mythara:v1.0.0 .
+
+      - name: Verify PGP signature
+        run: |
+          gpg --import forensic_public_key.asc
+          gpg --verify forensic_manifest.json.asc forensic_manifest.json
+
+      - name: Verify checksums
+        run: sha256sum -c manifest/checksums.sha256
+
+      - name: Upload validation outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-outputs
+          path: tests/output/
