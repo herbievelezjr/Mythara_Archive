@@ -911,6 +911,26 @@ async def health_check():
         "uptime_seconds": 0.0
     }
 
+@app.get("/download/pilot")
+async def download_pilot_package():
+    """
+    Public endpoint to download the Mythara pilot package.
+    No authentication required - this link is shared in purchase emails.
+    """
+    from fastapi.responses import FileResponse
+    import os
+    
+    file_path = os.path.join(os.path.dirname(__file__), "../static/mythara-pilot-package.zip")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Pilot package not found")
+    
+    return FileResponse(
+        path=file_path,
+        media_type="application/zip",
+        filename="mythara-pilot-package.zip"
+    )
+
 @app.post("/v1/pilot/unlock")
 async def pilot_unlock(request: Request):
     """
