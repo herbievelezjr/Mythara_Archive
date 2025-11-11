@@ -14,66 +14,49 @@ SETUP_INSTRUCTIONS = """
 ================================================================================
 
 1. Open Task Scheduler:
-   - Press Windows + R
-   - Type: taskschd.msc
-   - Press Enter
+   - Press Win+R, type 'taskschd.msc', press Enter
 
-2. Create New Task:
-   - Click "Create Basic Task" (right sidebar)
-   - Name: "Mythara Weekly Sales Analytics"
-   - Description: "Sends weekly sales bot performance report PDF every Sunday"
+2. Create Basic Task:
+   - Click "Create Basic Task..." in right panel
+   - Name: "Mythara Weekly Analytics Report"
+   - Description: "Automated weekly analytics report for Mythara Engine"
    - Click Next
 
-3. Set Trigger (When):
-   - Select: "Weekly"
+3. Trigger:
+   - Select "Weekly"
    - Click Next
-   - Start date: (Today's date)
-   - Start time: 18:00:00 (6:00 PM MT)
+   - Start date: Today
+   - Start time: 18:00 (6:00 PM)
    - Recur every: 1 week
-   - Select: Sunday
+   - Check: Sunday
    - Click Next
 
-4. Set Action (What):
-   - Select: "Start a program"
+4. Action:
+   - Select "Start a program"
    - Click Next
-   - Program/script: C:\\Users\\HVele\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\python.exe
-   - Add arguments: -3.11 weekly_analytics_report.py
-   - Start in: C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial
+   - Program/script: Browse to python.exe (e.g., C:\\Python311\\python.exe)
+   - Add arguments: "C:\\path\\to\\Mythara_Archive\\Commercial\\weekly_analytics_report.py"
+   - Start in: C:\\path\\to\\Mythara_Archive\\Commercial
    - Click Next
 
-5. Review and Finish:
+5. Finish:
    - Review settings
-   - Check "Open the Properties dialog when I click Finish"
+   - Check "Open the Properties dialog"
    - Click Finish
 
-6. Configure Properties:
-   - On General tab:
-     - Select "Run whether user is logged on or not"
+6. Additional Settings (in Properties dialog):
+   - General tab:
+     - Check "Run whether user is logged on or not"
      - Check "Run with highest privileges"
-   - On Settings tab:
+   - Conditions tab:
+     - Uncheck "Start the task only if the computer is on AC power"
+   - Settings tab:
      - Check "Run task as soon as possible after a scheduled start is missed"
-     - Check "If the task fails, restart every: 10 minutes, Attempt to restart up to: 3 times"
    - Click OK
-   - Enter your Windows password when prompted
 
-================================================================================
-✅ TASK SCHEDULED - Weekly reports will be sent automatically
-================================================================================
-
-📧 What Happens Every Sunday 6pm:
-   1. Script runs automatically
-   2. Analyzes last 7 days of bot activity
-   3. Generates PDF report
-   4. (Once Gmail OAuth configured) Emails PDF to Herbievelezjr@gmail.com
-
-📋 Report Includes:
-   - Emails sent/received
-   - Response rates
-   - Blessings score
-   - Deals closed
-   - Governance violations
-   - Performance strengths
-   - Recommended improvements
+7. Test:
+   - Right-click the task → Run
+   - Check email for PDF report
 
 💡 To Test Now:
    - Right-click task in Task Scheduler
@@ -83,20 +66,21 @@ SETUP_INSTRUCTIONS = """
 ================================================================================
 """
 
-print(SETUP_INSTRUCTIONS)
+import argparse
 
-# Alternative: Create task via PowerShell command
-POWERSHELL_COMMAND = """
-# PowerShell command to create task (run as Administrator):
+def main():
+    parser = argparse.ArgumentParser(
+        description="Schedule the weekly analytics report (see instructions)")
+    parser.add_argument('--show-instructions', action='store_true', 
+                       help='Print setup instructions and exit')
+    args = parser.parse_args()
+    
+    if args.show_instructions:
+        print(SETUP_INSTRUCTIONS)
+        return
+    
+    print("This script displays setup instructions for Task Scheduler.")
+    print("Run with --show-instructions to see full setup guide.")
 
-$action = New-ScheduledTaskAction -Execute 'py' -Argument '-3.11 weekly_analytics_report.py' -WorkingDirectory 'C:\\Users\\HVele\\OneDrive\\Desktop\\Mythara_Archive\\Commercial'
-
-$trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At 6:00PM
-
-Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "Mythara Weekly Sales Analytics" -Description "Sends weekly sales bot performance report PDF every Sunday at 6pm MT"
-"""
-
-print("\n📌 ALTERNATIVE: PowerShell One-Liner")
-print("="*80)
-print(POWERSHELL_COMMAND)
-print("="*80)
+if __name__ == "__main__":
+    main()
