@@ -1,0 +1,36 @@
+# Mythara Engine Pilot - Docker Compose
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+
+version: '3.8'
+
+services:
+  mythara-api:
+    image: herbievelezjr/mythara-engine:pilot
+    container_name: mythara-pilot-api
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - MYTHARA_PILOT_PAYWALL=${MYTHARA_PILOT_PAYWALL:-true}
+      - MYTHARA_PILOT_FORCE_UNLOCK=${MYTHARA_PILOT_FORCE_UNLOCK:-true}
+      - MYTHARA_PILOT_PURCHASE_URL=${MYTHARA_PILOT_PURCHASE_URL}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - MYTHARA_API_KEYS=${MYTHARA_API_KEYS}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - pilot-data:/tmp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  pilot-data:
+    driver: local
+
+networks:
+  default:
+    name: mythara-pilot-network
