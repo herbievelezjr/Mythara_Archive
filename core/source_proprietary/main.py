@@ -236,16 +236,29 @@ PILOT_PAYWALL_ENABLED = os.getenv("MYTHARA_PILOT_PAYWALL", "false").lower() in [
 PILOT_PRICE_USD = int(os.getenv("MYTHARA_PILOT_PRICE_USD", "49"))
 PILOT_PURCHASE_URL = os.getenv("MYTHARA_PILOT_PURCHASE_URL")  # Stripe payment link for pilot fee
 PILOT_ACCESS_FILE = os.getenv("MYTHARA_PILOT_ACCESS_PATH", "/tmp/mythara_pilot_access.json")
+
+# Stripe payment links for enterprise tiers (configure these in Railway environment)
+STRIPE_PAYMENT_LINKS = {
+    "pilot": os.getenv("STRIPE_LINK_PILOT", "https://buy.stripe.com/test_dRm28s5XKbpm2Dk41KgjC00"),
+    "foundation": os.getenv("STRIPE_LINK_FOUNDATION"),  # $25K Startup tier
+    "professional": os.getenv("STRIPE_LINK_PROFESSIONAL"),  # $40K Small Business tier
+    "corporate": os.getenv("STRIPE_LINK_CORPORATE"),  # $75K Mid-Market tier
+    "enterprise": os.getenv("STRIPE_LINK_ENTERPRISE"),  # $150K Enterprise tier
+    "sovereign": os.getenv("STRIPE_LINK_SOVEREIGN"),  # $300K Global tier
+}
+
 # Operator overrides (for local/dev simplicity)
 PILOT_FORCE_UNLOCK = os.getenv("MYTHARA_PILOT_FORCE_UNLOCK", "false").lower() in ["1", "true", "yes", "on"]
 PILOT_UNLOCK_TOKEN = os.getenv("MYTHARA_PILOT_UNLOCK_TOKEN")  # If set, enables /v1/pilot/unlock endpoint
 
 # Enterprise pricing tiers based on company size
 # Each tier includes: display name, description, features, and pricing
+# Stripe product names: "Startup", "Small Business", "Mid-Market", "Enterprise", "Global"
 ENTERPRISE_TIERS = {
     "foundation": {
         "name": "Foundation",
         "display_name": "Mythara Foundation",
+        "stripe_product_name": "Startup",  # Matches Stripe product catalog
         "tagline": "Perfect for early-stage startups and SMBs",
         "description": "Essential SSIP orchestration for growing teams building compliant mental health applications",
         "base_price": 25000,
@@ -264,6 +277,7 @@ ENTERPRISE_TIERS = {
     "professional": {
         "name": "Professional",
         "display_name": "Mythara Professional",
+        "stripe_product_name": "Small Business",  # Matches Stripe product catalog
         "tagline": "Built for established small businesses",
         "description": "Advanced orchestration with priority support for scaling healthcare organizations",
         "base_price": 40000,
@@ -284,6 +298,7 @@ ENTERPRISE_TIERS = {
     "corporate": {
         "name": "Corporate",
         "display_name": "Mythara Corporate",
+        "stripe_product_name": "Mid-Market",  # Matches Stripe product catalog
         "tagline": "Enterprise-grade for mid-market leaders",
         "description": "High-volume orchestration with enhanced SLAs for mission-critical mental health infrastructure",
         "base_price": 75000,
@@ -305,6 +320,7 @@ ENTERPRISE_TIERS = {
     "enterprise": {
         "name": "Enterprise",
         "display_name": "Mythara Enterprise",
+        "stripe_product_name": "Enterprise",  # Matches Stripe product catalog
         "tagline": "Unlimited scale for healthcare enterprises",
         "description": "White-glove service with unlimited orchestration for national healthcare organizations",
         "base_price": 150000,
@@ -327,6 +343,7 @@ ENTERPRISE_TIERS = {
     "sovereign": {
         "name": "Sovereign",
         "display_name": "Mythara Sovereign",
+        "stripe_product_name": "Global",  # Matches Stripe product catalog
         "tagline": "Complete ownership for global enterprises",
         "description": "Full source code escrow and unlimited deployment rights for Fortune 500 healthcare leaders",
         "base_price": 300000,
@@ -399,6 +416,7 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
         "tier": tier_key,
         "name": tier["name"],
         "display_name": tier["display_name"],
+        "stripe_product_name": tier.get("stripe_product_name"),
         "tagline": tier["tagline"],
         "description": tier["description"],
         "base_price": base_price,
@@ -408,7 +426,8 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
         "employee_range": tier["employee_range"],
         "multiplier": tier["multiplier"],
         "features": tier["features"],
-        "ideal_for": tier["ideal_for"]
+        "ideal_for": tier["ideal_for"],
+        "payment_link": STRIPE_PAYMENT_LINKS.get(tier_key)  # Stripe payment link URL
     }
 
 def compute_current_enterprise_price(tier_key: str = "mid") -> int:
