@@ -240,47 +240,103 @@ PILOT_ACCESS_FILE = os.getenv("MYTHARA_PILOT_ACCESS_PATH", "/tmp/mythara_pilot_a
 PILOT_FORCE_UNLOCK = os.getenv("MYTHARA_PILOT_FORCE_UNLOCK", "false").lower() in ["1", "true", "yes", "on"]
 PILOT_UNLOCK_TOKEN = os.getenv("MYTHARA_PILOT_UNLOCK_TOKEN")  # If set, enables /v1/pilot/unlock endpoint
 
+# Enterprise pricing tiers based on company size
+# Base price is for small companies (1-100 employees)
+ENTERPRISE_TIERS = {
+    "startup": {
+        "name": "Startup (1-50 employees)",
+        "base_price": 25000,
+        "employee_range": (1, 50),
+        "multiplier": 1.0
+    },
+    "small": {
+        "name": "Small Business (51-200 employees)",
+        "base_price": 40000,
+        "employee_range": (51, 200),
+        "multiplier": 1.6
+    },
+    "mid": {
+        "name": "Mid-Market (201-1000 employees)",
+        "base_price": 75000,
+        "employee_range": (201, 1000),
+        "multiplier": 3.0
+    },
+    "enterprise": {
+        "name": "Enterprise (1001-5000 employees)",
+        "base_price": 150000,
+        "employee_range": (1001, 5000),
+        "multiplier": 6.0
+    },
+    "global": {
+        "name": "Global Enterprise (5000+ employees)",
+        "base_price": 300000,
+        "employee_range": (5001, 999999),
+        "multiplier": 12.0
+    }
+}
+
 # Inflation-based dynamic pricing (optional):
 # If MYTHARA_INFLATION_RATE_ANNUAL is set, we compute current price as:
 #   enterprise_price = base_price * (1 + inflation_rate) ** max(0, current_year - base_year)
 # This compounds once per calendar year difference.
 PRICE_BASE_YEAR = int(os.getenv("MYTHARA_PRICE_BASE_YEAR", "2025"))
 INFLATION_RATE_ANNUAL = os.getenv("MYTHARA_INFLATION_RATE_ANNUAL")  # e.g. "0.03" for 3%
-# Optional size-based multiplier (e.g., 1.0 small, 1.2 mid, 1.5 enterprise)
-SIZE_PRICE_MULTIPLIER = os.getenv("MYTHARA_PRICE_MULTIPLIER")  # e.g. "1.25"
 
-def compute_current_enterprise_price() -> int:
-    """Compute enterprise price with optional inflation and size multipliers.
-    - If INFLATION_RATE_ANNUAL is unset/blank or invalid, use base price.
-    - If SIZE_PRICE_MULTIPLIER is unset/blank or invalid, ignore it.
+def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Optional[str] = None) -> Dict[str, Any]:
     """
-    base = ENTERPRISE_PRICE_USD
+    Compute enterprise price based on company size.
+    
+    Args:
+        employee_count: Number of employees (if known)
+        tier_key: Specific tier key (startup, small, mid, enterprise, global) or None for auto-detect
+    
+    Returns:
+        Dict with pricing info: {tier, base_price, final_price, name, employee_range}
+    """
+    # Auto-detect tier if not specified
+    if tier_key is None:
+        for key, tier in ENTERPRISE_TIERS.items():
+            min_emp, max_emp = tier["employee_range"]
+            if min_emp <= employee_count <= max_emp:
+                tier_key = key
+                break
+        if tier_key is None:
+            tier_key = "global"  # Default to highest tier
+    
+    tier = ENTERPRISE_TIERS.get(tier_key, ENTERPRISE_TIERS["mid"])
+    base_price = tier["base_price"]
+    
+    # Apply inflation if configured
     rate: Optional[float] = None
-
-    # Parse inflation rate safely
     if INFLATION_RATE_ANNUAL not in (None, ""):
         try:
-            rate = float(INFLATION_RATE_ANNUAL)  # e.g., 0.03 for 3%
+            rate = float(INFLATION_RATE_ANNUAL)
         except ValueError:
-            logger.warning(f"Invalid inflation rate: {INFLATION_RATE_ANNUAL}; using base price.")
-            rate = None
-
+            pass
+    
     current_year = datetime.utcnow().year
     years = max(0, current_year - PRICE_BASE_YEAR)
-    price = float(base)
-
+    final_price = float(base_price)
+    
     if rate is not None:
-        price = base * ((1 + rate) ** years)
+        final_price = base_price * ((1 + rate) ** years)
+    
+    return {
+        "tier": tier_key,
+        "tier_name": tier["name"],
+        "base_price": base_price,
+        "final_price": int(round(final_price)),
+        "employee_range": tier["employee_range"],
+        "multiplier": tier["multiplier"]
+    }
 
-    # Apply size multiplier if present
-    if SIZE_PRICE_MULTIPLIER not in (None, ""):
-        try:
-            mult = float(SIZE_PRICE_MULTIPLIER)
-            price *= mult
-        except ValueError:
-            logger.warning(f"Invalid size price multiplier: {SIZE_PRICE_MULTIPLIER}; ignoring.")
-
-    return int(round(price))
+def compute_current_enterprise_price(tier_key: str = "mid") -> int:
+    """
+    Compute enterprise price for a specific tier (legacy function for compatibility).
+    Default to mid-market tier.
+    """
+    pricing = compute_enterprise_price_for_company_size(500, tier_key)  # Use middle of mid-tier
+    return pricing["final_price"]
 
 # In production, replace the following in-memory stubs with DB/Redis-backed models.
 # See README and .github/copilot-instructions.md for integration points.
@@ -1116,19 +1172,63 @@ async def admin_pricing(api_key: str = Depends(require_role("admin"))):
         infl = float(INFLATION_RATE_ANNUAL) if INFLATION_RATE_ANNUAL is not None else None
     except ValueError:
         infl = None
-    try:
-        mult = float(SIZE_PRICE_MULTIPLIER) if SIZE_PRICE_MULTIPLIER is not None else None
-    except ValueError:
-        mult = None
+    
+    # Return tier-based pricing info
+    mid_tier_pricing = compute_enterprise_price_for_company_size(500, "mid")
+    
     return PricingBreakdownResponse(
-        base_price_usd=ENTERPRISE_PRICE_USD,
+        base_price_usd=mid_tier_pricing["base_price"],
         inflation_rate=infl,
         base_year=PRICE_BASE_YEAR,
         current_year=current_year,
         years_elapsed=years,
-        size_multiplier=mult,
+        size_multiplier=mid_tier_pricing["multiplier"],
         computed_price_usd=compute_current_enterprise_price(),
     )
+
+@app.get("/v1/pricing/enterprise")
+async def get_enterprise_pricing(
+    employees: Optional[int] = None,
+    tier: Optional[str] = None
+):
+    """
+    Get enterprise pricing based on company size.
+    
+    Query params:
+        employees: Number of employees (auto-detects tier)
+        tier: Specific tier (startup, small, mid, enterprise, global)
+    
+    Returns all available tiers if no params provided.
+    """
+    if employees is None and tier is None:
+        # Return all tiers
+        all_tiers = {}
+        for tier_key, tier_data in ENTERPRISE_TIERS.items():
+            pricing = compute_enterprise_price_for_company_size(
+                tier_data["employee_range"][0], 
+                tier_key
+            )
+            all_tiers[tier_key] = pricing
+        
+        return {
+            "tiers": all_tiers,
+            "currency": "USD",
+            "billing": "one-time annual license",
+            "note": "Custom pricing available for unique requirements"
+        }
+    
+    # Return specific tier pricing
+    if tier:
+        pricing = compute_enterprise_price_for_company_size(100, tier)
+    else:
+        pricing = compute_enterprise_price_for_company_size(employees or 100)
+    
+    return {
+        "pricing": pricing,
+        "currency": "USD",
+        "billing": "one-time annual license",
+        "contact": CONTACT_EMAIL
+    }
 
 # ============================================================================
 # STARTUP
