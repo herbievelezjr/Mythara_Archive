@@ -241,37 +241,111 @@ PILOT_FORCE_UNLOCK = os.getenv("MYTHARA_PILOT_FORCE_UNLOCK", "false").lower() in
 PILOT_UNLOCK_TOKEN = os.getenv("MYTHARA_PILOT_UNLOCK_TOKEN")  # If set, enables /v1/pilot/unlock endpoint
 
 # Enterprise pricing tiers based on company size
-# Base price is for small companies (1-100 employees)
+# Each tier includes: display name, description, features, and pricing
 ENTERPRISE_TIERS = {
-    "startup": {
-        "name": "Startup (1-50 employees)",
+    "foundation": {
+        "name": "Foundation",
+        "display_name": "Mythara Foundation",
+        "tagline": "Perfect for early-stage startups and SMBs",
+        "description": "Essential SSIP orchestration for growing teams building compliant mental health applications",
         "base_price": 25000,
         "employee_range": (1, 50),
-        "multiplier": 1.0
+        "multiplier": 1.0,
+        "features": [
+            "Full API access with 100K clause invocations/month",
+            "Standard support (48-hour response)",
+            "NIST 800-53 & HIPAA compliance documentation",
+            "Docker deployment templates",
+            "Community Slack access",
+            "Quarterly security updates"
+        ],
+        "ideal_for": "Startups, mental health apps, telehealth platforms (1-50 employees)"
     },
-    "small": {
-        "name": "Small Business (51-200 employees)",
+    "professional": {
+        "name": "Professional",
+        "display_name": "Mythara Professional",
+        "tagline": "Built for established small businesses",
+        "description": "Advanced orchestration with priority support for scaling healthcare organizations",
         "base_price": 40000,
         "employee_range": (51, 200),
-        "multiplier": 1.6
+        "multiplier": 1.6,
+        "features": [
+            "Everything in Foundation, plus:",
+            "500K clause invocations/month",
+            "Priority support (24-hour response)",
+            "Custom integration assistance (5 hours/quarter)",
+            "Advanced monitoring & analytics dashboard",
+            "SOC 2 Type II compliance mapping",
+            "Monthly security patches",
+            "Dedicated onboarding session"
+        ],
+        "ideal_for": "Small healthcare providers, therapy platforms, wellness apps (51-200 employees)"
     },
-    "mid": {
-        "name": "Mid-Market (201-1000 employees)",
+    "corporate": {
+        "name": "Corporate",
+        "display_name": "Mythara Corporate",
+        "tagline": "Enterprise-grade for mid-market leaders",
+        "description": "High-volume orchestration with enhanced SLAs for mission-critical mental health infrastructure",
         "base_price": 75000,
         "employee_range": (201, 1000),
-        "multiplier": 3.0
+        "multiplier": 3.0,
+        "features": [
+            "Everything in Professional, plus:",
+            "2M clause invocations/month",
+            "Premium support (12-hour response, 24/7 emergency)",
+            "Custom integration assistance (15 hours/quarter)",
+            "Multi-environment deployment (dev/staging/prod)",
+            "Dedicated Customer Success Manager",
+            "Custom SLA agreements available",
+            "Bi-weekly strategic review calls",
+            "Early access to new features"
+        ],
+        "ideal_for": "Regional healthcare systems, EAP providers, large therapy networks (201-1K employees)"
     },
     "enterprise": {
-        "name": "Enterprise (1001-5000 employees)",
+        "name": "Enterprise",
+        "display_name": "Mythara Enterprise",
+        "tagline": "Unlimited scale for healthcare enterprises",
+        "description": "White-glove service with unlimited orchestration for national healthcare organizations",
         "base_price": 150000,
         "employee_range": (1001, 5000),
-        "multiplier": 6.0
+        "multiplier": 6.0,
+        "features": [
+            "Everything in Corporate, plus:",
+            "Unlimited clause invocations",
+            "Elite support (4-hour response, 24/7 dedicated hotline)",
+            "Custom integration assistance (40 hours/quarter)",
+            "On-premise deployment option",
+            "Custom feature development prioritization",
+            "Dedicated Technical Account Manager",
+            "Architecture review & optimization",
+            "Annual on-site training & consultation",
+            "White-label options available"
+        ],
+        "ideal_for": "National healthcare networks, insurance companies, federal contractors (1K-5K employees)"
     },
-    "global": {
-        "name": "Global Enterprise (5000+ employees)",
+    "sovereign": {
+        "name": "Sovereign",
+        "display_name": "Mythara Sovereign",
+        "tagline": "Complete ownership for global enterprises",
+        "description": "Full source code escrow and unlimited deployment rights for Fortune 500 healthcare leaders",
         "base_price": 300000,
         "employee_range": (5001, 999999),
-        "multiplier": 12.0
+        "multiplier": 12.0,
+        "features": [
+            "Everything in Enterprise, plus:",
+            "Source code escrow agreement",
+            "Unlimited global deployments",
+            "VIP support (1-hour response, 24/7 executive escalation)",
+            "Unlimited custom development hours",
+            "Dedicated development team liaison",
+            "Quarterly executive business reviews",
+            "Joint go-to-market opportunities",
+            "Custom compliance certifications (FedRAMP, etc.)",
+            "Perpetual license option available",
+            "Revenue sharing partnerships considered"
+        ],
+        "ideal_for": "Fortune 500 healthcare companies, global health systems, government agencies (5K+ employees)"
     }
 }
 
@@ -323,11 +397,18 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
     
     return {
         "tier": tier_key,
-        "tier_name": tier["name"],
+        "name": tier["name"],
+        "display_name": tier["display_name"],
+        "tagline": tier["tagline"],
+        "description": tier["description"],
         "base_price": base_price,
         "final_price": int(round(final_price)),
+        "currency": "USD",
+        "billing_period": "annual",
         "employee_range": tier["employee_range"],
-        "multiplier": tier["multiplier"]
+        "multiplier": tier["multiplier"],
+        "features": tier["features"],
+        "ideal_for": tier["ideal_for"]
     }
 
 def compute_current_enterprise_price(tier_key: str = "mid") -> int:
