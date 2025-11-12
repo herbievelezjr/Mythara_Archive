@@ -774,6 +774,7 @@ async def enforce_trial_expiration_middleware(request: Request, call_next):
         "/api/docs", "/docs", "/redoc", "/openapi.json",
         "/download/pilot",  # Allow pilot package download
     }
+    logger.info(f"Middleware check: path={request.url.path}, allowed={request.url.path in allowed_paths}")
     if request.url.path in allowed_paths or request.url.path.startswith("/static/"):
         return await call_next(request)
     
