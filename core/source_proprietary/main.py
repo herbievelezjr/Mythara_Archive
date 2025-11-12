@@ -259,6 +259,7 @@ ENTERPRISE_TIERS = {
         "name": "Foundation",
         "display_name": "Mythara Foundation",
         "stripe_product_name": "Startup",  # Matches Stripe product catalog
+        "stripe_product_id": "prod_TPQfqg07Ypieyc",  # Stripe product ID
         "tagline": "Perfect for early-stage startups and SMBs",
         "description": "Essential SSIP orchestration for growing teams building compliant mental health applications",
         "base_price": 25000,
@@ -278,6 +279,7 @@ ENTERPRISE_TIERS = {
         "name": "Professional",
         "display_name": "Mythara Professional",
         "stripe_product_name": "Small Business",  # Matches Stripe product catalog
+        "stripe_product_id": "prod_TPV6XvKT9amEaJ",  # Stripe product ID
         "tagline": "Built for established small businesses",
         "description": "Advanced orchestration with priority support for scaling healthcare organizations",
         "base_price": 40000,
@@ -299,6 +301,7 @@ ENTERPRISE_TIERS = {
         "name": "Corporate",
         "display_name": "Mythara Corporate",
         "stripe_product_name": "Mid-Market",  # Matches Stripe product catalog
+        "stripe_product_id": "prod_TPV7jzSVAsJFyq",  # Stripe product ID
         "tagline": "Enterprise-grade for mid-market leaders",
         "description": "High-volume orchestration with enhanced SLAs for mission-critical mental health infrastructure",
         "base_price": 75000,
@@ -321,6 +324,7 @@ ENTERPRISE_TIERS = {
         "name": "Enterprise",
         "display_name": "Mythara Enterprise",
         "stripe_product_name": "Enterprise",  # Matches Stripe product catalog
+        "stripe_product_id": "prod_TPV9sC4CFk0ZjX",  # Stripe product ID
         "tagline": "Unlimited scale for healthcare enterprises",
         "description": "White-glove service with unlimited orchestration for national healthcare organizations",
         "base_price": 150000,
@@ -344,6 +348,7 @@ ENTERPRISE_TIERS = {
         "name": "Sovereign",
         "display_name": "Mythara Sovereign",
         "stripe_product_name": "Global",  # Matches Stripe product catalog
+        "stripe_product_id": "prod_TPVApcR5idslLw",  # Stripe product ID
         "tagline": "Complete ownership for global enterprises",
         "description": "Full source code escrow and unlimited deployment rights for Fortune 500 healthcare leaders",
         "base_price": 300000,
@@ -417,6 +422,7 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
         "name": tier["name"],
         "display_name": tier["display_name"],
         "stripe_product_name": tier.get("stripe_product_name"),
+        "stripe_product_id": tier.get("stripe_product_id"),
         "tagline": tier["tagline"],
         "description": tier["description"],
         "base_price": base_price,
