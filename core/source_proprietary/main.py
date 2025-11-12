@@ -796,6 +796,7 @@ async def enforce_trial_expiration_middleware(request: Request, call_next):
         "/v1/pilot/status", "/v1/pilot/unlock",
         "/v1/pricing/enterprise",  # Allow pricing queries without pilot access
         "/pricing",  # Public pricing page with Stripe table
+        "/debug/middleware",  # Debug endpoint
         "/api/webhooks/stripe",
         "/api/docs", "/docs", "/redoc", "/openapi.json",
         "/download/pilot",  # Allow pilot package download
@@ -1116,6 +1117,11 @@ async def pricing_page():
         html_content = f.read()
     
     return HTMLResponse(content=html_content)
+
+@app.get("/debug/middleware")
+async def debug_middleware():
+    """Debug endpoint to test middleware exemption"""
+    return {"status": "ok", "message": "This endpoint should be accessible without pilot access"}
 
 @app.post("/v1/pilot/unlock")
 async def pilot_unlock(request: Request):
