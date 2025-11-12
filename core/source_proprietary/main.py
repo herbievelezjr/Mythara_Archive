@@ -688,8 +688,10 @@ async def enforce_trial_expiration_middleware(request: Request, call_next):
         "/", "/health",
         "/v1/license/status",
         "/v1/pilot/status", "/v1/pilot/unlock",
+        "/v1/pricing/enterprise",  # Allow pricing queries without pilot access
         "/api/webhooks/stripe",
         "/api/docs", "/docs", "/redoc", "/openapi.json",
+        "/download/pilot",  # Allow pilot package download
     }
     if request.url.path in allowed_paths or request.url.path.startswith("/static/"):
         return await call_next(request)
