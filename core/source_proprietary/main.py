@@ -789,21 +789,27 @@ async def enforce_trial_expiration_middleware(request: Request, call_next):
     Middleware to block all API calls if trial has expired.
     Returns HTTP 402 Payment Required for expired trials.
     """
-    # Skip health check, docs, webhook, and status/maintenance endpoints
-    allowed_paths = {
-        "/", "/health",
-        "/v1/license/status",
-        "/v1/pilot/status", "/v1/pilot/unlock",
-        "/v1/pricing/enterprise",  # Allow pricing queries without pilot access
-        "/pricing",  # Public pricing page with Stripe table
-        "/debug/middleware",  # Debug endpoint
-        "/api/webhooks/stripe",
-        "/api/docs", "/docs", "/redoc", "/openapi.json",
-        "/download/pilot",  # Allow pilot package download
-    }
-    print(f"MIDDLEWARE_DEBUG: path={request.url.path}, in_allowed={request.url.path in allowed_paths}", flush=True)
-    logger.info(f"Middleware check: path={request.url.path}, allowed={request.url.path in allowed_paths}")
-    if request.url.path in allowed_paths or request.url.path.startswith("/static/"):
+    # CRITICAL: Allow public endpoints immediately before any other checks
+    path = request.url.path
+    
+    # Public endpoints that bypass all checks
+    if path in {"/", "/health", "/pricing", "/download/pilot", "/debug/middleware"}:
+        return await call_next(request)
+    
+    # API documentation endpoints
+    if path in {"/api/docs", "/docs", "/redoc", "/openapi.json"}:
+        return await call_next(request)
+    
+    # License and pilot status endpoints
+    if path in {"/v1/license/status", "/v1/pilot/status", "/v1/pilot/unlock"}:
+        return await call_next(request)
+    
+    # Pricing and webhook endpoints
+    if path in {"/v1/pricing/enterprise", "/api/webhooks/stripe"}:
+        return await call_next(request)
+    
+    # Static files
+    if path.startswith("/static/"):
         return await call_next(request)
     
     # Check if we're in trial mode and it's expired
