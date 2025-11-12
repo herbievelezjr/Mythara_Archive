@@ -795,6 +795,7 @@ async def enforce_trial_expiration_middleware(request: Request, call_next):
         "/v1/license/status",
         "/v1/pilot/status", "/v1/pilot/unlock",
         "/v1/pricing/enterprise",  # Allow pricing queries without pilot access
+        "/pricing",  # Public pricing page with Stripe table
         "/api/webhooks/stripe",
         "/api/docs", "/docs", "/redoc", "/openapi.json",
         "/download/pilot",  # Allow pilot package download
@@ -1096,6 +1097,25 @@ async def download_pilot_package():
         media_type="application/zip",
         filename="mythara-pilot-package.zip"
     )
+
+@app.get("/pricing")
+async def pricing_page():
+    """
+    Public endpoint for Stripe pricing table with embedded payment links.
+    No authentication required - this is the public-facing pricing page.
+    """
+    from fastapi.responses import HTMLResponse
+    import os
+    
+    file_path = os.path.join(os.path.dirname(__file__), "../static/pricing.html")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Pricing page not found")
+    
+    with open(file_path, "r") as f:
+        html_content = f.read()
+    
+    return HTMLResponse(content=html_content)
 
 @app.post("/v1/pilot/unlock")
 async def pilot_unlock(request: Request):
