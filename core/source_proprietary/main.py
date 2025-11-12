@@ -397,9 +397,9 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
                 tier_key = key
                 break
         if tier_key is None:
-            tier_key = "global"  # Default to highest tier
+            tier_key = "sovereign"  # Default to highest tier
     
-    tier = ENTERPRISE_TIERS.get(tier_key, ENTERPRISE_TIERS["mid"])
+    tier = ENTERPRISE_TIERS.get(tier_key, ENTERPRISE_TIERS["corporate"])
     base_price = tier["base_price"]
     
     # Apply inflation if configured
@@ -436,12 +436,12 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
         "payment_link": STRIPE_PAYMENT_LINKS.get(tier_key)  # Stripe payment link URL
     }
 
-def compute_current_enterprise_price(tier_key: str = "mid") -> int:
+def compute_current_enterprise_price(tier_key: str = "corporate") -> int:
     """
     Compute enterprise price for a specific tier (legacy function for compatibility).
-    Default to mid-market tier.
+    Default to corporate tier (mid-market).
     """
-    pricing = compute_enterprise_price_for_company_size(500, tier_key)  # Use middle of mid-tier
+    pricing = compute_enterprise_price_for_company_size(500, tier_key)  # Use middle of corporate tier
     return pricing["final_price"]
 
 # In production, replace the following in-memory stubs with DB/Redis-backed models.
@@ -1316,7 +1316,7 @@ async def admin_pricing(api_key: str = Depends(require_role("admin"))):
         infl = None
     
     # Return tier-based pricing info
-    mid_tier_pricing = compute_enterprise_price_for_company_size(500, "mid")
+    mid_tier_pricing = compute_enterprise_price_for_company_size(500, "corporate")
     
     return PricingBreakdownResponse(
         base_price_usd=mid_tier_pricing["base_price"],
