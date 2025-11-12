@@ -1,0 +1,24 @@
+# Railway Environment Variables for Mythara Engine
+# Copy and paste these into Railway Dashboard → Variables tab
+
+DOCKERFILE_PATH=core/Dockerfile.api
+PORT=8000
+
+# Pilot Configuration (DISABLED for public pricing page)
+MYTHARA_PILOT_PAYWALL=false
+MYTHARA_PILOT_FORCE_UNLOCK=false
+MYTHARA_PILOT_PURCHASE_URL=https://buy.stripe.com/test_dRm28s5XKbpm2Dk41KgjC00
+MYTHARA_PILOT_DOWNLOAD_URL=https://heroic-flexibility-production.up.railway.app/download/pilot
+
+# Stripe Configuration
+STRIPE_WEBHOOK_SECRET=whsec_YYgRgpA0oUD9yCoaY2vcKWWraNQmnDH7
+
+# SendGrid Email
+SENDGRID_API_KEY=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
+
+# Stripe Payment Links (Enterprise Tiers)
+STRIPE_LINK_FOUNDATION=https://buy.stripe.com/test_28E9AU85SfFCa5MbucgjC01
+STRIPE_LINK_PROFESSIONAL=https://buy.stripe.com/test_28E3cw99Wbpm91I2XGgjC02
+STRIPE_LINK_CORPORATE=https://buy.stripe.com/test_3cI00k3PC3WU91Iaq8gjC03
+STRIPE_LINK_ENTERPRISE=https://buy.stripe.com/test_6oUbJ2bi4fFC7XE41KgjC04
+STRIPE_LINK_SOVEREIGN=https://buy.stripe.com/test_00wbJ22Lyali3HofKsgjC05
