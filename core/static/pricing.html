@@ -41,29 +41,19 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         .avatar-orb {
             width: 220px;
             height: 220px;
-            background: linear-gradient(135deg, #FFB366 0%, #FF8C42 50%, #FFA366 100%);
+            background: transparent;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
             position: relative;
-            animation: pulse 3s ease-in-out infinite;
-            box-shadow: 0 0 60px rgba(255, 140, 66, 0.6), 
-                        0 0 100px rgba(255, 179, 102, 0.4),
-                        inset 0 0 60px rgba(255, 255, 255, 0.2);
-            overflow: visible;
             cursor: pointer;
             transition: transform 0.3s ease;
         }
         
         .avatar-orb:hover {
-            transform: scale(1.1);
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            transform: scale(1.15);
         }
         
         .avatar-orb:hover {
@@ -71,8 +61,8 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         }
         
         @keyframes bounce {
-            0%, 100% { transform: scale(1.1) translateY(0); }
-            50% { transform: scale(1.1) translateY(-15px); }
+            0%, 100% { transform: scale(1.15) translateY(0); }
+            50% { transform: scale(1.15) translateY(-20px); }
         }
         
         /* Cute CSS Fox */
@@ -92,23 +82,27 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         .fox-head {
             width: 80px;
             height: 70px;
-            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            background: linear-gradient(135deg, #9b59b6 0%, #667eea 50%, #8e44ad 100%);
             border-radius: 50% 50% 45% 45%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
+            box-shadow: 0 0 30px rgba(155, 89, 182, 0.6),
+                        0 0 50px rgba(102, 126, 234, 0.3),
+                        inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
         
         /* Fox Ears */
         .fox-ear {
             width: 35px;
             height: 45px;
-            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            background: linear-gradient(135deg, #9b59b6 0%, #667eea 100%);
             border-radius: 50% 50% 0 0;
             position: absolute;
             top: -15px;
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
         }
         
         .fox-ear.left {
@@ -121,38 +115,47 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             transform: rotate(15deg);
         }
         
-        .fox-ear-inner {
+                .fox-ear-inner {
             width: 20px;
             height: 28px;
-            background: #FFD9A8;
+            background: linear-gradient(135deg, #e8c5f0 0%, #f0d9ff 100%);
             border-radius: 50% 50% 0 0;
             position: absolute;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4);
         }
         
-        /* Fox Face Cream Color */
+        /* Fox Face */
         .fox-face {
             width: 60px;
             height: 50px;
-            background: #FFD9A8;
+            background: linear-gradient(135deg, #f0d9ff 0%, #e8daef 100%);
             border-radius: 50% 50% 60% 60%;
             position: absolute;
             bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(240, 217, 255, 0.5);
         }
         
         /* Fox Eyes */
         .fox-eye {
             width: 12px;
             height: 16px;
-            background: #2C1810;
+            background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 100%);
             border-radius: 50%;
             position: absolute;
             top: 25px;
-            animation: blink 4s infinite;
+            animation: blink 4s infinite, eyeGlow 2s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.8),
+                        inset 0 0 4px rgba(167, 139, 250, 0.5);
+        }
+        
+        @keyframes eyeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(139, 92, 246, 0.8), inset 0 0 4px rgba(167, 139, 250, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(139, 92, 246, 1), inset 0 0 6px rgba(167, 139, 250, 0.8); }
         }
         
         @keyframes blink {
@@ -163,49 +166,63 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         .fox-eye.left { left: 20px; }
         .fox-eye.right { right: 20px; }
         
-        .eye-shine {
+                .eye-shine {
             width: 4px;
             height: 6px;
-            background: white;
+            background: rgba(102, 126, 234, 0.9);
             border-radius: 50%;
             position: absolute;
             top: 3px;
             left: 2px;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.8);
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.3); }
         }
         
         /* Fox Nose */
         .fox-nose {
             width: 10px;
             height: 8px;
-            background: #2C1810;
+            background: linear-gradient(135deg, #5B21B6 0%, #7C3AED 100%);
             border-radius: 50% 50% 50% 50%;
             position: absolute;
             top: 42px;
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 0 5px rgba(139, 92, 246, 0.6);
         }
         
         /* Fox Mouth */
         .fox-mouth {
             width: 30px;
             height: 15px;
-            border: 2px solid #2C1810;
+            border: 2px solid #6366F1;
             border-top: none;
             border-radius: 0 0 50% 50%;
             position: absolute;
             top: 45px;
             left: 50%;
             transform: translateX(-50%);
+            opacity: 0.7;
         }
         
         /* Fox Cheeks */
         .fox-cheek {
             width: 15px;
             height: 12px;
-            background: rgba(255, 150, 150, 0.4);
+            background: rgba(219, 176, 234, 0.5);
             border-radius: 50%;
             position: absolute;
             top: 40px;
+            box-shadow: 0 0 10px rgba(219, 176, 234, 0.4);
+        }
+        
+        @keyframes blushGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
         }
         
         .fox-cheek.left { left: 8px; }
@@ -225,24 +242,29 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         .fox-tail {
             width: 40px;
             height: 80px;
-            background: linear-gradient(135deg, #FF8C42 0%, #FFB366 100%);
+            background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 50%, #DDD6FE 100%);
             border-radius: 50% 50% 30% 30%;
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform-origin: bottom center;
             animation: tailWag 3s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4),
+                        0 0 30px rgba(139, 92, 246, 0.2);
+            filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.6));
         }
         
         .fox-tail::after {
             content: '';
             width: 30px;
             height: 25px;
-            background: white;
+            background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
             border-radius: 50%;
             position: absolute;
             bottom: 0;
             left: 5px;
+            box-shadow: 0 0 10px rgba(243, 232, 255, 0.8),
+                        inset 0 0 8px rgba(167, 139, 250, 0.3);
         }
         
         .fox-tail:nth-child(1) { transform: translateX(-50%) rotate(-40deg); animation-delay: 0s; }
@@ -260,20 +282,29 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             50% { transform: translateX(-50%) rotate(calc(var(--rotation) - 5deg)) scale(1.05); }
         }
         
-        .avatar-ring {
+                .avatar-ring {
             position: absolute;
             top: -20px;
             left: -20px;
             right: -20px;
             bottom: -20px;
-            border: 3px solid rgba(138, 43, 226, 0.3);
+            border: 3px solid rgba(155, 89, 182, 0.5);
             border-radius: 50%;
             animation: ringPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
         }
         
         @keyframes ringPulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.2; }
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.7;
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
+            }
+            50% { 
+                transform: scale(1.15); 
+                opacity: 0.4;
+                box-shadow: 0 0 50px rgba(155, 89, 182, 0.6);
+            }
         }
         
         header {
