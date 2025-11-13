@@ -52,7 +52,13 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             box-shadow: 0 0 60px rgba(255, 140, 66, 0.6), 
                         0 0 100px rgba(255, 179, 102, 0.4),
                         inset 0 0 60px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
+            overflow: visible;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .avatar-orb:hover {
+            transform: scale(1.1);
         }
         
         @keyframes pulse {
@@ -60,20 +66,198 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             50% { transform: scale(1.05); }
         }
         
+        .avatar-orb:hover {
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1.1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-15px); }
+        }
+        
+        /* Cute CSS Fox */
         .avatar-face {
-            width: 200px;
-            height: 200px;
-            background-image: url('https://raw.githubusercontent.com/herbievelezjr/Mythara_Archive/main/core/static/mythara-fox.png');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+            width: 180px;
+            height: 180px;
+            position: relative;
             animation: foxFloat 4s ease-in-out infinite;
         }
         
         @keyframes foxFloat {
-            0%, 100% { transform: translateY(0px) rotate(-2deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Fox Head */
+        .fox-head {
+            width: 80px;
+            height: 70px;
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            border-radius: 50% 50% 45% 45%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        /* Fox Ears */
+        .fox-ear {
+            width: 35px;
+            height: 45px;
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: -15px;
+        }
+        
+        .fox-ear.left {
+            left: 5px;
+            transform: rotate(-15deg);
+        }
+        
+        .fox-ear.right {
+            right: 5px;
+            transform: rotate(15deg);
+        }
+        
+        .fox-ear-inner {
+            width: 20px;
+            height: 28px;
+            background: #FFD9A8;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Fox Face Cream Color */
+        .fox-face {
+            width: 60px;
+            height: 50px;
+            background: #FFD9A8;
+            border-radius: 50% 50% 60% 60%;
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Fox Eyes */
+        .fox-eye {
+            width: 12px;
+            height: 16px;
+            background: #2C1810;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            animation: blink 4s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 48%, 52%, 100% { height: 16px; }
+            50% { height: 2px; }
+        }
+        
+        .fox-eye.left { left: 20px; }
+        .fox-eye.right { right: 20px; }
+        
+        .eye-shine {
+            width: 4px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 2px;
+        }
+        
+        /* Fox Nose */
+        .fox-nose {
+            width: 10px;
+            height: 8px;
+            background: #2C1810;
+            border-radius: 50% 50% 50% 50%;
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Fox Mouth */
+        .fox-mouth {
+            width: 30px;
+            height: 15px;
+            border: 2px solid #2C1810;
+            border-top: none;
+            border-radius: 0 0 50% 50%;
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Fox Cheeks */
+        .fox-cheek {
+            width: 15px;
+            height: 12px;
+            background: rgba(255, 150, 150, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            top: 40px;
+        }
+        
+        .fox-cheek.left { left: 8px; }
+        .fox-cheek.right { right: 8px; }
+        
+        /* Nine Tails */
+        .fox-tails {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+        
+        .fox-tail {
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF8C42 0%, #FFB366 100%);
+            border-radius: 50% 50% 30% 30%;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform-origin: bottom center;
+            animation: tailWag 3s ease-in-out infinite;
+        }
+        
+        .fox-tail::after {
+            content: '';
+            width: 30px;
+            height: 25px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+        }
+        
+        .fox-tail:nth-child(1) { transform: translateX(-50%) rotate(-40deg); animation-delay: 0s; }
+        .fox-tail:nth-child(2) { transform: translateX(-50%) rotate(-30deg); animation-delay: 0.1s; }
+        .fox-tail:nth-child(3) { transform: translateX(-50%) rotate(-20deg); animation-delay: 0.2s; }
+        .fox-tail:nth-child(4) { transform: translateX(-50%) rotate(-10deg); animation-delay: 0.3s; }
+        .fox-tail:nth-child(5) { transform: translateX(-50%) rotate(0deg); animation-delay: 0.4s; }
+        .fox-tail:nth-child(6) { transform: translateX(-50%) rotate(10deg); animation-delay: 0.5s; }
+        .fox-tail:nth-child(7) { transform: translateX(-50%) rotate(20deg); animation-delay: 0.6s; }
+        .fox-tail:nth-child(8) { transform: translateX(-50%) rotate(30deg); animation-delay: 0.7s; }
+        .fox-tail:nth-child(9) { transform: translateX(-50%) rotate(40deg); animation-delay: 0.8s; }
+        
+        @keyframes tailWag {
+            0%, 100% { transform: translateX(-50%) rotate(var(--rotation)) scale(1); }
+            50% { transform: translateX(-50%) rotate(calc(var(--rotation) - 5deg)) scale(1.05); }
         }
         
         .avatar-ring {
@@ -307,7 +491,52 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             <div class="avatar-container">
                 <div class="avatar-ring"></div>
                 <div class="avatar-orb">
-                    <div class="avatar-face"></div>
+                    <div class="avatar-face">
+                        <!-- Nine Tails -->
+                        <div class="fox-tails">
+                            <div class="fox-tail" style="--rotation: -40deg;"></div>
+                            <div class="fox-tail" style="--rotation: -30deg;"></div>
+                            <div class="fox-tail" style="--rotation: -20deg;"></div>
+                            <div class="fox-tail" style="--rotation: -10deg;"></div>
+                            <div class="fox-tail" style="--rotation: 0deg;"></div>
+                            <div class="fox-tail" style="--rotation: 10deg;"></div>
+                            <div class="fox-tail" style="--rotation: 20deg;"></div>
+                            <div class="fox-tail" style="--rotation: 30deg;"></div>
+                            <div class="fox-tail" style="--rotation: 40deg;"></div>
+                        </div>
+                        
+                        <!-- Fox Head -->
+                        <div class="fox-head">
+                            <!-- Ears -->
+                            <div class="fox-ear left">
+                                <div class="fox-ear-inner"></div>
+                            </div>
+                            <div class="fox-ear right">
+                                <div class="fox-ear-inner"></div>
+                            </div>
+                            
+                            <!-- Face -->
+                            <div class="fox-face">
+                                <!-- Eyes -->
+                                <div class="fox-eye left">
+                                    <div class="eye-shine"></div>
+                                </div>
+                                <div class="fox-eye right">
+                                    <div class="eye-shine"></div>
+                                </div>
+                                
+                                <!-- Nose -->
+                                <div class="fox-nose"></div>
+                                
+                                <!-- Mouth -->
+                                <div class="fox-mouth"></div>
+                                
+                                <!-- Cheeks -->
+                                <div class="fox-cheek left"></div>
+                                <div class="fox-cheek right"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
