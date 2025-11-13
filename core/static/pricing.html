@@ -39,19 +39,20 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
         }
         
         .avatar-orb {
-            width: 180px;
-            height: 180px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, #FFB366 0%, #FF8C42 50%, #FFA366 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
             position: relative;
-            animation: pulse 3s ease-in-out infinite, rotate 20s linear infinite;
-            box-shadow: 0 0 60px rgba(138, 43, 226, 0.6), 
-                        0 0 100px rgba(102, 126, 234, 0.4),
-                        inset 0 0 60px rgba(255, 255, 255, 0.1);
+            animation: pulse 3s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(255, 140, 66, 0.6), 
+                        0 0 100px rgba(255, 179, 102, 0.4),
+                        inset 0 0 60px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
         }
         
         @keyframes pulse {
@@ -59,20 +60,20 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             50% { transform: scale(1.05); }
         }
         
-        @keyframes rotate {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-        
         .avatar-face {
-            font-size: 5rem;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-            animation: foxSway 3s ease-in-out infinite;
+            width: 200px;
+            height: 200px;
+            background-image: url('/static/mythara-fox.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+            animation: foxFloat 4s ease-in-out infinite;
         }
         
-        @keyframes foxSway {
-            0%, 100% { transform: rotate(-3deg); }
-            50% { transform: rotate(3deg); }
+        @keyframes foxFloat {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
         
         .avatar-ring {
@@ -277,12 +278,13 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             }
             
             .avatar-orb {
-                width: 140px;
-                height: 140px;
+                width: 160px;
+                height: 160px;
             }
             
             .avatar-face {
-                font-size: 4rem;
+                width: 150px;
+                height: 150px;
             }
             
             .pricing-wrapper {
@@ -305,7 +307,7 @@ Add AI avatar Mythara with stunning animated pricing page redesign<!DOCTYPE html
             <div class="avatar-container">
                 <div class="avatar-ring"></div>
                 <div class="avatar-orb">
-                    <div class="avatar-face">🦊</div>
+                    <div class="avatar-face"></div>
                 </div>
             </div>
             
