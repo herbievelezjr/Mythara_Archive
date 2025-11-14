@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mythara Pricing — V2 Preview</title>
+  <meta name="description" content="Premium, calm, and readable pricing animation for Mythara." />
+  <style>
+    :root {
+      --bg-deep: #0b1220;      /* deep navy */
+      --bg-dark: #0f172a;      /* slate-900 */
+      --cyan:    #06b6d4;      /* cyan-500 */
+      --cyan-2:  #22d3ee;      /* cyan-400 */
+      --gold:    #f59e0b;      /* amber-500 */
+      --text:    #e5e7eb;      /* gray-200 */
+      --muted:   #94a3b8;      /* slate-400 */
+      --card:    #111827;      /* gray-900 */
+      --border:  rgba(255,255,255,0.08);
+      --shadow:  rgba(0,0,0,0.4);
+      --scene-time: 4s;        /* seconds per scene */
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: radial-gradient(1000px 600px at 50% -20%, #12213a 0%, var(--bg-deep) 60%, var(--bg-dark) 100%);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 32px 20px;
+    }
+
+    .stage {
+      width: 100%;
+      max-width: 1120px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(11,18,32,0.9));
+      border-radius: 16px;
+      box-shadow: 0 30px 80px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+      overflow: hidden;
+      position: relative;
+    }
+
+    header {
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    }
+
+    .brand {
+      display: flex; gap: 12px; align-items: center;
+      letter-spacing: 0.4px;
+    }
+    .brand-mark {
+      width: 12px; height: 12px; border-radius: 2px;
+      background: linear-gradient(135deg, var(--cyan), var(--gold));
+      box-shadow: 0 0 18px rgba(34,211,238,0.45);
+    }
+    .brand-name {
+      font-weight: 600; color: #f0f3f7;
+    }
+
+    .controls { display: flex; gap: 10px; }
+    .btn {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px 12px; border-radius: 10px; cursor: pointer;
+      font-weight: 500;
+    }
+    .btn:hover { color: var(--text); border-color: rgba(255,255,255,0.16); }
+
+    .scene {
+      display: none; opacity: 0; transform: translateY(8px);
+      transition: opacity 700ms ease, transform 700ms ease;
+      padding: 48px 32px 64px 32px;
+    }
+    .scene.active { display: block; opacity: 1; transform: translateY(0); }
+
+    .kicker {
+      color: var(--cyan-2); font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    h1, h2 { margin: 10px 0 14px 0; line-height: 1.15; }
+    h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 800; background: linear-gradient(135deg, var(--cyan-2), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    h2 { font-size: clamp(22px, 4vw, 32px); font-weight: 700; color: #eaf2f8; }
+    p { color: var(--muted); font-size: 16px; max-width: 62ch; }
+
+    .grid {
+      display: grid; gap: 16px; margin-top: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .card h3 { margin: 8px 0 12px 0; font-size: 18px; color: #f1f5f9; }
+    .price { font-size: 22px; font-weight: 700; color: var(--cyan-2); }
+    .feat { color: var(--muted); font-size: 14px; margin: 6px 0; }
+
+    .cta {
+      margin-top: 26px; display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(34,211,238,0.4);
+      color: #062a30; background: linear-gradient(135deg, var(--cyan-2), var(--gold));
+      text-decoration: none; font-weight: 700; letter-spacing: 0.3px;
+      box-shadow: 0 8px 30px rgba(34,211,238,0.25);
+    }
+    .cta:hover { filter: brightness(1.05); }
+
+    footer { padding: 16px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+    .muted { color: var(--muted); }
+
+    /* subtle ambient lines */
+    .ambient {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .ambient::before, .ambient::after {
+      content: ""; position: absolute; inset: -40%;
+      background: conic-gradient(from 120deg at 50% 50%, transparent 0 74%, rgba(34,211,238,0.06) 75% 76%, transparent 77% 100%);
+      transform: rotate(6deg);
+    }
+    .ambient::after { transform: rotate(-8deg); opacity: 0.8; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scene { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="stage" role="region" aria-label="Mythara Pricing V2">
+      <header>
+        <div class="brand"><div class="brand-mark"></div><div class="brand-name">Mythara Engine</div></div>
+        <div class="controls">
+          <button class="btn" id="prevBtn" aria-label="Previous">◀</button>
+          <button class="btn" id="pauseBtn" aria-label="Pause">Pause</button>
+          <button class="btn" id="nextBtn" aria-label="Next">▶</button>
+        </div>
+      </header>
+
+      <div class="ambient" aria-hidden="true"></div>
+
+      <!-- Scene 1: Promise -->
+      <section class="scene active" data-scene="1">
+        <div class="kicker">Symbolic Safety Integrity Protocol</div>
+        <h1>Confidently ship mental health tech — with integrity.</h1>
+        <p>Mythara orchestrates safety, compliance, and trust so your team can build faster. One annual license, enterprise-grade assurance.</p>
+        <a class="cta" href="/pricing">See Pricing Details →</a>
+      </section>
+
+      <!-- Scene 2: Core Value -->
+      <section class="scene" data-scene="2">
+        <div class="kicker">Why Mythara</div>
+        <h2>Compliance baked in. Velocity preserved.</h2>
+        <p>Reduce review cycles and ship features with higher quality signals. SSIP metrics keep you on the rails — drift suppression, pairing fidelity, and emotional fidelity all in one place.</p>
+      </section>
+
+      <!-- Scene 3: Tiers Overview -->
+      <section class="scene" data-scene="3">
+        <div class="kicker">Annual License</div>
+        <h2>Choose your scale — clear tiers, no surprises.</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Foundation</h3>
+            <div class="price">$25K / yr</div>
+            <div class="feat">Startups · 1–50 employees</div>
+            <div class="feat">100K invocations / month</div>
+          </div>
+          <div class="card">
+            <h3>Professional</h3>
+            <div class="price">$40K / yr</div>
+            <div class="feat">51–200 employees</div>
+            <div class="feat">500K invocations / month</div>
+          </div>
+          <div class="card">
+            <h3>Corporate</h3>
+            <div class="price">$75K / yr</div>
+            <div class="feat">201–1K employees</div>
+            <div class="feat">2M invocations / month</div>
+          </div>
+          <div class="card">
+            <h3>Enterprise</h3>
+            <div class="price">$150K / yr</div>
+            <div class="feat">1K–5K+ employees</div>
+            <div class="feat">Unlimited invocations</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 4: Trust -->
+      <section class="scene" data-scene="4">
+        <div class="kicker">Trust & Assurance</div>
+        <h2>Auditability that stands up in enterprise reviews.</h2>
+        <p>Built-in integrity hashes, health endpoints, and documented SSIP behaviors reduce risk and simplify vendor due diligence.</p>
+      </section>
+
+      <!-- Scene 5: CTA -->
+      <section class="scene" data-scene="5">
+        <div class="kicker">Ready when you are</div>
+        <h2>Run a pilot. Prove value in weeks.</h2>
+        <p class="muted">We’ll guide your team through integration and validation. Upgrade when you’re ready to scale.</p>
+        <a class="cta" href="/pricing">Open Pricing & Payment →</a>
+      </section>
+
+      <footer>
+        Use ← → or buttons to control. Auto-advances every 4s. Press "Pause" to stop.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const scenes = Array.from(document.querySelectorAll('.scene'));
+      let idx = 0; let playing = true; let timer = null;
+
+      const show = (i) => {
+        scenes.forEach(s => s.classList.remove('active'));
+        scenes[i].classList.add('active');
+      };
+      const next = () => { idx = (idx + 1) % scenes.length; show(idx); };
+      const prev = () => { idx = (idx - 1 + scenes.length) % scenes.length; show(idx); };
+      const play = () => { playing = true; tick(); }; const pause = () => { playing = false; clearTimeout(timer); };
+      const tick = () => { clearTimeout(timer); if (!playing) return; timer = setTimeout(() => { next(); tick(); }, 4000); };
+
+      document.getElementById('nextBtn').addEventListener('click', () => { pause(); next(); });
+      document.getElementById('prevBtn').addEventListener('click', () => { pause(); prev(); });
+      document.getElementById('pauseBtn').addEventListener('click', (e) => {
+        if (playing) { pause(); e.target.textContent = 'Play'; }
+        else { play(); e.target.textContent = 'Pause'; }
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { pause(); next(); }
+        if (e.key === 'ArrowLeft')  { pause(); prev(); }
+        if (e.key.toLowerCase() === ' ') { e.preventDefault(); document.getElementById('pauseBtn').click(); }
+      });
+
+      show(0); tick();
+    })();
+  </script>
+</body>
+</html>
