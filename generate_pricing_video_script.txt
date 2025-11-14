@@ -1,0 +1,28 @@
+MYTHARA ENGINE - PRICING VIDEO SCRIPT
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+
+[INTRO - 0:00-0:08]
+Welcome to Mythara Engine, the auditable symbolic clause orchestration system built for enterprise trust and integrity.
+
+[PILOT TIER - 0:08-0:18]
+Our Pilot tier runs fifteen to twenty thousand dollars for thirty to ninety days. Perfect for proof of concept validation, with limited invocations, full onboarding support, and a one hundred percent credit when you upgrade to production.
+
+[GROWTH TIER - 0:18-0:26]
+The Growth tier is thirty-five to forty thousand per year. Designed for scaling teams with an invocation cap, standard support, and production-ready infrastructure.
+
+[ENTERPRISE TIER - 0:26-0:38]
+Our most popular tier: Enterprise, at sixty thousand per year. You get one hundred thousand monthly invocations, integrity artifacts included, priority bug fixes, SLA guarantees, and transparent inflation-adjusted pricing that grows predictably with your business.
+
+[SOVEREIGN TIER - 0:38-0:48]
+For organizations requiring air-gapped deployment, our Sovereign tier starts at one hundred fifty thousand per year. This includes on-premise infrastructure, enhanced audit controls, custom SLAs, and a dedicated support team.
+
+[CALL TO ACTION - 0:48-0:58]
+Ready to bring auditable trust to your infrastructure? Visit mythara dot ai slash pricing to start your pilot today. Mythara Engine: where symbolic orchestration meets enterprise integrity.
+
+[END - 0:58]
+
+---
+
+TOTAL DURATION: ~58 seconds
+VOICE: Adam (deep, authoritative) - ElevenLabs
+VISUALS: Animated tier cards with cute fox mascot, purple/blue gradient theme
