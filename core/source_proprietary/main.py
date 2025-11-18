@@ -1304,12 +1304,6 @@ async def terms_page(request: Request):
             "Cache-Control": "public, max-age=300",
         }
     )
-        </p>
-    </body>
-    </html>
-    """
-    
-    return HTMLResponse(content=full_html)
 
 @app.post("/v1/mythara/chat", response_model=ChatResponse)
 async def mythara_chat(req: ChatRequest, request: Request):
