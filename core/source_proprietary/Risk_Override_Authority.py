@@ -290,8 +290,9 @@ class RiskOverrideAuthority:
         invocation_copy = {k: v for k, v in invocation.items() if k != "integrity_hash"}
         recomputed_hash = self._compute_integrity_hash(invocation_copy)
         
-        # Compare
-        verified = (original_hash == recomputed_hash)
+        # Compare using constant-time comparison to prevent timing attacks
+        import hmac
+        verified = hmac.compare_digest(original_hash, recomputed_hash)
         
         return {
             "verified": verified,
