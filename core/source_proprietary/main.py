@@ -97,6 +97,20 @@ from dual_framing import (
     generate_flow_diagram_text
 )
 
+# Import Soul Cradle Zim Framework
+from soul_cradle_zim_framework import (
+    SoulCradleParadox,
+    ZimExpression,
+    NonExpression,
+    PrincipalSystem,
+    ExpressionType,
+    SystemType,
+    TerminalRiskLevel,
+    TerminalRiskCalculator,
+    ZimQueryParser,
+    log_paradox_creation
+)
+
 # Import Salesforce Integration
 from salesforce_integration import (
     SalesforceIntegration,
@@ -2585,6 +2599,181 @@ async def push_soul_cradle_to_salesforce(
     
     except Exception as e:
         logger.error(f"Failed to push Soul Cradle event to Salesforce: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ===================== ZIM FRAMEWORK ENDPOINTS =====================
+
+@app.post("/v1/soul-cradle/paradox/create")
+async def create_soul_cradle_paradox(
+    paradox: SoulCradleParadox,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Create a Soul Cradle paradox using Zim's framework.
+    Requires valid Mythara API key (all tiers).
+    
+    Returns paradox with integrity hash and terminal risk assessment.
+    """
+    try:
+        # Compute integrity hash
+        integrity_hash = paradox.compute_integrity_hash()
+        
+        # Log creation
+        log_paradox_creation(paradox)
+        
+        # Return with integrity hash
+        return {
+            "success": True,
+            "paradox_id": paradox.paradox_id,
+            "system_type": paradox.system_type.value,
+            "viability_score": paradox.viability_score,
+            "terminal_risk": paradox.terminal_risk.value,
+            "integrity_hash": integrity_hash,
+            "timestamp": paradox.timestamp.isoformat(),
+            "principal_system": {
+                "notation": paradox.principal_system.notation,
+                "viability_score": paradox.principal_system.viability_score,
+                "description": paradox.principal_system.description
+            }
+        }
+    
+    except Exception as e:
+        logger.error(f"Failed to create Soul Cradle paradox: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/v1/soul-cradle/terminal-risk/calculate")
+async def calculate_terminal_risk(
+    request: Dict[str, Any],
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Calculate terminal risk (burnout prediction) from paradox history.
+    
+    Body:
+    {
+        "paradoxes": [...],  # List of SoulCradleParadox objects
+        "time_window_days": 90,  # Optional, default 90
+        "viability_threshold": 0.3  # Optional, default 0.3
+    }
+    
+    Returns risk score, level, and recommendations.
+    """
+    try:
+        # Parse paradoxes
+        paradox_data = request.get("paradoxes", [])
+        paradoxes = [SoulCradleParadox(**p) for p in paradox_data]
+        
+        time_window = request.get("time_window_days", 90)
+        threshold = request.get("viability_threshold", 0.3)
+        
+        # Calculate risk
+        risk_result = TerminalRiskCalculator.calculate_terminal_risk(
+            paradox_events=paradoxes,
+            time_window_days=time_window,
+            viability_threshold=threshold
+        )
+        
+        # Add integrity hash
+        risk_data = json.dumps(risk_result, sort_keys=True)
+        integrity_hash = hashlib.sha256(risk_data.encode()).hexdigest()
+        
+        return {
+            "success": True,
+            **risk_result,
+            "integrity_hash": integrity_hash,
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    except Exception as e:
+        logger.error(f"Failed to calculate terminal risk: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/v1/soul-cradle/query")
+async def query_paradoxes_zim_notation(
+    notation: str,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Query Soul Cradle paradoxes using Zim notation.
+    
+    Examples:
+    - Every(Policy)Any(+)Some(Discharge)Non(Safety)
+    - Every(*)Any(+)Some(*)Non(Safety)  # All paradoxes where safety is not expressed
+    
+    Note: This is a demo endpoint. Production systems should query a database.
+    """
+    try:
+        # In production, query database here
+        # For demo, return example matches
+        
+        logger.info(f"Zim query: {notation}")
+        
+        return {
+            "success": True,
+            "query": notation,
+            "message": "Production implementation requires database integration. This endpoint demonstrates Zim query language parsing.",
+            "example_matches": [
+                {
+                    "paradox_id": "SC_2025_1118_HOSPITAL_001",
+                    "matched_expression": "Every(Policy)Any(+)Some(Discharge)Non(Safety)",
+                    "terminal_risk": "HIGH"
+                }
+            ],
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    except Exception as e:
+        logger.error(f"Failed to query paradoxes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/v1/soul-cradle/manifest/zim")
+async def get_zim_framework_manifest(
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Get Zim framework manifest with integrity hash.
+    Returns framework version, notation spec, and documentation links.
+    """
+    try:
+        manifest = {
+            "framework": "Zim Systems Mathematics",
+            "version": "1.0.0",
+            "notation_spec": "Every(X)Any(+)Some(Y)Non(Z)",
+            "system_types": [
+                {
+                    "type": "Pseudo_Partial",
+                    "description": "Incomplete expressions leading to terminal events (burnout)",
+                    "viability_range": "0.0-0.3"
+                },
+                {
+                    "type": "Principal_Complete",
+                    "description": "Full express-ability with viable outcomes",
+                    "viability_range": "0.8-1.0"
+                }
+            ],
+            "terminal_risk_levels": ["LOW", "MODERATE", "HIGH", "CRITICAL"],
+            "terminal_risk_formula": "(pseudo_system_density × non_expression_accumulation) / time_window_days",
+            "attribution": "Based on systems interpretations from Zim Olson (zimmathematics.com)",
+            "documentation": "See soul_cradle_zim_framework.py for complete implementation"
+        }
+        
+        # Compute integrity hash
+        manifest_data = json.dumps(manifest, sort_keys=True)
+        integrity_hash = hashlib.sha256(manifest_data.encode()).hexdigest()
+        
+        return {
+            "success": True,
+            "manifest": manifest,
+            "integrity_hash": integrity_hash,
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    except Exception as e:
+        logger.error(f"Failed to get Zim manifest: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
