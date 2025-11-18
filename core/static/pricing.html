@@ -1903,6 +1903,86 @@
                 return 'Most compliance tools just check boxes. Mythara measures the human cost of those boxes. We\'re not replacing your existing systems—we\'re adding the layer that tracks what they can\'t: paradox, burnout, mission drift. Think of us as the conscience your CRM doesn\'t have.';
             }
             
+            // How it works / Demo
+            if (lowerInput.includes('how does it work') || lowerInput.includes('how it works') || lowerInput.includes('demo') || lowerInput.includes('show me') || lowerInput.includes('walkthrough')) {
+                return 'Picture this: Your team member faces an impossible choice. They document it in Mythara—what policy said, what their heart said, what they actually did. We generate a cryptographic hash, timestamp it, measure the emotional weight. Leadership sees the pattern across the org. You spot burnout before people break. That\'s how it works. Want to try the 49 dollar Pilot and see it yourself?';
+            }
+            
+            // Who is it for / Target audience
+            if (lowerInput.includes('who is this for') || lowerInput.includes('who uses') || lowerInput.includes('target audience') || lowerInput.includes('right for me') || lowerInput.includes('good fit')) {
+                return 'It\'s for anyone caught between mission and compliance. Healthcare workers, social workers, bankers, public defenders, nonprofit leaders, teachers, civil servants. If your team makes impossible choices every day and you want to make sure those choices don\'t destroy them—Mythara\'s for you. Which industry are you in?';
+            }
+            
+            // Team size / Scalability
+            if (lowerInput.includes('team size') || lowerInput.includes('how many users') || lowerInput.includes('scalab') || lowerInput.includes('small team') || lowerInput.includes('large org')) {
+                return 'Pilot works for any size—you\'re testing it. Enterprise scales from 10 to 5,000 employees. Global tier handles 5,000 plus across multiple countries. The system grows with you. Small team now? Start with Pilot. Growing fast? Enterprise. Multinational? Global tier. What\'s your team size?';
+            }
+            
+            // Data privacy / Compliance
+            if (lowerInput.includes('hipaa') || lowerInput.includes('gdpr') || lowerInput.includes('complian') || lowerInput.includes('privacy') || lowerInput.includes('regulation')) {
+                return 'We\'re HIPAA-ready, SOC 2 compliant, and built for GDPR. All data encrypted at rest and in transit. You own your data—we never sell it, mine it, or use it for anything except what you tell us to. Every record is cryptographically signed. Audit trails that hold up in court. We take this seriously because your trust is everything.';
+            }
+            
+            // API / Technical integration
+            if (lowerInput.includes('api') || lowerInput.includes('technical') || lowerInput.includes('developer') || lowerInput.includes('webhook') || lowerInput.includes('rest')) {
+                return 'Full REST API with JSON payloads. Webhooks for real-time events. OAuth 2.0 authentication. Rate limits scale with your tier. We provide SDKs for Python, JavaScript, and Go. Documentation is thorough—your devs will be up and running in under an hour. Want the API docs? They\'re in the Enterprise tier.';
+            }
+            
+            // Mobile / Platform availability
+            if (lowerInput.includes('mobile') || lowerInput.includes('app') || lowerInput.includes('phone') || lowerInput.includes('ios') || lowerInput.includes('android') || lowerInput.includes('platform')) {
+                return 'Web-based platform works on any device—desktop, tablet, mobile. Responsive design. No app download needed. Your team can document paradox events from anywhere. We\'re also building native iOS and Android apps—coming Q2 2026 for Enterprise and Global tiers.';
+            }
+            
+            // Reporting / Analytics
+            if (lowerInput.includes('report') || lowerInput.includes('analytic') || lowerInput.includes('dashboard') || lowerInput.includes('metric') || lowerInput.includes('data viz')) {
+                return 'Real-time dashboards show paradox density, emotional drift patterns, Soul Cradle events. Export to CSV, PDF, or push to your BI tools. Custom reports by department, role, time period. Leadership sees what\'s breaking before it breaks. All visualizations are built for executives who need answers fast.';
+            }
+            
+            // Free trial / Money back guarantee
+            if (lowerInput.includes('free trial') || lowerInput.includes('money back') || lowerInput.includes('guarantee') || lowerInput.includes('try before') || lowerInput.includes('risk free')) {
+                return 'The Pilot is your free trial—49 dollars for 7 days, and if you upgrade to Enterprise, that 49 dollars gets credited back. So it\'s essentially free if you continue. No money-back guarantee because all sales are final, but the Pilot lets you verify everything before committing. Fair?';
+            }
+            
+            // Customer support / Response time
+            if (lowerInput.includes('customer support') || lowerInput.includes('response time') || lowerInput.includes('help desk') || lowerInput.includes('support hours')) {
+                return 'Pilot tier: Email support, same-day response. Enterprise: 24/7 support, live chat, dedicated account manager. Global: White-glove service, priority hotline, custom SLAs. We respond fast because when your team is burning out, minutes matter.';
+            }
+            
+            // Onboarding / Getting started
+            if (lowerInput.includes('onboard') || lowerInput.includes('getting started') || lowerInput.includes('first steps') || lowerInput.includes('begin')) {
+                return 'Pilot? Sign up, you\'re in immediately. Enterprise? We schedule a kickoff call, integrate your CRM in 20 minutes, train your team in 2 days. Most orgs are fully operational within a week. We don\'t leave you hanging—white-glove onboarding is standard for Enterprise and Global.';
+            }
+            
+            // Customization / White-label
+            if (lowerInput.includes('custom') || lowerInput.includes('white label') || lowerInput.includes('brand') || lowerInput.includes('tailor')) {
+                return 'Enterprise tier: Customizable workflows, fields, and reports. Global tier: Full white-labeling, custom UI, your branding everywhere. We build what you need. If you\'re big enough for Global, we\'re flexible enough to make Mythara feel like it\'s yours.';
+            }
+            
+            // Contract length / Commitment
+            if (lowerInput.includes('contract') || lowerInput.includes('commitment') || lowerInput.includes('how long') || lowerInput.includes('lock in')) {
+                return 'Pilot: 7 days, no commitment. Enterprise and Global: 1-year contracts. You can upgrade mid-contract and we credit unused time toward your new tier. No surprises. We want long-term relationships, not trapped customers.';
+            }
+            
+            // Payment / Billing
+            if (lowerInput.includes('payment') || lowerInput.includes('billing') || lowerInput.includes('invoice') || lowerInput.includes('pay')) {
+                return 'Pilot: Pay by card, instant access. Enterprise: Annual billing, invoices available. Global: Custom payment terms—net 30, net 60, whatever works. We accept credit cards, ACH, wire transfers. International? We handle multi-currency.';
+            }
+            
+            // Testimonials / Case studies / Proof
+            if (lowerInput.includes('testimonial') || lowerInput.includes('customer stor') || lowerInput.includes('proof') || lowerInput.includes('success stor') || lowerInput.includes('reference')) {
+                return 'We protect our clients\' privacy—most are in sensitive industries. What we can share: Healthcare org reduced turnover by 30 percent in 6 months. Financial services avoided 2 wrongful termination suits in year one. Nonprofit kept their mission alive through a brutal funding crisis. Want specifics for your industry? Email us and we\'ll connect you with a reference.';
+            }
+            
+            // Burnout / Mental health focus
+            if (lowerInput.includes('burnout') || lowerInput.includes('mental health') || lowerInput.includes('wellbeing') || lowerInput.includes('wellness') || lowerInput.includes('employee health')) {
+                return 'Burnout happens when impossible choices become routine. We measure it before it breaks people. Soul Cradle witnesses the weight. Leadership sees the pattern. You intervene early. This isn\'t wellness theater—it\'s data-driven prevention. Your team deserves better than breaking in silence.';
+            }
+            
+            // AI / Technology behind it
+            if (lowerInput.includes('ai') || lowerInput.includes('artificial intelligence') || lowerInput.includes('machine learning') || lowerInput.includes('technology') || lowerInput.includes('how is it built')) {
+                return 'We use symbolic AI—not black-box neural nets. Every decision is explainable. Cryptographic integrity ensures nothing gets tampered with. Emotional analysis is pattern-based, not sentiment guessing. The tech serves the mission: documenting truth in impossible situations. Enterprise tier gives you access to the technical architecture docs.';
+            }
+            
             // Default fallback - smarter response
             if (lowerInput.length < 3) {
                 return 'I need a bit more than that. Try: "What is Mythara?" or "How much does it cost?" or "Tell me about Soul Cradle."';
@@ -1910,7 +1990,7 @@
             
             // Intelligent fallback based on keywords
             if (lowerInput.includes('?')) {
-                return 'Good question. Let me connect you with someone who can answer that properly—email Mythara.Engine@yahoo.com and we\'ll respond same day. Or if you want to explore on your own, the $49 Pilot gives you full access to see for yourself.';
+                return 'Good question. Let me connect you with someone who can answer that properly—email Mythara.Engine@yahoo.com and we\'ll respond same day. Or if you want to explore on your own, the 49 dollar Pilot gives you full access to see for yourself.';
             }
             
             // Final fallback - conversational
