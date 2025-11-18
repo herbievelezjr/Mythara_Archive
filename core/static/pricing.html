@@ -1478,6 +1478,20 @@
             }
         });
         
+        // Stop speech when page is closed or refreshed
+        window.addEventListener('beforeunload', () => {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+        });
+        
+        // Stop speech when page loses focus
+        window.addEventListener('blur', () => {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+        });
+        
         function addMessage(text, isUser = false) {
             const msg = document.createElement('div');
             msg.className = `chat-message ${isUser ? 'user' : 'bot'}`;
