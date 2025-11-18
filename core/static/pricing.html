@@ -3,154 +3,1227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mythara Engine - Enterprise Pricing</title>
+    <title>Mythara Engine — Enterprise AI Governance</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #000; min-height: 100vh; padding: 2rem 1rem; overflow-x: hidden; }
-        #matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.3; }
-        .container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
-        .avatar-hero { text-align: center; margin-bottom: 4rem; position: relative; }
-        .avatar-container { position: relative; display: inline-block; margin-bottom: 2rem; }
-        .avatar-orb { width: 220px; height: 220px; background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; position: relative; cursor: pointer; transition: transform 0.3s ease; }
-        .avatar-orb:hover { transform: scale(1.15); animation: bounce 0.6s ease; }
-        @keyframes bounce { 0%, 100% { transform: scale(1.15) translateY(0); } 50% { transform: scale(1.15) translateY(-20px); } }
-        .avatar-face { width: 180px; height: 180px; position: relative; animation: foxFloat 4s ease-in-out infinite; }
-        @keyframes foxFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        .fox-head { width: 80px; height: 70px; background: linear-gradient(135deg, #00d9ff 0%, #0ea5e9 50%, #fbbf24 100%); border-radius: 50% 50% 45% 45%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; box-shadow: 0 0 30px rgba(0,217,255,0.8), 0 0 50px rgba(0,217,255,0.4), inset 0 0 20px rgba(251,191,36,0.3); }
-        .fox-ear { width: 35px; height: 45px; background: linear-gradient(135deg, #00d9ff 0%, #0ea5e9 100%); border-radius: 50% 50% 0 0; position: absolute; top: -15px; box-shadow: 0 0 15px rgba(0,217,255,0.6); }
-        .fox-ear.left { left: 5px; transform: rotate(-15deg); }
-        .fox-ear.right { right: 5px; transform: rotate(15deg); }
-        .fox-ear-inner { width: 20px; height: 28px; background: linear-gradient(135deg, #e8c5f0 0%, #f0d9ff 100%); border-radius: 50% 50% 0 0; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); box-shadow: inset 0 0 10px rgba(255,255,255,0.4); }
-        .fox-face { width: 60px; height: 50px; background: linear-gradient(135deg, #f0d9ff 0%, #e8daef 100%); border-radius: 50% 50% 60% 60%; position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 20px rgba(240,217,255,0.5); }
-        .fox-eye { width: 12px; height: 16px; background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 100%); border-radius: 50%; position: absolute; top: 25px; animation: blink 4s infinite, eyeGlow 2s ease-in-out infinite; box-shadow: 0 0 8px rgba(139,92,246,0.8), inset 0 0 4px rgba(167,139,250,0.5); }
-        @keyframes eyeGlow { 0%, 100% { box-shadow: 0 0 8px rgba(139,92,246,0.8), inset 0 0 4px rgba(167,139,250,0.5); } 50% { box-shadow: 0 0 15px rgba(139,92,246,1), inset 0 0 6px rgba(167,139,250,0.8); } }
-        @keyframes blink { 0%, 48%, 52%, 100% { height: 16px; } 50% { height: 2px; } }
-        .fox-eye.left { left: 20px; } .fox-eye.right { right: 20px; }
-        .eye-shine { width: 4px; height: 6px; background: rgba(102,126,234,0.9); border-radius: 50%; position: absolute; top: 3px; left: 2px; box-shadow: 0 0 5px rgba(102,126,234,0.8); }
-        .fox-nose { width: 10px; height: 8px; background: linear-gradient(135deg, #0ea5e9 0%, #00d9ff 100%); border-radius: 50%; position: absolute; top: 42px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 5px rgba(0,217,255,0.8); }
-        .fox-mouth { width: 30px; height: 15px; border: 2px solid #6366F1; border-top: none; border-radius: 0 0 50% 50%; position: absolute; top: 45px; left: 50%; transform: translateX(-50%); opacity: 0.7; }
-        .fox-cheek { width: 15px; height: 12px; background: rgba(219,176,234,0.5); border-radius: 50%; position: absolute; top: 40px; box-shadow: 0 0 10px rgba(219,176,234,0.4); }
-        .fox-cheek.left { left: 8px; } .fox-cheek.right { right: 8px; }
-        .fox-tails { position: absolute; width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5; }
-        .fox-tail { width: 40px; height: 80px; background: linear-gradient(135deg,#00d9ff 0%,#0ea5e9 50%,#fbbf24 100%); border-radius: 50% 50% 30% 30%; position: absolute; bottom: 20px; left: 50%; transform-origin: bottom center; animation: tailWag 3s ease-in-out infinite; box-shadow: 0 0 15px rgba(0,217,255,0.6), 0 0 30px rgba(0,217,255,0.4); filter: drop-shadow(0 0 10px rgba(251,191,36,0.6)); }
-        .fox-tail::after { content:''; width:30px; height:25px; background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%); border-radius:50%; position:absolute; bottom:0; left:5px; box-shadow:0 0 10px rgba(251,191,36,0.8), inset 0 0 8px rgba(0,217,255,0.3); }
-        .fox-tail:nth-child(1){transform:translateX(-50%) rotate(-40deg);animation-delay:0s;} .fox-tail:nth-child(2){transform:translateX(-50%) rotate(-30deg);animation-delay:0.1s;} .fox-tail:nth-child(3){transform:translateX(-50%) rotate(-20deg);animation-delay:0.2s;} .fox-tail:nth-child(4){transform:translateX(-50%) rotate(-10deg);animation-delay:0.3s;} .fox-tail:nth-child(5){transform:translateX(-50%) rotate(0deg);animation-delay:0.4s;} .fox-tail:nth-child(6){transform:translateX(-50%) rotate(10deg);animation-delay:0.5s;} .fox-tail:nth-child(7){transform:translateX(-50%) rotate(20deg);animation-delay:0.6s;} .fox-tail:nth-child(8){transform:translateX(-50%) rotate(30deg);animation-delay:0.7s;} .fox-tail:nth-child(9){transform:translateX(-50%) rotate(40deg);animation-delay:0.8s;}
-        @keyframes tailWag { 0%,100% { transform: translateX(-50%) rotate(var(--rotation)) scale(1);} 50% { transform: translateX(-50%) rotate(calc(var(--rotation) - 5deg)) scale(1.05);} }
-        header { text-align:center; color:#fff; margin-bottom:3rem; }
-        header h1 { font-size:3.5rem; font-weight:800; margin-bottom:1rem; background:linear-gradient(135deg,#00d9ff 0%,#fbbf24 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:titleShine 3s ease-in-out infinite; }
-        @keyframes titleShine { 0%,100% { filter:brightness(1);} 50% { filter:brightness(1.2);} }
-        header p { font-size:1.25rem; color:rgba(255,255,255,0.9); max-width:800px; margin:0 auto; line-height:1.6; }
-        .avatar-speech { background:rgba(255,255,255,0.95); padding:1.5rem 2rem; border-radius:20px; max-width:600px; margin:2rem auto; position:relative; box-shadow:0 10px 40px rgba(0,0,0,0.3); animation:fadeIn 1s ease-out; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
-        .avatar-speech::before { content:''; position:absolute; top:-10px; left:50%; transform:translateX(-50%); border-left:15px solid transparent; border-right:15px solid transparent; border-bottom:15px solid rgba(255,255,255,0.95); }
-        .avatar-speech p { color:#333; font-size:1.1rem; margin:0; font-style:italic; }
-        .avatar-speech strong { color:#00d9ff; font-weight:700; }
-        .pricing-wrapper { background:rgba(255,255,255,0.98); border-radius:30px; padding:3rem; box-shadow:0 30px 80px rgba(0,0,0,0.4), 0 0 1px rgba(138,43,226,0.5); backdrop-filter:blur(10px); border:1px solid rgba(138,43,226,0.2); }
-        .info-banner { background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%); color:#fff; padding:2rem; border-radius:20px; margin-bottom:3rem; text-align:center; position:relative; overflow:hidden; }
-        .info-banner::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent); animation:shimmer 3s infinite; }
-        @keyframes shimmer { 0% { transform:translateX(-100%) translateY(-100%);} 100% { transform:translateX(100%) translateY(100%);} }
-        .info-banner h2 { font-size:1.8rem; margin-bottom:0.5rem; position:relative; z-index:1; }
-        .info-banner p { font-size:1.1rem; opacity:0.95; position:relative; z-index:1; }
-        .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.5rem; margin-bottom:3rem; }
-        .mini-mythara { position:relative; width:80px; height:80px; margin:0 auto 1rem; animation:miniFloat 3s ease-in-out infinite; }
-        @keyframes miniFloat { 0%,100% { transform:translateY(0px) rotate(-5deg);} 50% { transform:translateY(-15px) rotate(5deg);} }
-        .mini-fox-head { width:50px; height:45px; background:linear-gradient(135deg,#00d9ff 0%,#0ea5e9 50%,#fbbf24 100%); border-radius:50% 50% 45% 45%; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); box-shadow:0 0 20px rgba(0,217,255,0.8); }
-        .mini-fox-ear { width:20px; height:25px; background:linear-gradient(135deg,#00d9ff 0%,#0ea5e9 100%); border-radius:50% 50% 0 0; position:absolute; top:15px; }
-        .mini-fox-ear.left { left:8px; transform:rotate(-25deg);} .mini-fox-ear.right { right:8px; transform:rotate(25deg); }
-        .mini-fox-tail { width:25px; height:35px; background:linear-gradient(135deg,#00d9ff 0%,#0ea5e9 100%); border-radius:50%; position:absolute; bottom:5px; opacity:0.7; }
-        .mini-fox-tail:nth-child(1){ left:-5px; transform:rotate(-30deg);} .mini-fox-tail:nth-child(2){ left:5px; transform:rotate(-15deg);} .mini-fox-tail:nth-child(3){ right:5px; transform:rotate(15deg);}        
-        .feature-card { perspective:1000px; height:200px; }
-        .card-inner { position:relative; width:100%; height:100%; transition:transform 0.6s; transform-style:preserve-3d; }
-        .feature-card:hover .card-inner { transform:rotateY(180deg); }
-        .card-front, .card-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:16px; padding:2rem; }
-        .card-front { background:linear-gradient(135deg,#f8f9fa 0%,#ffffff 100%); border-left:5px solid #00d9ff; box-shadow:0 5px 15px rgba(0,0,0,0.08); }
-        .card-back { background:linear-gradient(135deg,#00d9ff 0%,#0ea5e9 100%); transform:rotateY(180deg); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; box-shadow:0 5px 15px rgba(0,0,0,0.15); }
-        .card-back h4 { font-size:1.3rem; margin-bottom:0.5rem; font-weight:700; }
-        .card-back p { font-size:0.9rem; opacity:0.9; }
-        .card-front h3 { color:#00d9ff; font-size:1.2rem; margin-bottom:0.75rem; font-weight:700; }
-        .feature-card p { color:#555; font-size:0.95rem; line-height:1.6; }
-        .contact-footer { text-align:center; margin-top:2rem; padding-top:2rem; border-top:2px solid #e0e0e0; }
-        .contact-footer p { color:#666; margin-bottom:1rem; }
-        .contact-footer a { color:#00d9ff; text-decoration:none; font-weight:600; }
-        .contact-footer a:hover { text-decoration:underline; }
-        @media (max-width: 768px) { header h1 { font-size:2.5rem; } .avatar-orb { width:160px; height:160px; } .avatar-face { width:150px; height:150px; } .pricing-wrapper { padding:1.5rem; } .avatar-speech { padding:1.25rem 1.5rem; } }
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg-primary);
+            color: var(--text-primary); 
+            min-height: 100vh; 
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Animated mesh gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            animation: meshMove 20s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(60px);
+        }
+        
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5%, -5%) scale(1.1); }
+            66% { transform: translate(-5%, 5%) scale(0.95); }
+        }
+        
+        /* Subtle noise texture */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 2rem 1.5rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+        
+        /* Modern Hero Header */
+        .header {
+            text-align: center;
+            padding: clamp(3rem, 10vh, 6rem) 0 clamp(2rem, 5vh, 4rem);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        
+        .header .mission {
+            max-width: 700px;
+            margin: 2rem auto 0;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bento-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .bento-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+        
+        .bento-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .bento-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin: 5rem 0 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Pricing Cards - Modern Style */
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: scale(1.02);
+        }
+        
+        .pricing-card.featured {
+            border-color: var(--accent-primary);
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        .tier-badge {
+            display: inline-block;
+            padding: 0.375rem 1rem;
+            background: var(--accent-gradient);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        
+        .tier-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .tier-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Core Capabilities */
+        .capabilities {
+            margin-bottom: 6rem;
+        }
+        
+        .capabilities h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #e8e8ec 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .capability-card {
+            background: rgba(17,24,39,0.5);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .capability-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(102,126,234,0.5);
+            box-shadow: 
+                0 20px 60px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+        
+        .capability-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #a78bfa;
+        }
+        
+        .capability-card p {
+            color: #d1d5db;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        
+        /* Pricing Section */
+        .pricing-section {
+            margin-bottom: 6rem;
+        }
+        
+        .pricing-header {
+            text-align: center;
+            margin: 6rem 0 4rem;
+        }
+        
+        .pricing-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .pricing-header p {
+            font-size: 1.2rem;
+            color: #9ca3af;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .pricing-wrapper {
+            background: rgba(17,24,39,0.4);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .pricing-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102,126,234,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .pricing-wrapper:hover::before {
+            left: 100%;
+        }
+        
+        .pricing-wrapper:hover {
+            border-color: rgba(102,126,234,0.4);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .tier-divider {
+            margin: 4rem 0;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(102,126,234,0.15);
+        }
+        
+        .tier-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tier-title h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #e8e8ec;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tier-title p {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+        
+        /* Contact Footer */
+        .contact-footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(102,126,234,0.15);
+        }
+        
+        .contact-footer p {
+            color: #9ca3af;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .contact-footer a {
+            color: #a78bfa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .contact-footer a:hover {
+            color: #667eea;
+        }
+        
+        .contact-footer .legal {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .header .tagline { font-size: 1.2rem; }
+            .pricing-wrapper { padding: 2rem 1.5rem; }
+            .container { padding: 2rem 1rem; }
+        }
+        
+        /* Chat Widget */
+        .chat-bubble {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+        }
+        
+        .chat-bubble svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+        
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 380px;
+            height: 500px;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+        }
+        
+        .chat-window.active {
+            display: flex;
+        }
+        
+        .chat-header {
+            padding: 1.25rem;
+            background: var(--accent-gradient);
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .chat-message {
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+            animation: messageSlide 0.3s ease;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .chat-message.bot {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            align-self: flex-start;
+        }
+        
+        .chat-message.user {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            align-self: flex-end;
+        }
+        
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            display: flex; /* Always visible - users can ask questions anytime */
+            gap: 0.75rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        
+        .chat-send {
+            padding: 0.75rem 1.25rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .chat-send:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Voice Input Button */
+        .voice-btn {
+            padding: 0.75rem;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            color: var(--accent-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .voice-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .voice-btn.listening {
+            background: var(--accent-gradient);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Dynamic Action Button */
+        .dynamic-action {
+            padding: 0 1rem 1rem 1rem;
+            display: none;
+        }
+        
+        .dynamic-action.visible {
+            display: block;
+        }
+        
+        .action-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(135deg, #9d6ffb 0%, #7477f6 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .chat-window {
+                width: calc(100% - 32px);
+                height: calc(100% - 120px);
+                right: 16px;
+                bottom: 90px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Matrix rain background -->
-    <!-- SYNC_MARKER: SYMBOLIC_SYNC_20251114 -->
-    <canvas id="matrix-bg"></canvas>
-    <div class="particles" id="particles"></div>
     <div class="container">
-        <div class="avatar-hero">
-            <div class="avatar-container">
-                <div class="avatar-orb">
-                    <div class="avatar-face">
-                        <div class="fox-tails">
-                            <div class="fox-tail" style="--rotation: -40deg;"></div>
-                            <div class="fox-tail" style="--rotation: -30deg;"></div>
-                            <div class="fox-tail" style="--rotation: -20deg;"></div>
-                            <div class="fox-tail" style="--rotation: -10deg;"></div>
-                            <div class="fox-tail" style="--rotation: 0deg;"></div>
-                            <div class="fox-tail" style="--rotation: 10deg;"></div>
-                            <div class="fox-tail" style="--rotation: 20deg;"></div>
-                            <div class="fox-tail" style="--rotation: 30deg;"></div>
-                            <div class="fox-tail" style="--rotation: 40deg;"></div>
-                        </div>
-                        <div class="fox-head">
-                            <div class="fox-ear left"><div class="fox-ear-inner"></div></div>
-                            <div class="fox-ear right"><div class="fox-ear-inner"></div></div>
-                            <div class="fox-face">
-                                <div class="fox-eye left"><div class="eye-shine"></div></div>
-                                <div class="fox-eye right"><div class="eye-shine"></div></div>
-                                <div class="fox-nose"></div>
-                                <div class="fox-mouth"></div>
-                                <div class="fox-cheek left"></div>
-                                <div class="fox-cheek right"></div>
-                            </div>
+        <!-- Header -->
+        <div class="header">
+            <h1>Mythara Engine</h1>
+            <div class="mission">
+                <strong>Our Promise to Every Industry:</strong> Most systems force you to choose between your mission and compliance. Mythara ensures you never have to sacrifice what matters. Whether you're healing patients, serving communities, protecting the vulnerable, or building trust—we document when rules conflict with purpose, protect your people from moral injury, and give you data to advocate for change. You stay compliant. Your heart stays intact. Your mission survives.
+            </div>
+        </div>
+        
+        <!-- Core Capabilities -->
+        <div class="capabilities">
+            <h2>What Mythara Preserves</h2>
+            <div class="capabilities-grid">
+                <div class="capability-card" style="border: 2px solid #8b5cf6; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);">
+                    <h3 style="color: #8b5cf6;">Soul Cradle Operator 💜</h3>
+                    <p>When God's Will contradicts His Commandments, when leadership vision conflicts with compliance mandates—the soul must hold both. Mythara measures integrity under paradox: obedience when rules war with reality, resilience when faith is tested.</p>
+                    <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(139, 92, 246, 0.3); font-size: 0.9rem; color: #a78bfa;"><strong>Donated to:</strong> Healthcare/Mental Health, Banking/Finance, Justice Systems, Nonprofits, Civil Service, Education — included free with all tiers for qualifying industries.</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h3>Emotional Vitality (S(t))</h3>
+                    <p>Systems burn out. Teams collapse. Mythara tracks the soul proportion—emotional coherence, renewal capacity, stress drag—as a bounded metric that adapts over time. Not surveillance. Support.</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h3>Symbolic Safety (SSIP)</h3>
+                    <p>In mental health, finance, justice—context is everything. SSIP orchestration preserves emotional fidelity, prevents drift, maintains messenger pairing. The meaning survives the machinery.</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h3>Blessings Reservoir</h3>
+                    <p>Every act of obedience under trial, every choice to uphold what's right when it costs—these accumulate. Mythara tracks benevolent force as a measurable, auditable reservoir that compounds over time.</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h3>Cryptographic Witnessing</h3>
+                    <p>SHA-256 audit trails aren't just compliance. They're testimony. Every decision, every state transition, every moment the soul held paradox—witnessed, immutable, accountable to both regulators and the divine.</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h3>Cultural Translation</h3>
+                    <p>HIPAA for healers. OCC mandates for bankers. OMB guidance for civil servants. Mythara speaks the regulatory language while preserving what each community holds sacred—the nuance that makes compliance human.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pricing -->
+        <div class="pricing-section">
+            <div class="pricing-header">
+                <h2>Partnership Tiers</h2>
+                <p>Choose the depth of integration that honors your community's needs</p>
+            </div>
+            
+            <div class="pricing-wrapper">
+                <div class="tier-title">
+                    <h3 style="color: #a78bfa;">🌱 7-Day Pilot (Hosted Trial)</h3>
+                    <p>$49 one-time • 7 days of hosted API access • Rate-limited by company size • Perfect for evaluation</p>
+                    
+                    <!-- Terms Agreement Checkbox -->
+                    <div style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                        <div style="display: flex; align-items: center; font-size: 0.95rem; color: #a78bfa;">
+                            <input type="checkbox" id="pilot-terms-checkbox" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #8b5cf6; flex-shrink: 0;">
+                            <span>
+                                I agree to the <a href="/terms" target="_blank" style="color: #8b5cf6; text-decoration: underline; font-weight: 600; cursor: pointer;">Terms of Service & Refund Policy</a>
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <header>
-                <h1>Meet Mythara</h1>
-                <p>Your AI-powered guardian for SSIP-compliant symbolic orchestration</p>
-            </header>
-            <div class="avatar-speech">
-                <p>Hi! I'm <strong>Mythara</strong>, your nine-tailed guardian of symbolic safety. With ancient wisdom and modern tech, I help mental health applications maintain <strong>emotional integrity</strong> and <strong>HIPAA compliance</strong> through advanced SSIP orchestration. Let's find the perfect tier for your journey! 🦊✨</p>
-            </div>
-        </div>
-        <div class="pricing-wrapper">
-            <div class="mini-mythara">
-                <div class="mini-fox-tail"></div>
-                <div class="mini-fox-tail"></div>
-                <div class="mini-fox-tail"></div>
-                <div class="mini-fox-head">
-                    <div class="mini-fox-ear left"></div>
-                    <div class="mini-fox-ear right"></div>
+                <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+                <stripe-pricing-table id="pilot-pricing-table" pricing-table-id="prctbl_1SSoThLDsWsQ7YoJfUHpD8Bj" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh" style="pointer-events: none; opacity: 0.5;"></stripe-pricing-table>
+                
+                <div class="tier-divider">
+                    <div class="tier-title">
+                        <h3 style="color: #a78bfa;">🏛️ Enterprise (Unlimited Hosted)</h3>
+                        <p>$25K-$300K/year • Fully managed hosting • Unlimited API calls • 24/7 support • 99.9% SLA</p>
+                        <p style="color: #8b5cf6; font-size: 0.9rem; margin-top: 0.5rem;">💝 Loyalty Reward: 2-10% off renewals (smaller companies get bigger discounts)</p>
+                        
+                        <!-- Terms Agreement Checkbox -->
+                        <div style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                            <div style="display: flex; align-items: center; font-size: 0.95rem; color: #a78bfa;">
+                                <input type="checkbox" id="enterprise-terms-checkbox" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #8b5cf6; flex-shrink: 0;">
+                                <span>
+                                    I agree to the <a href="/terms" target="_blank" style="color: #8b5cf6; text-decoration: underline; font-weight: 600; cursor: pointer;">Terms of Service & Refund Policy</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+                    <stripe-pricing-table id="enterprise-pricing-table" pricing-table-id="prctbl_1SSp8yLDsWsQ7YoJA3Qxw8c7" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh" style="pointer-events: none; opacity: 0.5;"></stripe-pricing-table>
+                </div>
+                
+                <div class="tier-divider">
+                    <div class="tier-title">
+                        <h3 style="color: #a78bfa;">🌍 Global Stewardship</h3>
+                        <p>Custom pricing • 5,000+ employees • Multi-region deployment • Dedicated team • Custom cultural translation</p>
+                        <p style="color: #8b5cf6; font-size: 0.9rem; margin-top: 0.5rem;">💝 Loyalty Reward: 2% off renewals</p>
+                        
+                        <!-- Terms Agreement Checkbox -->
+                        <div style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 8px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                            <div style="display: flex; align-items: center; font-size: 0.95rem; color: #a78bfa;">
+                                <input type="checkbox" id="global-terms-checkbox" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #8b5cf6; flex-shrink: 0;">
+                                <span>
+                                    I agree to the <a href="/terms" target="_blank" style="color: #8b5cf6; text-decoration: underline; font-weight: 600; cursor: pointer;">Terms of Service & Refund Policy</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+                    <stripe-pricing-table id="global-pricing-table" pricing-table-id="prctbl_1SSp9zLDsWsQ7YoJLP6bVJ8o" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh" style="pointer-events: none; opacity: 0.5;"></stripe-pricing-table>
+                </div>
+                
+                <div class="contact-footer">
+                    <p><strong>Ready to preserve what your community holds sacred?</strong></p>
+                    <p>Let's talk: <a href="mailto:Mythara.Engine@yahoo.com">Mythara.Engine@yahoo.com</a></p>
                 </div>
             </div>
-            <div class="info-banner">
-                <h2>Enterprise Licensing</h2>
-                <p>One-time annual license with full support, compliance documentation, and deployment templates</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card"><div class="card-inner"><div class="card-front"><h3>✨ SSIP Orchestration</h3><p>State-space symbolic processing with drift suppression and messenger pairing</p></div><div class="card-back"><h4>What This Means</h4><p style="text-align:center;font-size:.85rem;line-height:1.4;">SSIP continuously tracks emotional state transitions and messenger pairing context to prevent drift. Each clause invocation preserves safety constraints, reducing fragmentation in mental health workflows.</p></div></div></div>
-                <div class="feature-card"><div class="card-inner"><div class="card-front"><h3>🔒 HIPAA Compliant</h3><p>Full NIST 800-53 and HIPAA compliance documentation included</p></div><div class="card-back"><h4>Compliance Detail</h4><p style="text-align:center;font-size:.85rem;line-height:1.4;">Mappings to HIPAA technical safeguards, NIST 800-53 controls, encryption posture guidance, PHI boundary recommendations, and audit-ready documentation packs accelerate reviews.</p></div></div></div>
-                <div class="feature-card"><div class="card-inner"><div class="card-front"><h3>🚀 Production Ready</h3><p>Docker templates, API access, and deployment guides</p></div><div class="card-back"><h4>Operational Scope</h4><p style="text-align:center;font-size:.85rem;line-height:1.4;">Curated Docker images, env templates, scaling patterns, readiness & liveness examples, and observability hook points for metrics and structured logs.</p></div></div></div>
-                <div class="feature-card"><div class="card-inner"><div class="card-front"><h3>💬 Priority Support</h3><p>24/7 support with SLA guarantees for enterprise tiers</p></div><div class="card-back"><h4>Support Model</h4><p style="text-align:center;font-size:.85rem;line-height:1.4;">24/7 ticketing, escalation SLAs, proactive incident advisories, upgrade guidance, and solution engineering consults keep workloads resilient and compliant.</p></div></div></div>
-            </div>
-            <div style="margin:3rem 0 2rem;"><h2 style="text-align:center;font-size:2rem;color:#fff;margin-bottom:0.5rem;">🚀 Mythara Engine Pilot</h2><p style="text-align:center;color:#aaa;margin-bottom:2rem;">Start your SSIP journey with our developer tier</p></div>
-            <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-            <stripe-pricing-table pricing-table-id="prctbl_1SSoThLDsWsQ7YoJfUHpD8Bj" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh"></stripe-pricing-table>
-            <div style="margin:4rem 0 2rem;"><h2 style="text-align:center;font-size:2rem;color:#fff;margin-bottom:0.5rem;">🏢 Enterprise Solutions</h2><p style="text-align:center;color:#aaa;margin-bottom:2rem;">Production-ready tiers for growing businesses</p></div>
-            <stripe-pricing-table pricing-table-id="prctbl_1SSp8yLDsWsQ7YoJA3Qxw8c7" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh"></stripe-pricing-table>
-            <div style="margin:4rem 0 2rem;"><h2 style="text-align:center;font-size:2rem;color:#fff;margin-bottom:0.5rem;">🌍 Global Tier</h2><p style="text-align:center;color:#aaa;margin-bottom:2rem;">For enterprises with 5,000+ employees worldwide</p></div>
-            <stripe-pricing-table pricing-table-id="prctbl_1SSp9zLDsWsQ7YoJLP6bVJ8o" publishable-key="pk_live_51SS7mQLDsWsQ7YoJOhXlXeGR3EAdCvuAG6bd0UDfXM69JKr4Nbtf47CXrHn3tN3qe9IuFehLkVyv1Ib8vfHxp03x00i6GrK5Eh"></stripe-pricing-table>
-            <div class="contact-footer"><p><strong>Questions about custom deployments or Fortune 500 licensing?</strong></p><p>Contact us: <a href="mailto:Mythara.Engine@yahoo.com">Mythara.Engine@yahoo.com</a></p><p style="margin-top:1.5rem;font-size:0.9rem;color:#999;">© 2025 Herbert Velez Jr. All rights reserved. | <a href="/api/docs">API Documentation</a> | <a href="/health">System Status</a></p></div>
+    
+    <!-- MytharaConnect Chat Widget -->
+    <div id="chat-bubble" class="chat-bubble">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2 22l5.71-.97C9 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.38 0-2.68-.29-3.86-.81l-.27-.13-2.82.48.48-2.82-.13-.27C4.89 14.68 4.6 13.38 4.6 12c0-4.07 3.33-7.4 7.4-7.4s7.4 3.33 7.4 7.4-3.33 7.4-7.4 7.4z"/>
+        </svg>
+    </div>
+    
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <h3>MytharaConnect</h3>
+            <button id="chat-close" class="chat-close">×</button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="dynamic-action" class="dynamic-action"></div>
+        <div class="chat-input-area">
+            <button id="voice-btn" class="voice-btn" title="Click to speak">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/>
+                </svg>
+            </button>
+            <input type="text" id="chat-input" class="chat-input" placeholder="Type or speak your message...">
+            <button id="chat-send" class="chat-send">Send</button>
         </div>
     </div>
+
     <script>
-        const canvas=document.getElementById('matrix-bg');const ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;const chars='01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';const fontSize=14;const columns=canvas.width/fontSize;const drops=Array(Math.floor(columns)).fill(1);function drawMatrix(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#0F0';ctx.font=fontSize+'px monospace';for(let i=0;i<drops.length;i++){const text=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(text,i*fontSize,drops[i]*fontSize);if(drops[i]*fontSize>canvas.height&&Math.random()>0.975){drops[i]=0;}drops[i]++;}}setInterval(drawMatrix,35);window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});const particlesContainer=document.getElementById('particles');const particleCount=50;for(let i=0;i<particleCount;i++){const particle=document.createElement('div');particle.className='particle';particle.style.left=Math.random()*100+'%';particle.style.animationDelay=Math.random()*20+'s';particle.style.animationDuration=(15+Math.random()*10)+'s';particlesContainer.appendChild(particle);}    </script>
+        // Enforce Terms checkbox before allowing payment for all tiers
+        const pilotCheckbox = document.getElementById('pilot-terms-checkbox');
+        const pilotPricingTable = document.getElementById('pilot-pricing-table');
+        
+        const enterpriseCheckbox = document.getElementById('enterprise-terms-checkbox');
+        const enterprisePricingTable = document.getElementById('enterprise-pricing-table');
+        
+        const globalCheckbox = document.getElementById('global-terms-checkbox');
+        const globalPricingTable = document.getElementById('global-pricing-table');
+        
+        pilotCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                pilotPricingTable.style.pointerEvents = 'auto';
+                pilotPricingTable.style.opacity = '1';
+            } else {
+                pilotPricingTable.style.pointerEvents = 'none';
+                pilotPricingTable.style.opacity = '0.5';
+            }
+        });
+        
+        enterpriseCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                enterprisePricingTable.style.pointerEvents = 'auto';
+                enterprisePricingTable.style.opacity = '1';
+            } else {
+                enterprisePricingTable.style.pointerEvents = 'none';
+                enterprisePricingTable.style.opacity = '0.5';
+            }
+        });
+        
+        globalCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                globalPricingTable.style.pointerEvents = 'auto';
+                globalPricingTable.style.opacity = '1';
+            } else {
+                globalPricingTable.style.pointerEvents = 'none';
+                globalPricingTable.style.opacity = '0.5';
+            }
+        });
+        
+        // Chat Widget
+        const chatBubble = document.getElementById('chat-bubble');
+        const chatWindow = document.getElementById('chat-window');
+        const chatClose = document.getElementById('chat-close');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatMessages = document.getElementById('chat-messages');
+        const voiceBtn = document.getElementById('voice-btn');
+        
+        // Speech Recognition Setup
+        let recognition = null;
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            // Update language for speech recognition based on user's detected language
+            const updateRecognitionLanguage = () => {
+                const langMap = {
+                    'en': 'en-US',
+                    'es': 'es-ES',
+                    'zh': 'zh-CN',
+                    'hi': 'hi-IN',
+                    'ar': 'ar-SA'
+                };
+                recognition.lang = langMap[userLanguage] || 'en-US';
+            };
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                chatInput.value = transcript;
+                voiceBtn.classList.remove('listening');
+                handleSend();
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                voiceBtn.classList.remove('listening');
+            };
+            
+            recognition.onend = () => {
+                voiceBtn.classList.remove('listening');
+            };
+        }
+        
+        // Voice button handler
+        voiceBtn.addEventListener('click', () => {
+            if (recognition) {
+                if (voiceBtn.classList.contains('listening')) {
+                    recognition.stop();
+                    voiceBtn.classList.remove('listening');
+                } else {
+                    // Update recognition language before starting
+                    const langMap = {
+                        'en': 'en-GB',
+                        'es': 'es-ES',
+                        'zh': 'zh-CN',
+                        'hi': 'hi-IN',
+                        'ar': 'ar-SA'
+                    };
+                    recognition.lang = langMap[userLanguage] || 'en-GB';
+                    voiceBtn.classList.add('listening');
+                    recognition.start();
+                }
+            } else {
+                const noSupportMsg = {
+                    en: 'Voice input is not supported in this browser. Please use Chrome, Edge, or Safari.',
+                    es: 'La entrada de voz no es compatible con este navegador. Usa Chrome, Edge o Safari.',
+                    zh: '此浏览器不支持语音输入。请使用Chrome、Edge或Safari。',
+                    hi: 'इस ब्राउज़र में वॉयस इनपुट समर्थित नहीं है। कृपया Chrome, Edge, या Safari का उपयोग करें।',
+                    ar: 'إدخال الصوت غير مدعوم في هذا المتصفح. يرجى استخدام Chrome أو Edge أو Safari.'
+                };
+                addMessage(noSupportMsg[userLanguage], false);
+            }
+        });
+        
+        // Load voices
+        let voicesLoaded = false;
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = () => {
+                voicesLoaded = true;
+            };
+        }
+        
+        let conversationStage = 0;
+        
+        chatBubble.addEventListener('click', () => {
+            chatWindow.classList.add('active');
+            // Start guided conversation
+            if (chatMessages.children.length === 0) {
+                startConversation();
+            }
+        });
+        
+        function startConversation() {
+            conversationStage = 0;
+            setTimeout(() => {
+                addMessage("Hi. I'm here if you need help navigating Mythara—pricing, Soul Cradle, licensing, whatever you're wondering about.");
+            }, 500);
+        }
+        
+        chatClose.addEventListener('click', () => {
+            chatWindow.classList.remove('active');
+            // Stop talking when chat closes
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+        });
+        
+        function addMessage(text, isUser = false) {
+            const msg = document.createElement('div');
+            msg.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+            msg.textContent = text;
+            chatMessages.appendChild(msg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Speak bot messages with young British voice
+            if (!isUser && 'speechSynthesis' in window) {
+                // Fix pronunciation: Mythara = "Myth-ARE-uh", HIPAA = "Hip-pah"
+                let spokenText = text.replace(/Mythara/gi, 'Myth-are-uh')
+                                    .replace(/HIPAA/gi, 'Hip-pah');
+                
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                const voices = speechSynthesis.getVoices();
+                // Try young British voices
+                const preferredVoice = voices.find(v => v.lang === 'en-GB' && v.name.includes('Female')) ||
+                                      voices.find(v => v.lang === 'en-GB') ||
+                                      voices.find(v => v.name.includes('Google UK English Female')) ||
+                                      voices.find(v => v.name.includes('UK')) ||
+                                      voices.find(v => v.name.includes('British'));
+                if (preferredVoice) utterance.voice = preferredVoice;
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.9;  // Slower, more professional
+                utterance.pitch = 1.0;  // Normal pitch, more mature
+                utterance.volume = 0.9;  // Slightly softer
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        function handleSend() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            addMessage(text, true);
+            chatInput.value = '';
+            
+            // Detect language from user input
+            userLanguage = detectLanguage(text);
+            
+            // Get intelligent response
+            setTimeout(() => {
+                const response = getResponse(text);
+                addMessage(response);
+                
+                // Offer next step based on context
+                setTimeout(() => {
+                    suggestNextStep(text);
+                }, 1500);
+            }, 800);
+        }
+        
+        function suggestNextStep(userInput) {
+            const lower = userInput.toLowerCase();
+            
+            // Don't suggest if they just asked about terms/licensing
+            if (lower.includes('license') || lower.includes('refund') || lower.includes('terms')) {
+                return; // Let them digest the info
+            }
+            
+            // If they asked about Soul Cradle, suggest pricing
+            if (lower.includes('soul cradle') && conversationStage < 3) {
+                setTimeout(() => {
+                    addMessage("Want to see pricing for your industry?");
+                    showActionButton("Yes, show pricing", () => handlePricing());
+                }, 1000);
+            }
+            
+            // If they asked about pricing/cost, push to Pilot
+            else if ((lower.includes('pricing') || lower.includes('cost') || lower.includes('price')) && conversationStage < 3) {
+                setTimeout(() => {
+                    addMessage("Ready to start your $49 Pilot?");
+                    showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
+                }, 1000);
+            }
+            
+            // If they asked about pilot, push to signup
+            else if (lower.includes('pilot') && conversationStage < 4) {
+                setTimeout(() => {
+                    addMessage("Let's get you started!");
+                    showActionButton("Start my Pilot now", () => handlePilotSignup());
+                }, 1000);
+            }
+        }
+        
+        function showActionButton(text, callback) {
+            const actionDiv = document.getElementById('dynamic-action');
+            actionDiv.innerHTML = `<button class="action-btn" onclick="handleButtonClick()">${text}</button>`;
+            actionDiv.classList.add('visible');
+            window.handleButtonClick = callback;
+        }
+        
+        function hideActionButton() {
+            const actionDiv = document.getElementById('dynamic-action');
+            actionDiv.classList.remove('visible');
+            actionDiv.innerHTML = '';
+        }
+        
+        function handleExploring() {
+            hideActionButton();
+            addMessage("I'm exploring", true);
+            conversationStage = 1;
+            setTimeout(() => {
+                addMessage("Perfect! Think of Mythara as your mission's guardian. You know how sometimes what you must do conflicts with what you should do? That's where we come in.");
+                setTimeout(() => {
+                    addMessage("Which area matters most to you right now?");
+                    showActionButton("Understanding Soul Cradle", () => handleSoulCradle());
+                }, 2500);
+            }, 1000);
+        }
+        
+        function handleSoulCradle() {
+            hideActionButton();
+            addMessage("Tell me about Soul Cradle", true);
+            conversationStage = 2;
+            setTimeout(() => {
+                addMessage("Soul Cradle is our flagship feature—and we donate it to the industries that need it most. Healthcare, banking, justice, nonprofits, civil service, education. If that's you, it's included free with any tier.");
+                setTimeout(() => {
+                    addMessage("You hold paradox every day. We make sure it doesn't break you. Ready to see pricing?");
+                    showActionButton("Yes, show me pricing", () => handlePricing());
+                }, 3000);
+            }, 1000);
+        }
+        
+        function handlePricing() {
+            hideActionButton();
+            addMessage("Show me pricing", true);
+            conversationStage = 3;
+            setTimeout(() => {
+                addMessage("Perfect! Here's the deal: Our 7-day Pilot is just $49—full access, one per business. And if you love it and upgrade to Enterprise, that $49 gets credited back. So really, it's risk-free!");
+                setTimeout(() => {
+                    addMessage("Most teams know by day three if Mythara's the right fit. Ready to start your Pilot?");
+                    showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
+                }, 2500);
+            }, 1000);
+        }
+        
+        function handlePilotSignup() {
+            hideActionButton();
+            addMessage("Yes, let's do it!", true);
+            conversationStage = 4;
+            setTimeout(() => {
+                addMessage("Awesome! Scroll up to the Pilot section, check the Terms box, and click Subscribe. You'll be up and running in under 2 minutes. See you on the inside! 💜");
+                setTimeout(() => {
+                    addMessage("Oh, and if you need anything—licensing questions, terms clarification, anything—just email us at Mythara.Engine@yahoo.com. We're here to help!");
+                }, 2500);
+            }, 1000);
+        }
+        
+        // Multilingual Support (Top 5 languages)
+        let userLanguage = 'en'; // Default English
+        
+        // Auto-detect language from browser/system settings
+        function initializeLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.split('-')[0].toLowerCase();
+            
+            // Map browser language to supported languages
+            const supportedLangs = ['en', 'es', 'zh', 'hi', 'ar'];
+            if (supportedLangs.includes(langCode)) {
+                userLanguage = langCode;
+            } else {
+                userLanguage = 'en'; // Default to English
+            }
+            
+            console.log(`MytharaConnect: Detected language - ${userLanguage} (${browserLang})`);
+        }
+        
+        // Initialize language on load
+        initializeLanguage();
+        
+        const translations = {
+            greeting: {
+                en: 'Hi! I\'m here to help with Mythara Engine. How can I assist you today?',
+                es: '¡Hola! Estoy aquí para ayudarte con Mythara Engine. ¿Cómo puedo asistirte hoy?',
+                zh: '你好！我在这里帮助您了解Mythara引擎。今天我能如何帮助您？',
+                hi: 'नमस्ते! मैं Mythara Engine के बारे में आपकी मदद के लिए यहाँ हूँ। मैं आज आपकी कैसे सहायता कर सकती हूँ?',
+                ar: 'مرحبا! أنا هنا للمساعدة في Mythara Engine. كيف يمكنني مساعدتك اليوم؟'
+            },
+            fallback: {
+                en: 'Great question! For immediate assistance, email Mythara.Engine@yahoo.com or ask about: Pricing, Pilot Program, Enterprise, Soul Cradle, or Industries.',
+                es: '¡Gran pregunta! Para asistencia inmediata, envía un correo a Mythara.Engine@yahoo.com o pregunta sobre: Precios, Programa Piloto, Enterprise, Soul Cradle o Industrias.',
+                zh: '好问题！如需即时帮助，请发送电子邮件至Mythara.Engine@yahoo.com，或询问有关：定价、试点计划、企业版、Soul Cradle或行业的信息。',
+                hi: 'बढ़िया सवाल! तत्काल सहायता के लिए, Mythara.Engine@yahoo.com पर ईमेल करें या पूछें: मूल्य निर्धारण, पायलट प्रोग्राम, एंटरप्राइज़, Soul Cradle, या उद्योग।',
+                ar: 'سؤال رائع! للمساعدة الفورية، أرسل بريدًا إلكترونيًا إلى Mythara.Engine@yahoo.com أو اسأل عن: التسعير، البرنامج التجريبي، المؤسسات، Soul Cradle، أو الصناعات.'
+            }
+        };
+        
+        function detectLanguage(text) {
+            // Simple language detection based on character sets
+            if (/[\u4e00-\u9fa5]/.test(text)) return 'zh'; // Chinese
+            if (/[\u0900-\u097F]/.test(text)) return 'hi'; // Hindi
+            if (/[\u0600-\u06FF]/.test(text)) return 'ar'; // Arabic
+            if (/[áéíóúñ¿¡]/i.test(text)) return 'es'; // Spanish
+            return 'en'; // Default English
+        }
+        
+        function getGreeting() {
+            return translations.greeting[userLanguage];
+        }
+        
+        function translateResponse(key, customText = null) {
+            if (customText && userLanguage !== 'en') {
+                // For non-English, provide translated fallback
+                return translations.fallback[userLanguage];
+            }
+            return customText || translations.fallback[userLanguage];
+        }
+        
+        function getResponse(input) {
+            const lowerInput = input.toLowerCase();
+            
+            // Handle casual/vague inputs first
+            if (lowerInput.length < 15 && (lowerInput.includes('wondering') || lowerInput.includes('curious') || lowerInput === 'whatever' || lowerInput === 'idk' || lowerInput === 'not sure')) {
+                return 'Alright. Most people start with: What does Mythara actually do? Or they want to know pricing. What sounds more useful?';
+            }
+            
+            // About Mythara
+            if (lowerInput.includes('what is mythara') || lowerInput.includes('about mythara') || lowerInput.includes('tell me about')) {
+                return 'Mythara holds the space when your mission conflicts with compliance. You know that moment—when doing the right thing breaks the rules, or following the rules breaks your heart? We document it. We measure it. We make sure it doesn\'t destroy your people or drift your mission. That\'s what we do.';
+            }
+            
+            // Pricing Overview
+            if (lowerInput.includes('pricing') || lowerInput.includes('cost') || lowerInput.includes('price')) {
+                return '$49 for 7 days. That\'s the Pilot. Full access, see if it fits. If you upgrade to Enterprise later, that $49 comes back to you—so it\'s risk-free. Enterprise runs $25K-$300K yearly depending on your scale. Global tier for 5,000+ employees, custom everything. Where are you at?';
+            }
+            
+            // Pilot Program
+            if (lowerInput.includes('pilot')) {
+                return 'The Pilot is 7 days, $49. You get everything—see if Mythara actually works for your team\'s reality. Most people know by day three. And if you go Enterprise after, that $49 gets credited back. So really, you\'re just testing it with our money.';
+            }
+            
+            // Enterprise
+            if (lowerInput.includes('enterprise')) {
+                return 'So Enterprise is where things get serious—but in a good way! Unlimited API calls, we handle all the tech headaches, 24/7 support when you need us, and we guarantee 99.9% uptime. It\'s a 1-year commitment, pricing varies based on your team size ($25K to $300K annually). Perfect when you\'re ready to scale. Sound like your speed?';
+            }
+            
+            // Global
+            if (lowerInput.includes('global')) {
+                return 'Ah, Global tier! That\'s our white-glove service for big organizations—we\'re talking 5,000+ people across multiple countries. It\'s a 1-year commitment with everything customized to fit your specific needs, multi-region deployments, and a dedicated team. Honestly? If you\'re at that scale, let\'s just hop on a call. Email Mythara.Engine@yahoo.com and we\'ll set something up!';
+            }
+            
+            // Soul Cradle
+            if (lowerInput.includes('soul cradle')) {
+                return 'Soul Cradle is what happens when a hospital social worker has to discharge a patient they know will be homeless. Policy says discharge. Her heart says keep them safe. Both are true. Soul Cradle holds that. It documents the paradox, measures the cost to her soul and the mission, generates an immutable record. We donate it to healthcare, banking, justice, nonprofits, civil service, education—the industries carrying impossible weight. It\'s included. No charge.';
+            }
+            
+            // CRM Integration (multi-platform)
+            if (lowerInput.includes('salesforce') || lowerInput.includes('hubspot') || lowerInput.includes('dynamics') || lowerInput.includes('zoho') || lowerInput.includes('servicenow') || lowerInput.includes('crm') || (lowerInput.includes('integration') && !lowerInput.includes('technical'))) {
+                return 'Your CRM already tracks deals, contacts, tickets. Mythara adds the layer it can\'t see—paradox events, emotional drift, Soul Cradle witnessing. So when leadership opens Salesforce or HubSpot or whatever they use, they see both: the business data and the human cost. Same dashboard. Cryptographically verified. That\'s the enhancement. Works with Salesforce, HubSpot, Dynamics 365, Zoho, ServiceNow, or any custom REST API. Enterprise and Global tiers. Setup takes about 20 minutes.';
+            }
+            
+            // Industries
+            if (lowerInput.includes('industr')) {
+                return 'Healthcare workers forced to deny care. Bankers who see families drowning but regulations say no. Public defenders with 200 cases who can\'t give anyone real attention. Nonprofit leaders watching their mission get shredded by grant requirements. Civil servants trapped between policy and people. Teachers knowing a kid needs help but the system won\'t bend. Those industries. The ones where people break.';
+            }
+            
+            // License & Terms
+            if (lowerInput.includes('license') || lowerInput.includes('licensing') || lowerInput.includes('terms') || lowerInput.includes('refund') || lowerInput.includes('cancel')) {
+                // Check if asking about upgrades
+                if (lowerInput.includes('upgrade') || lowerInput.includes('switch') || lowerInput.includes('change tier')) {
+                    return 'Upgrades work like this: Pilot to Enterprise? Your $49 gets credited. Enterprise to Global mid-contract? We credit the unused months and extend your new contract by that time. So if you upgrade 6 months in, you get credit for those 6 months AND your Global contract runs for 18 months total. You don\'t lose what you paid.';
+                }
+                // Check if asking about renewals
+                if (lowerInput.includes('renew') || lowerInput.includes('renewal') || lowerInput.includes('discount') || lowerInput.includes('loyalty')) {
+                    return 'We reward loyalty with renewal discounts: Startup tier gets 10% off, Corporate 8%, Mid-Market 6%, Enterprise 4%, Global 2%. Smaller companies get bigger discounts because we want to keep you growing with us. So if you start at $25K, your renewal is $22.5K. It\'s automatic—just stay with us.';
+                }
+                return 'All sales final—exchanges only for upgrades. Pilot is $49 for 7 days, one per business. Upgrade to Enterprise? That $49 gets credited. Enterprise and Global are 1-year commitments. Upgrade mid-contract? Unused months get credited and added to your new tier. Renewals get loyalty discounts (2-10% off). You own your data, we don\'t sell it, export anytime. Questions? Email Mythara.Engine@yahoo.com.';
+            }
+            
+            // Contact/Sales (only if explicitly asked)
+            if (lowerInput.includes('contact') || lowerInput.includes('sales') || lowerInput.includes('talk to someone') || lowerInput.includes('speak with')) {
+                return 'Just email us at Mythara.Engine@yahoo.com and we\'ll respond same day. But honestly, the $49 Pilot answers most questions faster—you\'ll see exactly how it works for your team. Your call!';
+            }
+            
+            // Benefits
+            if (lowerInput.includes('benefit') || lowerInput.includes('why mythara') || lowerInput.includes('help')) {
+                return 'Most systems make you choose: mission or compliance. Mythara says both. We track when your team\'s burning out from impossible choices. We measure when meaning gets lost in translation. We create audit trails that actually matter. We document the cost of doing what\'s "right" when the rules say otherwise. So you can advocate for better policies with real data. And your people don\'t shatter in the process.';
+            }
+            
+            // Default fallback
+            if (lowerInput.length < 3) {
+                return 'I need a bit more than that. Try: "What is Mythara?" or "How much does it cost?" or "Tell me about Soul Cradle."';
+            }
+            return 'Not sure I caught that. Try asking about: pricing, Soul Cradle, which industries we work with, or licensing terms.';
+        }
+        
+        chatSend.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+    </script>
 </body>
 </html>
