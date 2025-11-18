@@ -702,7 +702,7 @@
                         <div style="display: flex; align-items: center; font-size: 0.95rem; color: #a78bfa;">
                             <input type="checkbox" id="pilot-terms-checkbox" style="width: 20px; height: 20px; margin-right: 12px; cursor: pointer; accent-color: #8b5cf6; flex-shrink: 0;">
                             <span>
-                                I agree to the <a href="/terms" target="_blank" style="color: #8b5cf6; text-decoration: underline; font-weight: 600; cursor: pointer;">Terms of Service & Refund Policy</a>
+                                I agree to the <a href="/terms" target="_blank" style="color: #8b5cf6; text-decoration: underline; font-weight: 600; cursor: pointer;">Terms of Service & Licensing Agreement</a>
                             </span>
                         </div>
                     </div>
@@ -753,6 +753,9 @@
                 <div class="contact-footer">
                     <p><strong>Ready to preserve what your community holds sacred?</strong></p>
                     <p>Let's talk: <a href="mailto:Mythara.Engine@yahoo.com">Mythara.Engine@yahoo.com</a></p>
+                    <p class="legal" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; opacity: 0.7;">
+                        © 2025 Mythara Labs LLC. All rights reserved. | We do not sell or share your data with third parties except as required by law or valid legal process.
+                    </p>
                 </div>
             </div>
     
@@ -967,6 +970,11 @@
             const text = chatInput.value.trim();
             if (!text) return;
             
+            // Stop any ongoing speech when user types
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            
             addMessage(text, true);
             chatInput.value = '';
             
@@ -984,6 +992,20 @@
                 }, 1500);
             }, 800);
         }
+        
+        // Stop speech when user focuses on input
+        chatInput.addEventListener('focus', () => {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        });
+        
+        // Stop speech when user starts typing
+        chatInput.addEventListener('input', () => {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        });
         
         function suggestNextStep(userInput) {
             const lower = userInput.toLowerCase();
@@ -1062,7 +1084,7 @@
             addMessage("Show me pricing", true);
             conversationStage = 3;
             setTimeout(() => {
-                addMessage("Perfect! Here's the deal: Our 7-day Pilot is just $49—full access, one per business. And if you love it and upgrade to Enterprise, that $49 gets credited back. So really, it's risk-free!");
+                addMessage("Perfect! Here's the deal: Our 7-day Pilot is just $49—full access, see if it fits. If you upgrade to Enterprise later, that $49 gets credited back. So really, it's risk-free!");
                 setTimeout(() => {
                     addMessage("Most teams know by day three if Mythara's the right fit. Ready to start your Pilot?");
                     showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
@@ -1208,9 +1230,24 @@
                 return 'Just email us at Mythara.Engine@yahoo.com and we\'ll respond same day. But honestly, the $49 Pilot answers most questions faster—you\'ll see exactly how it works for your team. Your call!';
             }
             
-            // Benefits
-            if (lowerInput.includes('benefit') || lowerInput.includes('why mythara') || lowerInput.includes('help')) {
+            // Security / Technical
+            if (lowerInput.includes('security') || lowerInput.includes('hack') || lowerInput.includes('secure') || lowerInput.includes('safe') || lowerInput.includes('breach') || lowerInput.includes('encrypted')) {
+                return 'Everything\'s cryptographically verified with SHA-256 integrity hashes. Your data is encrypted at rest and in transit. We don\'t store passwords—API keys only. All clause invocations generate immutable audit trails. Can someone hack it? They\'d need to break SHA-256 first (which would break the entire internet). Your data stays yours. We don\'t sell it, we don\'t train AI on it, you can export anytime.';
+            }
+            
+            // Privacy / Spying / Data concerns
+            if (lowerInput.includes('spy') || lowerInput.includes('track') || lowerInput.includes('privacy') || lowerInput.includes('data') || lowerInput.includes('sell my') || lowerInput.includes('watching')) {
+                return 'No. We don\'t sell your data. We don\'t share it with third parties except as required by law or valid legal process. We don\'t train AI models on your data. You own it—export anytime, delete anytime. We only see what you explicitly send through API calls. Your paradoxes are yours. We just hold the space.';
+            }
+            
+            // Benefits / Differentiation
+            if (lowerInput.includes('benefit') || lowerInput.includes('why mythara') || lowerInput.includes('help') || lowerInput.includes('different') || lowerInput.includes('makes you') || lowerInput.includes('what makes')) {
                 return 'Most systems make you choose: mission or compliance. Mythara says both. We track when your team\'s burning out from impossible choices. We measure when meaning gets lost in translation. We create audit trails that actually matter. We document the cost of doing what\'s "right" when the rules say otherwise. So you can advocate for better policies with real data. And your people don\'t shatter in the process.';
+            }
+            
+            // "Tell me more" - general inquiry
+            if (lowerInput.includes('tell me more') || lowerInput.includes('more info') || lowerInput.includes('learn more') || lowerInput.includes('explain more')) {
+                return 'Here\'s the thing: Compliance systems track whether you followed the rules. HR systems track whether people quit. Mythara tracks why—the moment between "I have to do this" and "this will break someone." That\'s where burnout starts. That\'s where mission drift begins. We measure it before it destroys your team. We document it so leadership sees the cost. And we create records that hold up in audits. What part do you want to dig into?';
             }
             
             // Default fallback
