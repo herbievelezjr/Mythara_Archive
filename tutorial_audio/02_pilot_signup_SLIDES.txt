@@ -1,0 +1,63 @@
+# How to Start Your Mythara Pilot
+Duration: 2 minutes
+
+## Script
+Let me show you how to start your Mythara Pilot.
+
+Scroll down to the Pilot tier. 49 dollars for 7 days, full access.
+
+Check the Terms box. Click Subscribe.
+
+You'll enter your payment info. Takes 2 minutes.
+
+That's it. You're in. Full access to Mythara for 7 days.
+
+Most people know by day three if it's the right fit.
+
+And if you upgrade to Enterprise? That 49 dollars gets credited back.
+
+So you're really just testing it with our money.
+
+Questions? Email Mythara.Engine@yahoo.com
+
+## Slide Sequence
+
+Slide 1: Title - 'Start Your Pilot'
+Slide 2: Pricing tiers overview
+Slide 3: Zoom in on Pilot tier ($49)
+Slide 4: Highlight 'Check terms' checkbox
+Slide 5: Highlight 'Subscribe' button
+Slide 6: '7 Days Full Access'
+Slide 7: 'Upgrade credits back your $49'
+Slide 8: Contact info
+
+## How to Record This Tutorial
+
+### Option 1: PowerPoint + OBS (Recommended)
+1. Create PowerPoint with these 8 slides
+2. Open OBS Studio
+3. Add "Display Capture" source
+4. Click "Start Recording"
+5. Open PowerPoint in Presenter View
+6. Play audio file: 02_pilot_signup_SLIDES.mp3
+7. Advance slides as audio plays
+8. Stop recording when done
+
+### Option 2: Manual Recording (Easiest)
+1. Press Windows + G (Xbox Game Bar)
+2. Click Record
+3. Open Railway pricing page
+4. Play audio file: 02_pilot_signup_SLIDES.mp3
+5. Navigate page as audio plays
+6. Press Windows + Alt + R to stop
+7. Video saved to: C:\Users\Mythara\Videos\Captures
+
+### Option 3: Professional (Best Quality)
+1. Record audio separately (clearer voice)
+2. Record screen navigation separately
+3. Use Clipchamp or DaVinci Resolve to sync
+4. Add title cards and transitions
+5. Export as MP4
+
+---
+Generated: 2025-11-18 07:14:49
