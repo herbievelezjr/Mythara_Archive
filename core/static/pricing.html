@@ -1872,6 +1872,14 @@
         }
         
         chatSend.addEventListener('click', handleSend);
+        
+        // Stop chatbot when user starts typing
+        chatInput.addEventListener('input', () => {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel(); // Stop all speech immediately
+            }
+        });
+        
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleSend();
         });
