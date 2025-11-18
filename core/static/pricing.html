@@ -1734,7 +1734,7 @@
             showTypingIndicator();
             setTimeout(() => {
                 hideTypingIndicator();
-                addMessage("Awesome! Scroll up to the Pilot section, check the Terms box, and click Subscribe. You'll be up and running in under 2 minutes. See you on the inside! 💜");
+                addMessage("Awesome! Scroll up to the Pilot section, check the Terms box, and click Subscribe. You'll be up and running in under 2 minutes. See you on the inside!");
                 
                 setTimeout(() => {
                     showTypingIndicator();
@@ -1822,17 +1822,17 @@
             
             // Pricing Overview
             if (lowerInput.includes('pricing') || lowerInput.includes('cost') || lowerInput.includes('price')) {
-                return '$49 for 7 days. That\'s the Pilot. Full access, see if it fits. If you upgrade to Enterprise later, that $49 comes back to you—so it\'s risk-free. Enterprise runs $25K-$300K yearly depending on your scale. Global tier for 5,000+ employees, custom everything. Where are you at?';
+                return '49 dollars for 7 days. That\'s the Pilot. Full access, see if it fits. If you upgrade to Enterprise later, that 49 dollars comes back to you—so it\'s risk-free. Enterprise runs 25 to 300 thousand yearly depending on your scale. Global tier for 5,000 plus employees, custom everything. Where are you at?';
             }
             
             // Pilot Program
             if (lowerInput.includes('pilot')) {
-                return 'The Pilot is 7 days, $49. You get everything—see if Mythara actually works for your team\'s reality. Most people know by day three. And if you go Enterprise after, that $49 gets credited back. So really, you\'re just testing it with our money.';
+                return 'The Pilot is 7 days, 49 dollars. You get everything—see if Mythara actually works for your team\'s reality. Most people know by day three. And if you go Enterprise after, that 49 dollars gets credited back. So really, you\'re just testing it with our money.';
             }
             
             // Enterprise
             if (lowerInput.includes('enterprise')) {
-                return 'So Enterprise is where things get serious—but in a good way! Unlimited API calls, we handle all the tech headaches, 24/7 support when you need us, and we guarantee 99.9% uptime. It\'s a 1-year commitment, pricing varies based on your team size ($25K to $300K annually). Perfect when you\'re ready to scale. Sound like your speed?';
+                return 'So Enterprise is where things get serious—but in a good way! Unlimited API calls, we handle all the tech headaches, 24/7 support when you need us, and we guarantee 99.9 percent uptime. It\'s a 1-year commitment, pricing varies based on your team size—25 to 300 thousand annually. Perfect when you\'re ready to scale. Sound like your speed?';
             }
             
             // Global
@@ -1859,18 +1859,18 @@
             if (lowerInput.includes('license') || lowerInput.includes('licensing') || lowerInput.includes('terms') || lowerInput.includes('refund') || lowerInput.includes('cancel')) {
                 // Check if asking about upgrades
                 if (lowerInput.includes('upgrade') || lowerInput.includes('switch') || lowerInput.includes('change tier')) {
-                    return 'Upgrades work like this: Pilot to Enterprise? Your $49 gets credited. Enterprise to Global mid-contract? We credit the unused months and extend your new contract by that time. So if you upgrade 6 months in, you get credit for those 6 months AND your Global contract runs for 18 months total. You don\'t lose what you paid.';
+                    return 'Upgrades work like this: Pilot to Enterprise? Your 49 dollars gets credited. Enterprise to Global mid-contract? We credit the unused months and extend your new contract by that time. So if you upgrade 6 months in, you get credit for those 6 months AND your Global contract runs for 18 months total. You don\'t lose what you paid.';
                 }
                 // Check if asking about renewals
                 if (lowerInput.includes('renew') || lowerInput.includes('renewal') || lowerInput.includes('discount') || lowerInput.includes('loyalty')) {
-                    return 'We reward loyalty with renewal discounts: Startup tier gets 10% off, Corporate 8%, Mid-Market 6%, Enterprise 4%, Global 2%. Smaller companies get bigger discounts because we want to keep you growing with us. So if you start at $25K, your renewal is $22.5K. It\'s automatic—just stay with us.';
+                    return 'We reward loyalty with renewal discounts: Startup tier gets 10 percent off, Corporate 8 percent, Mid-Market 6 percent, Enterprise 4 percent, Global 2 percent. Smaller companies get bigger discounts because we want to keep you growing with us. So if you start at 25 thousand, your renewal is 22.5 thousand. It\'s automatic—just stay with us.';
                 }
-                return 'All sales final—exchanges only for upgrades. Pilot is $49 for 7 days, one per business. Upgrade to Enterprise? That $49 gets credited. Enterprise and Global are 1-year commitments. Upgrade mid-contract? Unused months get credited and added to your new tier. Renewals get loyalty discounts (2-10% off). You own your data, we don\'t sell it, export anytime. Questions? Email Mythara.Engine@yahoo.com.';
+                return 'All sales final—exchanges only for upgrades. Pilot is 49 dollars for 7 days, one per business. Upgrade to Enterprise? That 49 dollars gets credited. Enterprise and Global are 1-year commitments. Upgrade mid-contract? Unused months get credited and added to your new tier. Renewals get loyalty discounts—2 to 10 percent off. You own your data, we don\'t sell it, export anytime. Questions? Email Mythara.Engine@yahoo.com.';
             }
             
             // Contact/Sales (only if explicitly asked)
             if (lowerInput.includes('contact') || lowerInput.includes('sales') || lowerInput.includes('talk to someone') || lowerInput.includes('speak with')) {
-                return 'Just email us at Mythara.Engine@yahoo.com and we\'ll respond same day. But honestly, the $49 Pilot answers most questions faster—you\'ll see exactly how it works for your team. Your call!';
+                return 'Just email us at Mythara.Engine@yahoo.com and we\'ll respond same day. But honestly, the 49 dollar Pilot answers most questions faster—you\'ll see exactly how it works for your team. Your call!';
             }
             
             // Benefits
@@ -1880,7 +1880,7 @@
             
             // ROI Examples
             if (lowerInput.includes('roi') || lowerInput.includes('return on investment') || lowerInput.includes('case stud') || lowerInput.includes('example')) {
-                return 'Here\'s the real math: **Turnover costs** alone justify Mythara. Losing one mid-level employee to burnout costs $50K-$200K (recruiting, training, lost productivity, knowledge drain). Soul Cradle catches the warning signs 3-6 months early—before they break. **Compliance violations**: A single HIPAA breach averages $50K in fines. One wrongful termination lawsuit? $75K-$250K. Mythara creates immutable audit trails that prevent both. **Mission drift**: When your team stops believing in the work, productivity drops 20-40%. We measure that erosion in real-time so you can intervene. Most Enterprise clients see full ROI in 4-6 months just from retention. Healthcare and finance clients often break even in 90 days from avoided violations alone. What\'s your biggest cost right now—turnover, compliance risk, or productivity loss?';
+                return 'Here\'s the real math: Turnover costs alone justify Mythara. Losing one mid-level employee to burnout costs 50 to 200 thousand dollars in recruiting, training, lost productivity, knowledge drain. Soul Cradle catches the warning signs 3 to 6 months early—before they break. Compliance violations: A single HIPAA breach averages 50 thousand in fines. One wrongful termination lawsuit? 75 to 250 thousand. Mythara creates immutable audit trails that prevent both. Mission drift: When your team stops believing in the work, productivity drops 20 to 40 percent. We measure that erosion in real-time so you can intervene. Most Enterprise clients see full ROI in 4 to 6 months just from retention. Healthcare and finance clients often break even in 90 days from avoided violations alone. What\'s your biggest cost right now—turnover, compliance risk, or productivity loss?';
             }
             
             // Security/Technical
