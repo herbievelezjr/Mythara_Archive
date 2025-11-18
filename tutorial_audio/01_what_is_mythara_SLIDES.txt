@@ -1,0 +1,62 @@
+# What is Mythara Engine?
+Duration: 90 seconds
+
+## Script
+Hi, I'm Herbert from Mythara. Let me show you what we do.
+
+Mythara holds the space when your mission conflicts with compliance. 
+
+Say you're a hospital social worker. Policy says discharge this patient. 
+Your heart says they'll be homeless. Both are true.
+
+Soul Cradle documents that paradox. Measures the cost to your soul 
+and the mission. Creates an immutable record.
+
+We donate Soul Cradle to healthcare, banking, justice, nonprofits, 
+civil service, education—the industries carrying impossible weight.
+
+Try it: 49 dollars for 7 days. Full access. See if it fits your reality.
+
+Questions? Email Mythara.Engine@yahoo.com
+
+## Slide Sequence
+
+Slide 1: Title - 'What is Mythara Engine?'
+Slide 2: Show pricing page hero section
+Slide 3: 'When Mission Conflicts with Compliance'
+Slide 4: Example scenario text
+Slide 5: 'Soul Cradle' section from pricing page
+Slide 6: Industries we serve
+Slide 7: Pilot pricing ($49/7 days)
+Slide 8: Contact info
+
+## How to Record This Tutorial
+
+### Option 1: PowerPoint + OBS (Recommended)
+1. Create PowerPoint with these 8 slides
+2. Open OBS Studio
+3. Add "Display Capture" source
+4. Click "Start Recording"
+5. Open PowerPoint in Presenter View
+6. Play audio file: 01_what_is_mythara_SLIDES.mp3
+7. Advance slides as audio plays
+8. Stop recording when done
+
+### Option 2: Manual Recording (Easiest)
+1. Press Windows + G (Xbox Game Bar)
+2. Click Record
+3. Open Railway pricing page
+4. Play audio file: 01_what_is_mythara_SLIDES.mp3
+5. Navigate page as audio plays
+6. Press Windows + Alt + R to stop
+7. Video saved to: C:\Users\Mythara\Videos\Captures
+
+### Option 3: Professional (Best Quality)
+1. Record audio separately (clearer voice)
+2. Record screen navigation separately
+3. Use Clipchamp or DaVinci Resolve to sync
+4. Add title cards and transitions
+5. Export as MP4
+
+---
+Generated: 2025-11-18 07:14:42

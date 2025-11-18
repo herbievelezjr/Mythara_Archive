@@ -1,0 +1,71 @@
+# Soul Cradle Explained
+Duration: 3 minutes
+
+## Script
+Let's talk about Soul Cradle.
+
+Hospital social worker. Patient needs care. Policy says discharge. 
+Heart says keep them safe.
+
+Soul Cradle documents: What policy said. What your heart said. 
+What you actually did. The emotional weight of that choice.
+
+We generate a cryptographic hash. Timestamp it. Make it immutable.
+
+Leadership sees the pattern across your org. They spot burnout 
+before people break.
+
+Audit-ready. Court-ready. Human-ready.
+
+We donate Soul Cradle to the industries that need it most:
+Healthcare, banking, justice, nonprofits, civil service, education.
+
+It's included in every tier. No charge.
+
+Because some things shouldn't have a price.
+
+Questions? Email Mythara.Engine@yahoo.com
+
+## Slide Sequence
+
+Slide 1: Title - 'Soul Cradle'
+Slide 2: 'When Mission Conflicts with Compliance'
+Slide 3: Hospital scenario example
+Slide 4: What Soul Cradle captures (4 points)
+Slide 5: 'Cryptographic Hash + Timestamp'
+Slide 6: Leadership dashboard view
+Slide 7: 'Audit-ready, Court-ready, Human-ready'
+Slide 8: Industries (icons/list)
+Slide 9: 'Included in Every Tier'
+Slide 10: Contact info
+
+## How to Record This Tutorial
+
+### Option 1: PowerPoint + OBS (Recommended)
+1. Create PowerPoint with these 10 slides
+2. Open OBS Studio
+3. Add "Display Capture" source
+4. Click "Start Recording"
+5. Open PowerPoint in Presenter View
+6. Play audio file: 03_soul_cradle_SLIDES.mp3
+7. Advance slides as audio plays
+8. Stop recording when done
+
+### Option 2: Manual Recording (Easiest)
+1. Press Windows + G (Xbox Game Bar)
+2. Click Record
+3. Open Railway pricing page
+4. Play audio file: 03_soul_cradle_SLIDES.mp3
+5. Navigate page as audio plays
+6. Press Windows + Alt + R to stop
+7. Video saved to: C:\Users\Mythara\Videos\Captures
+
+### Option 3: Professional (Best Quality)
+1. Record audio separately (clearer voice)
+2. Record screen navigation separately
+3. Use Clipchamp or DaVinci Resolve to sync
+4. Add title cards and transitions
+5. Export as MP4
+
+---
+Generated: 2025-11-18 07:15:01
