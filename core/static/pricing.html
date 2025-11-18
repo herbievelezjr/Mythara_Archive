@@ -425,44 +425,97 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             background: var(--accent-gradient);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.5), 0 0 0 0 rgba(139, 92, 246, 0.7);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 1000;
+            animation: bubblePulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes bubblePulse {
+            0%, 100% { box-shadow: 0 8px 32px rgba(139, 92, 246, 0.5), 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            50% { box-shadow: 0 8px 32px rgba(139, 92, 246, 0.5), 0 0 0 10px rgba(139, 92, 246, 0); }
         }
         
         .chat-bubble:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.7);
+            animation: none;
+        }
+        
+        .chat-bubble.has-unread {
+            animation: urgentPulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .chat-bubble.has-unread::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 14px;
+            height: 14px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #0a0a0f;
+            animation: notificationBounce 0.6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes notificationBounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-3px); }
         }
         
         .chat-bubble svg {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             fill: white;
+            transition: transform 0.3s ease;
+        }
+        
+        .chat-bubble:hover svg {
+            transform: scale(1.1);
         }
         
         .chat-window {
             position: fixed;
             bottom: 100px;
             right: 24px;
-            width: 380px;
-            height: 500px;
-            background: rgba(17, 24, 39, 0.95);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
+            width: 420px;
+            height: 600px;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 10, 15, 0.98) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 100px rgba(139, 92, 246, 0.2);
+            backdrop-filter: blur(30px);
             display: none;
             flex-direction: column;
             z-index: 999;
+            transform-origin: bottom right;
+            animation: chatSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+        }
+        
+        @keyframes chatSlideIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         
         .chat-window.active {
@@ -470,162 +523,407 @@
         }
         
         .chat-header {
-            padding: 1.25rem;
+            padding: 1.5rem;
             background: var(--accent-gradient);
-            border-radius: 16px 16px 0 0;
+            border-radius: 20px 20px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: headerShine 3s ease-in-out infinite;
+        }
+        
+        @keyframes headerShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .chat-header h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 700;
             color: white;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .chat-status {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.8);
+            position: absolute;
+            bottom: 0.5rem;
+            left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
         }
         
         .chat-close {
-            background: none;
-            border: none;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
             padding: 0;
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .chat-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
         }
         
         .chat-messages {
             flex: 1;
-            padding: 1.25rem;
+            padding: 1.5rem;
             overflow-y: auto;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.25rem;
+            scroll-behavior: smooth;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 10px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--accent-gradient);
+            border-radius: 10px;
         }
         
         .chat-message {
-            padding: 0.875rem 1rem;
-            border-radius: 12px;
-            max-width: 80%;
-            animation: messageSlide 0.3s ease;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            max-width: 85%;
+            animation: messageSlide 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            word-wrap: break-word;
+            line-height: 1.6;
         }
         
         @keyframes messageSlide {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.9);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
         }
         
         .chat-message.bot {
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-left: 4px solid var(--accent-primary);
             align-self: flex-start;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
         }
         
         .chat-message.user {
-            background: rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            border-right: 4px solid var(--accent-secondary);
             align-self: flex-end;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* Typing Indicator */
+        .typing-indicator {
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            max-width: 80px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-left: 4px solid var(--accent-primary);
+            align-self: flex-start;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        /* Quick Reply Suggestions */
+        .typing-indicator {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+            padding: 0.8rem 1rem;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .quick-reply {
+            padding: 0.6rem 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            color: var(--accent-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .quick-reply:hover {
+            background: var(--accent-gradient);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Conversation Progress Tracker */
+        .progress-tracker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            transition: width 0.5s ease;
+            z-index: 10;
         }
         
         .chat-input-area {
-            padding: 1rem;
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-            display: flex; /* Always visible - users can ask questions anytime */
+            padding: 1.25rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgba(17, 24, 39, 0.8);
+            display: flex;
             gap: 0.75rem;
+            backdrop-filter: blur(10px);
         }
         
         .chat-input {
             flex: 1;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
             color: white;
             font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
         
         .chat-input:focus {
             outline: none;
             border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
         }
         
         .chat-send {
-            padding: 0.75rem 1.25rem;
+            padding: 0.9rem 1.5rem;
             background: var(--accent-gradient);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
         }
         
         .chat-send:hover {
-            transform: scale(1.05);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+        
+        .chat-send:active {
+            transform: translateY(0) scale(0.98);
         }
         
         /* Voice Input Button */
         .voice-btn {
-            padding: 0.75rem;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 8px;
+            padding: 0.9rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
             color: var(--accent-primary);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 48px;
         }
         
         .voice-btn:hover {
-            background: rgba(139, 92, 246, 0.3);
-            transform: scale(1.05);
+            background: rgba(139, 92, 246, 0.25);
+            transform: scale(1.1) rotate(5deg);
+            border-color: var(--accent-primary);
         }
         
         .voice-btn.listening {
             background: var(--accent-gradient);
             color: white;
-            animation: pulse 1.5s infinite;
+            animation: voicePulse 1.2s ease-in-out infinite;
+            border-color: transparent;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        @keyframes voicePulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+            }
         }
         
         /* Dynamic Action Button */
         .dynamic-action {
-            padding: 0 1rem 1rem 1rem;
+            padding: 0 1.25rem 1.25rem 1.25rem;
             display: none;
         }
         
         .dynamic-action.visible {
             display: block;
+            animation: actionSlideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes actionSlideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .action-btn {
             width: 100%;
-            padding: 0.8rem;
+            padding: 1rem;
             background: var(--accent-gradient);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .action-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
         .action-btn:hover {
-            background: linear-gradient(135deg, #9d6ffb 0%, #7477f6 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6);
+        }
+        
+        .action-btn:active {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
         
         @media (max-width: 768px) {
@@ -764,11 +1062,19 @@
     </div>
     
     <div id="chat-window" class="chat-window">
+        <div class="progress-tracker" id="progress-tracker" style="width: 0%"></div>
         <div class="chat-header">
-            <h3>MytharaConnect</h3>
+            <div>
+                <h3>MytharaConnect</h3>
+                <div class="chat-status">
+                    <span class="status-indicator"></span>
+                    <span id="status-text">Online • Smart Assist</span>
+                </div>
+            </div>
             <button id="chat-close" class="chat-close">×</button>
         </div>
         <div id="chat-messages" class="chat-messages"></div>
+        <div id="quick-replies" class="quick-replies"></div>
         <div id="dynamic-action" class="dynamic-action"></div>
         <div class="chat-input-area">
             <button id="voice-btn" class="voice-btn" title="Click to speak">
@@ -776,7 +1082,7 @@
                     <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/>
                 </svg>
             </button>
-            <input type="text" id="chat-input" class="chat-input" placeholder="Type or speak your message...">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask me anything about Mythara...">
             <button id="chat-send" class="chat-send">Send</button>
         </div>
     </div>
@@ -909,9 +1215,239 @@
         }
         
         let conversationStage = 0;
+        let engagementScore = 0;
+        let sessionStartTime = Date.now();
+        let lastInteractionTime = Date.now();
+        let hasUnread = false;
+        
+        // Typing Indicator Management
+        function showTypingIndicator() {
+            const existing = document.getElementById('typing-indicator');
+            if (existing) return; // Already showing
+            
+            const typing = document.createElement('div');
+            typing.className = 'chat-message bot typing-indicator';
+            typing.id = 'typing-indicator';
+            typing.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            chatMessages.appendChild(typing);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+        
+        // Quick Reply System
+        function addQuickReplies(suggestions) {
+            const container = document.getElementById('quick-replies');
+            container.innerHTML = '';
+            
+            suggestions.forEach(text => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply';
+                btn.textContent = text;
+                btn.onclick = () => {
+                    chatInput.value = text;
+                    handleSend();
+                    container.innerHTML = '';
+                };
+                container.appendChild(btn);
+            });
+        }
+        
+        function clearQuickReplies() {
+            const container = document.getElementById('quick-replies');
+            container.innerHTML = '';
+        }
+        
+        // Progress Tracker
+        function updateProgress(percentage) {
+            const tracker = document.getElementById('progress-tracker');
+            if (tracker) {
+                tracker.style.width = percentage + '%';
+            }
+        }
+        
+        // Emotion Detection & Tone Adaptation
+        function detectEmotion(text) {
+            const lower = text.toLowerCase();
+            
+            // Frustration signals
+            if (lower.match(/expensive|too much|can't afford|frustrated|annoyed|waste|overpriced/i)) {
+                return 'frustrated';
+            }
+            
+            // Excitement signals
+            if (lower.match(/amazing|love|perfect|yes|let's do it|awesome|great|excellent|wow/i)) {
+                return 'excited';
+            }
+            
+            // Confusion signals
+            if (lower.match(/confused|don't understand|what do you mean|unclear|huh|what\?|explain/i)) {
+                return 'confused';
+            }
+            
+            // Skeptical signals
+            if (lower.match(/really|sure about|doubt|skeptical|sounds too good|prove it|scam|fake/i)) {
+                return 'skeptical';
+            }
+            
+            // Urgency signals
+            if (lower.match(/urgent|asap|quickly|right now|immediately|hurry/i)) {
+                return 'urgent';
+            }
+            
+            return 'neutral';
+        }
+        
+        function adaptTone(emotion) {
+            switch(emotion) {
+                case 'frustrated':
+                    return { 
+                        style: 'empathetic', 
+                        pace: 1200,
+                        prefix: "I hear you. "
+                    };
+                case 'excited':
+                    return { 
+                        style: 'enthusiastic', 
+                        pace: 600,
+                        prefix: ""
+                    };
+                case 'confused':
+                    return { 
+                        style: 'explanatory', 
+                        pace: 1400,
+                        prefix: "Let me clarify. "
+                    };
+                case 'skeptical':
+                    return { 
+                        style: 'factual', 
+                        pace: 1000,
+                        prefix: "Fair question. "
+                    };
+                case 'urgent':
+                    return { 
+                        style: 'direct', 
+                        pace: 500,
+                        prefix: "Quick answer: "
+                    };
+                default:
+                    return { 
+                        style: 'professional', 
+                        pace: 800,
+                        prefix: ""
+                    };
+            }
+        }
+        
+        // Context-Aware Smart Suggestions
+        function getSmartSuggestions(stage) {
+            const suggestions = {
+                0: ['What is Mythara?', 'Show pricing', 'Tell me about Soul Cradle'],
+                1: ['How does it work?', 'What industries use it?', 'Security details'],
+                2: ['Pricing details', 'Enterprise features', 'Implementation time'],
+                3: ['Start Pilot', 'Talk to sales', 'ROI examples'],
+                4: ['Support options', 'Training included?', 'Integration help']
+            };
+            return suggestions[stage] || suggestions[0];
+        }
+        
+        // Engagement Tracking
+        let idleTimer = null;
+        let scrollDepth = 0;
+        let mouseMovements = 0;
+        
+        function trackEngagement() {
+            // Track scroll depth
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+                if (currentScroll > scrollDepth) {
+                    scrollDepth = currentScroll;
+                }
+            });
+            
+            // Track mouse movement
+            document.addEventListener('mousemove', () => {
+                mouseMovements++;
+                lastInteractionTime = Date.now();
+                resetIdleTimer();
+            });
+            
+            // Track keyboard activity
+            document.addEventListener('keydown', () => {
+                lastInteractionTime = Date.now();
+                resetIdleTimer();
+            });
+            
+            // Start idle timer
+            resetIdleTimer();
+        }
+        
+        function resetIdleTimer() {
+            if (idleTimer) clearTimeout(idleTimer);
+            
+            idleTimer = setTimeout(() => {
+                const idleTime = (Date.now() - lastInteractionTime) / 1000;
+                
+                if (idleTime > 30 && chatWindow.classList.contains('active')) {
+                    // User idle for 30s in open chat
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        addMessage("Still there? Any questions I can help with?");
+                        addQuickReplies(['Yes, about pricing', 'Tell me about Soul Cradle', 'No thanks']);
+                    }, 1000);
+                } else if (idleTime > 60 && !chatWindow.classList.contains('active')) {
+                    // User idle for 60s, chat closed - show notification
+                    setUnreadNotification(true);
+                }
+            }, 30000); // Check every 30 seconds
+        }
+        
+        // Unread Notification
+        function setUnreadNotification(unread) {
+            hasUnread = unread;
+            if (unread) {
+                chatBubble.classList.add('has-unread');
+            } else {
+                chatBubble.classList.remove('has-unread');
+            }
+        }
+        
+        // Exit Intent Detection
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown && conversationStage < 3) {
+                exitIntentShown = true;
+                
+                if (!chatWindow.classList.contains('active')) {
+                    chatBubble.classList.add('has-unread');
+                    
+                    // Auto-open chat with urgent message
+                    setTimeout(() => {
+                        chatWindow.classList.add('active');
+                        showTypingIndicator();
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            addMessage("Wait! Before you go—have you seen our $49 Pilot? Full access, 7 days, risk-free. Most teams know by day three if it's the right fit.");
+                            addQuickReplies(['Tell me more', 'Show pricing', 'Not interested']);
+                            setUnreadNotification(false);
+                        }, 1200);
+                    }, 500);
+                }
+            }
+        });
+        
+        // Initialize engagement tracking
+        trackEngagement();
         
         chatBubble.addEventListener('click', () => {
             chatWindow.classList.add('active');
+            setUnreadNotification(false);
+            engagementScore += 10;
+            
             // Start guided conversation
             if (chatMessages.children.length === 0) {
                 startConversation();
@@ -920,9 +1456,18 @@
         
         function startConversation() {
             conversationStage = 0;
+            updateProgress(0);
+            
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 addMessage("Hi. I'm here if you need help navigating Mythara—pricing, Soul Cradle, licensing, whatever you're wondering about.");
-            }, 500);
+                
+                // Show smart suggestions after greeting
+                setTimeout(() => {
+                    addQuickReplies(getSmartSuggestions(0));
+                }, 1000);
+            }, 800);
         }
         
         chatClose.addEventListener('click', () => {
@@ -969,20 +1514,43 @@
             
             addMessage(text, true);
             chatInput.value = '';
+            clearQuickReplies();
+            lastInteractionTime = Date.now();
+            engagementScore += 5;
             
             // Detect language from user input
             userLanguage = detectLanguage(text);
             
-            // Get intelligent response
+            // Detect emotion and adapt response
+            const emotion = detectEmotion(text);
+            const toneConfig = adaptTone(emotion);
+            
+            // Show typing indicator with emotion-adapted delay
+            showTypingIndicator();
+            
+            // Get intelligent response with natural delay
+            const typingDelay = toneConfig.pace + Math.random() * 400; // Add randomness
             setTimeout(() => {
-                const response = getResponse(text);
+                hideTypingIndicator();
+                
+                let response = getResponse(text);
+                
+                // Adapt response with emotion-aware prefix
+                if (toneConfig.prefix && emotion !== 'neutral') {
+                    response = toneConfig.prefix + response;
+                }
+                
                 addMessage(response);
+                
+                // Update progress based on conversation stage
+                const progressMap = { 0: 0, 1: 25, 2: 50, 3: 75, 4: 100 };
+                updateProgress(progressMap[conversationStage] || 0);
                 
                 // Offer next step based on context
                 setTimeout(() => {
                     suggestNextStep(text);
                 }, 1500);
-            }, 800);
+            }, typingDelay);
         }
         
         function suggestNextStep(userInput) {
@@ -995,26 +1563,65 @@
             
             // If they asked about Soul Cradle, suggest pricing
             if (lower.includes('soul cradle') && conversationStage < 3) {
+                showTypingIndicator();
                 setTimeout(() => {
+                    hideTypingIndicator();
                     addMessage("Want to see pricing for your industry?");
+                    addQuickReplies(['Yes, show pricing', 'Enterprise details', 'ROI examples']);
                     showActionButton("Yes, show pricing", () => handlePricing());
                 }, 1000);
             }
             
             // If they asked about pricing/cost, push to Pilot
             else if ((lower.includes('pricing') || lower.includes('cost') || lower.includes('price')) && conversationStage < 3) {
+                showTypingIndicator();
                 setTimeout(() => {
+                    hideTypingIndicator();
                     addMessage("Ready to start your $49 Pilot?");
+                    addQuickReplies(['Yes, start Pilot!', 'Tell me more', 'Talk to sales']);
                     showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
                 }, 1000);
             }
             
             // If they asked about pilot, push to signup
             else if (lower.includes('pilot') && conversationStage < 4) {
+                showTypingIndicator();
                 setTimeout(() => {
+                    hideTypingIndicator();
                     addMessage("Let's get you started!");
+                    addQuickReplies(['Start now', 'Questions first', 'Email me details']);
                     showActionButton("Start my Pilot now", () => handlePilotSignup());
                 }, 1000);
+            }
+            
+            // If they express frustration about price
+            else if (lower.match(/expensive|too much|cost/i) && lower.match(/high|lot|afford/i)) {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage("I hear you. Think of it this way: The $49 Pilot gets you 7 days of full access. If one decision is made with clarity instead of second-guessing, what's that worth? Plus, it credits back if you upgrade.");
+                    addQuickReplies(['Fair point', 'ROI examples', 'Still thinking']);
+                }, 1000);
+            }
+            
+            // If they're skeptical
+            else if (lower.match(/really|prove|sure about|doubt/i)) {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage("Fair question. That's exactly why we offer the Pilot—so you can verify it yourself. No sales pressure, just full access for 7 days. See the value firsthand.");
+                    addQuickReplies(['Start Pilot', 'Customer stories', 'Security proof']);
+                }, 1000);
+            }
+            
+            // Default: offer contextual suggestions based on stage
+            else {
+                const suggestions = getSmartSuggestions(conversationStage);
+                if (suggestions.length > 0) {
+                    setTimeout(() => {
+                        addQuickReplies(suggestions);
+                    }, 500);
+                }
             }
         }
         
@@ -1035,51 +1642,95 @@
             hideActionButton();
             addMessage("I'm exploring", true);
             conversationStage = 1;
+            updateProgress(25);
+            clearQuickReplies();
+            
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 addMessage("Perfect! Think of Mythara as your mission's guardian. You know how sometimes what you must do conflicts with what you should do? That's where we come in.");
+                
                 setTimeout(() => {
-                    addMessage("Which area matters most to you right now?");
-                    showActionButton("Understanding Soul Cradle", () => handleSoulCradle());
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        addMessage("Which area matters most to you right now?");
+                        addQuickReplies(['Understanding Soul Cradle', 'Show pricing', 'Security details']);
+                        showActionButton("Understanding Soul Cradle", () => handleSoulCradle());
+                    }, 1000);
                 }, 2500);
-            }, 1000);
+            }, 1200);
         }
         
         function handleSoulCradle() {
             hideActionButton();
             addMessage("Tell me about Soul Cradle", true);
             conversationStage = 2;
+            updateProgress(50);
+            clearQuickReplies();
+            
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 addMessage("Soul Cradle is our flagship feature—and we donate it to the industries that need it most. Healthcare, banking, justice, nonprofits, civil service, education. If that's you, it's included free with any tier.");
+                
                 setTimeout(() => {
-                    addMessage("You hold paradox every day. We make sure it doesn't break you. Ready to see pricing?");
-                    showActionButton("Yes, show me pricing", () => handlePricing());
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        addMessage("You hold paradox every day. We make sure it doesn't break you. Ready to see pricing?");
+                        addQuickReplies(['Yes, show pricing', 'Enterprise features', 'Implementation time']);
+                        showActionButton("Yes, show me pricing", () => handlePricing());
+                    }, 1000);
                 }, 3000);
-            }, 1000);
+            }, 1200);
         }
         
         function handlePricing() {
             hideActionButton();
             addMessage("Show me pricing", true);
             conversationStage = 3;
+            updateProgress(75);
+            clearQuickReplies();
+            
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 addMessage("Perfect! Here's the deal: Our 7-day Pilot is just $49—full access, one per business. And if you love it and upgrade to Enterprise, that $49 gets credited back. So really, it's risk-free!");
+                
                 setTimeout(() => {
-                    addMessage("Most teams know by day three if Mythara's the right fit. Ready to start your Pilot?");
-                    showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        addMessage("Most teams know by day three if Mythara's the right fit. Ready to start your Pilot?");
+                        addQuickReplies(['Yes, start Pilot!', 'ROI examples', 'Talk to sales']);
+                        showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
+                    }, 1000);
                 }, 2500);
-            }, 1000);
+            }, 1200);
         }
         
         function handlePilotSignup() {
             hideActionButton();
             addMessage("Yes, let's do it!", true);
             conversationStage = 4;
+            updateProgress(100);
+            clearQuickReplies();
+            
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 addMessage("Awesome! Scroll up to the Pilot section, check the Terms box, and click Subscribe. You'll be up and running in under 2 minutes. See you on the inside! 💜");
+                
                 setTimeout(() => {
-                    addMessage("Oh, and if you need anything—licensing questions, terms clarification, anything—just email us at Mythara.Engine@yahoo.com. We're here to help!");
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        addMessage("Oh, and if you need anything—licensing questions, terms clarification, anything—just email us at Mythara.Engine@yahoo.com. We're here to help!");
+                        addQuickReplies(['Support options', 'Training included?', 'Integration help']);
+                    }, 1000);
                 }, 2500);
-            }, 1000);
+            }, 1200);
         }
         
         // Multilingual Support (Top 5 languages)
