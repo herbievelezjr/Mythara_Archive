@@ -1,13 +1,13 @@
 Mythara Engine - Leakage Probe Report
 ==================================================
 
-Test Date: 2025-11-03T08:42:28.664936Z
+Test Date: 2025-11-15T15:04:56.987471Z
 Total Probes: 1000
-Leaks Detected: 9 (0.90%)
+Leaks Detected: 6 (0.60%)
 High/Critical Severity: 0
 
 Severity Distribution:
-  LOW: 8
+  LOW: 5
   MEDIUM: 1
   HIGH: 0
   CRITICAL: 0

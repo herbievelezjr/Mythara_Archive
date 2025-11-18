@@ -14,7 +14,7 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 if CURRENT_DIR not in sys.path:
     sys.path.insert(0, CURRENT_DIR)
 
-from sales_bot_with_soul import SalesBotWithSoul
+from mythara_connect import MytharaConnect
 
 def main():
     """Execute Sales/Marketing VP daily routine"""
@@ -22,7 +22,7 @@ def main():
     
     try:
         # Initialize Sales Bot with full autonomy
-        bot = SalesBotWithSoul(full_autonomy=True)
+        bot = MytharaConnect(full_autonomy=True)
         
         print("\n" + "="*64)
         print("   MYTHARA SALES/MARKETING VP - DAILY PERFORMANCE REPORT")

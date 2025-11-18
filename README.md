@@ -72,6 +72,35 @@ curl -X POST http://localhost:8000/v1/clauses/invoke \
    }'
 ```
 
+### 6. Dual-Framing for Enterprise Audiences
+
+Mythara Engine now includes a **dual-framing translation layer** that preserves mythic integrity internally while providing enterprise-safe terminology externally.
+
+**Quick Example:**
+
+```bash
+# Mythic framing (default)
+curl -H "Authorization: Bearer dev_test_key_001" \
+  http://localhost:8000/v1/reservoir/status
+
+# Industry framing (for external audiences)
+curl -H "Authorization: Bearer dev_test_key_001" \
+  http://localhost:8000/v1/reservoir/status?frame=industry
+```
+
+**Documentation:**
+
+- **Chart**: `DUAL_FRAMING_CHART.md` — Mythic-to-industry term mappings
+- **Guide**: `DUAL_FRAMING_GUIDE.md` — Comprehensive enterprise integration guide
+- **Flow Diagram**: `DUAL_FRAMING_FLOW_DIAGRAM.md` — System architecture visualization
+- **Integration Summary**: `DUAL_FRAMING_INTEGRATION_SUMMARY.md` — Implementation details
+
+**Use Cases:**
+
+- Show "Resonance Reservoir" instead of "Blessings Reservoir" to non-theological audiences
+- Present "Trust Index" instead of "Integrity Metric" to C-suite executives
+- Toggle dashboard between mythic and industry framing based on audience
+
 ---
 
 ## Quick Start

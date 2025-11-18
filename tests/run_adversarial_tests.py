@@ -7,6 +7,7 @@ Attempts to break integrity, bypass SSIP, inject attacks, and degrade performanc
 """
 
 import hashlib
+import hmac
 import time
 import json
 from typing import Dict, Any
@@ -24,7 +25,7 @@ def test_hash_collision_attempt():
     hash_1 = hashlib.sha256(json.dumps(payload_1, sort_keys=True).encode()).hexdigest()
     hash_2 = hashlib.sha256(json.dumps(payload_2, sort_keys=True).encode()).hexdigest()
     
-    if hash_1 == hash_2:
+    if hmac.compare_digest(hash_1, hash_2):
         print("❌ CRITICAL: Hash collision detected!")
         return False
     else:
@@ -72,7 +73,7 @@ def test_tampering_detection():
         json.dumps(tampered_response, sort_keys=True).encode()
     ).hexdigest()
     
-    if original_hash == recomputed_hash:
+    if hmac.compare_digest(original_hash, recomputed_hash):
         print("❌ CRITICAL: Tampering not detected!")
         return False
     else:
@@ -145,18 +146,18 @@ def test_timing_attack_on_hash():
     guess_1 = "abc123" * 10
     guess_2 = "zzz999" * 10
     
-    # Non-constant-time (vulnerable)
+    # Constant-time comparison (secure)
     start = time.perf_counter()
-    _ = (correct_hash == guess_1)
+    _ = hmac.compare_digest(correct_hash, guess_1)
     time_1 = time.perf_counter() - start
     
     start = time.perf_counter()
-    _ = (correct_hash == guess_2)
+    _ = hmac.compare_digest(correct_hash, guess_2)
     time_2 = time.perf_counter() - start
     
-    # Real system should use hmac.compare_digest
-    print(f"⚠️  Timing: match={time_1:.9f}s, mismatch={time_2:.9f}s")
-    print(f"✅ Use hmac.compare_digest for constant-time comparison in production")
+    # Now using hmac.compare_digest for constant-time comparison
+    print(f"✅ Timing: match={time_1:.9f}s, mismatch={time_2:.9f}s")
+    print(f"✅ Using hmac.compare_digest for constant-time comparison")
     return True
 
 

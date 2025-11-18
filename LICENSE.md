@@ -73,9 +73,13 @@ Breach of confidentiality may result in legal action and damages.
 
 ---
 
-## Governing Law
+## Governing Law & Dispute Resolution
 
 This license is governed by the laws of the State of California, United States, without regard to conflict of law principles.
+
+**ARBITRATION AGREEMENT:** Any dispute, claim, or controversy arising out of or relating to this license or the Software shall be resolved by binding arbitration administered by the American Arbitration Association (AAA) under its Commercial Arbitration Rules. The arbitration shall be conducted in California. Judgment on the award rendered by the arbitrator(s) may be entered in any court having jurisdiction. YOU AGREE TO WAIVE YOUR RIGHT TO A JURY TRIAL AND TO PARTICIPATE IN CLASS ACTION LAWSUITS.
+
+**Small Claims Exception:** Either party may bring an individual action in small claims court for disputes within its jurisdiction.
 
 ---
 
