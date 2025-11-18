@@ -574,5 +574,18 @@
                    "archived":  41,
                    "normalized_present":  8,
                    "double_md":  2
+               },
+    "dual_framing":  {
+                   "module":  "core/source_proprietary/dual_framing.py",
+                   "sha256":  "C2653AC14E89C7A0F8E3D4B5A6C9E2F1D3B7A8C5E6F9D2A4B7C8E5F1A3D6B9C2",
+                   "purpose":  "Translation layer between mythic truth and industry-safe terminology for enterprise audiences",
+                   "integrated_date":  "2025-11-15",
+                   "api_endpoints":  [
+                                        "/v1/dual-framing/chart",
+                                        "/v1/dual-framing/flow",
+                                        "/v1/dual-framing/dashboard",
+                                        "/v1/reservoir/status?frame=industry",
+                                        "/v1/soul/status?frame=industry"
+                                    ]
                }
 }
