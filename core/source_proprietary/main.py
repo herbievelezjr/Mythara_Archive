@@ -33,6 +33,10 @@ try:
 except ImportError:
     pass  # dotenv not installed, use system env vars only
 
+# Configure logging BEFORE any other imports that use logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Import database layer and email service
 try:
     from database import (
@@ -102,10 +106,6 @@ from salesforce_integration import (
     SalesforceSoulCradleEvent,
     generate_salesforce_setup_instructions
 )
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # ElevenLabs Configuration
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")  # Set via environment variable
