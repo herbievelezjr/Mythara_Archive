@@ -97,17 +97,17 @@ from dual_framing import (
     generate_flow_diagram_text
 )
 
-# Import Soul Cradle Zim Framework
-from soul_cradle_zim_framework import (
+# Import Soul Cradle Systems Framework
+from soul_cradle_systems_framework import (
     SoulCradleParadox,
-    ZimExpression,
+    SystemExpression,
     NonExpression,
     PrincipalSystem,
     ExpressionType,
     SystemType,
     TerminalRiskLevel,
     TerminalRiskCalculator,
-    ZimQueryParser,
+    SystemQueryParser,
     log_paradox_creation
 )
 
@@ -2602,7 +2602,7 @@ async def push_soul_cradle_to_salesforce(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ===================== ZIM FRAMEWORK ENDPOINTS =====================
+# ===================== SYSTEMS FRAMEWORK ENDPOINTS =====================
 
 @app.post("/v1/soul-cradle/paradox/create")
 async def create_soul_cradle_paradox(
@@ -2610,7 +2610,7 @@ async def create_soul_cradle_paradox(
     api_key: str = Depends(verify_api_key)
 ):
     """
-    Create a Soul Cradle paradox using Zim's framework.
+    Create a Soul Cradle paradox using systems mathematics framework.
     Requires valid Mythara API key (all tiers).
     
     Returns paradox with integrity hash and terminal risk assessment.
@@ -2692,12 +2692,12 @@ async def calculate_terminal_risk(
 
 
 @app.get("/v1/soul-cradle/query")
-async def query_paradoxes_zim_notation(
+async def query_paradoxes_system_notation(
     notation: str,
     api_key: str = Depends(verify_api_key)
 ):
     """
-    Query Soul Cradle paradoxes using Zim notation.
+    Query Soul Cradle paradoxes using system expression notation.
     
     Examples:
     - Every(Policy)Any(+)Some(Discharge)Non(Safety)
@@ -2709,12 +2709,12 @@ async def query_paradoxes_zim_notation(
         # In production, query database here
         # For demo, return example matches
         
-        logger.info(f"Zim query: {notation}")
+        logger.info(f"System expression query: {notation}")
         
         return {
             "success": True,
             "query": notation,
-            "message": "Production implementation requires database integration. This endpoint demonstrates Zim query language parsing.",
+            "message": "Production implementation requires database integration. This endpoint demonstrates system expression query language parsing.",
             "example_matches": [
                 {
                     "paradox_id": "SC_2025_1118_HOSPITAL_001",
@@ -2730,17 +2730,17 @@ async def query_paradoxes_zim_notation(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/v1/soul-cradle/manifest/zim")
-async def get_zim_framework_manifest(
+@app.get("/v1/soul-cradle/manifest/systems")
+async def get_systems_framework_manifest(
     api_key: str = Depends(verify_api_key)
 ):
     """
-    Get Zim framework manifest with integrity hash.
+    Get systems framework manifest with integrity hash.
     Returns framework version, notation spec, and documentation links.
     """
     try:
         manifest = {
-            "framework": "Zim Systems Mathematics",
+            "framework": "Soul Cradle Systems Mathematics",
             "version": "1.0.0",
             "notation_spec": "Every(X)Any(+)Some(Y)Non(Z)",
             "system_types": [
@@ -2757,8 +2757,7 @@ async def get_zim_framework_manifest(
             ],
             "terminal_risk_levels": ["LOW", "MODERATE", "HIGH", "CRITICAL"],
             "terminal_risk_formula": "(pseudo_system_density × non_expression_accumulation) / time_window_days",
-            "attribution": "Based on systems interpretations from Zim Olson (zimmathematics.com)",
-            "documentation": "See soul_cradle_zim_framework.py for complete implementation"
+            "documentation": "See soul_cradle_systems_framework.py for complete implementation"
         }
         
         # Compute integrity hash
@@ -2773,7 +2772,7 @@ async def get_zim_framework_manifest(
         }
     
     except Exception as e:
-        logger.error(f"Failed to get Zim manifest: {e}")
+        logger.error(f"Failed to get systems manifest: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
