@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Soul Cradle Zim Framework Integration
-Mathematical foundation for paradox analysis using Zim Olson's systems mathematics.
+Soul Cradle Systems Framework
+Mathematical foundation for paradox analysis and burnout prediction.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
-Based on systems interpretations from zimmathematics.com:
+Systems mathematics framework:
 - Expression notation: Every(X)Any(+)Some(Y)Non(Z)
 - Pseudo-Partial Systems: Incomplete expressions → terminal events (burnout)
 - Principal Complete Systems: Full express-ability → viable outcomes
@@ -38,7 +38,7 @@ class ExpressionType(str, Enum):
 
 
 class SystemType(str, Enum):
-    """System viability classification (Zim framework)"""
+    """System viability classification"""
     PSEUDO_PARTIAL = "Pseudo_Partial"  # Terminal event risk
     PRINCIPAL_COMPLETE = "Principal_Complete"  # Viable outcome
 
@@ -51,18 +51,18 @@ class TerminalRiskLevel(str, Enum):
     CRITICAL = "CRITICAL"  # 0.7-1.0
 
 
-# ===================== ZIM EXPRESSION MODELS =====================
+# ===================== EXPRESSION MODELS =====================
 
-class ZimExpression(BaseModel):
+class SystemExpression(BaseModel):
     """
-    Zim's expression notation: Every(X)Any(+)Some(Y)Non(Z)
+    System expression notation: Every(X)Any(+)Some(Y)Non(Z)
     
     Example:
     Every(Policy)Any(+)Some(Discharge)Non(Safety)
     "Policy demands discharge, but safety is not expressed"
     """
     type: ExpressionType = Field(..., description="Category of the expression")
-    notation: str = Field(..., description="Zim notation: Every(X)Any(+)Some(Y)Non(Z)")
+    notation: str = Field(..., description="System notation: Every(X)Any(+)Some(Y)Non(Z)")
     content: str = Field(..., description="Human-readable expression content")
     dominion_claim: bool = Field(default=True, description="Does this expression claim dominion over the other?")
     
@@ -75,7 +75,7 @@ class ZimExpression(BaseModel):
 class NonExpression(BaseModel):
     """
     The unresolved state when two expressions compete.
-    Zim: Non(Both) = Neither expression can be fully satisfied
+    Non(Both) = Neither expression can be fully satisfied
     """
     type: ExpressionType = Field(default=ExpressionType.RESOLUTION)
     notation: str = Field(default="Non(Both)", description="What cannot be expressed")
@@ -85,10 +85,10 @@ class NonExpression(BaseModel):
 class PrincipalSystem(BaseModel):
     """
     The complete system that Soul Cradle creates.
-    Zim: Every(Mission)Any(+)Some(1,0)Non(Mission)
+    Every(Mission)Any(+)Some(1,0)Non(Mission)
     "The mission includes both states (1=expression A, 0=expression B), nothing is excluded"
     """
-    notation: str = Field(..., description="Zim notation for principal complete system")
+    notation: str = Field(..., description="System notation for principal complete system")
     recovery_method: str = Field(default="Witness_Both_Expressions")
     viability_score: float = Field(default=1.0, ge=0.0, le=1.0, description="1.0 = complete system")
     description: str = Field(..., description="How Soul Cradle resolves the paradox")
@@ -98,7 +98,7 @@ class PrincipalSystem(BaseModel):
 
 class SoulCradleParadox(BaseModel):
     """
-    Complete Soul Cradle paradox using Zim's framework.
+    Complete Soul Cradle paradox using systems mathematics framework.
     
     Structure:
     - Two competing expressions (A and B) form a pseudo-partial system
@@ -108,8 +108,8 @@ class SoulCradleParadox(BaseModel):
     paradox_id: str = Field(..., description="Unique identifier (e.g., SC_2025_1118_001)")
     
     # The competing expressions
-    expression_a: ZimExpression
-    expression_b: ZimExpression
+    expression_a: SystemExpression
+    expression_b: SystemExpression
     
     # The impossibility
     non_expression: NonExpression
@@ -183,7 +183,7 @@ class SoulCradleParadox(BaseModel):
 
 class TerminalRiskCalculator:
     """
-    Predicts burnout risk using Zim's framework.
+    Predicts burnout risk using systems mathematics framework.
     
     Formula:
     terminal_risk = (pseudo_system_density × non_expression_accumulation) / time_window
@@ -278,11 +278,11 @@ class TerminalRiskCalculator:
         }
 
 
-# ===================== ZIM QUERY LANGUAGE =====================
+# ===================== SYSTEM QUERY LANGUAGE =====================
 
-class ZimQueryParser:
+class SystemQueryParser:
     """
-    Parse and execute queries using Zim's notation.
+    Parse and execute queries using system expression notation.
     
     Examples:
     - Every(Policy)Any(+)Some(Discharge)Non(Safety)
@@ -292,7 +292,7 @@ class ZimQueryParser:
     @staticmethod
     def parse_notation(notation: str) -> Dict[str, str]:
         """
-        Parse Zim notation into components.
+        Parse system expression notation into components.
         
         Example: Every(Policy)Any(+)Some(Discharge)Non(Safety)
         Returns: {"every": "Policy", "any": "+", "some": "Discharge", "non": "Safety"}
@@ -301,7 +301,7 @@ class ZimQueryParser:
         pattern = r'Every\((\w+)\)Any\((\+)\)Some\((\w+)\)Non\((\w+)\)'
         match = re.match(pattern, notation)
         if not match:
-            raise ValueError(f"Invalid Zim notation: {notation}")
+            raise ValueError(f"Invalid system expression notation: {notation}")
         
         return {
             "every": match.group(1),
@@ -317,11 +317,11 @@ class ZimQueryParser:
         Supports wildcards (*) in query.
         """
         try:
-            query = ZimQueryParser.parse_notation(query_notation)
+            query = SystemQueryParser.parse_notation(query_notation)
             
             # Check expression_a
             if paradox.expression_a.notation:
-                expr_a = ZimQueryParser.parse_notation(paradox.expression_a.notation)
+                expr_a = SystemQueryParser.parse_notation(paradox.expression_a.notation)
                 if (query["every"] == "*" or query["every"] == expr_a["every"]) and \
                    (query["some"] == "*" or query["some"] == expr_a["some"]) and \
                    (query["non"] == "*" or query["non"] == expr_a["non"]):
@@ -329,7 +329,7 @@ class ZimQueryParser:
             
             # Check expression_b
             if paradox.expression_b.notation:
-                expr_b = ZimQueryParser.parse_notation(paradox.expression_b.notation)
+                expr_b = SystemQueryParser.parse_notation(paradox.expression_b.notation)
                 if (query["every"] == "*" or query["every"] == expr_b["every"]) and \
                    (query["some"] == "*" or query["some"] == expr_b["some"]) and \
                    (query["non"] == "*" or query["non"] == expr_b["non"]):
@@ -347,13 +347,13 @@ def create_hospital_discharge_paradox() -> SoulCradleParadox:
     """Example: Healthcare worker paradox"""
     return SoulCradleParadox(
         paradox_id="SC_2025_1118_HOSPITAL_001",
-        expression_a=ZimExpression(
+        expression_a=SystemExpression(
             type=ExpressionType.POLICY,
             notation="Every(Policy)Any(+)Some(Discharge)Non(Safety)",
             content="Hospital policy requires discharge after 72 hours. Insurance won't cover longer stay.",
             dominion_claim=True
         ),
-        expression_b=ZimExpression(
+        expression_b=SystemExpression(
             type=ExpressionType.HEART,
             notation="Every(Heart)Any(+)Some(Safety)Non(Discharge)",
             content="Patient will be homeless if discharged. They're not medically stable. My heart says they need more time.",
@@ -381,13 +381,13 @@ def create_nonprofit_budget_paradox() -> SoulCradleParadox:
     """Example: Nonprofit budget vs mission"""
     return SoulCradleParadox(
         paradox_id="SC_2025_1118_NONPROFIT_001",
-        expression_a=ZimExpression(
+        expression_a=SystemExpression(
             type=ExpressionType.BUDGET,
             notation="Every(Budget)Any(+)Some(Cuts)Non(Programs)",
             content="Board says we must cut 30% of programs to stay solvent. No choice.",
             dominion_claim=True
         ),
-        expression_b=ZimExpression(
+        expression_b=SystemExpression(
             type=ExpressionType.MISSION,
             notation="Every(Mission)Any(+)Some(Programs)Non(Cuts)",
             content="Every program serves real people who will lose services. Our mission is to serve them ALL.",
@@ -429,7 +429,7 @@ def log_paradox_creation(paradox: SoulCradleParadox) -> None:
 
 if __name__ == "__main__":
     # Demo: Create example paradoxes
-    print("=== Zim Framework Demo ===\n")
+    print("=== Systems Framework Demo ===\n")
     
     # Example 1: Hospital discharge
     hospital = create_hospital_discharge_paradox()

@@ -1,4 +1,4 @@
-# Zim Framework Integration Guide for Developers
+# Systems Framework Integration Guide for Developers
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
 **Proprietary and Confidential.**
@@ -7,7 +7,7 @@
 
 ## Overview
 
-The **Zim Framework** integrates Zim Olson's systems mathematics (zimmathematics.com) into Soul Cradle's paradox analysis engine. This provides mathematical foundation for predicting burnout 3-6 months before terminal events.
+The **Systems Framework** provides mathematical foundation for Soul Cradle's paradox analysis engine. This enables burnout prediction 3-6 months before terminal events.
 
 ### Core Concept
 
@@ -20,7 +20,7 @@ Soul Cradle transforms this by witnessing **both expressions as simultaneously t
 
 ---
 
-## Zim Expression Notation
+## Expression Notation
 
 ### Basic Structure
 
@@ -64,12 +64,12 @@ Principal System: Every(Mission)Any(+)Some(1,0)Non(Mission)
 
 ### SoulCradleParadox
 
-Complete paradox using Zim's framework.
+Complete paradox using systems mathematics framework.
 
 ```python
 from soul_cradle_zim_framework import (
     SoulCradleParadox,
-    ZimExpression,
+    SystemExpression,
     NonExpression,
     PrincipalSystem,
     ExpressionType,
@@ -81,14 +81,14 @@ paradox = SoulCradleParadox(
     paradox_id="SC_2025_1118_001",
     
     # Competing expressions
-    expression_a=ZimExpression(
+    expression_a=SystemExpression(
         type=ExpressionType.POLICY,
         notation="Every(Policy)Any(+)Some(Discharge)Non(Safety)",
         content="Discharge patient per 72-hour rule",
         dominion_claim=True
     ),
     
-    expression_b=ZimExpression(
+    expression_b=SystemExpression(
         type=ExpressionType.HEART,
         notation="Every(Heart)Any(+)Some(Safety)Non(Discharge)",
         content="Patient will be homeless and unsafe",
@@ -130,8 +130,8 @@ print(f"Integrity: {integrity_hash[:16]}...")
 | Field | Type | Description |
 |-------|------|-------------|
 | `paradox_id` | `str` | Unique identifier (format: `SC_YYYY_MMDD_XXX`) |
-| `expression_a` | `ZimExpression` | First competing expression |
-| `expression_b` | `ZimExpression` | Second competing expression |
+| `expression_a` | `SystemExpression` | First competing expression |
+| `expression_b` | `SystemExpression` | Second competing expression |
 | `non_expression` | `NonExpression` | What cannot be satisfied |
 | `system_type` | `SystemType` | `PSEUDO_PARTIAL` or `PRINCIPAL_COMPLETE` |
 | `viability_score` | `float` | 0.0 (terminal) to 1.0 (complete) |
@@ -205,7 +205,7 @@ print(f"Recommendation: {risk_result['recommendation']}")
 
 **POST** `/v1/soul-cradle/paradox/create`
 
-Create a Soul Cradle paradox using Zim's framework.
+Create a Soul Cradle paradox using systems framework.
 
 **Request:**
 ```json
@@ -293,11 +293,11 @@ Calculate burnout risk from paradox history.
 }
 ```
 
-### 3. Query with Zim Notation
+### 3. Query with System Notation
 
 **GET** `/v1/soul-cradle/query?notation=Every(*)Any(+)Some(*)Non(Safety)`
 
-Query paradoxes using Zim notation. Supports wildcards (`*`).
+Query paradoxes using system expression notation. Supports wildcards (`*`).
 
 **Examples:**
 - `Every(Policy)Any(+)Some(Discharge)Non(Safety)` — Exact match
@@ -322,16 +322,16 @@ Query paradoxes using Zim notation. Supports wildcards (`*`).
 
 ### 4. Get Framework Manifest
 
-**GET** `/v1/soul-cradle/manifest/zim`
+**GET** `/v1/soul-cradle/manifest/systems`
 
-Get Zim framework version, notation spec, and documentation.
+Get systems framework version, notation spec, and documentation.
 
 **Response:**
 ```json
 {
     "success": true,
     "manifest": {
-        "framework": "Zim Systems Mathematics",
+        "framework": "Soul Cradle Systems Mathematics",
         "version": "1.0.0",
         "notation_spec": "Every(X)Any(+)Some(Y)Non(Z)",
         "system_types": [
@@ -347,8 +347,7 @@ Get Zim framework version, notation spec, and documentation.
             }
         ],
         "terminal_risk_levels": ["LOW", "MODERATE", "HIGH", "CRITICAL"],
-        "terminal_risk_formula": "(pseudo_system_density × non_expression_accumulation) / time_window_days",
-        "attribution": "Zim Olson (zimmathematics.com)"
+        "terminal_risk_formula": "(pseudo_system_density × non_expression_accumulation) / time_window_days"
     },
     "integrity_hash": "c7e3f9a4b1d8...",
     "timestamp": "2025-11-18T10:45:00Z"
@@ -357,20 +356,20 @@ Get Zim framework version, notation spec, and documentation.
 
 ---
 
-## Zim Query Language
+## System Query Language
 
-Parse and execute queries using Zim notation.
+Parse and execute queries using expression notation.
 
 ```python
-from soul_cradle_zim_framework import ZimQueryParser
+from soul_cradle_zim_framework import SystemQueryParser
 
 # Parse notation
 query = "Every(Policy)Any(+)Some(Discharge)Non(Safety)"
-components = ZimQueryParser.parse_notation(query)
+components = SystemQueryParser.parse_notation(query)
 # Returns: {"every": "Policy", "any": "+", "some": "Discharge", "non": "Safety"}
 
 # Match against paradox
-matches = ZimQueryParser.matches_query(paradox, query)
+matches = SystemQueryParser.matches_query(paradox, query)
 # Returns: True if paradox expressions match query (supports wildcards)
 ```
 
@@ -395,7 +394,7 @@ query = "Every(Policy)Any(+)Some(*)Non(*)"
 ```python
 from soul_cradle_zim_framework import (
     SoulCradleParadox,
-    ZimExpression,
+    SystemExpression,
     NonExpression,
     PrincipalSystem,
     ExpressionType,
@@ -407,13 +406,13 @@ from soul_cradle_zim_framework import (
 # Worker logs paradox
 paradox = SoulCradleParadox(
     paradox_id=f"SC_{datetime.now().strftime('%Y_%m%d_%H%M%S')}",
-    expression_a=ZimExpression(
+    expression_a=SystemExpression(
         type=ExpressionType.POLICY,
         notation="Every(Policy)Any(+)Some(Discharge)Non(Safety)",
         content="72-hour discharge rule",
         dominion_claim=True
     ),
-    expression_b=ZimExpression(
+    expression_b=SystemExpression(
         type=ExpressionType.HEART,
         notation="Every(Heart)Any(+)Some(Safety)Non(Discharge)",
         content="Patient not safe to discharge",
@@ -515,7 +514,7 @@ python soul_cradle_zim_framework.py
 
 Output:
 ```
-=== Zim Framework Demo ===
+=== Systems Framework Demo ===
 
 Hospital Paradox: SC_2025_1118_HOSPITAL_001
   Expression A: Every(Policy)Any(+)Some(Discharge)Non(Safety)
@@ -533,23 +532,9 @@ Recommendation: HIGH RISK: Schedule weekly check-ins...
 
 ---
 
-## Attribution
-
-This framework integrates systems mathematics from **Zim Olson** (zimmathematics.com).
-
-Key concepts:
-- **Expression Viability**: Every(X)Any(+)Some(Y)Non(Z)
-- **Pseudo-Partial Systems**: Incomplete expressions → terminal events
-- **Principal Complete Systems**: Full express-ability → viable outcomes
-- **Terminal Events**: Burnout from accumulated non-expressions
-
-Soul Cradle applies Zim's framework to transform workplace paradoxes into mathematically analyzable systems, enabling burnout prediction 3-6 months before terminal events.
-
----
-
 ## Support
 
-Questions about Zim Framework integration?
+Questions about Systems Framework integration?
 
 - **Email**: Mythara.Engine@yahoo.com
 - **Documentation**: See `soul_cradle_zim_framework.py` source code
