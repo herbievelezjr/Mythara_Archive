@@ -1878,11 +1878,43 @@
                 return 'Most systems make you choose: mission or compliance. Mythara says both. We track when your team\'s burning out from impossible choices. We measure when meaning gets lost in translation. We create audit trails that actually matter. We document the cost of doing what\'s "right" when the rules say otherwise. So you can advocate for better policies with real data. And your people don\'t shatter in the process.';
             }
             
-            // Default fallback
+            // ROI Examples
+            if (lowerInput.includes('roi') || lowerInput.includes('return on investment') || lowerInput.includes('case stud') || lowerInput.includes('example')) {
+                return 'Here\'s the math: Say you lose one key employee to burnout—that\'s $50K-$200K in recruiting, training, lost productivity. Soul Cradle catches the warning signs early. Or a single compliance violation: $10K-$50K in fines, legal fees, reputation damage. Mythara documents everything so audits become easy. Most clients see ROI in 3-6 months just from retention alone. Want specifics for your industry?';
+            }
+            
+            // Security/Technical
+            if (lowerInput.includes('security') || lowerInput.includes('encryption') || lowerInput.includes('safe') || lowerInput.includes('secure') || lowerInput.includes('data protection')) {
+                return 'Everything\'s cryptographically signed with SHA-256 integrity hashes. Your data is encrypted at rest and in transit. We\'re HIPAA-ready, SOC 2 compliant, and built for audit trails that hold up in court. You own your data—we never sell it, and you can export anytime. Full security docs available on request.';
+            }
+            
+            // Implementation/Setup
+            if (lowerInput.includes('implement') || lowerInput.includes('setup') || lowerInput.includes('how long') || lowerInput.includes('install') || lowerInput.includes('integration time')) {
+                return 'Pilot setup is instant—just sign up and you\'re in. Enterprise deployment: API integration takes 20 minutes, CRM hookup another hour. Training your team? Most are fluent in 2 days. We handle the technical stuff, you focus on using it. White-glove onboarding included with Enterprise and Global tiers.';
+            }
+            
+            // Training/Support
+            if (lowerInput.includes('training') || lowerInput.includes('support') || lowerInput.includes('help') || lowerInput.includes('learn')) {
+                return 'Pilot tier gets email support (same-day response). Enterprise and Global get 24/7 support, dedicated onboarding, and live training sessions. Most teams are up and running in 48 hours. We also include documentation, video tutorials, and a Slack channel if you want direct access to our team.';
+            }
+            
+            // Competitors/Alternatives
+            if (lowerInput.includes('competitor') || lowerInput.includes('alternative') || lowerInput.includes('vs ') || lowerInput.includes('compare') || lowerInput.includes('different from')) {
+                return 'Most compliance tools just check boxes. Mythara measures the human cost of those boxes. We\'re not replacing your existing systems—we\'re adding the layer that tracks what they can\'t: paradox, burnout, mission drift. Think of us as the conscience your CRM doesn\'t have.';
+            }
+            
+            // Default fallback - smarter response
             if (lowerInput.length < 3) {
                 return 'I need a bit more than that. Try: "What is Mythara?" or "How much does it cost?" or "Tell me about Soul Cradle."';
             }
-            return 'Not sure I caught that. Try asking about: pricing, Soul Cradle, which industries we work with, or licensing terms.';
+            
+            // Intelligent fallback based on keywords
+            if (lowerInput.includes('?')) {
+                return 'Good question. Let me connect you with someone who can answer that properly—email Mythara.Engine@yahoo.com and we\'ll respond same day. Or if you want to explore on your own, the $49 Pilot gives you full access to see for yourself.';
+            }
+            
+            // Final fallback - conversational
+            return 'Hmm, I want to give you the right answer. Can you rephrase that? Or ask me about: pricing, Soul Cradle, industries we serve, ROI examples, or security.';
         }
         
         chatSend.addEventListener('click', handleSend);
