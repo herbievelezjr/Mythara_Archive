@@ -67,7 +67,7 @@ Principal System: Every(Mission)Any(+)Some(1,0)Non(Mission)
 Complete paradox using systems mathematics framework.
 
 ```python
-from soul_cradle_zim_framework import (
+from soul_cradle_systems_framework import (
     SoulCradleParadox,
     SystemExpression,
     NonExpression,
@@ -168,7 +168,7 @@ Where:
 ### Usage
 
 ```python
-from soul_cradle_zim_framework import TerminalRiskCalculator
+from soul_cradle_systems_framework import TerminalRiskCalculator
 
 paradoxes = [paradox1, paradox2, paradox3]
 
@@ -361,7 +361,7 @@ Get systems framework version, notation spec, and documentation.
 Parse and execute queries using expression notation.
 
 ```python
-from soul_cradle_zim_framework import SystemQueryParser
+from soul_cradle_systems_framework import SystemQueryParser
 
 # Parse notation
 query = "Every(Policy)Any(+)Some(Discharge)Non(Safety)"
@@ -392,7 +392,7 @@ query = "Every(Policy)Any(+)Some(*)Non(*)"
 ### Example 1: Track Healthcare Worker Burnout
 
 ```python
-from soul_cradle_zim_framework import (
+from soul_cradle_systems_framework import (
     SoulCradleParadox,
     SystemExpression,
     NonExpression,
@@ -509,7 +509,7 @@ Run the demo script to see examples:
 
 ```bash
 cd core/source_proprietary
-python soul_cradle_zim_framework.py
+python soul_cradle_systems_framework.py
 ```
 
 Output:
@@ -537,7 +537,7 @@ Recommendation: HIGH RISK: Schedule weekly check-ins...
 Questions about Systems Framework integration?
 
 - **Email**: Mythara.Engine@yahoo.com
-- **Documentation**: See `soul_cradle_zim_framework.py` source code
+- **Documentation**: See `soul_cradle_systems_framework.py` source code
 - **API Docs**: https://api.mythara.com/api/docs
 
 ---
