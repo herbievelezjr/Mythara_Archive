@@ -40,15 +40,28 @@ try:
         create_pilot, get_usage_tracking, increment_usage,
         issue_strike, log_audit, queue_email
     )
+    DATABASE_ENABLED = True
+    logger.info("✅ Database services loaded")
+except ImportError as e:
+    DATABASE_ENABLED = False
+    logger.warning(f"⚠️ Database not available, using in-memory storage: {e}")
+
+# Optional email service (not critical for core functionality)
+try:
     from email_service import (
         send_api_key_delivery, send_usage_alert_80_percent,
         send_expiration_alert_24hr, send_strike_warning
     )
-    DATABASE_ENABLED = True
-    logger.info("✅ Database and email services loaded")
+    EMAIL_ENABLED = True
+    logger.info("✅ Email services loaded")
 except ImportError as e:
-    DATABASE_ENABLED = False
-    logger.warning(f"⚠️ Database not available, using in-memory storage: {e}")
+    EMAIL_ENABLED = False
+    logger.warning(f"⚠️ Email service not available: {e}")
+    # Define stub functions so the app doesn't crash
+    def send_api_key_delivery(*args, **kwargs): pass
+    def send_usage_alert_80_percent(*args, **kwargs): pass
+    def send_expiration_alert_24hr(*args, **kwargs): pass
+    def send_strike_warning(*args, **kwargs): pass
 
 # Import Soul Proportion Model
 from soul_proportion_model import (
