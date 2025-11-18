@@ -911,7 +911,27 @@
             };
         }
         
+        // ===== SALES PSYCHOLOGY FRAMEWORK =====
+        // MytharaConnect implements consultative selling with ethical persuasion:
+        // 1. Pain point identification & mirroring (builds rapport)
+        // 2. Objection handling with reframing (addresses concerns without being pushy)
+        // 3. 5-step close progression (natural flow, not forced)
+        //    - Step 1: Problem identification (mirror their reality)
+        //    - Step 2: Pain amplification (ethical - show consequences they already feel)
+        //    - Step 3: Solution introduction (contrast - before/after)
+        //    - Step 4: Pilot offer (de-risk the decision)
+        //    - Step 5: Close (assumptive language)
+        // 4. Protective responses (detects proprietary fishing, escalates warnings)
+        // 5. Context awareness (tracks conversation history, adapts responses)
+        // 6. Randomized responses (feels human, not scripted)
+        // 7. Only offers email contact if EXPLICITLY requested
+        
         let conversationStage = 0;
+        let closeStage = 0; // 5-step close tracker
+        let proprietaryAttempts = 0; // Track fishing for secrets
+        let conversationHistory = []; // Context awareness
+        let painPointsIdentified = []; // Sales psychology: track their pain
+        let objectionCount = 0; // Handle objections strategically
         
         chatBubble.addEventListener('click', () => {
             chatWindow.classList.add('active');
@@ -978,6 +998,12 @@
             addMessage(text, true);
             chatInput.value = '';
             
+            // Track conversation for context awareness
+            conversationHistory.push(text.toLowerCase());
+            
+            // Detect pain points (sales psychology)
+            identifyPainPoints(text);
+            
             // Detect language from user input
             userLanguage = detectLanguage(text);
             
@@ -1010,13 +1036,91 @@
         function suggestNextStep(userInput) {
             const lower = userInput.toLowerCase();
             
-            // Don't suggest if they just asked about terms/licensing
-            if (lower.includes('license') || lower.includes('refund') || lower.includes('terms')) {
-                return; // Let them digest the info
+            // Don't suggest if they just asked about terms/licensing/objections
+            if (lower.includes('license') || lower.includes('refund') || lower.includes('terms') || objectionCount > 2) {
+                return; // Let them digest
             }
             
+            // ==== 5-STEP CLOSE WITH SALES PSYCHOLOGY ====
+            
+            // STEP 1: Awareness → Problem Identification
+            // Mirror their pain point back to them
+            if (closeStage === 0 && conversationHistory.length >= 2) {
+                closeStage = 1;
+                setTimeout(() => {
+                    if (painPointsIdentified.includes('burnout')) {
+                        addMessage("So burnout's hitting your team. That's the paradox—do your job right, but the system makes it impossible. Sound familiar?");
+                    } else if (painPointsIdentified.includes('retention')) {
+                        addMessage("Losing people, right? They're good at their jobs, they care about the work—but something's breaking them. Ring a bell?");
+                    } else if (painPointsIdentified.includes('compliance')) {
+                        addMessage("Compliance is squeezing you. You're following the rules, but it's crushing what you're actually trying to do. That the situation?");
+                    } else {
+                        addMessage(randomResponse([
+                            "Does your team face impossible choices? Moments where policy and mission collide?",
+                            "Sound like your team carries weight they can't talk about?",
+                            "Familiar territory? The gap between what should happen and what the rules allow?"
+                        ]));
+                    }
+                }, 1500);
+            }
+            
+            // STEP 2: Problem Acknowledged → Amplify Pain (ethical)
+            else if (closeStage === 1 && (lower.includes('yes') || lower.includes('yeah') || lower.includes('exactly') || lower.includes('familiar'))) {
+                closeStage = 2;
+                setTimeout(() => {
+                    if (painPointsIdentified.includes('burnout')) {
+                        addMessage("And you're probably seeing it in sick days, quiet quitting, the good ones leaving. The ones who care the most break first. That's the pattern, right?");
+                    } else if (painPointsIdentified.includes('retention')) {
+                        addMessage("Let me guess: exit interviews say 'better opportunity,' but you know it's deeper. They're leaving because the work became impossible. Am I close?");
+                    } else {
+                        addMessage(randomResponse([
+                            "And nobody's tracking it, right? Leadership sees turnover, but they don't see why. They think it's pay or benefits. But it's the mission being crushed by compliance. That the story?",
+                            "The worst part? Your people think it's their fault. They think they're failing. But the system set them up to lose. Sound about right?",
+                            "And when you try to explain it to leadership, it sounds soft. 'Emotional toll.' 'Moral injury.' They want data. But how do you measure a soul breaking? That's the problem, isn't it?"
+                        ]));
+                    }
+                }, 1500);
+            }
+            
+            // STEP 3: Pain Amplified → Solution Introduction (contrast)
+            else if (closeStage === 2 && (lower.includes('yes') || lower.includes('right') || lower.includes('exactly') || conversationHistory.length >= 4)) {
+                closeStage = 3;
+                setTimeout(() => {
+                    addMessage(randomResponse([
+                        "That's where Mythara comes in. We document those paradoxes before they destroy people. We measure the cost so leadership sees it. We create audit trails that matter. Soul Cradle holds the impossible moments—witnesses them, records them, makes them real.",
+                        "Mythara tracks what compliance systems miss—the human toll. When someone faces an impossible choice, we document it. We measure the emotional cost. We give you data to show leadership what's really happening. Soul Cradle does the witnessing. Want to know how?",
+                        "Here's what we do: We track the moment someone has to choose between mission and policy. We measure the toll it takes. We create cryptographic records that hold up in audits. Soul Cradle witnesses the paradox. So your people don't carry it alone, and leadership sees the cost with data. Make sense?"
+                    ]));
+                    setTimeout(() => {
+                        addMessage("Want to see pricing?");
+                    }, 2500);
+                }, 1500);
+            }
+            
+            // STEP 4: Solution Introduced → Pilot Offer (de-risk)
+            else if (closeStage === 3 && (lower.includes('yes') || lower.includes('pricing') || lower.includes('how much'))) {
+                closeStage = 4;
+                setTimeout(() => {
+                    addMessage(randomResponse([
+                        "$49 for 7 days. Full access—Soul Cradle, paradox tracking, audit trails, everything. Most teams know by day three if it fits. And if you upgrade to Enterprise, that $49 gets credited back. So you're risking basically nothing. Want to start?",
+                        "Pilot is $49, runs for 7 days. You get the full platform—no limits. Most people see the value in three days. Upgrade to Enterprise later? We credit the $49 back. So it's a zero-risk test. Ready?",
+                        "$49, 7 days, full access. You'll see if Mythara catches what you're missing. If it does, you go Enterprise and the $49 comes off. If it doesn't, you're out the cost of lunch. Fair trade? Want to start your Pilot?"
+                    ]));
+                    showActionButton("Yes, start my Pilot", () => handlePilotSignup());
+                }, 1500);
+            }
+            
+            // STEP 5: Pilot Offered → Close (assumptive)
+            else if (closeStage === 4 && (lower.includes('yes') || lower.includes('start') || lower.includes('pilot') || lower.includes('sign up'))) {
+                closeStage = 5;
+                handlePilotSignup();
+            }
+            
+            // ==== LEGACY FALLBACKS (if they jump stages) ====
+            
             // If they asked about Soul Cradle, suggest pricing
-            if (lower.includes('soul cradle') && conversationStage < 3) {
+            else if (lower.includes('soul cradle') && closeStage < 3) {
+                closeStage = 3;
                 setTimeout(() => {
                     addMessage("Want to see pricing for your industry?");
                     showActionButton("Yes, show pricing", () => handlePricing());
@@ -1024,7 +1128,8 @@
             }
             
             // If they asked about pricing/cost, push to Pilot
-            else if ((lower.includes('pricing') || lower.includes('cost') || lower.includes('price')) && conversationStage < 3) {
+            else if ((lower.includes('pricing') || lower.includes('cost') || lower.includes('price')) && closeStage < 4) {
+                closeStage = 4;
                 setTimeout(() => {
                     addMessage("Ready to start your $49 Pilot?");
                     showActionButton("Yes, start my Pilot!", () => handlePilotSignup());
@@ -1032,7 +1137,8 @@
             }
             
             // If they asked about pilot, push to signup
-            else if (lower.includes('pilot') && conversationStage < 4) {
+            else if (lower.includes('pilot') && closeStage < 5) {
+                closeStage = 5;
                 setTimeout(() => {
                     addMessage("Let's get you started!");
                     showActionButton("Start my Pilot now", () => handlePilotSignup());
@@ -1164,42 +1270,221 @@
             return customText || translations.fallback[userLanguage];
         }
         
+        // Helper function to pick random response from array
+        function randomResponse(responses) {
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // SALES PSYCHOLOGY: Identify pain points for targeted responses
+        function identifyPainPoints(text) {
+            const lower = text.toLowerCase();
+            
+            if ((lower.includes('burnout') || lower.includes('exhausted') || lower.includes('tired')) && !painPointsIdentified.includes('burnout')) {
+                painPointsIdentified.push('burnout');
+            }
+            if ((lower.includes('quit') || lower.includes('turnover') || lower.includes('retention')) && !painPointsIdentified.includes('retention')) {
+                painPointsIdentified.push('retention');
+            }
+            if ((lower.includes('compliance') || lower.includes('audit') || lower.includes('regulation')) && !painPointsIdentified.includes('compliance')) {
+                painPointsIdentified.push('compliance');
+            }
+            if ((lower.includes('mission') || lower.includes('values') || lower.includes('purpose')) && !painPointsIdentified.includes('mission')) {
+                painPointsIdentified.push('mission');
+            }
+            if ((lower.includes('legal') || lower.includes('lawsuit') || lower.includes('liability')) && !painPointsIdentified.includes('legal')) {
+                painPointsIdentified.push('legal');
+            }
+        }
+        
+        // SALES PSYCHOLOGY: Detect objections and handle strategically
+        function detectObjection(text) {
+            const lower = text.toLowerCase();
+            
+            // ROI / Value questions (not objections, but need strong response)
+            if ((lower.includes('roi') || lower.includes('return on investment') || lower.includes('worth it') || lower.includes('value')) && !lower.includes('price')) {
+                return 'roi';
+            }
+            // Price objections
+            if (lower.includes('expensive') || lower.includes('too much') || lower.includes('cost') && lower.includes('high')) {
+                objectionCount++;
+                return 'price';
+            }
+            // Time objections
+            if (lower.includes('busy') || lower.includes('no time') || lower.includes('later')) {
+                objectionCount++;
+                return 'time';
+            }
+            // Authority objections
+            if (lower.includes('need approval') || lower.includes('talk to') || lower.includes('boss') || lower.includes('manager')) {
+                objectionCount++;
+                return 'authority';
+            }
+            // Need objections
+            if (lower.includes('not sure') || lower.includes('don\'t need') || lower.includes('already have')) {
+                objectionCount++;
+                return 'need';
+            }
+            
+            return null;
+        }
+        
+        // SALES PSYCHOLOGY: Handle objections with reframing
+        function handleObjection(objectionType) {
+            switch(objectionType) {
+                case 'roi':
+                    return randomResponse([
+                        "Real numbers: Average employee replacement costs $15K-$50K. If Mythara prevents just 2 resignations at Enterprise tier ($25K/year), you save $30K-$100K. That's 120-400% ROI. And we haven't counted burnout costs, legal risk, or mission drift. One prevented lawsuit? $50K-$500K saved. The Pilot ($49) costs less than one sick day.",
+                        "Here's the math: Burnout costs $3K-$5K per person per year in sick days and lost productivity. Legal claims from workplace stress? $50K-$500K settlements. Turnover? $15K-$50K per replacement. If Mythara prevents 2 people from quitting and reduces burnout for 10 more, you're looking at $95K+ saved for a $25K investment. That's 280% ROI minimum.",
+                        "Conservative example: Healthcare org pays $25K for Enterprise. Mythara prevents 2 nurses from quitting ($40K saved), reduces 5 social workers' burnout ($15K saved), documents paradoxes that prevent one EEOC claim ($75K saved). Total: $130K saved. Cost: $25K. Net gain: $105K. That's 420% ROI, and we're being conservative."
+                    ]);
+                case 'price':
+                    return randomResponse([
+                        "Fair question. What's the cost of losing your best people to burnout? Average replacement: $15K-$50K per person. $49 for 7 days shows you if Mythara prevents that. If one person stays, it paid for itself 300x over. Enterprise at $25K/year? Prevents 2 resignations and you've already made $10K-$75K profit.",
+                        "I hear you. But compare: $49 to see if it works, versus one resignation (replacement cost averages $15K-$50K). The Pilot de-risks the decision. Enterprise at $25K saves you $100K+ if it prevents just 2 people from quitting. That's not a cost—it's an investment with 300-400% returns.",
+                        "True—but think about it this way: You're already paying the cost in turnover ($15K-$50K per person), sick days ($3K-$5K per person), and legal risk ($50K-$500K per claim). Mythara just makes it visible and gives you tools to fix it. $49 to see if we're right? That's less than one employee's sick day."
+                    ]);
+                case 'time':
+                    return randomResponse([
+                        "That's exactly why people need Mythara—you're too busy fighting fires to prevent them. Setup takes 20 minutes. Most teams see impact by day three. What if it saves you 10 hours next week? Or prevents one exit interview that costs you 40 hours of recruiting and training?",
+                        "I get it. But 'later' is how burnout happens. The Pilot runs for 7 days in the background—you're not adding work, you're getting visibility. 20 minutes to set up, that's it. Compare that to 100+ hours you'll spend on exit interviews, recruiting, and training a replacement.",
+                        "Totally fair. But what's costing you time right now? Exit interviews (40 hours)? Compliance headaches (20 hours/week)? Training replacements (160 hours)? Mythara addresses the root. 20-minute setup, and you'll know if it saves you hundreds of hours this year."
+                    ]);
+                case 'authority':
+                    return randomResponse([
+                        "Smart—get buy-in. Here's what helps: the Pilot is $49, low-risk proof. You can show them real data from your team in 7 days. Most leaders say 'I wish we'd done this sooner.' Want to run the Pilot first, then brief them with ROI data? Show them '$49 test prevented $40K resignation' and watch them approve Enterprise.",
+                        "Makes sense. The Pilot gives you ammunition—real data from your team showing where the friction is and what it costs. $49 to build your case. Bring them results ('Mythara identified 12 paradoxes costing us $180K/year in turnover'), not a pitch. Sound better?",
+                        "Good instinct. But the Pilot ($49, 7 days) is low enough that most managers approve it as a test. You get data, then escalate with proof. 'We tested it, saved $40K by retaining 2 people, ROI is 400%.' That's how you get Enterprise approved. Want to start there?"
+                    ]);
+                case 'need':
+                    return randomResponse([
+                        "Fair. Let me ask: do people on your team ever say 'I had to choose between doing my job right and following the rules'? If yes, that costs you $15K-$50K per resignation. If no, you don't need this. Be honest—does that happen?",
+                        "Okay. So your team never faces impossible choices? Never stuck between policy and people? If that's true, you're right—you don't need Mythara. But if I'm wrong, $49 shows you what you're missing. And what it's costing you in turnover and legal risk.",
+                        "I hear you. But what if you're missing something you can't see yet? The Pilot costs less than lunch for your team ($49). If it reveals nothing, you're out $49. If it shows you where people are breaking—and costing you $50K-$100K in turnover—that's a 1,000-2,000% ROI. Worth the test?"
+                    ]);
+                default:
+                    return null;
+            }
+        }
+        
+        // SALES PSYCHOLOGY: Detect if they're fishing for proprietary info
+        function detectProprietaryFishing(text) {
+            const lower = text.toLowerCase();
+            
+            const fishingPatterns = [
+                'source code', 'algorithm', 'how do you', 'how does it work exactly',
+                'technical details', 'architecture', 'database', 'infrastructure',
+                'trade secret', 'proprietary', 'patent', 'intellectual property',
+                'can i see', 'show me how', 'code', 'api documentation'
+            ];
+            
+            for (let pattern of fishingPatterns) {
+                if (lower.includes(pattern)) {
+                    proprietaryAttempts++;
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // SALES PSYCHOLOGY: Protective response when they fish for secrets
+        function getProprietaryResponse() {
+            if (proprietaryAttempts === 1) {
+                return randomResponse([
+                    "That's proprietary. But here's what matters: it works. SHA-256 cryptographic verification, immutable audit trails, works with your existing systems. Want to see it in action with the Pilot instead?",
+                    "Can't share the secret sauce—that's what makes Mythara valuable. But the Pilot shows you everything it does for your team. $49, 7 days, full access. See the results without needing to know how the engine works?",
+                    "Nice try, but our IP is protected for a reason. What you get: results. Paradox tracking, Soul Cradle witnessing, audit trails, CRM integration. The Pilot demonstrates all of it. Interested?"
+                ]);
+            } else if (proprietaryAttempts === 2) {
+                return randomResponse([
+                    "You're persistent. Look, you wouldn't ask Coca-Cola for their formula, right? Same here. But the $49 Pilot lets you test everything without needing our trade secrets. That work?",
+                    "Okay, I see what you're doing. We don't disclose proprietary algorithms—that's literally our competitive advantage. But the Pilot gives you full access to use it. Isn't that better than theory?",
+                    "Second time asking about our internals. I get curiosity, but some things stay locked. What you can access: the full platform for 7 days, $49. See if it solves your problem. Fair?"
+                ]);
+            } else {
+                return randomResponse([
+                    "I've answered this. Our technology is proprietary and protected. If you want to see what it does, the Pilot is your path. If you're not interested in testing it, that's fine—but I can't share trade secrets. Anything else I can help with?",
+                    "Look, I'm here to help people who need Mythara, not to give away what makes it work. The Pilot exists so you don't have to trust theory—you see results. If that doesn't interest you, no hard feelings.",
+                    "Third time's a charm, but the answer's the same: proprietary means proprietary. You can use the platform via the Pilot. If you're not ready to test it, that's okay. Want to talk about something else?"
+                ]);
+            }
+        }
+
         function getResponse(input) {
             const lowerInput = input.toLowerCase();
             
+            // SALES PSYCHOLOGY: Check for proprietary fishing FIRST
+            if (detectProprietaryFishing(input)) {
+                return getProprietaryResponse();
+            }
+            
+            // SALES PSYCHOLOGY: Detect and handle objections
+            const objection = detectObjection(input);
+            if (objection) {
+                const response = handleObjection(objection);
+                if (response) return response;
+            }
+            
             // Handle casual/vague inputs first
             if (lowerInput.length < 15 && (lowerInput.includes('wondering') || lowerInput.includes('curious') || lowerInput === 'whatever' || lowerInput === 'idk' || lowerInput === 'not sure')) {
-                return 'Alright. Most people start with: What does Mythara actually do? Or they want to know pricing. What sounds more useful?';
+                return randomResponse([
+                    'Alright. Most people start with: What does Mythara actually do? Or they want to know pricing. What sounds more useful?',
+                    'Fair. Two things people usually ask: what this actually does, or what it costs. Which one matters more to you?',
+                    'No worries. Start simple—want to know what Mythara is, or how much it costs?'
+                ]);
             }
             
             // About Mythara
             if (lowerInput.includes('what is mythara') || lowerInput.includes('about mythara') || lowerInput.includes('tell me about')) {
-                return 'Mythara holds the space when your mission conflicts with compliance. You know that moment—when doing the right thing breaks the rules, or following the rules breaks your heart? We document it. We measure it. We make sure it doesn\'t destroy your people or drift your mission. That\'s what we do.';
+                return randomResponse([
+                    'Mythara holds the space when your mission conflicts with compliance. You know that moment—when doing the right thing breaks the rules, or following the rules breaks your heart? We document it. We measure it. We make sure it doesn\'t destroy your people or drift your mission. That\'s what we do.',
+                    'We track the moments your team can\'t win. Healthcare worker has to deny care because of policy. Banker sees a family drowning but regulations say no. Public defender with 200 cases who can\'t give anyone real attention. Mythara documents those paradoxes, measures the cost to your people and your mission, and creates audit trails that actually matter.',
+                    'Think of us as the system that tracks what compliance systems miss—the human cost. When your team is forced to choose between doing what\'s right and following the rules, we measure that. We document it. We help you advocate for better policies with real data, and we make sure your people don\'t shatter in the process.'
+                ]);
             }
             
-            // Pricing Overview
+            // Pricing Overview (with ROI framing)
             if (lowerInput.includes('pricing') || lowerInput.includes('cost') || lowerInput.includes('price')) {
-                return '$49 for 7 days. That\'s the Pilot. Full access, see if it fits. If you upgrade to Enterprise later, that $49 comes back to you—so it\'s risk-free. Enterprise runs $25K-$300K yearly depending on your scale. Global tier for 5,000+ employees, custom everything. Where are you at?';
+                return randomResponse([
+                    '$49 for 7 days. That\'s the Pilot—full access. If you upgrade to Enterprise, that $49 gets credited back. Enterprise starts at $25K/year. Reality check: if it prevents 2 people from quitting, you save $30K-$100K. That\'s 120-400% ROI. Global tier is $300K+ for larger organizations. What tier fits your team?',
+                    'Three tiers: Pilot is $49 for 7 days—costs less than one employee sick day. Enterprise starts at $25K/year for production deployment—saves $100K+ in turnover prevention. Global is $300K+ for large orgs. The $49 gets credited if you upgrade. Where are you at?',
+                    'Pilot: $49, 7 days, full access. Enterprise: $25K-$300K/year depending on team size—average client saves 3-5x that in reduced turnover and legal risk. Global: $300K+ for 5,000+ employees. If you go from Pilot to Enterprise, that $49 gets credited back. What sounds right?'
+                ]);
             }
             
-            // Pilot Program
+            // Pilot Program (emphasize low risk, high return)
             if (lowerInput.includes('pilot')) {
-                return 'The Pilot is 7 days, $49. You get everything—see if Mythara actually works for your team\'s reality. Most people know by day three. And if you go Enterprise after, that $49 gets credited back. So really, you\'re just testing it with our money.';
+                return randomResponse([
+                    'The Pilot is 7 days, $49. Full access to see if it fits. Most teams know by day three. If you upgrade to Enterprise, that $49 gets credited back. Real talk: $49 is less than the cost of one employee calling in sick. If it helps you retain one person, that\'s $15K-$50K saved. Zero-risk test.',
+                    'Seven days, $49, everything unlocked. You get full API access, Soul Cradle, the whole system. Most people know if it works by day three. Upgrade to Enterprise? That $49 comes off your first invoice. For context: average resignation costs you $15K-$50K to replace. The Pilot costs what—an hour of your time?',
+                    'It\'s a real test drive—$49 for 7 days with no limits. You\'ll see exactly how it works for your team. If you decide to go Enterprise, we credit the $49 back. One Pilot per business. Bottom line: costs less than team lunch, could save you $50K-$100K in turnover this year.'
+                ]);
             }
             
-            // Enterprise
+            // Enterprise (show ROI clearly)
             if (lowerInput.includes('enterprise')) {
-                return 'So Enterprise is where things get serious—but in a good way! Unlimited API calls, we handle all the tech headaches, 24/7 support when you need us, and we guarantee 99.9% uptime. It\'s a 1-year commitment, pricing varies based on your team size ($25K to $300K annually). Perfect when you\'re ready to scale. Sound like your speed?';
+                return randomResponse([
+                    'Enterprise gives you unlimited API calls, 24/7 support, and 99.9% uptime. One-year commitment, pricing is $25K-$300K annually based on team size. ROI reality: if it prevents 2 resignations ($30K-$100K saved) and reduces burnout for 10 people ($30K saved), you\'re looking at $60K-$130K saved. Net profit: $35K-$105K. Good fit?',
+                    'Enterprise: Unlimited API calls, 24/7 support, guaranteed 99.9% uptime. It\'s a 1-year commitment at $25K-$300K/year depending on your team size. Average client prevents 3-5 resignations per year—that\'s $45K-$250K saved in replacement costs alone. Not counting legal risk or burnout reduction. Questions about what\'s included?',
+                    'That\'s our production tier. Unlimited calls, 24/7 support, 99.9% uptime guarantee. One year commitment. Pricing is $25K to $300K annually based on how many people you\'re supporting. Math: 2 prevented resignations = $30K-$100K saved. 1 avoided legal claim = $50K-$500K saved. Your cost: $25K-$300K. Net gain: typically $50K-$300K. Sound like where you\'re headed?'
+                ]);
             }
             
             // Global
             if (lowerInput.includes('global')) {
-                return 'Ah, Global tier! That\'s our white-glove service for big organizations—we\'re talking 5,000+ people across multiple countries. It\'s a 1-year commitment with everything customized to fit your specific needs, multi-region deployments, and a dedicated team. Honestly? If you\'re at that scale, let\'s just hop on a call. Email Mythara.Engine@yahoo.com and we\'ll set something up!';
+                return randomResponse([
+                    'Global tier: For 5,000+ employees, multi-region deployments, custom everything. Let\'s talk: Mythara.Engine@yahoo.com',
+                    'Global is for large organizations—5,000+ employees, multi-region, custom integrations, white-glove support. Honestly? Email Mythara.Engine@yahoo.com and we\'ll talk specifics.',
+                    'That\'s our enterprise-scale tier. Multi-region deployment, custom everything, dedicated support. Starts at $300K for organizations with 5,000+ employees. Let\'s talk: Mythara.Engine@yahoo.com'
+                ]);
             }
             
             // Soul Cradle
             if (lowerInput.includes('soul cradle')) {
-                return 'Soul Cradle is what happens when a hospital social worker has to discharge a patient they know will be homeless. Policy says discharge. Her heart says keep them safe. Both are true. Soul Cradle holds that. It documents the paradox, measures the cost to her soul and the mission, generates an immutable record. We donate it to healthcare, banking, justice, nonprofits, civil service, education—the industries carrying impossible weight. It\'s included. No charge.';
+                return randomResponse([
+                    'Soul Cradle is what happens when a hospital social worker has to discharge a patient they know will be homeless. Policy says discharge. Her heart says keep them safe. Both are true. Soul Cradle holds that. It documents the paradox, measures the cost to her soul and the mission, generates an immutable record. We donate it to healthcare, banking, justice, nonprofits, civil service, education—the industries carrying impossible weight. It\'s included. No charge.',
+                    'Soul Cradle holds the moments that break people. A banker who has to foreclose on a family they know. A teacher who sees a kid falling through the cracks but policy won\'t let them intervene. A public defender with 200 cases who can\'t give anyone real justice. It documents those paradoxes, witnesses them, creates cryptographic records that matter. It\'s free for healthcare workers, government employees, nonprofits, educators—anyone carrying that weight. Included in every tier.',
+                    'It\'s the witnessing layer. When your team faces an impossible choice—do the right thing and break the rules, or follow the rules and break someone—Soul Cradle documents it. Creates an immutable record. Measures the human cost. We donate it to industries where people carry impossible weight: healthcare, social services, banking, justice, education, civil service. No charge. It\'s just included.'
+                ]);
             }
             
             // CRM Integration (multi-platform)
@@ -1225,36 +1510,73 @@
                 return 'All sales final—exchanges only for upgrades. Pilot is $49 for 7 days, one per business. Upgrade to Enterprise? That $49 gets credited. Enterprise and Global are 1-year commitments. Upgrade mid-contract? Unused months get credited and added to your new tier. Renewals get loyalty discounts (2-10% off). You own your data, we don\'t sell it, export anytime. Questions? Email Mythara.Engine@yahoo.com.';
             }
             
-            // Contact/Sales (only if explicitly asked)
-            if (lowerInput.includes('contact') || lowerInput.includes('sales') || lowerInput.includes('talk to someone') || lowerInput.includes('speak with')) {
-                return 'Just email us at Mythara.Engine@yahoo.com and we\'ll respond same day. But honestly, the $49 Pilot answers most questions faster—you\'ll see exactly how it works for your team. Your call!';
+            // Contact/Sales (ONLY if they explicitly ask for email/contact)
+            if (lowerInput.includes('email') || lowerInput.includes('contact you') || lowerInput.includes('reach out') || lowerInput.includes('how do i contact')) {
+                return randomResponse([
+                    'Mythara.Engine@yahoo.com—we respond within 24 hours. What specific question should I prep an answer for?',
+                    'Email us at Mythara.Engine@yahoo.com and we\'ll get back same day. What do you need help with specifically?',
+                    'Sure: Mythara.Engine@yahoo.com. We\'ll respond fast. What\'s the question?'
+                ]);
+            }
+            
+            // "Talk to someone" - redirect to Pilot instead of email
+            if (lowerInput.includes('talk to someone') || lowerInput.includes('speak with') || lowerInput.includes('sales')) {
+                return randomResponse([
+                    'Most questions get answered faster by testing the $49 Pilot—you see exactly how it works. But if you need something specific first, what\'s the question?',
+                    'Honestly? The Pilot ($49, 7 days) shows you more than a sales call would. But if there\'s something blocking you, ask me—I might be able to clear it up right now.',
+                    'The Pilot answers most questions better than a conversation would—you get hands-on experience. What\'s your specific concern? Maybe I can address it here.'
+                ]);
             }
             
             // Security / Technical
             if (lowerInput.includes('security') || lowerInput.includes('hack') || lowerInput.includes('secure') || lowerInput.includes('safe') || lowerInput.includes('breach') || lowerInput.includes('encrypted')) {
-                return 'Everything\'s cryptographically verified with SHA-256 integrity hashes. Your data is encrypted at rest and in transit. We don\'t store passwords—API keys only. All clause invocations generate immutable audit trails. Can someone hack it? They\'d need to break SHA-256 first (which would break the entire internet). Your data stays yours. We don\'t sell it, we don\'t train AI on it, you can export anytime.';
+                return randomResponse([
+                    'Everything\'s cryptographically verified with SHA-256 integrity hashes. Your data is encrypted at rest and in transit. We don\'t store passwords—API keys only. All clause invocations generate immutable audit trails. Can someone hack it? They\'d need to break SHA-256 first (which would break the entire internet). Your data stays yours. We don\'t sell it, we don\'t train AI on it, you can export anytime.',
+                    'SHA-256 cryptographic verification on everything. Data encrypted at rest and in transit. No passwords stored—API keys only. Every action creates an immutable audit trail. Could it be hacked? Only if someone breaks SHA-256, which would also break every bank, government, and security system on the internet. Your data is yours—we don\'t sell it, don\'t train on it, you export anytime.',
+                    'Security: SHA-256 hashing, encryption everywhere (at rest, in transit), API key authentication (no passwords), immutable audit logs for every action. Hack risk? You\'d have to break SHA-256 first, which would collapse internet security globally. Not happening. Your data stays yours—no selling, no AI training, export whenever you want.'
+                ]);
             }
             
             // Privacy / Spying / Data concerns
             if (lowerInput.includes('spy') || lowerInput.includes('track') || lowerInput.includes('privacy') || lowerInput.includes('data') || lowerInput.includes('sell my') || lowerInput.includes('watching')) {
-                return 'No. We don\'t sell your data. We don\'t share it with third parties except as required by law or valid legal process. We don\'t train AI models on your data. You own it—export anytime, delete anytime. We only see what you explicitly send through API calls. Your paradoxes are yours. We just hold the space.';
+                return randomResponse([
+                    'No. We don\'t sell your data. We don\'t share it with third parties except as required by law or valid legal process. We don\'t train AI models on your data. You own it—export anytime, delete anytime. We only see what you explicitly send through API calls. Your paradoxes are yours. We just hold the space.',
+                    'We don\'t spy. We don\'t sell your data. We don\'t share it except when legally required (subpoena, warrant). We don\'t use it to train AI. You own everything—export it, delete it, whatever. We only see what you send us through the API. Your team\'s paradoxes stay yours. We just witness and document.',
+                    'No spying, no selling. Your data is yours. We don\'t share it with third parties except as legally required. We don\'t train AI on it. We only see what you explicitly send via API calls—we can\'t access anything else. Export anytime, delete anytime. You own it. We just hold the space.'
+                ]);
             }
             
             // Benefits / Differentiation
             if (lowerInput.includes('benefit') || lowerInput.includes('why mythara') || lowerInput.includes('help') || lowerInput.includes('different') || lowerInput.includes('makes you') || lowerInput.includes('what makes')) {
-                return 'Most systems make you choose: mission or compliance. Mythara says both. We track when your team\'s burning out from impossible choices. We measure when meaning gets lost in translation. We create audit trails that actually matter. We document the cost of doing what\'s "right" when the rules say otherwise. So you can advocate for better policies with real data. And your people don\'t shatter in the process.';
+                return randomResponse([
+                    'Most systems make you choose: mission or compliance. Mythara says both. We track when your team\'s burning out from impossible choices. We measure when meaning gets lost in translation. We create audit trails that actually matter. We document the cost of doing what\'s "right" when the rules say otherwise. So you can advocate for better policies with real data. And your people don\'t shatter in the process.',
+                    'Compliance systems track if you followed the rules. HR tracks if people quit. Mythara tracks why—the moment someone has to choose between mission and policy. We document those impossible choices before they break your team. We measure the human cost so leadership sees it. We create audit trails that matter. Then you can fight for better policies with real data.',
+                    'Other systems force the choice: mission or compliance. Mythara tracks both and shows you where they collide. We document the paradoxes, measure the cost to your people, create records that hold up in audits. So you can advocate for change with data, not just stories. And your team doesn\'t burn out in silence.'
+                ]);
             }
             
             // "Tell me more" - general inquiry
             if (lowerInput.includes('tell me more') || lowerInput.includes('more info') || lowerInput.includes('learn more') || lowerInput.includes('explain more')) {
-                return 'Here\'s the thing: Compliance systems track whether you followed the rules. HR systems track whether people quit. Mythara tracks why—the moment between "I have to do this" and "this will break someone." That\'s where burnout starts. That\'s where mission drift begins. We measure it before it destroys your team. We document it so leadership sees the cost. And we create records that hold up in audits. What part do you want to dig into?';
+                return randomResponse([
+                    'Here\'s the thing: Compliance systems track whether you followed the rules. HR systems track whether people quit. Mythara tracks why—the moment between "I have to do this" and "this will break someone." That\'s where burnout starts. That\'s where mission drift begins. We measure it before it destroys your team. We document it so leadership sees the cost. And we create records that hold up in audits. What part do you want to dig into?',
+                    'Think about the last time someone on your team had to make an impossible choice. Do the right thing and violate policy? Or follow policy and hurt someone? Compliance systems don\'t see that moment. HR doesn\'t track it. But that\'s where people break. Mythara documents it, measures it, witnesses it. So leadership sees the cost before your team shatters. What part interests you most?',
+                    'Most systems miss the moment that matters—when someone faces a paradox they can\'t win. Follow the rules and hurt someone, or do the right thing and break policy. Mythara captures that, measures the human cost, creates cryptographic records that matter. So you can show leadership the toll it takes and advocate for better systems. What do you want to know more about?'
+                ]);
             }
             
             // Default fallback
             if (lowerInput.length < 3) {
-                return 'I need a bit more than that. Try: "What is Mythara?" or "How much does it cost?" or "Tell me about Soul Cradle."';
+                return randomResponse([
+                    'I need a bit more than that. Try: "What is Mythara?" or "How much does it cost?" or "Tell me about Soul Cradle."',
+                    'Give me a little more to work with. Ask about: pricing, Soul Cradle, what industries we serve, or how it works.',
+                    'Not enough there. Try asking: What does Mythara do? How much is it? What\'s Soul Cradle?'
+                ]);
             }
-            return 'Not sure I caught that. Try asking about: pricing, Soul Cradle, which industries we work with, or licensing terms.';
+            return randomResponse([
+                'Not sure I caught that. Try asking about: pricing, Soul Cradle, which industries we work with, or licensing terms.',
+                'Hmm, didn\'t quite get that. Want to know about pricing? Soul Cradle? How it works? Industries we serve?',
+                'Lost me there. Try: What is Mythara? How much does it cost? What industries do you work with?'
+            ]);
         }
         
         chatSend.addEventListener('click', handleSend);
