@@ -20,19 +20,27 @@ This document publicly discloses the technical architecture, mathematical algori
 
 **Mathematical Framework:**
 ```
-Integrity Score = min(S, W, C) / max(S, W, C)
+Paradox Severity = (Coercion × 0.50) + (Contradiction × 0.35) + (Distress × 0.15)
 
 Where:
-- S (Soul State) = 1.0 - (distress_keyword_density × 2.5)
-- W (Will Autonomy) = 1.0 - min(1.0, Σ coercion_patterns × 0.25)
-- C (Commandments) = max(0.0, 1.0 - (contradiction_count × 0.35))
+- Distress Score = min(1.0, distress_keyword_density × 2.5)
+  → 0.0 = calm, 1.0 = extreme emotional suffering
+  
+- Coercion Score = min(1.0, coercion_pattern_count × 0.3)
+  → 0.0 = voluntary, 1.0 = forced/trapped
+  
+- Contradiction Score = min(1.0, contradiction_count × 0.4)
+  → 0.0 = clear situation, 1.0 = impossible legal paradox
+
+Result: 0.0-0.3 (minimal), 0.3-0.5 (medium), 0.5-0.7 (high), 0.7-1.0 (critical)
 ```
 
 **Novel Elements:**
-- Set-theoretic intersection/union operators for emotional conflict quantification
-- Distress keyword taxonomy with 2.5× weighting multiplier
-- Four-category coercion pattern detection (legal requirement, explicit threat, impossible choice, authority conflict)
-- Contradiction pattern regex library with severity classification
+- Weighted sum formula prioritizing coercion (50%) and contradiction (35%) over distress alone
+- Distress keyword taxonomy with 2.5× density multiplier for emotional suffering detection
+- Four-category coercion pattern detection: obligation, threat, retaliation, trapped
+- Six-category contradiction pattern detection: dual obligation, authority conflict, illegal demand, impossible choice, whistleblower paradox, falsification demand
+- Regex-based pattern matching with context awareness (e.g., excludes "no pressure" from threat detection)
 - SHA-256 timestamping for court-admissible evidence generation
 
 **Attorney Referral Enhancement:**
