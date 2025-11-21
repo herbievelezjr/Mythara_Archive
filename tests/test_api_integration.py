@@ -1,0 +1,673 @@
+#!/usr/bin/env python3
+"""
+Mythara Engine - API Integration Tests
+Comprehensive endpoint testing with authentication, rate limiting, and error handling.
+
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Proprietary and Confidential.
+"""
+
+import pytest
+import sys
+from pathlib import Path
+
+# Add source directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "core" / "source_proprietary"))
+
+from fastapi.testclient import TestClient
+from main import app
+
+# Test client
+client = TestClient(app)
+
+# Test API keys
+VALID_API_KEY = "dev_test_key_001"
+INVALID_API_KEY = "invalid_key_xyz"
+
+
+class TestHealthEndpoints:
+    """Test health check and root endpoints."""
+    
+    def test_root_endpoint(self):
+        """Test root endpoint returns status."""
+        response = client.get("/")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "online"
+        assert "version" in data
+    
+    def test_health_endpoint(self):
+        """Test health endpoint."""
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+        assert "timestamp" in data
+
+
+class TestAuthentication:
+    """Test authentication and authorization."""
+    
+    def test_missing_auth_header(self):
+        """Test request without Authorization header."""
+        response = client.post("/v1/clauses/invoke", json={
+            "clause_id": "Legacy_Seed",
+            "messenger": "M-001",
+            "payload": {},
+            "consent_token": "test"
+        })
+        assert response.status_code == 403
+    
+    def test_invalid_api_key(self):
+        """Test request with invalid API key."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={"Authorization": f"Bearer {INVALID_API_KEY}"},
+            json={
+                "clause_id": "Legacy_Seed",
+                "messenger": "M-001",
+                "payload": {},
+                "consent_token": "test"
+            }
+        )
+        assert response.status_code == 401
+    
+    def test_valid_api_key(self):
+        """Test request with valid API key."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "clause_id": "Legacy_Seed",
+                "messenger": "M-001",
+                "payload": {"emotion": "gratitude", "intensity": 0.8},
+                "consent_token": "test"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "clause_id" in data
+        assert "integrity_hash" in data
+
+
+class TestClauseInvocation:
+    """Test clause invocation endpoint."""
+    
+    def test_invoke_legacy_seed(self):
+        """Test invoking Legacy_Seed clause."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "clause_id": "Legacy_Seed",
+                "messenger": "M-001",
+                "payload": {"emotion": "grief", "intensity": 0.87},
+                "consent_token": "user_consent_xyz"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["clause_id"] == "Legacy_Seed"
+        assert data["messenger"] == "M-001"
+        assert "br_inflow" in data
+        assert "integrity_hash" in data
+        assert len(data["integrity_hash"]) == 64  # SHA-256
+    
+    def test_invoke_invalid_clause(self):
+        """Test invoking non-existent clause."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "clause_id": "NonExistent_Clause",
+                "messenger": "M-001",
+                "payload": {},
+                "consent_token": "test"
+            }
+        )
+        assert response.status_code == 404
+    
+    def test_invoke_missing_required_fields(self):
+        """Test invocation with missing required fields."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "clause_id": "Legacy_Seed",
+                # Missing messenger, payload, consent_token
+            }
+        )
+        assert response.status_code == 422  # Validation error
+
+
+class TestReservoirStatus:
+    """Test Blessings Reservoir status endpoint."""
+    
+    def test_reservoir_status(self):
+        """Test getting reservoir status."""
+        response = client.get(
+            "/v1/reservoir/status",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "reservoir_score" in data
+        assert "inflow_rate" in data
+        assert "overflow_events" in data
+        assert 0 <= data["reservoir_score"] <= 100
+
+
+class TestManifest:
+    """Test clause manifest endpoint."""
+    
+    def test_manifest_clauses(self):
+        """Test getting clause manifest."""
+        response = client.get(
+            "/v1/manifest/clauses",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "clauses" in data
+        assert "manifest_integrity_hash" in data
+        assert len(data["clauses"]) > 0
+        
+        # Check clause structure
+        clause = data["clauses"][0]
+        assert "clause_id" in clause
+        assert "integrity_hash" in clause
+
+
+class TestSSIPAudit:
+    """Test SSIP audit endpoint."""
+    
+    def test_ssip_audit(self):
+        """Test SSIP compliance audit."""
+        response = client.get(
+            "/v1/ssip/audit",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "drift_suppression" in data
+        assert "messenger_pairing_fidelity" in data
+        assert "emotional_fidelity" in data
+        assert "audit_integrity_hash" in data
+
+
+class TestRateLimiting:
+    """Test rate limiting behavior."""
+    
+    def test_rate_limit_enforcement(self):
+        """Test that rate limiting is enforced."""
+        # Make multiple rapid requests
+        responses = []
+        for i in range(150):  # Exceed default 100/min limit
+            response = client.get(
+                "/v1/reservoir/status",
+                headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+            )
+            responses.append(response.status_code)
+        
+        # Should have some 429 responses (rate limit exceeded)
+        assert 429 in responses
+
+
+class TestErrorHandling:
+    """Test error handling and responses."""
+    
+    def test_404_on_invalid_endpoint(self):
+        """Test 404 on non-existent endpoint."""
+        response = client.get(
+            "/v1/invalid/endpoint",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 404
+    
+    def test_malformed_json(self):
+        """Test handling of malformed JSON."""
+        response = client.post(
+            "/v1/clauses/invoke",
+            headers={
+                "Authorization": f"Bearer {VALID_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            content="{invalid json"
+        )
+        assert response.status_code == 422
+
+
+class TestCORS:
+    """Test CORS configuration."""
+    
+    def test_cors_headers_present(self):
+        """Test that CORS headers are present."""
+        response = client.options(
+            "/v1/reservoir/status",
+            headers={
+                "Origin": "http://localhost:3000",
+                "Access-Control-Request-Method": "GET"
+            }
+        )
+        assert "access-control-allow-origin" in response.headers
+        assert "access-control-allow-methods" in response.headers
+
+
+class TestSoulEndpoints:
+    """Test Soul Cradle and Soul Proportion endpoints."""
+    
+    def test_soul_status(self):
+        """Test soul status endpoint."""
+        response = client.get(
+            "/v1/soul/status",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "soul_id" in data
+        assert "will" in data
+        assert "commandments" in data
+        assert "antithesis" in data
+    
+    def test_soul_step(self):
+        """Test soul step endpoint."""
+        response = client.post(
+            "/v1/soul/step",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "trial_emotion": "hope",
+                "trial_intensity": 0.75,
+                "decision": "accept"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "soul_id" in data
+        assert "trial_result" in data
+    
+    def test_soul_holistic(self):
+        """Test holistic integrity endpoint."""
+        response = client.get(
+            "/v1/soul/holistic",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "holistic_integrity" in data
+        assert "components" in data
+    
+    def test_soul_cradle_create(self):
+        """Test soul cradle creation."""
+        response = client.post(
+            "/v1/soul/cradle",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "soul_id": "test_soul_001",
+                "initial_will": 0.5,
+                "commandments": ["Thou shalt not harm"],
+                "antithesis": ["Violence is acceptable"]
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "cradle_id" in data
+        assert "integrity_score" in data
+    
+    def test_soul_cradle_tiers(self):
+        """Test soul cradle tiers endpoint."""
+        response = client.get(
+            "/v1/soul/cradle/tiers",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "tiers" in data
+
+
+class TestPilotEndpoints:
+    """Test pilot-specific endpoints."""
+    
+    def test_pilot_unlock(self):
+        """Test pilot unlock endpoint."""
+        response = client.post(
+            "/v1/pilot/unlock",
+            json={
+                "email": "test@example.com",
+                "company": "Test Corp",
+                "employee_count": 50
+            }
+        )
+        # Should return success or domain conflict
+        assert response.status_code in [200, 409]
+    
+    def test_pilot_status_unauthenticated(self):
+        """Test pilot status without authentication."""
+        response = client.get("/v1/pilot/status")
+        assert response.status_code == 403
+    
+    def test_pilot_dashboard_unauthenticated(self):
+        """Test pilot dashboard without authentication."""
+        response = client.get("/v1/pilot/dashboard")
+        assert response.status_code == 403
+
+
+class TestLicenseAndPricing:
+    """Test license and pricing endpoints."""
+    
+    def test_license_status(self):
+        """Test license status endpoint."""
+        response = client.get(
+            "/v1/license/status",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "mode" in data
+        assert "tier" in data
+    
+    def test_pricing_enterprise(self):
+        """Test enterprise pricing endpoint."""
+        response = client.get(
+            "/v1/pricing/enterprise",
+            params={"employee_count": 100}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "monthly_price" in data
+        assert "annual_price" in data
+    
+    def test_admin_pricing_requires_auth(self):
+        """Test admin pricing requires authentication."""
+        response = client.get("/v1/admin/pricing")
+        assert response.status_code == 403
+
+
+class TestDualFraming:
+    """Test Dual Framing endpoints."""
+    
+    def test_dual_framing_chart(self):
+        """Test dual framing chart endpoint."""
+        response = client.get(
+            "/v1/dual-framing/chart",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "chart" in data
+    
+    def test_dual_framing_flow(self):
+        """Test dual framing flow diagram."""
+        response = client.get(
+            "/v1/dual-framing/flow",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "flow_diagram" in data
+    
+    def test_dual_framing_dashboard(self):
+        """Test dual framing dashboard."""
+        response = client.get(
+            "/v1/dual-framing/dashboard",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            params={"mode": "manager"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "positioning_line" in data
+
+
+class TestParadoxEndpoints:
+    """Test Soul Cradle Paradox endpoints."""
+    
+    def test_paradox_create(self):
+        """Test paradox creation."""
+        response = client.post(
+            "/v1/soul-cradle/paradox/create",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "will": "I want to be honest",
+                "commandment": "Always tell the truth",
+                "antithesis": "Sometimes lies protect people",
+                "trial": "Friend asks if outfit looks bad"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "paradox_id" in data
+        assert "expressions" in data
+    
+    def test_terminal_risk_calculate(self):
+        """Test terminal risk calculation."""
+        response = client.post(
+            "/v1/soul-cradle/terminal-risk/calculate",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "paradox_id": "test_paradox_001",
+                "context": {
+                    "industry": "healthcare",
+                    "role": "physician"
+                }
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "risk_level" in data
+        assert "risk_score" in data
+    
+    def test_paradox_query(self):
+        """Test paradox query endpoint."""
+        response = client.get(
+            "/v1/soul-cradle/query",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            params={"expression_type": "WILL"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "paradoxes" in data
+    
+    def test_systems_manifest(self):
+        """Test systems manifest endpoint."""
+        response = client.get(
+            "/v1/soul-cradle/manifest/systems",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "systems" in data
+
+
+class TestEmotionalExtortion:
+    """Test Emotional Extortion Detection endpoints."""
+    
+    def test_extortion_detect(self):
+        """Test extortion detection."""
+        response = client.post(
+            "/v1/emotional-extortion/detect",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "message": "If you loved me, you would do this",
+                "context": "relationship"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "is_extortion" in data
+        assert "extortion_types" in data
+        assert "confidence_score" in data
+    
+    def test_extortion_soul_cradle_integration(self):
+        """Test extortion soul cradle integration."""
+        response = client.post(
+            "/v1/emotional-extortion/soul-cradle-integration",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "message": "You're a bad person if you don't help",
+                "soul_id": "test_soul_001",
+                "context": "workplace"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "extortion_analysis" in data
+        assert "paradox_created" in data
+
+
+class TestComplianceEndpoints:
+    """Test Unified Compliance Framework endpoints."""
+    
+    def test_compliance_validate(self):
+        """Test compliance validation."""
+        response = client.post(
+            "/v1/compliance/validate",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "framework": "FINANCIAL_SERVICES",
+                "action": "process_payment",
+                "context": {
+                    "amount": 10000,
+                    "country": "US"
+                }
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "compliant" in data
+        assert "framework" in data
+    
+    def test_compliance_report(self):
+        """Test compliance report."""
+        response = client.get(
+            "/v1/compliance/report",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "frameworks" in data
+        assert "timestamp" in data
+    
+    def test_compliance_frameworks_list(self):
+        """Test compliance frameworks list."""
+        response = client.get(
+            "/v1/compliance/frameworks",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "frameworks" in data
+        assert len(data["frameworks"]) > 0
+
+
+class TestChatEndpoints:
+    """Test Mythara chat endpoints."""
+    
+    def test_mythara_chat(self):
+        """Test Mythara chat endpoint."""
+        response = client.post(
+            "/v1/mythara/chat",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            json={
+                "message": "What is Mythara?",
+                "mode": "symbolic"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "response" in data
+        assert "mode" in data
+    
+    def test_mythara_tts(self):
+        """Test Mythara TTS endpoint."""
+        response = client.get(
+            "/v1/mythara/tts",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"},
+            params={"text": "Hello world"}
+        )
+        # Should return 200 or 500 if ElevenLabs not configured
+        assert response.status_code in [200, 500]
+
+
+class TestIndividualClause:
+    """Test individual clause retrieval."""
+    
+    def test_get_specific_clause(self):
+        """Test getting specific clause by ID."""
+        response = client.get(
+            "/v1/clauses/Legacy_Seed",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["clause_id"] == "Legacy_Seed"
+        assert "integrity_hash" in data
+    
+    def test_get_nonexistent_clause(self):
+        """Test getting non-existent clause."""
+        response = client.get(
+            "/v1/clauses/NonExistent",
+            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
+        )
+        assert response.status_code == 404
+
+
+class TestPublicEndpoints:
+    """Test public-facing endpoints."""
+    
+    def test_pricing_page(self):
+        """Test pricing page endpoint."""
+        response = client.get("/pricing")
+        assert response.status_code == 200
+    
+    def test_terms_page(self):
+        """Test terms page endpoint."""
+        response = client.get("/terms")
+        assert response.status_code == 200
+    
+    def test_download_pilot_requires_auth(self):
+        """Test download pilot requires authentication."""
+        response = client.get("/download/pilot")
+        assert response.status_code == 403
+
+
+class TestAdminEndpoints:
+    """Test admin-only endpoints."""
+    
+    def test_regulation_status_requires_auth(self):
+        """Test regulation status requires authentication."""
+        response = client.get("/v1/admin/regulation-status")
+        assert response.status_code == 403
+    
+    def test_appeal_requires_auth(self):
+        """Test appeal endpoint requires authentication."""
+        response = client.post(
+            "/v1/admin/appeal",
+            json={"reason": "test"}
+        )
+        assert response.status_code == 403
+
+
+class TestSalesforceIntegration:
+    """Test Salesforce integration endpoints."""
+    
+    def test_salesforce_setup_requires_auth(self):
+        """Test Salesforce setup requires authentication."""
+        response = client.get("/v1/integrations/salesforce/setup")
+        assert response.status_code == 403
+    
+    def test_salesforce_test_requires_auth(self):
+        """Test Salesforce test requires authentication."""
+        response = client.post("/v1/integrations/salesforce/test")
+        assert response.status_code == 403
+    
+    def test_salesforce_push_paradox_requires_auth(self):
+        """Test Salesforce paradox push requires authentication."""
+        response = client.post(
+            "/v1/integrations/salesforce/push/paradox",
+            json={"paradox_id": "test"}
+        )
+        assert response.status_code == 403
+
+
+# Run tests
+if __name__ == "__main__":
+    pytest.main([__file__, "-v", "--tb=short"])

@@ -1,0 +1,100 @@
+{
+  "scenario_1_low_risk": {
+    "risk_score": 0.278,
+    "risk_level": "MODERATE",
+    "pseudo_system_count": 5,
+    "non_expression_count": 5,
+    "time_window_days": 90,
+    "total_paradoxes": 5,
+    "recommendation": "MODERATE RISK: Monitor closely. Ensure worker has access to Soul Cradle, schedule bi-weekly check-ins, validate paradox documentation."
+  },
+  "scenario_2_moderate_risk": {
+    "risk_score": 2.5,
+    "risk_level": "CRITICAL",
+    "pseudo_system_count": 15,
+    "non_expression_count": 15,
+    "time_window_days": 90,
+    "total_paradoxes": 15,
+    "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+  },
+  "scenario_3_high_risk": {
+    "risk_score": 13.611,
+    "risk_level": "CRITICAL",
+    "pseudo_system_count": 35,
+    "non_expression_count": 35,
+    "time_window_days": 90,
+    "total_paradoxes": 35,
+    "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+  },
+  "scenario_4_critical_risk": {
+    "risk_score": 46.944,
+    "risk_level": "CRITICAL",
+    "pseudo_system_count": 65,
+    "non_expression_count": 65,
+    "time_window_days": 90,
+    "total_paradoxes": 65,
+    "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+  },
+  "scenario_5_query_language": {
+    "query1_matches": 3,
+    "query2_matches": 0
+  },
+  "scenario_6_time_windows": {
+    "30d": {
+      "risk_score": 8.533,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 16,
+      "non_expression_count": 16,
+      "time_window_days": 30,
+      "total_paradoxes": 16,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    },
+    "60d": {
+      "risk_score": 16.017,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 31,
+      "non_expression_count": 31,
+      "time_window_days": 60,
+      "total_paradoxes": 31,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    },
+    "90d": {
+      "risk_score": 17.778,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 40,
+      "non_expression_count": 40,
+      "time_window_days": 90,
+      "total_paradoxes": 40,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    }
+  },
+  "scenario_7_viability": {
+    "0.2": {
+      "risk_score": 0.889,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 4,
+      "non_expression_count": 20,
+      "time_window_days": 90,
+      "total_paradoxes": 20,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    },
+    "0.3": {
+      "risk_score": 1.556,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 7,
+      "non_expression_count": 20,
+      "time_window_days": 90,
+      "total_paradoxes": 20,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    },
+    "0.4": {
+      "risk_score": 2.0,
+      "risk_level": "CRITICAL",
+      "pseudo_system_count": 9,
+      "non_expression_count": 20,
+      "time_window_days": 90,
+      "total_paradoxes": 20,
+      "recommendation": "IMMEDIATE INTERVENTION REQUIRED: Worker shows signs of imminent burnout. Schedule emergency support session, consider temporary leave, engage supervisor and peer support."
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Engine - Stripe Webhook Integrity Test Suite
@@ -23,7 +24,8 @@ def test_webhook_signature_validation():
     print("\n[TEST] Webhook signature validation")
     
     # Simulate Stripe webhook signature
-    webhook_secret = "whsec_test_secret_123"
+    # MACGYVER FIX: Moved to environment variable (CWE-798)
+    webhook_secret = os.getenv("WEBHOOK_SECRET", "")  # Set via environment
     payload = {"type": "checkout.session.completed", "data": {"object": {"id": "cs_test"}}}
     payload_str = json.dumps(payload)
     timestamp = str(int(time.time()))
