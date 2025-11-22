@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -620,7 +621,8 @@ py -3.11 -m pip install stripe reportlab opencv-python mediapipe openai
 ### 2. Configure Payment Processing
 ```python
 # Set Stripe API key
-export STRIPE_API_KEY="sk_live_YOUR_KEY"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY", "")  # Set via environment
 
 # Or use Zelle/Venmo (no API needed)
 ```

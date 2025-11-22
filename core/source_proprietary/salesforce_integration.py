@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Engine - Salesforce Integration Module
@@ -256,7 +257,8 @@ async def example_usage():
         client_id="3MVG9...",  # From Connected App
         client_secret="ABC123...",
         username="admin@mycompany.com",
-        password="MyP@ssw0rd",
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        password=os.getenv("PASSWORD", ""),  # Set via environment
         security_token="xyzABC123",
         api_version="v59.0"
     )

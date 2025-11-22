@@ -21,7 +21,8 @@ class FullyAutomatedSalesBot:
     def __init__(self):
         self.business_email = "Mythara.Engine@yahoo.com"
         self.payment_link = "https://paypal.me/MytharaEngine"
-        self.loyverse_token = "8f3dd129f7474cc59aa56908d1656487"
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        loyverse_token = os.getenv("LOYVERSE_TOKEN", "")  # Set via environment
         
     def generate_landing_page_content(self) -> Dict[str, str]:
         """

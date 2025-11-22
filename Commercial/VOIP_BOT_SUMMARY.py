@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -215,7 +216,8 @@ REAL-TIME TONE SWITCHING:
 ================================================================================
 
 TODAY (FOCUS ON EMAIL BOT):
-   1. ✅ Set OpenAI API key: $env:OPENAI_API_KEY = 'sk-proj-KEY'
+   # QUICKFIX FIX: Moved to environment variable (CWE-798)
+   OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # Set via environment
    2. ✅ Configure Gmail OAuth (EMAIL_ASSISTANT_SETUP.md)
    3. ✅ Send 20 outreach emails (First_100_Outreach_Targets.md)
    4. ✅ Use sales_bot_with_soul.py for automated responses

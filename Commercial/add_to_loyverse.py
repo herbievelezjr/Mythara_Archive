@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -10,7 +11,8 @@ import requests
 import json
 
 # Loyverse API credentials
-ACCESS_TOKEN = "8f3dd129f7474cc59aa56908d1656487"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN", "")  # Set via environment
 API_BASE_URL = "https://api.loyverse.com/v1.0"
 
 HEADERS = {
