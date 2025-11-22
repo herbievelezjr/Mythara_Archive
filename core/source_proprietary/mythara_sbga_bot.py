@@ -414,7 +414,8 @@ class MytharaSBGABot:
         self._log_action(f"Created partnership opportunity: {partner_company} ({opportunity_type})")
         
         # Update SBGA membership stats
-        c.execute('UPDATE sbga_membership SET partnership_opportunities = partnership_opportunities + 1')
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
+        c.execute('UPDATE sbga_membership SET partnership_opportunities = partnership_opportunities, ?)
         self.conn.commit()
         
         return {

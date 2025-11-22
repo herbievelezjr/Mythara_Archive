@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -305,7 +306,8 @@ Questions? Reply to this email.
         smtp_server = "smtp.gmail.com"
         smtp_port = 587
         sender_email = "mythara.engine@gmail.com"  # Your bot email
-        sender_password = "YOUR_APP_PASSWORD"  # Gmail App Password
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        sender_password = os.getenv("SENDER_PASSWORD", "")  # Set via environment
         
         msg = MIMEMultipart()
         msg['From'] = sender_email

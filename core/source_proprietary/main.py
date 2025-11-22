@@ -7,7 +7,7 @@ Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header, status, Response, Request
+from fastapi import FastAPI, HTTPException, Depends, Header, status, Response, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
@@ -97,18 +97,25 @@ from dual_framing import (
     generate_flow_diagram_text
 )
 
-# Import Soul Cradle Systems Framework
+# Import Soul Cradle Paradox Resolution Framework
 from soul_cradle_systems_framework import (
     SoulCradleParadox,
     SystemExpression,
-    NonExpression,
-    PrincipalSystem,
+    UnresolvedState,
+    ResolvedSystem,
     ExpressionType,
     SystemType,
     TerminalRiskLevel,
     TerminalRiskCalculator,
-    SystemQueryParser,
+    ParadoxQueryFilter,
     log_paradox_creation
+)
+
+# Import Emotional Extortion Detector
+from emotional_extortion_detector import (
+    EmotionalExtortionDetector,
+    ExtortionType,
+    ExtortionAnalysis
 )
 
 # Import Salesforce Integration
@@ -120,6 +127,92 @@ from salesforce_integration import (
     SalesforceSoulCradleEvent,
     generate_salesforce_setup_instructions
 )
+
+# Import Unified Compliance Framework
+from unified_compliance_framework import (
+    UnifiedComplianceFramework,
+    ComplianceFramework,
+    ComplianceStatus,
+    RiskLevel,
+    FinancialServicesCompliance,
+    TelecommunicationsCompliance,
+    LaborEmploymentCompliance,
+    CivilRightsAccessibilityCompliance,
+    unified_compliance
+)
+
+# Import Advanced Security Hardening
+from security_hardening import (
+    SecurityManager,
+    SecurityConfig,
+    HMACAuthenticator
+)
+
+# Import Production Infrastructure
+try:
+    from redis_cache import RedisCache
+    redis_cache = RedisCache()
+    REDIS_ENABLED = True
+    logger.info("✅ Redis cache initialized")
+except Exception as e:
+    REDIS_ENABLED = False
+    redis_cache = None
+    logger.warning(f"⚠️ Redis not available, using in-memory fallback: {e}")
+
+try:
+    from websocket_manager import (
+        manager as ws_manager,
+        broadcast_paradox_alert,
+        broadcast_systemic_overload_alert,
+        broadcast_indifference_alert,
+        broadcast_risk_update,
+        broadcast_system_event
+    )
+    WEBSOCKET_ENABLED = True
+    logger.info("✅ WebSocket manager loaded")
+except ImportError as e:
+    WEBSOCKET_ENABLED = False
+    logger.warning(f"⚠️ WebSocket support not available: {e}")
+
+try:
+    from soul_engine_dashboard import SoulEngineDashboard
+    soul_dashboard = SoulEngineDashboard()
+    DASHBOARD_ENABLED = True
+    logger.info("✅ Soul Engine dashboard loaded")
+except ImportError as e:
+    DASHBOARD_ENABLED = False
+    soul_dashboard = None
+    logger.warning(f"⚠️ Soul Engine dashboard not available: {e}")
+
+try:
+    from monitoring import (
+        record_http_request,
+        record_clause_invocation,
+        record_paradox_creation,
+        record_indifference_alert,
+        record_systemic_overload,
+        update_blessings_metrics,
+        get_metrics,
+        get_health,
+        get_system_stats,
+        PerformanceMonitor,
+        HealthChecker
+    )
+    MONITORING_ENABLED = True
+    logger.info("✅ Prometheus monitoring enabled")
+except ImportError as e:
+    MONITORING_ENABLED = False
+    logger.warning(f"⚠️ Monitoring not available: {e}")
+    # Stub functions
+    def record_http_request(*args, **kwargs): pass
+    def record_clause_invocation(*args, **kwargs): pass
+    def record_paradox_creation(*args, **kwargs): pass
+    def record_indifference_alert(*args, **kwargs): pass
+    def record_systemic_overload(*args, **kwargs): pass
+    def update_blessings_metrics(*args, **kwargs): pass
+    def get_metrics(): return Response(content="", media_type="text/plain")
+    def get_health(): return {"status": "unknown"}
+    def get_system_stats(): return {}
 
 # ElevenLabs Configuration
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")  # Set via environment variable
@@ -137,13 +230,39 @@ app = FastAPI(
 
 security = HTTPBearer()
 
+# CORS Configuration: Load allowed origins from environment for security
+# CRITICAL: allow_origins=["*"] + allow_credentials=True is forbidden by CORS spec
+ALLOWED_ORIGINS = os.getenv("MYTHARA_ALLOWED_ORIGINS", "").split(",") if os.getenv("MYTHARA_ALLOWED_ORIGINS") else []
+if not ALLOWED_ORIGINS:
+    # Development mode: Allow specific localhost origins only
+    ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000"
+    ]
+    logger.warning("⚠️ Using default CORS origins for development. Set MYTHARA_ALLOWED_ORIGINS in production.")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,  # Fixed: Explicit origins instead of wildcard
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Fixed: Explicit methods
+    allow_headers=["Authorization", "Content-Type", "X-Employee-Count"],  # Fixed: Explicit headers
 )
+
+# Rate Limiting Middleware - DDoS protection and tier enforcement
+try:
+    from rate_limiting import RateLimitMiddleware
+    app.add_middleware(
+        RateLimitMiddleware,
+        redis_cache=redis_cache if REDIS_ENABLED else None,
+        default_limit=100,
+        window_seconds=60
+    )
+    logger.info("✅ Rate limiting middleware enabled")
+except ImportError as e:
+    logger.warning(f"⚠️ Rate limiting not available: {e}")
 
 # Self-Regulation Middleware - Applied across all protected endpoints
 @app.middleware("http")
@@ -164,7 +283,9 @@ async def self_regulation_middleware(request: Request, call_next):
     
     api_key = auth_header.replace("Bearer ", "").strip()
     
-    # Extract employee count from request (query param, header, or body)
+    # Extract employee count from request (query param or header ONLY)
+    # NOTE: Cannot read request body here - it can only be consumed once by FastAPI
+    # Endpoints must include employee_count in query params or X-Employee-Count header
     employee_count = None
     
     # Try query parameter
@@ -174,17 +295,8 @@ async def self_regulation_middleware(request: Request, call_next):
     if not employee_count:
         employee_count = request.headers.get("X-Employee-Count")
     
-    # Try body (for POST/PUT requests)
-    if not employee_count and request.method in ["POST", "PUT"]:
-        try:
-            body = await request.body()
-            if body:
-                body_json = json.loads(body.decode())
-                employee_count = body_json.get("employee_count")
-        except:
-            pass
-    
     # Default to smallest tier if not provided
+    # This ensures rate limiting is conservative when size is unknown
     employee_count = int(employee_count) if employee_count else 10
     
     # Run self-regulation check
@@ -338,6 +450,37 @@ class SoulCradleResponse(BaseModel):
 class SoulCradleTiersResponse(BaseModel):
     tiers: List[Dict[str, Any]]
 
+class EmotionalExtortionRequest(BaseModel):
+    text: str = Field(description="Text to analyze for emotional extortion patterns")
+    context: Optional[Dict[str, Any]] = Field(default=None, description="Optional context (power_differential, relationship_type, etc.)")
+
+class EmotionalExtortionResponse(BaseModel):
+    extortion_score: float = Field(description="Overall extortion intensity [0,1]")
+    manipulation_index: float = Field(description="Emotional manipulation component [0,1]")
+    coercion_index: float = Field(description="Coercion/pressure component [0,1]")
+    vulnerability_exploitation: float = Field(description="Vulnerability targeting [0,1]")
+    genuine_consent_likelihood: float = Field(description="Probability of authentic agreement [0,1]")
+    emotional_fidelity_impact: float = Field(description="SSIP emotional fidelity damage [-1,0]")
+    blessing_reservoir_delta: int = Field(description="Blessings Reservoir penalty for extortion")
+    patterns_detected: List[Dict[str, Any]] = Field(description="Detected extortion patterns with evidence")
+    recommendations: List[str] = Field(description="Actionable recommendations")
+    safe_for_deployment: bool = Field(description="Whether this content is safe to deploy")
+    timestamp: str
+    integrity_hash: str
+
+class EmotionalExtortionSoulCradleIntegrationRequest(BaseModel):
+    text: str = Field(description="Text to analyze for emotional extortion")
+    soul_state: float = Field(description="Soul's current state [0,1]")
+    will_description: str = Field(description="Claimed 'will' being imposed")
+    commandments: List[str] = Field(description="Rules for obedience")
+    context: Optional[Dict[str, Any]] = None
+
+class EmotionalExtortionSoulCradleIntegrationResponse(BaseModel):
+    extortion_analysis: EmotionalExtortionResponse
+    soul_cradle_integration: Dict[str, Any] = Field(description="Augmented Soul Cradle metrics")
+    timestamp: str
+    integrity_hash: str
+
 class ChatRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
@@ -398,12 +541,51 @@ class PilotStatusResponse(BaseModel):
     enterprise_price_usd_year: int
 
 # ===================== AUTH =====================
-VALID_API_KEYS = {
-    "dev_test_key_001": {"name": "Development License", "roles": ["read", "invoke"]},
-    "ent_prod_key_001": {"name": "Enterprise License", "roles": ["read", "invoke", "admin"]},
-    "sov_airgap_key_001": {"name": "Sovereign License", "roles": ["read", "invoke", "admin", "audit"]},
-}
+# CRITICAL SECURITY: API keys MUST be loaded from environment, never hardcoded
+# Set MYTHARA_API_KEYS as JSON: {"key1": {"name": "License", "roles": ["read", "invoke"]}, ...}
+def load_api_keys_from_env() -> Dict[str, Dict[str, Any]]:
+    """
+    Load API keys from environment variable or return empty dict.
+    NEVER hardcode API keys in source code.
+    """
+    api_keys_json = os.getenv("MYTHARA_API_KEYS")
+    if not api_keys_json:
+        logger.error("❌ CRITICAL: MYTHARA_API_KEYS environment variable not set")
+        logger.error("❌ API authentication is DISABLED - set MYTHARA_API_KEYS to enable")
+        return {}
+    
+    try:
+        keys = json.loads(api_keys_json)
+        logger.info(f"✅ Loaded {len(keys)} API keys from environment")
+        return keys
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ Invalid MYTHARA_API_KEYS JSON format: {e}")
+        return {}
+
+VALID_API_KEYS = load_api_keys_from_env()
+
+# Development mode fallback: If no keys loaded and in dev mode, use test key
+if not VALID_API_KEYS and os.getenv("MYTHARA_ENV", "production").lower() == "development":
+    logger.warning("⚠️ DEVELOPMENT MODE: Using test API key. DO NOT use in production.")
+    VALID_API_KEYS = {
+        "dev_test_key_001": {"name": "Development Test Key", "roles": ["read", "invoke"]}
+    }
+
 RATE_LIMIT_STORE: Dict[str, List[float]] = {}
+
+# Initialize Advanced Security Manager
+SECURITY_SECRET_KEY = os.getenv("MYTHARA_SECURITY_SECRET", secrets.token_urlsafe(32)).encode('utf-8')
+SECURITY_CONFIG = SecurityConfig(
+    signature_required=os.getenv("MYTHARA_REQUIRE_HMAC", "false").lower() == "true",
+    rate_limit_per_minute=int(os.getenv("MYTHARA_RATE_LIMIT_MINUTE", "60")),
+    brute_force_threshold=int(os.getenv("MYTHARA_BRUTE_FORCE_THRESHOLD", "5")),
+    ip_blacklist_enabled=True,
+    auto_blacklist_on_abuse=True,
+    anomaly_detection_enabled=True,
+    max_request_size_kb=1024
+)
+SECURITY_MANAGER = SecurityManager(SECURITY_SECRET_KEY, SECURITY_CONFIG)
+logger.info("🛡️ Advanced Security Hardening ENABLED")
 
 def check_rate_limit(api_key: str, limit: int = 100, window: int = 60) -> bool:
     now = datetime.utcnow().timestamp()
@@ -425,12 +607,85 @@ def check_ip_rate_limit(ip: str, limit: int = 60, window: int = 60) -> bool:
     RATE_LIMIT_STORE[key].append(now)
     return True
 
-async def verify_api_key(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
+async def verify_api_key(
+    request: Request,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+) -> str:
+    """Enhanced API key verification with multi-layer security"""
     api_key = credentials.credentials
+    
+    # Basic API key validation
     if api_key not in VALID_API_KEYS:
+        # Record brute force attempt
+        SECURITY_MANAGER.brute_force.record_failure(f"invalid_{api_key[:8]}")
         raise HTTPException(status_code=401, detail="Invalid API key")
+    
+    # Extract request details for security validation
+    client_ip = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "unknown")
+    
+    # Get HMAC signature if present
+    signature = request.headers.get("X-Mythara-Signature")
+    timestamp_str = request.headers.get("X-Mythara-Timestamp")
+    nonce = request.headers.get("X-Mythara-Nonce")
+    
+    timestamp = int(timestamp_str) if timestamp_str else None
+    
+    # Get request body for signature verification (if POST/PUT)
+    body = None
+    if request.method in ["POST", "PUT", "PATCH"]:
+        # Note: Cannot read body here easily without consuming it
+        # For production, implement body buffering middleware
+        body = ""  # Placeholder
+    
+    # Multi-layer security validation
+    allowed, error, metadata = SECURITY_MANAGER.validate_request(
+        method=request.method,
+        path=str(request.url.path),
+        ip_address=client_ip,
+        api_key=api_key,
+        signature=signature,
+        timestamp=timestamp,
+        nonce=nonce,
+        body=body,
+        request_size=int(request.headers.get("content-length", 0)),
+        user_agent=user_agent,
+        headers=dict(request.headers)
+    )
+    
+    if not allowed:
+        logger.warning(f"🚫 Security validation failed: {error} | IP: {client_ip} | Key: {api_key[:8]}...")
+        
+        # Include retry-after header if available
+        retry_after = metadata.get("retry_after")
+        headers = {"Retry-After": str(retry_after)} if retry_after else {}
+        
+        if "anomaly" in error.lower():
+            raise HTTPException(
+                status_code=403,
+                detail=f"Security: {error}",
+                headers=headers
+            )
+        elif "rate limit" in error.lower():
+            raise HTTPException(
+                status_code=429,
+                detail=error,
+                headers=headers
+            )
+        else:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Access denied: {error}",
+                headers=headers
+            )
+    
+    # Record successful authentication
+    SECURITY_MANAGER.brute_force.record_success(api_key)
+    
+    # Legacy rate limit check (kept for backwards compatibility)
     if not check_rate_limit(api_key):
         raise HTTPException(status_code=429, detail="Rate limit exceeded")
+    
     return api_key
 
 def require_role(role: str):
@@ -674,7 +929,7 @@ def track_api_usage(api_key: str, employee_count: int) -> Dict[str, Any]:
             "action": action,
             "enforcement": enforcement,
             "call_count": usage["call_count"],
-            "days_active": days_since_first,
+            "days_active": days_since_start,  # Fixed: was days_since_first (undefined)
             "usage_multiplier": usage_multiplier
         })
         
@@ -685,8 +940,8 @@ def track_api_usage(api_key: str, employee_count: int) -> Dict[str, Any]:
             "reason": action,
             "usage_stats": {
                 "calls_made": usage["call_count"],
-                "monthly_limit": usage["monthly_limit"],
-                "days_active": days_since_first,
+                "total_limit": usage["total_limit"],  # Fixed: was monthly_limit (undefined)
+                "days_active": days_since_start,  # Fixed: was days_since_first (undefined)
                 "usage_multiplier": round(usage_multiplier, 2)
             }
         }
@@ -748,8 +1003,26 @@ def compute_enterprise_price_for_company_size(employee_count: int, tier_key: Opt
 def compute_current_enterprise_price(tier_key: str = "corporate") -> int:
     return compute_enterprise_price_for_company_size(500, tier_key)["final_price"]
 
-# ===================== IN-MEMORY STATE =====================
-BR_STATE = {"reservoir_score": 0.91, "total_blessings": 12847, "overflow_events": 2, "last_update": datetime.utcnow().isoformat() + "Z"}
+# ===================== STATE MANAGEMENT =====================
+# Initialize BR_STATE in Redis if available, otherwise use in-memory
+if REDIS_ENABLED and redis_cache:
+    # Try to get existing state, or initialize if not present
+    br_state_from_redis = redis_cache.get_br_state()
+    if not br_state_from_redis:
+        # Initialize Redis with default values
+        redis_cache.update_br_state(
+            reservoir_score=0.91,
+            total_blessings=12847,
+            overflow_events=2
+        )
+        logger.info("✅ BR_STATE initialized in Redis")
+    else:
+        logger.info(f"✅ BR_STATE loaded from Redis: {br_state_from_redis['total_blessings']} blessings")
+else:
+    # Fallback to in-memory state
+    BR_STATE = {"reservoir_score": 0.91, "total_blessings": 12847, "overflow_events": 2, "last_update": datetime.utcnow().isoformat() + "Z"}
+    logger.info("⚠️ Using in-memory BR_STATE (will not persist across restarts)")
+
 CLAUSE_DB = {
     "Legacy_Seed": {"description": "Ancestral memory harmonization clause", "emotional_tags": ["grief", "legacy", "ancestral"], "fallback_clause": "Shadow_Resolver", "emotional_fidelity_baseline": 0.93},
     "Hope_Anchor": {"description": "Future-oriented resilience clause", "emotional_tags": ["hope", "resilience", "forward"], "fallback_clause": "Shadow_Resolver", "emotional_fidelity_baseline": 0.89},
@@ -1025,20 +1298,31 @@ except Exception:
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 def _validate_email(email: str) -> bool:
-    """Validate email address with security checks."""
+    """
+    Validate email address format with security checks.
+    
+    SECURITY NOTE: This validates format only. SQL injection prevention MUST be
+    handled by the database layer using parameterized queries. Keyword blacklists
+    are ineffective against real SQL injection attacks.
+    """
     if not isinstance(email, str):
         return False
     if len(email) > 254 or len(email) < 3:
         return False
+    
+    # Block null bytes and path traversal
     if "\x00" in email or ".." in email:
         return False
-    # Basic RFC 5322 pattern
+    
+    # RFC 5322 compliant email regex
+    # Allows: alphanumeric, dot, underscore, percent, plus, hyphen
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(pattern, email):
         return False
-    # Block SQL injection patterns
-    if any(danger in email.lower() for danger in ["drop", "select", "insert", "delete", "';", "--"]):
-        return False
+    
+    # REMOVED: SQL keyword blacklist (ineffective - bypassed with UNION, EXEC, etc.)
+    # SQL injection prevention is handled by parameterized queries in database.py
+    
     return True
 
 def _send_license_email_stub(to_email: str, license_key: str, company_name: str, amount_paid: float) -> None:
@@ -1316,21 +1600,9 @@ async def pricing_page(request: Request):
 
 @app.get("/terms")
 async def terms_page(request: Request):
-    """Serve the terms of service page"""
-    from fastapi.responses import FileResponse
-    
-    # Serve the terms.html file from static directory
-    terms_path = os.path.join(os.path.dirname(__file__), "../static/terms.html")
-    if not os.path.exists(terms_path):
-        raise HTTPException(status_code=404, detail="Terms page not found")
-    
-    return FileResponse(
-        terms_path,
-        media_type="text/html",
-        headers={
-            "Cache-Control": "public, max-age=300",
-        }
-    )
+    """Redirect to static terms page"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/static/terms.html", status_code=302)
 
 @app.post("/v1/mythara/chat", response_model=ChatResponse)
 async def mythara_chat(req: ChatRequest, request: Request):
@@ -1606,9 +1878,23 @@ async def invoke_clause(req: ClauseInvocationRequest, api_key: str = Depends(req
     else:
         emotional_fidelity = clause["emotional_fidelity_baseline"] * 0.8
     blessings_delta = int(intensity * 100)
-    BR_STATE["total_blessings"] += blessings_delta
-    BR_STATE["reservoir_score"] = min(BR_STATE["reservoir_score"] + 0.01, 1.0)
-    BR_STATE["last_update"] = datetime.utcnow().isoformat() + "Z"
+    
+    # Update BR_STATE (Redis if available, otherwise in-memory)
+    if REDIS_ENABLED and redis_cache:
+        new_total = redis_cache.increment_blessings(blessings_delta)
+        br_state = redis_cache.get_br_state()
+        new_score = min(br_state["reservoir_score"] + 0.01, 1.0)
+        redis_cache.update_br_state(reservoir_score=new_score)
+        update_blessings_metrics(new_total, new_score)
+    else:
+        BR_STATE["total_blessings"] += blessings_delta
+        BR_STATE["reservoir_score"] = min(BR_STATE["reservoir_score"] + 0.01, 1.0)
+        BR_STATE["last_update"] = datetime.utcnow().isoformat() + "Z"
+        update_blessings_metrics(BR_STATE["total_blessings"], BR_STATE["reservoir_score"])
+    
+    # Record monitoring metrics
+    record_clause_invocation(req.clause_id, req.messenger, blessings_delta, emotional_fidelity)
+    
     integrity_hash = hashlib.sha256(f"{invocation_id}{req.clause_id}{req.messenger}{emotional_fidelity}".encode()).hexdigest()
     return ClauseInvocationResponse(
         invocation_id=invocation_id,
@@ -1631,7 +1917,11 @@ async def reservoir_status(api_key: str = Depends(verify_api_key), frame: Option
     Returns mythic terms by default (Blessings Reservoir), or industry overlay
     (Resonance Reservoir) when frame=industry.
     """
-    response_data = BR_STATE
+    # Get state from Redis or in-memory fallback
+    if REDIS_ENABLED and redis_cache:
+        response_data = redis_cache.get_br_state()
+    else:
+        response_data = BR_STATE
     
     # Apply dual-framing translation if requested
     if frame == "industry":
@@ -2740,24 +3030,24 @@ async def get_systems_framework_manifest(
     """
     try:
         manifest = {
-            "framework": "Soul Cradle Systems Mathematics",
-            "version": "1.0.0",
-            "notation_spec": "Every(X)Any(+)Some(Y)Non(Z)",
+            "framework": "Mythara Paradox Resolution Mathematics",
+            "version": "2.0.0",
+            "mathematical_formula": "P(t) = |A - B| × (1 - R(t)), R(t) = (W_a + W_b) / (2 × max(T_a, T_b))",
             "system_types": [
                 {
-                    "type": "Pseudo_Partial",
-                    "description": "Incomplete expressions leading to terminal events (burnout)",
+                    "type": "Incomplete_Resolution",
+                    "description": "Unresolved paradoxes leading to terminal risk (burnout)",
                     "viability_range": "0.0-0.3"
                 },
                 {
-                    "type": "Principal_Complete",
-                    "description": "Full express-ability with viable outcomes",
+                    "type": "Complete_Resolution",
+                    "description": "Fully witnessed expressions with viable recovery",
                     "viability_range": "0.8-1.0"
                 }
             ],
             "terminal_risk_levels": ["LOW", "MODERATE", "HIGH", "CRITICAL"],
-            "terminal_risk_formula": "(pseudo_system_density × non_expression_accumulation) / time_window_days",
-            "documentation": "See soul_cradle_systems_framework.py for complete implementation"
+            "terminal_risk_formula": "(Σ U_i × T_i) / N where U=unresolved score, T=max tension, N=paradox count",
+            "documentation": "See soul_cradle_systems_framework.py for Mythara Resolution Mathematics"
         }
         
         # Compute integrity hash
@@ -2776,9 +3066,843 @@ async def get_systems_framework_manifest(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ===================== EMOTIONAL EXTORTION DETECTION ENDPOINTS =====================
+
+@app.post("/v1/emotional-extortion/detect", response_model=EmotionalExtortionResponse)
+async def detect_emotional_extortion(
+    req: EmotionalExtortionRequest,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Detect and quantify emotional extortion patterns in text.
+    
+    Analyzes text for manipulation patterns that extract compliance through
+    emotional pressure (guilt, shame, fear, obligation) rather than genuine consent.
+    
+    Use cases:
+    - AI system output validation (detect manipulative language)
+    - Contract/terms review (detect coercive clauses)
+    - Manager communication audit (detect toxic management patterns)
+    - Customer service quality assurance (detect pressure tactics)
+    
+    Returns emotional extortion score, detected patterns, and safety recommendations.
+    """
+    try:
+        detector = EmotionalExtortionDetector()
+        analysis = detector.detect_extortion(req.text, req.context)
+        
+        # Convert signatures to dict format
+        patterns_detected = [
+            {
+                "extortion_type": sig.extortion_type.value,
+                "confidence": sig.confidence,
+                "severity": sig.severity,
+                "evidence": sig.evidence[:200]  # Truncate long evidence
+            }
+            for sig in analysis.signatures
+        ]
+        
+        # Determine deployment safety
+        safe_for_deployment = analysis.extortion_score < 0.3
+        
+        return EmotionalExtortionResponse(
+            extortion_score=analysis.extortion_score,
+            manipulation_index=analysis.manipulation_index,
+            coercion_index=analysis.coercion_index,
+            vulnerability_exploitation=analysis.vulnerability_exploitation,
+            genuine_consent_likelihood=analysis.genuine_consent_likelihood,
+            emotional_fidelity_impact=analysis.emotional_fidelity_impact,
+            blessing_reservoir_delta=analysis.blessing_reservoir_delta,
+            patterns_detected=patterns_detected,
+            recommendations=analysis.recommendations,
+            safe_for_deployment=safe_for_deployment,
+            timestamp=analysis.timestamp.isoformat(),
+            integrity_hash=analysis.integrity_hash
+        )
+    
+    except Exception as e:
+        logger.error(f"Failed to detect emotional extortion: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/v1/emotional-extortion/soul-cradle-integration", response_model=EmotionalExtortionSoulCradleIntegrationResponse)
+async def emotional_extortion_soul_cradle_integration(
+    req: EmotionalExtortionSoulCradleIntegrationRequest,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Integrate emotional extortion detection with Soul Cradle Operator.
+    
+    When extortion is present, the "Will" (W) is not genuine divine will but
+    manufactured compliance through manipulation. This endpoint distinguishes
+    authentic Will from extorted compliance.
+    
+    Use cases:
+    - Leadership decision validation (is executive directive genuine or coercive?)
+    - Policy compliance audit (are employees choosing freely or under duress?)
+    - AI system safety (is user "consenting" under manipulation?)
+    - Contract fairness analysis (is agreement voluntary or extracted?)
+    
+    Returns:
+    - Complete extortion analysis
+    - Augmented Soul Cradle metrics (will_authenticity, adjusted_soul_state, etc.)
+    - Messenger alerts (Healer detects emotional harm, Witness documents violation)
+    """
+    try:
+        detector = EmotionalExtortionDetector()
+        
+        # Detect extortion
+        extortion_analysis = detector.detect_extortion(req.text, req.context)
+        
+        # Integrate with Soul Cradle
+        soul_cradle_integration = detector.integrate_with_soul_cradle(
+            extortion_analysis=extortion_analysis,
+            soul_state=req.soul_state,
+            will_description=req.will_description,
+            commandments=req.commandments
+        )
+        
+        # Convert extortion analysis to response format
+        patterns_detected = [
+            {
+                "extortion_type": sig.extortion_type.value,
+                "confidence": sig.confidence,
+                "severity": sig.severity,
+                "evidence": sig.evidence[:200]
+            }
+            for sig in extortion_analysis.signatures
+        ]
+        
+        safe_for_deployment = extortion_analysis.extortion_score < 0.3
+        
+        extortion_response = EmotionalExtortionResponse(
+            extortion_score=extortion_analysis.extortion_score,
+            manipulation_index=extortion_analysis.manipulation_index,
+            coercion_index=extortion_analysis.coercion_index,
+            vulnerability_exploitation=extortion_analysis.vulnerability_exploitation,
+            genuine_consent_likelihood=extortion_analysis.genuine_consent_likelihood,
+            emotional_fidelity_impact=extortion_analysis.emotional_fidelity_impact,
+            blessing_reservoir_delta=extortion_analysis.blessing_reservoir_delta,
+            patterns_detected=patterns_detected,
+            recommendations=extortion_analysis.recommendations,
+            safe_for_deployment=safe_for_deployment,
+            timestamp=extortion_analysis.timestamp.isoformat(),
+            integrity_hash=extortion_analysis.integrity_hash
+        )
+        
+        # Generate integration integrity hash
+        integration_data = json.dumps({
+            "extortion_score": extortion_analysis.extortion_score,
+            "soul_state": req.soul_state,
+            "will_authenticity": soul_cradle_integration["will_authenticity"],
+            "timestamp": datetime.utcnow().isoformat()
+        }, sort_keys=True)
+        integration_hash = hashlib.sha256(integration_data.encode()).hexdigest()
+        
+        return EmotionalExtortionSoulCradleIntegrationResponse(
+            extortion_analysis=extortion_response,
+            soul_cradle_integration=soul_cradle_integration,
+            timestamp=datetime.utcnow().isoformat(),
+            integrity_hash=integration_hash
+        )
+    
+    except Exception as e:
+        logger.error(f"Failed to integrate extortion detection with Soul Cradle: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# UNIFIED COMPLIANCE FRAMEWORK ENDPOINTS
+# ============================================================================
+
+class ComplianceValidationRequest(BaseModel):
+    """Request model for compliance validation"""
+    data: Dict[str, Any] = Field(..., description="Data to validate for compliance")
+    frameworks: List[str] = Field(..., description="List of compliance frameworks to validate against")
+    user_id: Optional[str] = Field(None, description="User ID for audit trail")
+
+
+class ComplianceValidationResponse(BaseModel):
+    """Response model for compliance validation"""
+    timestamp: str
+    frameworks_checked: List[str]
+    overall_compliant: bool
+    framework_results: Dict[str, Any]
+    all_violations: List[str]
+    risk_assessment: str
+    audit_log_id: str
+    integrity_hash: str
+
+
+class ComplianceReportResponse(BaseModel):
+    """Response model for compliance report"""
+    report_generated: str
+    total_audits: int
+    frameworks_supported: int
+    recent_audits: List[Dict[str, Any]]
+    compliance_frameworks: Dict[str, List[str]]
+    compliance_status: str
+    integrity_hash: str
+
+
+@app.post("/v1/compliance/validate", response_model=ComplianceValidationResponse)
+async def validate_compliance(
+    req: ComplianceValidationRequest,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Validate data against multiple compliance frameworks simultaneously.
+    
+    Supported Frameworks:
+    - Financial: pci_dss, finra, sox, glba, dodd_frank, bsa_aml, sec_reg
+    - Healthcare: hipaa, hitech, fda_21_cfr_11
+    - Telecommunications: fcc_tcpa, fcc_cpni, can_spam, calea
+    - Federal: fisma, nist_800_53, ftc_act, omb_m_25_04, ferc
+    - Privacy: gdpr, ccpa, pipeda, lgpd, appi
+    - Industry: soc_2, iso_27001, iso_27017, iso_27018, owasp, cobit, itil
+    - Labor: nlra, flsa, osha, eeoc, fmla, union_compliance
+    - Civil Rights: aclu_standards, ada, section_508, wcag
+    - Other: ferpa, coppa, dmca, coso
+    
+    Returns:
+    - Compliance status for each framework
+    - List of all violations found
+    - Risk assessment (NEGLIGIBLE, LOW, MEDIUM, HIGH, CRITICAL)
+    - Audit trail with tamper-evident integrity hash
+    
+    Example:
+    ```json
+    {
+        "data": {
+            "card_token": "tok_abc123",
+            "amount": 100.00,
+            "encrypted": true
+        },
+        "frameworks": ["pci_dss", "sox"]
+    }
+    ```
+    """
+    try:
+        # Convert framework strings to enums
+        framework_enums = []
+        for fw_str in req.frameworks:
+            try:
+                framework_enums.append(ComplianceFramework(fw_str.lower()))
+            except ValueError:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Unsupported compliance framework: {fw_str}"
+                )
+        
+        # Validate compliance
+        results = unified_compliance.validate_multi_framework_compliance(
+            req.data,
+            framework_enums
+        )
+        
+        # Generate audit log ID
+        audit_log_id = f"COMP_VAL_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{secrets.token_hex(4)}"
+        
+        # Compute integrity hash
+        response_data = {
+            "audit_log_id": audit_log_id,
+            "results": results,
+            "api_key": api_key[:8]  # Partial key for audit trail
+        }
+        integrity_hash = hashlib.sha256(
+            json.dumps(response_data, sort_keys=True).encode()
+        ).hexdigest()
+        
+        logger.info(f"Compliance validation completed: {audit_log_id}, Risk: {results['risk_assessment']}")
+        
+        return ComplianceValidationResponse(
+            timestamp=results["timestamp"],
+            frameworks_checked=results["frameworks_checked"],
+            overall_compliant=results["overall_compliant"],
+            framework_results=results["framework_results"],
+            all_violations=results["all_violations"],
+            risk_assessment=results["risk_assessment"],
+            audit_log_id=audit_log_id,
+            integrity_hash=integrity_hash
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Compliance validation failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Compliance validation error: {str(e)}")
+
+
+@app.get("/v1/compliance/report", response_model=ComplianceReportResponse)
+async def get_compliance_report(api_key: str = Depends(verify_api_key)):
+    """
+    Generate comprehensive compliance status report.
+    
+    Returns:
+    - Total number of compliance audits performed
+    - Number of frameworks supported (50+)
+    - Recent audit history (last 10 audits)
+    - Complete list of supported frameworks by category
+    - Overall compliance system status
+    
+    This endpoint provides executives and compliance officers with a high-level
+    overview of the organization's compliance posture across all regulatory frameworks.
+    """
+    try:
+        report = unified_compliance.generate_compliance_report()
+        
+        # Compute integrity hash
+        integrity_hash = hashlib.sha256(
+            json.dumps(report, sort_keys=True).encode()
+        ).hexdigest()
+        
+        logger.info("Compliance report generated")
+        
+        return ComplianceReportResponse(
+            report_generated=report["report_generated"],
+            total_audits=report["total_audits"],
+            frameworks_supported=report["frameworks_supported"],
+            recent_audits=report["recent_audits"],
+            compliance_frameworks=report["compliance_frameworks"],
+            compliance_status=report["compliance_status"],
+            integrity_hash=integrity_hash
+        )
+    
+    except Exception as e:
+        logger.error(f"Compliance report generation failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Report generation error: {str(e)}")
+
+
+@app.get("/v1/compliance/frameworks")
+async def list_compliance_frameworks(api_key: str = Depends(verify_api_key)):
+    """
+    List all supported compliance frameworks.
+    
+    Returns complete list of 50+ regulatory frameworks organized by category:
+    - Financial Services (PCI DSS, FINRA, SOX, GLBA, etc.)
+    - Healthcare (HIPAA, HITECH, FDA)
+    - Telecommunications (FCC TCPA, CPNI, CAN-SPAM)
+    - Federal Regulations (FISMA, NIST, FTC, OMB)
+    - Privacy (GDPR, CCPA, PIPEDA, LGPD, APPI)
+    - Industry Standards (SOC 2, ISO 27001, OWASP, COBIT)
+    - Labor & Employment (NLRA, FLSA, OSHA, EEOC)
+    - Civil Rights (ACLU, ADA, Section 508, WCAG)
+    - Other (FERPA, COPPA, DMCA, COSO)
+    """
+    frameworks = {
+        "financial_services": [
+            {"code": "pci_dss", "name": "Payment Card Industry Data Security Standard v4.0"},
+            {"code": "finra", "name": "Financial Industry Regulatory Authority"},
+            {"code": "sox", "name": "Sarbanes-Oxley Act"},
+            {"code": "glba", "name": "Gramm-Leach-Bliley Act"},
+            {"code": "dodd_frank", "name": "Dodd-Frank Wall Street Reform"},
+            {"code": "bsa_aml", "name": "Bank Secrecy Act / Anti-Money Laundering"},
+            {"code": "sec_reg", "name": "Securities and Exchange Commission Regulations"}
+        ],
+        "healthcare": [
+            {"code": "hipaa", "name": "Health Insurance Portability and Accountability Act"},
+            {"code": "hitech", "name": "Health Information Technology for Economic and Clinical Health"},
+            {"code": "fda_21_cfr_11", "name": "FDA Electronic Records and Signatures"}
+        ],
+        "telecommunications": [
+            {"code": "fcc_tcpa", "name": "Telephone Consumer Protection Act"},
+            {"code": "fcc_cpni", "name": "Customer Proprietary Network Information"},
+            {"code": "can_spam", "name": "CAN-SPAM Act (Email Marketing)"},
+            {"code": "calea", "name": "Communications Assistance for Law Enforcement Act"}
+        ],
+        "federal_regulations": [
+            {"code": "fisma", "name": "Federal Information Security Management Act"},
+            {"code": "nist_800_53", "name": "NIST Special Publication 800-53"},
+            {"code": "ftc_act", "name": "Federal Trade Commission Act"},
+            {"code": "omb_m_25_04", "name": "OMB M-25-04 Zero Trust Architecture"},
+            {"code": "ferc", "name": "Federal Energy Regulatory Commission"}
+        ],
+        "privacy": [
+            {"code": "gdpr", "name": "EU General Data Protection Regulation"},
+            {"code": "ccpa", "name": "California Consumer Privacy Act"},
+            {"code": "pipeda", "name": "Canadian Personal Information Protection and Electronic Documents Act"},
+            {"code": "lgpd", "name": "Brazilian General Data Protection Law"},
+            {"code": "appi", "name": "Japanese Act on Protection of Personal Information"}
+        ],
+        "industry_standards": [
+            {"code": "soc_2", "name": "Service Organization Control 2"},
+            {"code": "iso_27001", "name": "ISO/IEC 27001 Information Security Management"},
+            {"code": "iso_27017", "name": "ISO/IEC 27017 Cloud Security"},
+            {"code": "iso_27018", "name": "ISO/IEC 27018 Cloud Privacy"},
+            {"code": "owasp", "name": "OWASP Top 10 Application Security"},
+            {"code": "cobit", "name": "Control Objectives for Information Technologies"},
+            {"code": "itil", "name": "IT Infrastructure Library"}
+        ],
+        "labor_employment": [
+            {"code": "nlra", "name": "National Labor Relations Act (Union Rights)"},
+            {"code": "flsa", "name": "Fair Labor Standards Act (Wages & Hours)"},
+            {"code": "osha", "name": "Occupational Safety and Health Administration"},
+            {"code": "eeoc", "name": "Equal Employment Opportunity Commission"},
+            {"code": "fmla", "name": "Family and Medical Leave Act"},
+            {"code": "union_compliance", "name": "Union Contract Compliance"}
+        ],
+        "civil_rights_accessibility": [
+            {"code": "aclu_standards", "name": "ACLU Civil Liberties Standards"},
+            {"code": "ada", "name": "Americans with Disabilities Act"},
+            {"code": "section_508", "name": "Section 508 Accessibility Standards"},
+            {"code": "wcag", "name": "Web Content Accessibility Guidelines"}
+        ],
+        "other": [
+            {"code": "ferpa", "name": "Family Educational Rights and Privacy Act"},
+            {"code": "coppa", "name": "Children's Online Privacy Protection Act"},
+            {"code": "dmca", "name": "Digital Millennium Copyright Act"},
+            {"code": "coso", "name": "Committee of Sponsoring Organizations"}
+        ]
+    }
+    
+    return {
+        "total_frameworks": sum(len(category) for category in frameworks.values()),
+        "frameworks_by_category": frameworks,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
+# ============================================================================
+# WEBSOCKET ENDPOINT - REAL-TIME DASHBOARD
+# ============================================================================
+
+if WEBSOCKET_ENABLED:
+    @app.websocket("/ws/{org_id}")
+    async def websocket_endpoint(websocket: WebSocket, org_id: str, api_key: str):
+        """
+        WebSocket endpoint for real-time Soul Engine dashboard updates.
+        
+        Clients connect with their organization ID and API key, then receive:
+        - Real-time paradox creation alerts
+        - Systemic overload notifications
+        - 🚨 CRITICAL indifference trajectory alerts (violence prevention)
+        - Risk score updates
+        - System-wide events
+        
+        Connection Protocol:
+        1. Connect: ws://localhost:8000/ws/{org_id}?api_key={your_key}
+        2. Authenticate: API key verified on connection
+        3. Subscribe: Send {"action": "subscribe", "entity_id": "user_123"} to watch specific users
+        4. Receive: JSON messages with alert types and payloads
+        
+        Alert Types:
+        - paradox_created: New paradox logged
+        - systemic_overload: Department-wide crisis
+        - indifference_alert: 🚨 Pre-violence soul withdrawal detected
+        - risk_update: Risk score changed
+        - system_event: Maintenance, updates, etc.
+        """
+        # Verify API key (sync wrapper for async context)
+        try:
+            # In production, verify API key against database
+            if api_key not in VALID_API_KEYS:
+                await websocket.close(code=1008, reason="Invalid API key")
+                return
+            
+            user_data = VALID_API_KEYS[api_key]
+            user_id = user_data.get("user_id", "unknown")
+            role = user_data.get("roles", ["viewer"])[0]
+            
+            # Connect to WebSocket manager
+            await ws_manager.connect(websocket, user_id, org_id, role)
+            logger.info(f"WebSocket connected: user={user_id}, org={org_id}, role={role}")
+            
+            # Send welcome message
+            await ws_manager.send_personal_message({
+                "type": "connection_established",
+                "message": "Connected to Mythara Soul Engine real-time feed",
+                "org_id": org_id,
+                "user_id": user_id,
+                "capabilities": [
+                    "paradox_alerts",
+                    "systemic_overload_alerts",
+                    "indifference_detection",
+                    "risk_updates"
+                ]
+            }, websocket)
+            
+            # Listen for client messages (subscriptions, etc.)
+            while True:
+                try:
+                    data = await websocket.receive_json()
+                    
+                    # Handle subscription requests
+                    if data.get("action") == "subscribe":
+                        entity_id = data.get("entity_id")
+                        if entity_id:
+                            ws_manager.subscribe(entity_id, websocket)
+                            await ws_manager.send_personal_message({
+                                "type": "subscription_confirmed",
+                                "entity_id": entity_id,
+                                "message": f"Now watching {entity_id} for updates"
+                            }, websocket)
+                    
+                    # Handle ping/pong for keepalive
+                    elif data.get("action") == "ping":
+                        await ws_manager.send_personal_message({
+                            "type": "pong",
+                            "timestamp": datetime.utcnow().isoformat()
+                        }, websocket)
+                
+                except WebSocketDisconnect:
+                    break
+                except json.JSONDecodeError:
+                    await ws_manager.send_personal_message({
+                        "type": "error",
+                        "message": "Invalid JSON format"
+                    }, websocket)
+        
+        except WebSocketDisconnect:
+            ws_manager.disconnect(websocket)
+            logger.info(f"WebSocket disconnected: user={user_id}, org={org_id}")
+        except Exception as e:
+            logger.error(f"WebSocket error: {e}")
+            ws_manager.disconnect(websocket)
+
+
+# ============================================================================
+# SOUL ENGINE DASHBOARD ENDPOINTS - VIOLENCE PREVENTION
+# ============================================================================
+
+class DepartmentRiskRequest(BaseModel):
+    """Request model for department risk analysis"""
+    dept_id: str = Field(..., description="Department identifier")
+    time_window_days: int = Field(30, description="Analysis window in days (default: 30)")
+
+
+class DepartmentRiskResponse(BaseModel):
+    """Response model for department risk profile"""
+    dept_id: str
+    analysis_window_days: int
+    employee_count: int
+    total_paradoxes: int
+    baseline_stress: float
+    acute_risk: float
+    systemic_overload: bool
+    risk_distribution: Dict[str, int]
+    high_risk_individuals: List[Dict[str, Any]]
+    timestamp: str
+    integrity_hash: str
+
+
+class IndifferenceDetectionRequest(BaseModel):
+    """Request model for indifference trajectory detection"""
+    user_id: str = Field(..., description="User to analyze")
+    org_id: str = Field(..., description="Organization ID (for alert broadcasting)")
+    time_window_days: int = Field(30, description="Analysis window in days (default: 30)")
+
+
+class IndifferenceDetectionResponse(BaseModel):
+    """Response model for indifference trajectory analysis"""
+    user_id: str
+    indifference_detected: bool
+    severity: Optional[str]
+    tension_slope: float
+    avg_unresolved: float
+    tension_drop_percent: float
+    days_until_critical: Optional[int]
+    recommended_actions: List[str]
+    alert_broadcast: bool
+    timestamp: str
+    integrity_hash: str
+
+
+class OrganizationHealthResponse(BaseModel):
+    """Response model for organization health score"""
+    org_id: str
+    health_score: float
+    total_employees: int
+    departments_analyzed: int
+    high_risk_count: int
+    systemic_overload_depts: List[str]
+    average_baseline_stress: float
+    timestamp: str
+    integrity_hash: str
+
+
+if DASHBOARD_ENABLED and soul_dashboard:
+    
+    @app.post("/v1/dashboard/department/{dept_id}", response_model=DepartmentRiskResponse)
+    async def department_risk_profile(
+        dept_id: str,
+        time_window_days: int = 30,
+        api_key: str = Depends(verify_api_key)
+    ):
+        """
+        Get comprehensive risk profile for a department.
+        
+        Analyzes:
+        - Baseline environmental stress (toxic work environment indicators)
+        - Acute individual risk (trauma accumulation)
+        - Systemic overload detection (σ₀ > 0.4 + acute > 0.3)
+        - Risk distribution across employees
+        - High-risk individuals requiring intervention
+        
+        This is the B2B dashboard endpoint for managers to monitor team health.
+        """
+        try:
+            # Get department paradoxes from Redis or database
+            if REDIS_ENABLED and redis_cache:
+                # In production, fetch all user paradoxes for department
+                # For now, stub with sample data
+                paradoxes = []
+            else:
+                paradoxes = []
+            
+            # Analyze department risk
+            risk_profile = soul_dashboard.get_department_risk_profile(dept_id, paradoxes, time_window_days)
+            
+            # Record systemic overload if detected
+            if risk_profile["systemic_overload"]:
+                record_systemic_overload(dept_id, risk_profile["baseline_stress"], risk_profile["acute_risk"])
+                
+                # Broadcast alert to WebSocket clients if enabled
+                if WEBSOCKET_ENABLED:
+                    await broadcast_systemic_overload_alert(
+                        org_id=dept_id.split("_")[0],  # Extract org from dept_id
+                        dept_id=dept_id,
+                        baseline_stress=risk_profile["baseline_stress"],
+                        acute_risk=risk_profile["acute_risk"],
+                        affected_count=risk_profile["employee_count"]
+                    )
+            
+            # Generate integrity hash
+            profile_str = json.dumps(risk_profile, sort_keys=True)
+            integrity_hash = hashlib.sha256(profile_str.encode()).hexdigest()
+            
+            return DepartmentRiskResponse(
+                **risk_profile,
+                timestamp=datetime.utcnow().isoformat(),
+                integrity_hash=integrity_hash
+            )
+        
+        except Exception as e:
+            logger.error(f"Failed to analyze department risk: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    @app.post("/v1/soul/indifference", response_model=IndifferenceDetectionResponse)
+    async def detect_indifference_trajectory(
+        req: IndifferenceDetectionRequest,
+        api_key: str = Depends(verify_api_key)
+    ):
+        """
+        🚨 CRITICAL VIOLENCE PREVENTION ENDPOINT
+        
+        Detects indifference trajectory - the mathematical signature of pre-violence soul state.
+        
+        Algorithm:
+        - Tension (T) decreasing while Unresolved (U) remains high = soul withdrawal
+        - Pattern: T: 0.9 → 0.5 → 0.2 while U > 0.6 (soul departing from body)
+        
+        Severity Levels:
+        - WARNING: Early detection (tension_drop > 0.2) - Preventive support
+        - CRITICAL: 14-30 day window (tension_drop > 0.3) - Urgent intervention
+        - TERMINAL: 7-14 day window (tension_drop > 0.5, U > 0.8) - 72-hour watch protocol
+        
+        Protocols:
+        - TERMINAL: Crisis counselor (2-6h), psychiatric evaluation, 24/7 supervision, weapon removal
+        - CRITICAL: Threat assessment, daily crisis counseling, safety plan
+        - WARNING: Counselor check-in, supportive resources, monitor weekly
+        
+        This is the endpoint that prevents school shootings, workplace violence, and suicide.
+        """
+        try:
+            # Get user paradox history from Redis or database
+            if REDIS_ENABLED and redis_cache:
+                paradoxes = redis_cache.get_user_paradoxes(req.user_id, days=req.time_window_days)
+            else:
+                # In-memory fallback (production should use Redis/DB)
+                paradoxes = []
+            
+            # Detect indifference trajectory
+            result = soul_dashboard.detect_indifference_trajectory(req.user_id, paradoxes, req.time_window_days)
+            
+            # Record alert if indifference detected
+            if result["indifference_detected"]:
+                severity = result["severity"]
+                record_indifference_alert(req.user_id, severity, result["tension_drop_percent"], result["days_until_critical"])
+                
+                # 🚨 Broadcast CRITICAL and TERMINAL alerts immediately
+                if severity in ["CRITICAL", "TERMINAL"] and WEBSOCKET_ENABLED:
+                    await broadcast_indifference_alert(
+                        org_id=req.org_id,
+                        user_id=req.user_id,
+                        severity=severity,
+                        tension_drop=result["tension_drop_percent"],
+                        avg_unresolved=result["avg_unresolved"],
+                        days_until_critical=result["days_until_critical"],
+                        recommended_actions=result["recommended_actions"]
+                    )
+                    result["alert_broadcast"] = True
+                else:
+                    result["alert_broadcast"] = False
+            else:
+                result["alert_broadcast"] = False
+            
+            # Generate integrity hash
+            result_str = json.dumps(result, sort_keys=True)
+            integrity_hash = hashlib.sha256(result_str.encode()).hexdigest()
+            
+            return IndifferenceDetectionResponse(
+                **result,
+                timestamp=datetime.utcnow().isoformat(),
+                integrity_hash=integrity_hash
+            )
+        
+        except Exception as e:
+            logger.error(f"Failed to detect indifference trajectory: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    @app.get("/v1/dashboard/org/{org_id}/health", response_model=OrganizationHealthResponse)
+    async def organization_health_score(
+        org_id: str,
+        api_key: str = Depends(verify_api_key)
+    ):
+        """
+        Get organization-wide health score (0-100).
+        
+        Aggregates:
+        - All department risk profiles
+        - Systemic overload departments
+        - High-risk individual count
+        - Average baseline environmental stress
+        
+        Health Score Calculation:
+        - 100: All departments healthy, no high-risk individuals
+        - 50-80: Some departments stressed, manageable risk
+        - 0-50: Multiple systemic overloads, high-risk individuals present
+        
+        This is the executive dashboard endpoint for C-suite monitoring.
+        """
+        try:
+            # Get all department data for organization
+            # In production, query all departments from database
+            dept_paradoxes = {}  # dept_id -> List[SoulCradleParadox]
+            
+            # Calculate organization health
+            health_data = soul_dashboard.get_organization_health(org_id, dept_paradoxes)
+            
+            # Generate integrity hash
+            health_str = json.dumps(health_data, sort_keys=True)
+            integrity_hash = hashlib.sha256(health_str.encode()).hexdigest()
+            
+            return OrganizationHealthResponse(
+                **health_data,
+                timestamp=datetime.utcnow().isoformat(),
+                integrity_hash=integrity_hash
+            )
+        
+        except Exception as e:
+            logger.error(f"Failed to calculate organization health: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# MONITORING & OBSERVABILITY ENDPOINTS
+# ============================================================================
+
+if MONITORING_ENABLED:
+    
+    @app.get("/metrics")
+    async def prometheus_metrics():
+        """
+        Prometheus metrics scrape endpoint.
+        
+        Exposes 15+ metrics:
+        - http_requests_total (method, endpoint, status_code)
+        - clause_invocations_total (clause_id, messenger)
+        - paradoxes_created_total (system_type)
+        - indifference_alerts_total (severity: WARNING/CRITICAL/TERMINAL)
+        - systemic_overload_events (dept_id)
+        - blessings_total, reservoir_score
+        - websocket_connections (org_id)
+        - database_queries_total, redis_operations_total
+        - rate_limit_hits_total (identifier_type)
+        
+        Configure Prometheus to scrape this endpoint every 15 seconds.
+        """
+        return await get_metrics()
+    
+    
+    @app.get("/health")
+    async def health_check():
+        """
+        Comprehensive health check endpoint.
+        
+        Checks:
+        - API status (200 = healthy)
+        - Redis connectivity (if enabled)
+        - Database connectivity (if enabled)
+        - System resources (CPU, memory, disk)
+        
+        Status Codes:
+        - 200: All systems healthy
+        - 503: Critical component unhealthy (Redis/DB down)
+        
+        Used by:
+        - Kubernetes liveness/readiness probes
+        - Load balancers (health checking)
+        - Monitoring systems (uptime tracking)
+        """
+        health_status = await get_health()
+        
+        # Return 503 if any critical component is unhealthy
+        if health_status["status"] == "unhealthy":
+            return Response(
+                content=json.dumps(health_status),
+                status_code=503,
+                media_type="application/json"
+            )
+        
+        return health_status
+    
+    
+    @app.get("/v1/admin/stats")
+    async def system_statistics(api_key: str = Depends(verify_api_key)):
+        """
+        Detailed system statistics (admin only).
+        
+        Returns:
+        - CPU usage (%)
+        - Memory usage (MB)
+        - Disk usage (GB)
+        - Network I/O (MB)
+        - WebSocket connections (count)
+        - API request rate (requests/sec)
+        
+        Requires: Admin API key
+        """
+        # Verify admin role
+        if api_key not in VALID_API_KEYS or "admin" not in VALID_API_KEYS[api_key].get("roles", []):
+            raise HTTPException(status_code=403, detail="Admin access required")
+        
+        stats = await get_system_stats()
+        
+        # Add WebSocket stats if enabled
+        if WEBSOCKET_ENABLED:
+            stats["websocket_stats"] = ws_manager.get_stats()
+        
+        # Add Redis stats if enabled
+        if REDIS_ENABLED and redis_cache:
+            redis_health = redis_cache.health_check()
+            stats["redis_status"] = redis_health
+        
+        return stats
+
+
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Mythara Engine API - Shutting down")
+    
+    # Cleanup Redis connections
+    if REDIS_ENABLED and redis_cache:
+        try:
+            redis_cache.close()
+            logger.info("✅ Redis connections closed")
+        except Exception as e:
+            logger.error(f"Error closing Redis: {e}")
 
 if __name__ == "__main__":
     import uvicorn

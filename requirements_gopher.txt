@@ -1,0 +1,13 @@
+# Mythara Gopher API Dependencies
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+
+# API Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# Database
+psycopg2-binary==2.9.9
+
+# Core dependencies (if not already installed)
+python-dotenv==1.0.0

@@ -22,7 +22,8 @@ import requests
 
 # Orchestrator connection
 ORCHESTRATOR_URL = "http://localhost:5000"
-VP_MASTER_TOKEN = "7561cec685b50635eab5693e5e6121dd12f7321f81903187ae0f6b07389201bf"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "")  # Set via environment
 
 class MytharaLogisticsVP:
     """

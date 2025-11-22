@@ -24,7 +24,7 @@ def test_webhook_signature_validation():
     print("\n[TEST] Webhook signature validation")
     
     # Simulate Stripe webhook signature
-    # MACGYVER FIX: Moved to environment variable (CWE-798)
+    # QUICKFIX FIX: Moved to environment variable (CWE-798)
     webhook_secret = os.getenv("WEBHOOK_SECRET", "")  # Set via environment
     payload = {"type": "checkout.session.completed", "data": {"object": {"id": "cs_test"}}}
     payload_str = json.dumps(payload)

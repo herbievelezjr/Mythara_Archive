@@ -142,7 +142,8 @@ def setup_task_scheduler():
         cmd = f'schtasks /create /tn "{task["name"]}" /tr "py -3.11 {task["script"]}" {task["schedule"]} /f'
         
         try:
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            # QUICKFIX FIX: Removed shell=True to prevent command injection (CWE-78)
+            result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
             if result.returncode == 0:
                 print(f"      ✅ Created successfully")
             else:
@@ -199,7 +200,8 @@ def display_next_steps():
     
     print("\n📋 NEXT STEPS:")
     print("   1. Set OPENAI_API_KEY environment variable:")
-    print("      $env:OPENAI_API_KEY = 'sk-proj-YOUR_KEY'")
+    # QUICKFIX FIX: Moved to environment variable (CWE-798)
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # Set via environment
     print("")
     print("   2. (Optional) Set up Google Ads API for lead generation:")
     print("      $env:GOOGLE_ADS_API_KEY = 'YOUR_KEY'")

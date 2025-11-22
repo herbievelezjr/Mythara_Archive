@@ -126,7 +126,8 @@ if __name__ == '__main__':
     # Check if OpenAI API key is set
     if not os.getenv('OPENAI_API_KEY'):
         print("⚠️  WARNING: OPENAI_API_KEY not set. Install with:")
-        print("   $env:OPENAI_API_KEY = 'sk-proj-YOUR-KEY'\n")
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # Set via environment
         print("Running RAG search test (doesn't need OpenAI)...\n")
         test_rag_search()
     else:

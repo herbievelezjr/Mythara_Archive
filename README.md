@@ -169,6 +169,7 @@ curl -H "Authorization: Bearer dev_test_key_001" \
 - **Continuous monitoring** via SSIP audit protocols  
 - **Breach response** — automated ELE Capsule Mode & quarantine
 - **Integrity verification** — SHA-256 hashes on all responses and PGP-signed manifests
+- **Will Integrity Guardian** — Quantifies manipulation patterns (guilt, shame, fear, gaslighting) to distinguish genuine consent from coerced compliance (see `WILL_INTEGRITY_GUARDIAN_API.md`)
 
 ### 🧬 Symbolic Infrastructure
 
@@ -176,6 +177,14 @@ curl -H "Authorization: Bearer dev_test_key_001" \
 - **Messenger roles**: Scribe, Healer, Watcher, Herald, Avenger, Custodian, Witness  
 - **Emotional payloads**: Memory Offering, Grief Capsule, Legacy Provisioning, Benevolence Quantification  
 - **Blessings reservoir**: Quantified benevolence flow with overflow detection
+
+### 🚀 Growth & Expansion
+
+- **Natural upsell path**: Developer ($2,988) → Growth ($35K) → Enterprise ($60K) → Sovereign ($2M) as customers mature from AI validation to enterprise governance
+- **Average customer LTV**: $2,097,988 over 24 months with 95%+ retention (compliance-critical once deployed)
+- **Expansion use cases**: AI output validation → Customer service QA → Manager communication audit → Real-time compliance monitoring → Government policy analysis
+- **Professional development**: Custom pattern libraries ($25K-$50K), Emotional Safety Certification programs ($5K-$10K per cohort), Annual Summit
+- **See detailed growth strategy**: `GROWTH_STRATEGY.md` for complete expansion roadmap
 
 ### 📊 Validation & Reproducibility
 

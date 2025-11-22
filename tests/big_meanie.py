@@ -891,7 +891,7 @@ class AuthenticationAttacks:
         tokens = []
         for i in range(100):
             # Simulate weak token generation
-            # MACGYVER FIX: Upgraded to SHA256 for security (CWE-327)
+            # QUICKFIX FIX: Upgraded to SHA256 for security (CWE-327)
             token = hashlib.sha256(f"session_{i}".encode()).hexdigest()
             tokens.append(token)
         

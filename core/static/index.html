@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mythara — Legal Infrastructure for the AI Age</title>
+    <meta name="description" content="The operating system for legal risk in AI. 34 international frameworks, adversarially hardened, $10M-$25M indemnification. The platform that makes AI safe to deploy at scale.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --accent-gold: #fbbf24;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg-primary);
+            color: var(--text-primary); 
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Animated Gradient Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(251, 191, 36, 0.1) 0%, transparent 50%);
+            animation: meshMove 20s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+        
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5%, -5%) scale(1.1); }
+            66% { transform: translate(-5%, 5%) scale(0.95); }
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: clamp(4rem, 12vh, 8rem) 0;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-primary) 50%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.05;
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .primary-cta {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+        
+        .primary-cta:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(139, 92, 246, 0.5);
+        }
+        
+        .secondary-cta {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 1.25rem 3rem;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+        }
+        
+        .secondary-cta:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Stats Bar */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* Section Styles */
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .section-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-header h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .product-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 48px rgba(139, 92, 246, 0.2);
+        }
+        
+        .product-card:hover::before {
+            opacity: 1;
+        }
+        
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .product-card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .product-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .product-features li {
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+        
+        .product-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .product-features li::before {
+            content: '✓';
+            color: var(--accent-primary);
+            font-weight: 700;
+            margin-right: 0.75rem;
+        }
+        
+        .learn-more {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+        
+        .learn-more:hover {
+            gap: 0.75rem;
+        }
+        
+        /* Why Mythara Section */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .why-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+        }
+        
+        .why-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-4px);
+        }
+        
+        .why-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .why-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .why-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Comparison Section */
+        .comparison {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 4rem;
+            margin-top: 4rem;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .comparison-row {
+            display: contents;
+        }
+        
+        .comparison-header {
+            font-weight: 700;
+            font-size: 1.125rem;
+            padding: 1.5rem 0;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .comparison-cell {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+        
+        .highlight {
+            color: var(--accent-primary);
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        
+        /* CTA Section */
+        .final-cta {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 32px;
+            padding: 6rem 2rem;
+            margin: 6rem 0;
+        }
+        
+        .final-cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        .final-cta p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+        
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 4rem 0 2rem;
+            margin-top: 6rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-section h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-table {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-cell {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">MYTHARA</div>
+            <ul class="nav-links">
+                <li><a href="#products">Products</a></li>
+                <li><a href="#why">Why Mythara</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="terms.html">Legal</a></li>
+            </ul>
+            <a href="pricing.html" class="cta-button">Get Started</a>
+        </nav>
+        
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">✨ Legal Infrastructure for the AI Age</div>
+            <h1>The Operating System<br>for Legal Risk in AI</h1>
+            <p class="subtitle">
+                34 international frameworks. Adversarially hardened. $10M-$25M indemnification. 
+                The platform that makes AI safe to deploy at scale.
+            </p>
+            <div class="hero-cta">
+                <a href="pricing.html" class="primary-cta">Start Free Trial</a>
+                <a href="#products" class="secondary-cta">Explore Platform</a>
+            </div>
+        </section>
+        
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">34</div>
+                <div class="stat-label">International Frameworks</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">97/97</div>
+                <div class="stat-label">Tests Passed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">$25M</div>
+                <div class="stat-label">Legal Indemnification</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">&lt;50ms</div>
+                <div class="stat-label">API Latency</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Products Section -->
+    <section id="products">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">🏗️ PLATFORM</div>
+                <h2>Built for the Regulatory Crisis<br>That's Coming</h2>
+                <p>
+                    When the first $1B AI company gets shut down by regulators, every AI CEO will ask: 
+                    "How do we make sure that doesn't happen to us?" The answer is Mythara.
+                </p>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Global Governance -->
+                <div class="product-card">
+                    <span class="product-icon">🛡️</span>
+                    <h3>Global Governance</h3>
+                    <p>
+                        Fortress-level legal protection across 34 international frameworks. 
+                        Real-time violation detection with adversarial hardening.
+                    </p>
+                    <ul class="product-features">
+                        <li>HIPAA, GDPR, FCPA, FDA, FINRA, ITAR enforcement</li>
+                        <li>Unicode & homoglyph attack prevention</li>
+                        <li>Semantic evasion detection</li>
+                        <li>$10M-$25M legal indemnification</li>
+                        <li>Zero false positives (97/97 tests)</li>
+                    </ul>
+                    <a href="pricing.html" class="learn-more">View Pricing →</a>
+                </div>
+                
+                <!-- MytharaConnect -->
+                <div class="product-card">
+                    <span class="product-icon">🔗</span>
+                    <h3>MytharaConnect</h3>
+                    <p>
+                        Emotional AI communication with messenger pairing and drift suppression. 
+                        Build trust that scales without breaking.
+                    </p>
+                    <ul class="product-features">
+                        <li>Symbolic Service & Integration Protocol (SSIP)</li>
+                        <li>Messenger pairing with emotional fidelity tracking</li>
+                        <li>Drift suppression algorithms</li>
+                        <li>Industry-aware conversation flows</li>
+                        <li>Real-time compliance integration</li>
+                    </ul>
+                    <a href="pricing.html#connect" class="learn-more">Learn More →</a>
+                </div>
+                
+                <!-- Analytics Engine -->
+                <div class="product-card">
+                    <span class="product-icon">📊</span>
+                    <h3>Analytics Engine</h3>
+                    <p>
+                        Business intelligence that understands risk, compliance, and trust metrics. 
+                        Make decisions with complete visibility.
+                    </p>
+                    <ul class="product-features">
+                        <li>Real-time risk scoring dashboards</li>
+                        <li>Compliance violation trend analysis</li>
+                        <li>Emotional fidelity metrics</li>
+                        <li>Regulatory update forecasting</li>
+                        <li>Custom framework reporting</li>
+                    </ul>
+                    <a href="pricing.html#analytics" class="learn-more">Coming Q1 2026 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Why Mythara -->
+    <section id="why">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">💎 COMPETITIVE ADVANTAGE</div>
+                <h2>Why No Other Framework<br>Compares</h2>
+                <p>
+                    We're not building a compliance tool. We're building the legal immune system 
+                    that makes AI safe to deploy at scale.
+                </p>
+            </div>
+            
+            <div class="why-grid">
+                <div class="why-card">
+                    <span class="why-icon">🌍</span>
+                    <h3>Global Coverage</h3>
+                    <p>
+                        34 frameworks enforced simultaneously. OneTrust has 2-5. Drata has 5-10. 
+                        We have everything from HIPAA to UN sanctions.
+                    </p>
+                </div>
+                
+                <div class="why-card">
+                    <span class="why-icon">⚔️</span>
+                    <h3>Adversarially Hardened</h3>
+                    <p>
+                        97/97 tests passed including Unicode attacks, homoglyph evasion, and semantic bypasses. 
+                        Zero loopholes detected.
+                    </p>
+                </div>
+                
+                <div class="why-card">
+                    <span class="why-icon">🏛️</span>
+                    <h3>Legal Indemnification</h3>
+                    <p>
+                        $10M-$25M coverage. If our system misses a violation, we pay the fine. 
+                        No other compliance tool offers this.
+                    </p>
+                </div>
+                
+                <div class="why-card">
+                    <span class="why-icon">⚡</span>
+                    <h3>Real-Time Protection</h3>
+                    <p>
+                        &lt;50ms API latency, 10K requests/second. Batch scanning and quarterly audits 
+                        can't protect you in production.
+                    </p>
+                </div>
+                
+                <div class="why-card">
+                    <span class="why-icon">🤖</span>
+                    <h3>AI-Specific</h3>
+                    <p>
+                        Built for AI companies. Understands algorithmic bias claims, investment guarantees, 
+                        and medical device certifications.
+                    </p>
+                </div>
+                
+                <div class="why-card">
+                    <span class="why-icon">🔄</span>
+                    <h3>Always Updated</h3>
+                    <p>
+                        New regulations added automatically. EU AI Act, US Executive Orders, 
+                        China AI laws — we handle regulatory changes.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Comparison Table -->
+            <div class="comparison">
+                <h3 style="text-align: center; margin-bottom: 3rem; font-size: 2rem;">How We Compare</h3>
+                <div class="comparison-table">
+                    <div class="comparison-row">
+                        <div class="comparison-header">Feature</div>
+                        <div class="comparison-header">Others</div>
+                        <div class="comparison-header">Mythara</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Framework Coverage</div>
+                        <div class="comparison-cell">2-15 frameworks</div>
+                        <div class="comparison-cell highlight">34 frameworks</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Attack Resistance</div>
+                        <div class="comparison-cell">Basic keyword matching</div>
+                        <div class="comparison-cell highlight">Adversarially hardened</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Legal Coverage</div>
+                        <div class="comparison-cell">"Use at your own risk"</div>
+                        <div class="comparison-cell highlight">$10M-$25M indemnification</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Response Time</div>
+                        <div class="comparison-cell">Manual review (days)</div>
+                        <div class="comparison-cell highlight">&lt;50ms real-time</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">AI-Specific</div>
+                        <div class="comparison-cell">Generic compliance</div>
+                        <div class="comparison-cell highlight">Built for AI companies</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="comparison-cell">Cost</div>
+                        <div class="comparison-cell">$500K-$2M/year (legal team)</div>
+                        <div class="comparison-cell highlight">$30K-$600K/year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section>
+        <div class="container">
+            <div class="final-cta">
+                <h2>Ready to Build on<br>Proven Infrastructure?</h2>
+                <p>
+                    Join the AI companies that won't be the next regulatory catastrophe. 
+                    Start with a free trial or talk to our team.
+                </p>
+                <div class="hero-cta">
+                    <a href="pricing.html" class="primary-cta">Start Free Trial</a>
+                    <a href="mailto:Mythara.Engine@yahoo.com" class="secondary-cta">Talk to Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="pricing.html">Global Governance</a></li>
+                        <li><a href="pricing.html#connect">MytharaConnect</a></li>
+                        <li><a href="pricing.html#analytics">Analytics Engine</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="docs/index.html">Documentation</a></li>
+                        <li><a href="https://github.com/herbievelezjr/Mythara_Archive">GitHub</a></li>
+                        <li><a href="mailto:Mythara.Engine@yahoo.com">Support</a></li>
+                        <li><a href="MYTHARA_GOVERNANCE_LICENSE_AGREEMENT.md">License Agreement</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="mailto:Mythara.Engine@yahoo.com">Contact</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="terms.html#privacy">Privacy Policy</a></li>
+                        <li><a href="COPYRIGHT.md">Copyright</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://github.com/herbievelezjr">GitHub</a></li>
+                        <li><a href="mailto:Mythara.Engine@yahoo.com">Email</a></li>
+                        <li>PGP: 571F FB4C CCFA DCF</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Herbert Velez Jr. All rights reserved. Mythara Labs LLC.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    The legal infrastructure for the AI age. Built to prevent the regulatory crisis that's coming.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

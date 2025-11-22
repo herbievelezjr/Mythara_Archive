@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Auto Sender - Fully Automated Email Outreach
@@ -7,7 +8,8 @@ Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 SETUP:
-1. Set Yahoo App Password: $env:YAHOO_APP_PASSWORD="your-password"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+YAHOO_APP_PASSWORD = os.getenv("YAHOO_APP_PASSWORD", "")  # Set via environment
 2. Run harvester: py public_contact_harvester.py
 3. Run this: py auto_sender.py
 

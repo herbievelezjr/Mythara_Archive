@@ -1,0 +1,76 @@
+{
+  "suite_id": "medical_team_suite_v1",
+  "report_time": "2025-11-20T00:29:36.409660",
+  "essential_bots": {
+    "triage_coordinator": {
+      "bot_id": "triage_coordinator",
+      "operational": true,
+      "active_cases_by_urgency": {},
+      "last_check": "2025-11-20T00:29:36.410660"
+    },
+    "clinical_documentation": {
+      "bot_id": "clinical_documentation",
+      "operational": true,
+      "unsigned_notes_pending": 0,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "compliance_monitor": {
+      "bot_id": "compliance_monitor",
+      "operational": true,
+      "active_alerts_by_severity": {},
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "crisis_response": {
+      "bot_id": "crisis_response",
+      "operational": true,
+      "available_protocols": [
+        "code_blue",
+        "code_red",
+        "code_grey",
+        "code_pink"
+      ],
+      "last_check": "2025-11-20T00:29:36.412059"
+    }
+  },
+  "support_bots": {
+    "patient_education": {
+      "bot_id": "patient_education",
+      "operational": true,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "scheduling_coordinator": {
+      "bot_id": "scheduling_coordinator",
+      "operational": true,
+      "todays_appointments": 0,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "resource_allocation": {
+      "bot_id": "resource_allocation",
+      "operational": true,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "administrative_assistant": {
+      "bot_id": "administrative_assistant",
+      "operational": true,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "quality_assurance": {
+      "bot_id": "quality_assurance",
+      "operational": true,
+      "last_check": "2025-11-20T00:29:36.412059"
+    },
+    "continuing_education": {
+      "bot_id": "continuing_education",
+      "operational": true,
+      "last_check": "2025-11-20T00:29:36.412059"
+    }
+  },
+  "overall_health": {
+    "active_triage_cases": 0,
+    "unresolved_compliance_alerts": 0,
+    "todays_scheduled_appointments": 0,
+    "suite_operational": true,
+    "last_health_check": "2025-11-20T00:29:36.412059"
+  },
+  "integrity_hash": "ced2aacc4b303d75f61a1ffd2bb63273afefa42c61e4c59cda925b891a3200e7"
+}

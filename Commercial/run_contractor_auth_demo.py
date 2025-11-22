@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -22,7 +23,8 @@ def main():
     print('-'*70)
     
     contractor_email = 'sarah@contractor.example.com'
-    contractor_password = 'SecureContractorPass2025!'
+    # QUICKFIX FIX: Moved to environment variable (CWE-798)
+    contractor_password = os.getenv("CONTRACTOR_PASSWORD", "")  # Set via environment
     
     print(f'Onboarding: {contractor_email}')
     cm.onboard_contractor(
@@ -168,7 +170,8 @@ def main():
         
         print(f"Contractor enters reset code: {reset_code}")
         
-        new_password = 'NewSecurePass2025!'
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        new_password = os.getenv("NEW_PASSWORD", "")  # Set via environment
         reset_result = auth.reset_password(
             otp_id=reset_request['otp_id'],
             otp_code=reset_code,

@@ -37,3 +37,13 @@ Thumbs.db
 *_secrets.py
 *.key
 *.pem
+PRIVATE/
+**/*FAST_EXIT*
+**/*STRATEGIC_TRANSITIONS*
+
+# Pricing & Deployment (never push these)
+core/static/pricing*.html
+generate_pricing_video*
+deploy_railway.sh
+railway.toml
+Procfile
