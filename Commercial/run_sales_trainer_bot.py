@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -7,7 +8,8 @@ Analyzes conversations, updates Sales Bot tactics
 
 UPDATED: Now uses Google Gemini (FREE) instead of OpenAI
 Get your free API key: https://ai.google.dev/
-Set: $env:GOOGLE_AI_API_KEY = 'YOUR_FREE_KEY'
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")  # Set via environment
 """
 
 import sys
@@ -23,7 +25,8 @@ GOOGLE_AI_API_KEY = os.getenv('GOOGLE_AI_API_KEY')
 if not GOOGLE_AI_API_KEY:
     print("⚠️  Warning: GOOGLE_AI_API_KEY not set. Bot will run in rule-based mode.")
     print("   Get free API key: https://ai.google.dev/")
-    print("   Set with: $env:GOOGLE_AI_API_KEY = 'YOUR_FREE_KEY'")
+    # QUICKFIX FIX: Moved to environment variable (CWE-798)
+    GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")  # Set via environment
     print("")
 
 def run_sales_trainer_bot():

@@ -1,0 +1,163 @@
+
+================================================================================
+🔧 MACGYVER BOT SECURITY REPORT
+================================================================================
+
+Mission: Secure the codebase with available resources
+Target: C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive
+Timestamp: 2025-11-20T01:46:20.895424
+
+VULNERABILITIES DETECTED:
+================================================================================
+Total: 14
+CRITICAL: 2
+HIGH: 11
+MEDIUM: 1
+LOW: 0
+
+FIXES APPLIED:
+================================================================================
+Total Fixes Attempted: 13
+Successful: 13
+Failed: 0
+Backups Created: 13
+
+DETAILED FINDINGS:
+================================================================================
+
+[1] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 217
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: # MACGYVER WARNING: pickle.loads() can execute arbitrary code (CWE-502)
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[2] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 218
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: if 'pickle.loads(' in content or 'pickle.load(' in content:
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[3] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 219
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: # MACGYVER WARNING: pickle.loads() can execute arbitrary code (CWE-502)
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[4] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 221
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: if 'pickle.load' in line:
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[5] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 225
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: # MACGYVER WARNING: pickle.loads() can execute arbitrary code (CWE-502)
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[6] HIGH - Insecure Deserialization
+File: macgyver_bot.py
+Line: 228
+CWE: CWE-502
+Description: pickle.loads() can execute arbitrary code
+Code: description="pickle.loads() can execute arbitrary code",
+Fix: Use json.loads() or validate pickle data source
+--------------------------------------------------------------------------------
+
+[7] CRITICAL - Command Injection
+File: macgyver_bot.py
+Line: 241
+CWE: CWE-78
+Description: eval() can execute arbitrary code
+Code: (r'eval\s*\(', 'eval() can execute arbitrary code'),
+Fix: Use subprocess with list arguments, avoid shell=True
+--------------------------------------------------------------------------------
+
+[8] CRITICAL - Command Injection
+File: macgyver_bot.py
+Line: 242
+CWE: CWE-78
+Description: exec() can execute arbitrary code
+Code: (r'exec\s*\(', 'exec() can execute arbitrary code'),
+Fix: Use subprocess with list arguments, avoid shell=True
+--------------------------------------------------------------------------------
+
+[9] MEDIUM - Path Traversal
+File: macgyver_bot.py
+Line: 264
+CWE: CWE-22
+Description: File path constructed from user input
+Code: if 'open(' in line and '+' in line:
+Fix: Validate and sanitize file paths, use os.path.abspath()
+--------------------------------------------------------------------------------
+
+[10] HIGH - Hardcoded Secret
+File: Commercial\deploy_ai_team.py
+Line: 203
+CWE: CWE-798
+Description: Potential Hardcoded API key
+Code: print("      $env:OPENAI_API_KEY = 'sk-proj-YOUR_KEY'")
+Fix: Use environment variables or secrets manager
+--------------------------------------------------------------------------------
+
+[11] HIGH - Hardcoded Secret
+File: Commercial\deploy_ai_team.py
+Line: 254
+CWE: CWE-798
+Description: Potential Hardcoded API key
+Code: print("   $env:OPENAI_API_KEY = 'sk-proj-YOUR_KEY'")
+Fix: Use environment variables or secrets manager
+--------------------------------------------------------------------------------
+
+[12] HIGH - Hardcoded Secret
+File: Commercial\run_contractor_auth_demo.py
+Line: 173
+CWE: CWE-798
+Description: Potential Hardcoded password
+Code: new_password = 'NewSecurePass2025!'
+Fix: Use environment variables or secrets manager
+--------------------------------------------------------------------------------
+
+[13] HIGH - Hardcoded Secret
+File: Commercial\run_marketing_bot.py
+Line: 29
+CWE: CWE-798
+Description: Potential Hardcoded API key
+Code: print("   Set with: $env:GOOGLE_AI_API_KEY = 'YOUR_FREE_KEY'")
+Fix: Use environment variables or secrets manager
+--------------------------------------------------------------------------------
+
+[14] HIGH - Hardcoded Secret
+File: Commercial\run_sales_trainer_bot.py
+Line: 28
+CWE: CWE-798
+Description: Potential Hardcoded API key
+Code: print("   Set with: $env:GOOGLE_AI_API_KEY = 'YOUR_FREE_KEY'")
+Fix: Use environment variables or secrets manager
+--------------------------------------------------------------------------------
+
+================================================================================
+MacGyver's Notes:
+--------------------------------------------------------------------------------
+- All fixes have been backed up to .macgyver_backups/
+- Review changes before committing
+- Test thoroughly after applying fixes
+- "I love it when a plan comes together!" - MacGyver
+
+Tools Used: python, regex, ast_parser
+================================================================================

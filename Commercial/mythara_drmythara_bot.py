@@ -1,0 +1,636 @@
+import os
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+# Proprietary and Confidential.
+
+"""
+DrMythara Bot - Healthcare Compliance Specialist
+- HIPAA validation and compliance checking
+- FDA 21 CFR Part 11 electronic records validation
+- Medical AI governance and risk assessment
+- Healthcare data privacy auditing
+- Clinical trial compliance
+- Medical device AI regulations
+
+NOT A MEDICAL PROFESSIONAL. DOES NOT PROVIDE MEDICAL ADVICE. COMPLIANCE GUIDANCE ONLY.
+
+Uses Mythara SSIP:
+- Sanctification: HIPAA rules locked (immutable)
+- Integrity Hashing: All compliance audits cryptographically verified
+- Blessings Reservoir: Compliance scores
+- Shadow_Resolver: Auto-escalate critical violations
+"""
+
+import json
+import sqlite3
+import hashlib
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Optional
+import requests
+import re
+
+# Orchestrator connection
+ORCHESTRATOR_URL = "http://localhost:5000"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "")  # Set via environment
+
+class DrMytharaBot:
+    """DrMythara Bot - Healthcare compliance specialist."""
+    
+    def __init__(self):
+        self.bot_id = "drmythara_bot"
+        self.bot_token = None
+        self.db_path = "mythara_drmythara.db"
+        
+        # HIPAA compliance rules
+        self.hipaa_rules = self._init_hipaa_rules()
+        
+        # FDA 21 CFR Part 11 rules
+        self.fda_rules = self._init_fda_rules()
+        
+        # Medical AI governance framework
+        self.ai_governance = self._init_ai_governance()
+        
+        # Initialize database
+        self._init_db()
+        
+        # Register with orchestrator
+        self._register()
+    
+    def _init_hipaa_rules(self) -> Dict[str, Any]:
+        """Initialize HIPAA compliance rules."""
+        return {
+            "technical_safeguards": {
+                "access_control": ["unique_user_id", "emergency_access", "auto_logoff", "encryption"],
+                "audit_controls": ["audit_logging", "log_review", "integrity_verification"],
+                "integrity": ["data_integrity", "authentication_mechanisms"],
+                "transmission_security": ["encryption_in_transit", "tls_1_2_minimum"]
+            },
+            "administrative_safeguards": {
+                "security_management": ["risk_analysis", "risk_management", "sanctions", "review"],
+                "workforce_security": ["authorization", "supervision", "termination", "clearance"],
+                "information_access": ["access_authorization", "access_modification"],
+                "training": ["security_awareness", "protection_malware", "login_monitoring", "password_management"]
+            },
+            "physical_safeguards": {
+                "facility_access": ["contingency_operations", "facility_security", "access_control_validation"],
+                "workstation_use": ["workstation_security", "device_encryption"],
+                "device_media": ["disposal", "media_reuse", "accountability", "data_backup"]
+            },
+            "phi_categories": [
+                "names", "addresses", "dates", "phone_numbers", "fax_numbers", "email_addresses",
+                "ssn", "medical_record_numbers", "health_plan_numbers", "account_numbers",
+                "certificate_numbers", "vehicle_identifiers", "device_identifiers", "urls",
+                "ip_addresses", "biometric_identifiers", "photos", "unique_identifying_numbers"
+            ]
+        }
+    
+    def _init_fda_rules(self) -> Dict[str, Any]:
+        """Initialize FDA 21 CFR Part 11 rules."""
+        return {
+            "electronic_records": {
+                "validation": ["system_validation", "accurate_reliable", "traceable", "consistent"],
+                "audit_trail": ["secure_timestamped", "independent_operator_date", "record_changes"],
+                "legacy_systems": ["accurate_complete_copies", "readily_retrievable"]
+            },
+            "electronic_signatures": {
+                "general_requirements": ["unique_to_individual", "not_reused", "not_reassigned"],
+                "components": ["biometric", "two_distinct_identification", "password_token"],
+                "controls": ["authority_checks", "device_checks", "multi_factor"]
+            },
+            "signature_manifestations": {
+                "display": ["printed_name", "signature_date", "meaning"],
+                "link_to_record": ["cannot_excise", "cannot_copy", "cannot_transfer"]
+            }
+        }
+    
+    def _init_ai_governance(self) -> Dict[str, Any]:
+        """Initialize medical AI governance framework."""
+        return {
+            "risk_categories": {
+                "low_risk": "Non-diagnostic informational AI (e.g., appointment scheduling)",
+                "moderate_risk": "Clinical decision support without autonomous action",
+                "high_risk": "Diagnostic AI requiring FDA clearance",
+                "critical_risk": "Autonomous treatment AI (rare, heavily regulated)"
+            },
+            "fda_device_classes": {
+                "class_i": "Low risk, general controls",
+                "class_ii": "Moderate risk, special controls + 510(k) clearance",
+                "class_iii": "High risk, PMA (Pre-Market Approval) required"
+            },
+            "bias_checks": [
+                "demographic_parity", "equalized_odds", "predictive_parity",
+                "treatment_parity", "false_positive_rate_balance"
+            ],
+            "validation_requirements": [
+                "clinical_validation", "technical_validation", "continuous_monitoring",
+                "drift_detection", "performance_degradation_alerts"
+            ]
+        }
+    
+    def _init_db(self):
+        """Initialize DrMythara database."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        # HIPAA compliance audits
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS hipaa_audits (
+                audit_id TEXT PRIMARY KEY,
+                organization_name TEXT NOT NULL,
+                audit_date TEXT NOT NULL,
+                audit_type TEXT CHECK(audit_type IN ('initial', 'annual', 'incident', 'ad_hoc')),
+                scope TEXT,
+                technical_score INT DEFAULT 0,
+                administrative_score INT DEFAULT 0,
+                physical_score INT DEFAULT 0,
+                overall_score INT DEFAULT 0,
+                findings TEXT,
+                critical_issues INT DEFAULT 0,
+                high_issues INT DEFAULT 0,
+                medium_issues INT DEFAULT 0,
+                low_issues INT DEFAULT 0,
+                remediation_plan TEXT,
+                status TEXT DEFAULT 'in_progress',
+                completed_at TEXT,
+                integrity_hash TEXT
+            )
+        ''')
+        
+        # FDA 21 CFR Part 11 validations
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS fda_validations (
+                validation_id TEXT PRIMARY KEY,
+                system_name TEXT NOT NULL,
+                validation_date TEXT NOT NULL,
+                validation_type TEXT CHECK(validation_type IN ('initial', 'periodic', 'change_control', 'revalidation')),
+                electronic_records_compliant BOOLEAN DEFAULT 0,
+                electronic_signatures_compliant BOOLEAN DEFAULT 0,
+                audit_trail_compliant BOOLEAN DEFAULT 0,
+                overall_compliant BOOLEAN DEFAULT 0,
+                findings TEXT,
+                gaps TEXT,
+                remediation_actions TEXT,
+                status TEXT DEFAULT 'in_progress',
+                completed_at TEXT,
+                integrity_hash TEXT
+            )
+        ''')
+        
+        # Medical AI governance assessments
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS ai_governance_assessments (
+                assessment_id TEXT PRIMARY KEY,
+                ai_system_name TEXT NOT NULL,
+                assessment_date TEXT NOT NULL,
+                risk_category TEXT CHECK(risk_category IN ('low_risk', 'moderate_risk', 'high_risk', 'critical_risk')),
+                fda_device_class TEXT CHECK(fda_device_class IN ('class_i', 'class_ii', 'class_iii', 'not_device')),
+                requires_fda_clearance BOOLEAN DEFAULT 0,
+                clinical_validation_complete BOOLEAN DEFAULT 0,
+                bias_testing_complete BOOLEAN DEFAULT 0,
+                drift_monitoring_enabled BOOLEAN DEFAULT 0,
+                overall_governance_score INT DEFAULT 0,
+                findings TEXT,
+                recommendations TEXT,
+                status TEXT DEFAULT 'in_progress',
+                completed_at TEXT,
+                integrity_hash TEXT
+            )
+        ''')
+        
+        # PHI exposure incidents
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS phi_incidents (
+                incident_id TEXT PRIMARY KEY,
+                detected_at TEXT NOT NULL,
+                incident_type TEXT CHECK(incident_type IN ('unauthorized_access', 'data_breach', 'improper_disposal', 'lost_device', 'ransomware', 'phishing', 'insider_threat')),
+                severity TEXT CHECK(severity IN ('low', 'medium', 'high', 'critical')),
+                affected_records INT DEFAULT 0,
+                affected_phi_categories TEXT,
+                breach_notification_required BOOLEAN DEFAULT 0,
+                ocr_notified BOOLEAN DEFAULT 0,
+                patients_notified BOOLEAN DEFAULT 0,
+                root_cause TEXT,
+                remediation_actions TEXT,
+                status TEXT DEFAULT 'investigating',
+                resolved_at TEXT,
+                integrity_hash TEXT
+            )
+        ''')
+        
+        # Compliance reports
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS compliance_reports (
+                report_id TEXT PRIMARY KEY,
+                report_type TEXT CHECK(report_type IN ('hipaa', 'fda_cfr11', 'ai_governance', 'combined')),
+                generated_at TEXT NOT NULL,
+                reporting_period_start TEXT NOT NULL,
+                reporting_period_end TEXT NOT NULL,
+                overall_compliance_score INT DEFAULT 0,
+                total_audits INT DEFAULT 0,
+                critical_findings INT DEFAULT 0,
+                recommendations TEXT,
+                executive_summary TEXT,
+                integrity_hash TEXT
+            )
+        ''')
+        
+        conn.commit()
+        conn.close()
+        print("[OK] DrMythara Bot database initialized: mythara_drmythara.db")
+    
+    def _register(self):
+        """Register with Mythara Orchestrator."""
+        try:
+            response = requests.post(
+                f"{ORCHESTRATOR_URL}/register_bot",
+                json={
+                    "vp_token": VP_MASTER_TOKEN,
+                    "bot_id": self.bot_id,
+                    "bot_name": "DrMythara Healthcare Compliance Bot"
+                },
+                timeout=5
+            )
+            if response.status_code == 200:
+                self.bot_token = response.json()['bot_token']
+                print(f"[OK] Registered with orchestrator: {self.bot_id}")
+        except Exception as e:
+            print(f"[WARN] Could not connect to orchestrator: {e}")
+    
+    def _generate_integrity_hash(self, data: Dict[str, Any]) -> str:
+        """Generate SHA-256 hash for audit trail."""
+        json_str = json.dumps(data, sort_keys=True)
+        return hashlib.sha256(json_str.encode()).hexdigest()[:16]
+    
+    def audit_hipaa_compliance(self, organization: str, scope: str = "full") -> Dict[str, Any]:
+        """
+        Perform HIPAA compliance audit.
+        
+        Args:
+            organization: Name of organization being audited
+            scope: Audit scope ('full', 'technical', 'administrative', 'physical')
+        
+        Returns:
+            Audit results with compliance scores and findings
+        """
+        audit_id = hashlib.sha256(f"{organization}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
+        
+        # Simulated audit (in production, integrate with actual security scanners)
+        findings = []
+        technical_score = 0
+        administrative_score = 0
+        physical_score = 0
+        
+        # Check technical safeguards
+        if scope in ['full', 'technical']:
+            tech_checks = len(self.hipaa_rules['technical_safeguards']['access_control'])
+            tech_passed = tech_checks - 1  # Simulated: missing one control
+            technical_score = int((tech_passed / tech_checks) * 100)
+            if tech_passed < tech_checks:
+                findings.append({
+                    "category": "Technical Safeguards",
+                    "severity": "high",
+                    "finding": "Auto-logoff not configured for all workstations",
+                    "recommendation": "Implement 15-minute auto-logoff policy across all systems"
+                })
+        
+        # Check administrative safeguards
+        if scope in ['full', 'administrative']:
+            admin_checks = 12  # Total administrative requirements
+            admin_passed = 11  # Simulated: missing one
+            administrative_score = int((admin_passed / admin_checks) * 100)
+            findings.append({
+                "category": "Administrative Safeguards",
+                "severity": "medium",
+                "finding": "Security awareness training not documented for 3 employees",
+                "recommendation": "Complete training and maintain training logs for all workforce members"
+            })
+        
+        # Check physical safeguards
+        if scope in ['full', 'physical']:
+            phys_checks = 8  # Total physical requirements
+            phys_passed = 8  # Simulated: all passed
+            physical_score = int((phys_passed / phys_checks) * 100)
+        
+        overall_score = int((technical_score + administrative_score + physical_score) / 3)
+        
+        # Count issues by severity
+        critical_issues = sum(1 for f in findings if f['severity'] == 'critical')
+        high_issues = sum(1 for f in findings if f['severity'] == 'high')
+        medium_issues = sum(1 for f in findings if f['severity'] == 'medium')
+        low_issues = sum(1 for f in findings if f['severity'] == 'low')
+        
+        audit_data = {
+            "audit_id": audit_id,
+            "organization_name": organization,
+            "audit_date": datetime.now().isoformat(),
+            "audit_type": "ad_hoc",
+            "scope": scope,
+            "technical_score": technical_score,
+            "administrative_score": administrative_score,
+            "physical_score": physical_score,
+            "overall_score": overall_score,
+            "findings": json.dumps(findings),
+            "critical_issues": critical_issues,
+            "high_issues": high_issues,
+            "medium_issues": medium_issues,
+            "low_issues": low_issues,
+            "status": "completed",
+            "completed_at": datetime.now().isoformat()
+        }
+        
+        audit_data['integrity_hash'] = self._generate_integrity_hash(audit_data)
+        
+        # Save to database
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        c.execute('''INSERT INTO hipaa_audits VALUES 
+                     (:audit_id, :organization_name, :audit_date, :audit_type, :scope,
+                      :technical_score, :administrative_score, :physical_score, :overall_score,
+                      :findings, :critical_issues, :high_issues, :medium_issues, :low_issues,
+                      NULL, :status, :completed_at, :integrity_hash)''', audit_data)
+        conn.commit()
+        conn.close()
+        
+        return {
+            "audit_id": audit_id,
+            "organization": organization,
+            "overall_score": overall_score,
+            "technical_score": technical_score,
+            "administrative_score": administrative_score,
+            "physical_score": physical_score,
+            "findings": findings,
+            "critical_issues": critical_issues,
+            "high_issues": high_issues,
+            "recommendation": "Address high-severity findings within 30 days" if high_issues > 0 else "Maintain current compliance posture"
+        }
+    
+    def validate_fda_cfr11_compliance(self, system_name: str) -> Dict[str, Any]:
+        """
+        Validate FDA 21 CFR Part 11 compliance for electronic records system.
+        
+        Args:
+            system_name: Name of system being validated
+        
+        Returns:
+            Validation results with compliance status
+        """
+        validation_id = hashlib.sha256(f"{system_name}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
+        
+        # Simulated validation checks
+        findings = []
+        gaps = []
+        
+        # Check electronic records compliance
+        records_compliant = True
+        findings.append({
+            "requirement": "Electronic Records - Validation",
+            "status": "compliant",
+            "evidence": "System validation documentation reviewed and approved"
+        })
+        
+        # Check electronic signatures compliance
+        signatures_compliant = False
+        findings.append({
+            "requirement": "Electronic Signatures - Two-Factor Authentication",
+            "status": "non_compliant",
+            "evidence": "System uses single-factor authentication only"
+        })
+        gaps.append("Implement two-factor authentication for all electronic signatures")
+        
+        # Check audit trail compliance
+        audit_trail_compliant = True
+        findings.append({
+            "requirement": "Audit Trail - Secure Timestamps",
+            "status": "compliant",
+            "evidence": "Audit trail uses secure, independent timestamps"
+        })
+        
+        overall_compliant = records_compliant and signatures_compliant and audit_trail_compliant
+        
+        validation_data = {
+            "validation_id": validation_id,
+            "system_name": system_name,
+            "validation_date": datetime.now().isoformat(),
+            "validation_type": "ad_hoc",
+            "electronic_records_compliant": records_compliant,
+            "electronic_signatures_compliant": signatures_compliant,
+            "audit_trail_compliant": audit_trail_compliant,
+            "overall_compliant": overall_compliant,
+            "findings": json.dumps(findings),
+            "gaps": json.dumps(gaps),
+            "status": "completed",
+            "completed_at": datetime.now().isoformat()
+        }
+        
+        validation_data['integrity_hash'] = self._generate_integrity_hash(validation_data)
+        
+        # Save to database
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        c.execute('''INSERT INTO fda_validations VALUES 
+                     (:validation_id, :system_name, :validation_date, :validation_type,
+                      :electronic_records_compliant, :electronic_signatures_compliant,
+                      :audit_trail_compliant, :overall_compliant, :findings, :gaps,
+                      NULL, :status, :completed_at, :integrity_hash)''', validation_data)
+        conn.commit()
+        conn.close()
+        
+        return {
+            "validation_id": validation_id,
+            "system_name": system_name,
+            "overall_compliant": overall_compliant,
+            "electronic_records_compliant": records_compliant,
+            "electronic_signatures_compliant": signatures_compliant,
+            "audit_trail_compliant": audit_trail_compliant,
+            "gaps": gaps,
+            "recommendation": "Address gaps before using system in production" if not overall_compliant else "System validated for 21 CFR Part 11 compliance"
+        }
+    
+    def assess_medical_ai_governance(self, ai_system: str, use_case: str) -> Dict[str, Any]:
+        """
+        Assess medical AI system for governance and regulatory compliance.
+        
+        Args:
+            ai_system: Name of AI system
+            use_case: Clinical use case description
+        
+        Returns:
+            Governance assessment with risk category and FDA requirements
+        """
+        assessment_id = hashlib.sha256(f"{ai_system}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
+        
+        # Determine risk category based on use case
+        risk_category = "moderate_risk"  # Default
+        if "diagnostic" in use_case.lower() or "treatment" in use_case.lower():
+            risk_category = "high_risk"
+        elif "scheduling" in use_case.lower() or "reminder" in use_case.lower():
+            risk_category = "low_risk"
+        elif "autonomous" in use_case.lower():
+            risk_category = "critical_risk"
+        
+        # Determine FDA device classification
+        fda_class = "not_device"
+        requires_clearance = False
+        if risk_category in ["high_risk", "critical_risk"]:
+            fda_class = "class_ii"
+            requires_clearance = True
+        elif risk_category == "moderate_risk":
+            fda_class = "class_i"
+        
+        # Governance checks
+        findings = []
+        recommendations = []
+        governance_score = 0
+        
+        if risk_category == "high_risk":
+            findings.append("System requires FDA 510(k) clearance before clinical deployment")
+            recommendations.append("Prepare 510(k) submission with clinical validation data")
+            recommendations.append("Conduct prospective clinical trial for diagnostic accuracy")
+            governance_score = 60  # Incomplete governance
+        else:
+            governance_score = 85  # Good governance for lower risk
+        
+        # Bias testing
+        bias_complete = False
+        findings.append("Bias testing not documented across demographic groups")
+        recommendations.append("Test AI performance across age, gender, race/ethnicity subgroups")
+        
+        # Drift monitoring
+        drift_enabled = False
+        findings.append("Model drift monitoring not configured")
+        recommendations.append("Implement continuous performance monitoring with drift alerts")
+        
+        assessment_data = {
+            "assessment_id": assessment_id,
+            "ai_system_name": ai_system,
+            "assessment_date": datetime.now().isoformat(),
+            "risk_category": risk_category,
+            "fda_device_class": fda_class,
+            "requires_fda_clearance": requires_clearance,
+            "clinical_validation_complete": False,
+            "bias_testing_complete": bias_complete,
+            "drift_monitoring_enabled": drift_enabled,
+            "overall_governance_score": governance_score,
+            "findings": json.dumps(findings),
+            "recommendations": json.dumps(recommendations),
+            "status": "completed",
+            "completed_at": datetime.now().isoformat()
+        }
+        
+        assessment_data['integrity_hash'] = self._generate_integrity_hash(assessment_data)
+        
+        # Save to database
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        c.execute('''INSERT INTO ai_governance_assessments VALUES 
+                     (:assessment_id, :ai_system_name, :assessment_date, :risk_category,
+                      :fda_device_class, :requires_fda_clearance, :clinical_validation_complete,
+                      :bias_testing_complete, :drift_monitoring_enabled, :overall_governance_score,
+                      :findings, :recommendations, :status, :completed_at, :integrity_hash)''', assessment_data)
+        conn.commit()
+        conn.close()
+        
+        return {
+            "assessment_id": assessment_id,
+            "ai_system": ai_system,
+            "risk_category": risk_category,
+            "fda_device_class": fda_class,
+            "requires_fda_clearance": requires_clearance,
+            "governance_score": governance_score,
+            "findings": findings,
+            "recommendations": recommendations
+        }
+    
+    def generate_compliance_report(self) -> str:
+        """Generate comprehensive compliance report."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        # Get recent audits
+        c.execute('''SELECT COUNT(*), AVG(overall_score), SUM(critical_issues), SUM(high_issues)
+                     FROM hipaa_audits 
+                     WHERE audit_date >= date('now', '-30 days')''')
+        hipaa_stats = c.fetchone()
+        
+        # Get recent validations
+        c.execute('''SELECT COUNT(*), 
+                     SUM(CASE WHEN overall_compliant = 1 THEN 1 ELSE 0 END)
+                     FROM fda_validations 
+                     WHERE validation_date >= date('now', '-30 days')''')
+        fda_stats = c.fetchone()
+        
+        # Get recent AI assessments
+        c.execute('''SELECT COUNT(*), AVG(overall_governance_score),
+                     SUM(CASE WHEN requires_fda_clearance = 1 THEN 1 ELSE 0 END)
+                     FROM ai_governance_assessments 
+                     WHERE assessment_date >= date('now', '-30 days')''')
+        ai_stats = c.fetchone()
+        
+        # Get recent PHI incidents
+        c.execute('''SELECT COUNT(*), SUM(affected_records)
+                     FROM phi_incidents 
+                     WHERE detected_at >= date('now', '-30 days')''')
+        incident_stats = c.fetchone()
+        
+        conn.close()
+        
+        report = f"""
+{'='*80}
+    DRMYTHARA BOT - HEALTHCARE COMPLIANCE REPORT
+                 {datetime.now().strftime('%Y-%m-%d %H:%M')}
+{'='*80}
+
+NOT A MEDICAL PROFESSIONAL. COMPLIANCE GUIDANCE ONLY.
+
+HIPAA COMPLIANCE AUDITS (Last 30 Days):
+   Total Audits: {hipaa_stats[0] or 0}
+   Avg Compliance Score: {hipaa_stats[1] or 0:.1f}%
+   Critical Issues: {hipaa_stats[2] or 0}
+   High Issues: {hipaa_stats[3] or 0}
+
+FDA 21 CFR PART 11 VALIDATIONS (Last 30 Days):
+   Total Validations: {fda_stats[0] or 0}
+   Systems Compliant: {fda_stats[1] or 0}
+   Compliance Rate: {(fda_stats[1]/fda_stats[0]*100 if fda_stats[0] else 0):.1f}%
+
+MEDICAL AI GOVERNANCE (Last 30 Days):
+   AI Systems Assessed: {ai_stats[0] or 0}
+   Avg Governance Score: {ai_stats[1] or 0:.1f}%
+   Systems Requiring FDA Clearance: {ai_stats[2] or 0}
+
+PHI SECURITY INCIDENTS (Last 30 Days):
+   Total Incidents: {incident_stats[0] or 0}
+   Affected Records: {incident_stats[1] or 0}
+   {'[!] BREACH NOTIFICATION REQUIRED' if incident_stats[1] and incident_stats[1] > 500 else '[OK] No breach notification threshold reached'}
+
+RECOMMENDATIONS:
+   {'[!] Address critical HIPAA findings immediately' if hipaa_stats[2] and hipaa_stats[2] > 0 else '✓ No critical HIPAA issues'}
+   {'[!] Complete FDA 21 CFR Part 11 gap remediation' if fda_stats[0] and fda_stats[1] and fda_stats[1] < fda_stats[0] else '✓ FDA systems validated'}
+   {'[!] Obtain FDA clearance for high-risk AI systems' if ai_stats[2] and ai_stats[2] > 0 else '✓ AI systems appropriately classified'}
+
+{'='*80}
+"""
+        return report
+
+
+if __name__ == "__main__":
+    print("Starting DrMythara Healthcare Compliance Bot...")
+    bot = DrMytharaBot()
+    
+    # Example: HIPAA audit
+    audit_result = bot.audit_hipaa_compliance("Example Healthcare Org", scope="full")
+    print(f"\n[HIPAA AUDIT] Score: {audit_result['overall_score']}% | Findings: {len(audit_result['findings'])}")
+    
+    # Example: FDA validation
+    fda_result = bot.validate_fda_cfr11_compliance("Electronic Health Records System")
+    print(f"[FDA CFR11] Compliant: {fda_result['overall_compliant']} | Gaps: {len(fda_result['gaps'])}")
+    
+    # Example: AI governance
+    ai_result = bot.assess_medical_ai_governance("Diagnostic AI System", "Radiology image analysis for cancer detection")
+    print(f"[AI GOVERNANCE] Risk: {ai_result['risk_category']} | FDA Class: {ai_result['fda_device_class']} | Clearance Required: {ai_result['requires_fda_clearance']}")
+    
+    # Generate report
+    report = bot.generate_compliance_report()
+    print(report)
+    
+    print("\nDrMythara Healthcare Compliance Bot execution complete.")

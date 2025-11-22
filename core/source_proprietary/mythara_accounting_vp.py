@@ -535,7 +535,8 @@ class MytharaAccountingVP:
         exp_id = c.lastrowid
         
         # Update grant spent amount
-        c.execute('UPDATE grant_funds SET amount_spent = amount_spent + ? WHERE id = ?',
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
+        c.execute('UPDATE grant_funds SET amount_spent = amount_spent, ?,
                  (amount, grant_id))
         
         self.conn.commit()

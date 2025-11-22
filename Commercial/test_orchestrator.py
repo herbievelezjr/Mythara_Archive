@@ -1,3 +1,4 @@
+import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 # Proprietary and Confidential.
 
@@ -9,7 +10,8 @@ import requests
 import json
 
 API_URL = "http://localhost:5000"
-VP_TOKEN = "7561cec685b50635eab5693e5e6121dd12f7321f81903187ae0f6b07389201bf"  # VP Master Token
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+VP_TOKEN = os.getenv("VP_TOKEN", "")  # Set via environment
 
 def test_health():
     """Test health endpoint."""

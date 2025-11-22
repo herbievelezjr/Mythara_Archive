@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Engine - Universal CRM Integration Module
@@ -423,7 +424,8 @@ async def example_multi_crm():
     hs_config = CRMConfig(
         provider=CRMProvider.HUBSPOT,
         api_url="https://api.hubapi.com",
-        api_key="pat-na1-..."
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        api_key = os.getenv("API_KEY", "")  # Set via environment
     )
     
     # Create event

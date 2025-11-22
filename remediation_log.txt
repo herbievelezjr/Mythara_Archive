@@ -1,7 +1,0 @@
-﻿archive\DEPRECATED\duplicate_backups\archive\DEPRECATED\core\source_proprietary\Mythara.Blessings.Harmonizer\### Package skeleton and files.txt | 13367 bytes | backed up
-archive\DEPRECATED\duplicate_backups\Commercial\Untitled.txt | 0 bytes | backed up
-archive\DEPRECATED\duplicate_backups\core\source_proprietary\subfolder (redacted).txt | 0 bytes | backed up
-archive\DEPRECATED\duplicate_backups\docs\# 🧭 Mythara Symbolic Index.txt | 4675 bytes | backed up
-archive\DEPRECATED\duplicate_backups\Evidence\evidence.txt | 130 bytes | backed up
-archive\DEPRECATED\duplicate_backups\FundRaising objective and focus\printable, timestamped forensic report (PDF).txt | 221 bytes | backed up
-archive\DEPRECATED\duplicate_backups\summary\Untitled.txt | 0 bytes | backed up

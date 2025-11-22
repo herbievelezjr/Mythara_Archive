@@ -1,0 +1,73 @@
+import os
+# Copyright © 2025 Herbert Velez Jr. All rights reserved.
+# Proprietary and Confidential.
+
+"""
+Marketing Bot Runner - Runs every hour
+Generates leads, scores them, feeds to Sales Bot
+
+UPDATED: Now uses Google Gemini (FREE) instead of OpenAI
+Get your free API key: https://ai.google.dev/
+# MACGYVER FIX: Moved to environment variable (CWE-798)
+GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")  # Set via environment
+"""
+
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Use FREE version (no API needed)
+from mythara_ai_team_free import MarketingBot
+import json
+from datetime import datetime
+
+# Check for Google AI API key
+GOOGLE_AI_API_KEY = os.getenv('GOOGLE_AI_API_KEY')
+if not GOOGLE_AI_API_KEY:
+    print("⚠️  Warning: GOOGLE_AI_API_KEY not set. Bot will run in rule-based mode.")
+    print("   Get free API key: https://ai.google.dev/")
+    print("   Set with: $env:GOOGLE_AI_API_KEY = 'YOUR_FREE_KEY'")
+    print("")
+
+def run_marketing_bot():
+    """Execute Marketing Bot tasks."""
+    print(f"📊 MARKETING BOT - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    bot = MarketingBot()
+    
+    # Simulate lead generation (in production, this would call Google Ads API, LinkedIn API, etc)
+    print("\n🔍 Checking Google Ads campaigns...")
+    print("   - AI model validation: 5 clicks, 2 conversions")
+    print("   - Banking compliance: 8 clicks, 3 conversions")
+    
+    print("\n🔗 Checking LinkedIn outreach...")
+    print("   - 15 connection requests sent")
+    print("   - 8 messages sent to warm leads")
+    
+    # Score sample leads
+    sample_leads = [
+        {"email": "john.smith@wellsfargo.com", "company": "Wells Fargo", "industry": "Banking", "revenue": ">$100M", "email_opens": 3, "clicked_link": True},
+        {"email": "sarah.jones@uchealth.org", "company": "UCHealth", "industry": "Healthcare", "revenue": "$50M-$100M", "email_opens": 1},
+        {"email": "mike.chen@startup.io", "company": "Startup Inc", "industry": "Tech", "revenue": "<$10M", "email_opens": 0}
+    ]
+    
+    print("\n🎯 Lead Scoring:")
+    for lead in sample_leads:
+        score = bot.score_lead(lead)
+        status = "🔥 HOT" if score > 70 else "⚡ WARM" if score > 40 else "❄️ COLD"
+        print(f"   {status} - {lead['company']}: {score}/100")
+        
+        if score > 70:
+            print(f"      → Sending to Sales Bot with Soul for immediate contact")
+    
+    # Train Sales Bot
+    print("\n🎓 Training Sales Bot:")
+    training_data = bot.train_sales_bot()
+    print(f"   - Best subject lines: {len(training_data['best_performing_subject_lines'])}")
+    print(f"   - Optimal send times configured for {len(training_data['optimal_send_times'])} industries")
+    
+    print("\n✅ Marketing Bot run complete")
+    print(f"   Next run: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} + 1 hour")
+
+if __name__ == "__main__":
+    run_marketing_bot()

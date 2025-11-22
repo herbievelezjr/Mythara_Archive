@@ -20,7 +20,8 @@ def run_command(cmd, description):
     print(f"{'=' * 60}\n")
     
     try:
-        result = subprocess.run(cmd, shell=True, check=False)
+        # QUICKFIX FIX: Removed shell=True to prevent command injection (CWE-78)
+        result = subprocess.run(cmd, shell=False, check=False)
         return result.returncode
     except Exception as e:
         print(f"[ERROR] running {description}: {e}")

@@ -1,0 +1,20 @@
+# AI Enhancement Requirements for A.M.I.R.
+# Install: pip install -r requirements-ai.txt
+
+# Core AI integrations
+openai>=1.12.0              # GPT-4 threat prediction & natural language queries
+anthropic>=0.18.0           # Claude strategic analysis (better reasoning)
+chromadb>=0.4.22            # Vector memory for learning from incidents
+
+# Optional advanced features
+langchain>=0.1.9            # LangChain for agent orchestration (future)
+langgraph>=0.0.26           # Multi-agent workflows (future)
+
+# Supporting libraries
+tiktoken>=0.6.0             # Token counting for OpenAI
+pydantic>=2.6.0             # Structured outputs
+instructor>=0.5.2           # Structured LLM outputs
+
+# Existing A.M.I.R. requirements
+psutil>=5.9.0
+python-dateutil>=2.8.2
