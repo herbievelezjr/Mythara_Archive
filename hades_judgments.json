@@ -1,0 +1,21 @@
+{
+  "judgments": [
+    {
+      "entity_id": "progeny_damned",
+      "type": "damnation",
+      "verdict": "DAMNED to Fraud",
+      "reasoning": [
+        "BR: -45 (below Hell threshold of -50)",
+        "Reason: Persistent deception and lies",
+        "Hardened heart: True",
+        "Persistent wickedness: False"
+      ],
+      "sentence": "Condemned to Fraud circle of Hell",
+      "debt_owed": 192,
+      "mercy_available": false,
+      "final": true,
+      "timestamp": "2025-11-22T09:29:43.061995"
+    }
+  ],
+  "total": 1
+}

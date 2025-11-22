@@ -1,0 +1,19 @@
+{
+  "profiles": [
+    {
+      "entity_id": "employee_defensive",
+      "stated_message": "I'm fine, everything is under control",
+      "intended_message": "I'm fine, everything is under control",
+      "actual_meaning": "Uncertainty about: I'm fine, everything is under control",
+      "signal_clarity": "Clear",
+      "message_alignment": 0.7,
+      "subtext": [
+        "Protecting ego/identity",
+        "Fear driving communication"
+      ],
+      "hermes_interpretation": "\ud83d\udce8 Beneath your words: Protecting ego/identity, Fear driving communication. This is what you're really communicating.",
+      "timestamp": "2025-11-22T09:53:37.304412"
+    }
+  ],
+  "total": 1
+}

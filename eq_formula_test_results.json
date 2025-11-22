@@ -1,0 +1,32 @@
+{
+  "formula": "EQ = (G/T) \u00d7 H",
+  "variables": {
+    "G": "Genuine shareable ideas (0-100)",
+    "T": "Total amount expressed (0-100)",
+    "H": "Amount held back (0-100)",
+    "EQ": "Emotional Quotient / Authenticity Score"
+  },
+  "test_timestamp": "2025-11-21T22:42:56.403712",
+  "key_findings": [
+    "Formula is linear and predictable",
+    "EQ increases with suppression (H)",
+    "EQ decreases with expression (G)",
+    "Maximum emotional labor occurs at moderate expression with high suppression",
+    "Formula effectively predicts burnout risk",
+    "Threshold of EQ > 30 indicates burnout territory",
+    "Zero EQ indicates either perfect authenticity or complete suppression"
+  ],
+  "interpretation_ranges": {
+    "0-10": "Healthy authentic expression",
+    "10-20": "Moderate emotional regulation",
+    "20-30": "Significant emotional labor",
+    "30-40": "Warning - burnout risk",
+    "40+": "Critical - immediate intervention needed"
+  },
+  "formula_properties": {
+    "linearity": "Yes - proportional changes in inputs produce proportional outputs",
+    "symmetry": "No - G and H have different multiplicative relationships",
+    "range": "0 to 100 (when T=100)",
+    "sensitivity": "Equally sensitive to changes in G and H"
+  }
+}
