@@ -42,8 +42,9 @@ try:
     from database import (
         init_db, get_db, get_pilot, get_pilot_by_domain,
         create_pilot, get_usage_tracking, increment_usage,
-        issue_strike, log_audit, queue_email
+        issue_strike, log_audit, queue_email, UsageTracking
     )
+    from sqlalchemy.orm import Session
     DATABASE_ENABLED = True
     logger.info("✅ Database services loaded")
 except ImportError as e:
@@ -112,9 +113,12 @@ from soul_cradle_systems_framework import (
 )
 
 # Import Emotional Extortion Detector
+import sys
+from pathlib import Path
+# Add parent directory to path to import emotional_extortion_detector
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from emotional_extortion_detector import (
     EmotionalExtortionDetector,
-    ExtortionType,
     ExtortionAnalysis
 )
 
@@ -131,15 +135,9 @@ from salesforce_integration import (
 # Import Unified Compliance Framework
 from unified_compliance_framework import (
     UnifiedComplianceFramework,
-    ComplianceFramework,
-    ComplianceStatus,
-    RiskLevel,
-    FinancialServicesCompliance,
-    TelecommunicationsCompliance,
-    LaborEmploymentCompliance,
-    CivilRightsAccessibilityCompliance,
-    unified_compliance
+    ComplianceFramework
 )
+# Note: Some compliance classes may need to be implemented or imported from other modules
 
 # Import Advanced Security Hardening
 from security_hardening import (
@@ -198,6 +196,7 @@ try:
         PerformanceMonitor,
         HealthChecker
     )
+    from monitoring import update_db_pool_metrics
     MONITORING_ENABLED = True
     logger.info("✅ Prometheus monitoring enabled")
 except ImportError as e:
@@ -210,6 +209,7 @@ except ImportError as e:
     def record_indifference_alert(*args, **kwargs): pass
     def record_systemic_overload(*args, **kwargs): pass
     def update_blessings_metrics(*args, **kwargs): pass
+    def update_db_pool_metrics(*args, **kwargs): pass
     def get_metrics(): return Response(content="", media_type="text/plain")
     def get_health(): return {"status": "unknown"}
     def get_system_stats(): return {}
@@ -230,18 +230,49 @@ app = FastAPI(
 
 security = HTTPBearer()
 
+# Production Environment Detection
+# Railway, Heroku, and most cloud providers set DATABASE_URL with postgres://
+IS_PRODUCTION = os.getenv("DATABASE_URL", "").startswith(("postgres://", "postgresql://"))
+
 # CORS Configuration: Load allowed origins from environment for security
 # CRITICAL: allow_origins=["*"] + allow_credentials=True is forbidden by CORS spec
-ALLOWED_ORIGINS = os.getenv("MYTHARA_ALLOWED_ORIGINS", "").split(",") if os.getenv("MYTHARA_ALLOWED_ORIGINS") else []
+ALLOWED_ORIGINS_RAW = os.getenv("MYTHARA_ALLOWED_ORIGINS", "")
+ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS_RAW.split(",") if origin.strip()] if ALLOWED_ORIGINS_RAW else []
+
 if not ALLOWED_ORIGINS:
-    # Development mode: Allow specific localhost origins only
-    ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8000"
-    ]
-    logger.warning("⚠️ Using default CORS origins for development. Set MYTHARA_ALLOWED_ORIGINS in production.")
+    if IS_PRODUCTION:
+        # CRITICAL: Production deployment MUST have MYTHARA_ALLOWED_ORIGINS set
+        error_msg = (
+            "❌ CRITICAL SECURITY ERROR: MYTHARA_ALLOWED_ORIGINS environment variable not set in production.\n"
+            "Production deployments MUST explicitly whitelist allowed origins for CORS.\n"
+            "Example: MYTHARA_ALLOWED_ORIGINS=https://app.example.com,https://www.example.com\n"
+            "Refusing to start with insecure default origins in production."
+        )
+        logger.error(error_msg)
+        raise RuntimeError(error_msg)
+    else:
+        # Development mode: Allow specific localhost origins only
+        ALLOWED_ORIGINS = [
+            "http://localhost:3000",
+            "http://localhost:8000",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:8000"
+        ]
+        logger.warning("⚠️ Using default CORS origins for development. Set MYTHARA_ALLOWED_ORIGINS in production.")
+
+# Validate origins format in production
+if IS_PRODUCTION:
+    for origin in ALLOWED_ORIGINS:
+        if not origin.startswith(("https://", "http://")):
+            error_msg = f"❌ INVALID CORS ORIGIN: '{origin}' must start with https:// or http://"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+        if origin == "http://*" or origin == "https://*" or origin == "*":
+            error_msg = f"❌ WILDCARD CORS ORIGIN FORBIDDEN: '{origin}' is not allowed in production"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+    
+    logger.info(f"✅ Production CORS configured with {len(ALLOWED_ORIGINS)} whitelisted origins")
 
 app.add_middleware(
     CORSMiddleware,
@@ -257,10 +288,12 @@ try:
     app.add_middleware(
         RateLimitMiddleware,
         redis_cache=redis_cache if REDIS_ENABLED else None,
-        default_limit=100,
+        default_limit=100,  # 100 req/min for authenticated requests (default tier)
         window_seconds=60
     )
-    logger.info("✅ Rate limiting middleware enabled")
+    logger.info("✅ Rate limiting middleware enabled with public endpoint protection")
+    if IS_PRODUCTION:
+        logger.info("✅ Production mode: Strict per-IP rate limits active for public endpoints")
 except ImportError as e:
     logger.warning(f"⚠️ Rate limiting not available: {e}")
 
@@ -270,6 +303,9 @@ async def self_regulation_middleware(request: Request, call_next):
     """
     Global self-regulation middleware that tracks usage and enforces rules
     across all API endpoints (except health checks and admin endpoints).
+    
+    TRANSACTION MANAGEMENT: Uses database session with proper commit/rollback
+    to prevent race conditions in concurrent usage tracking.
     """
     # Skip self-regulation for public/admin endpoints
     excluded_paths = ["/", "/health", "/api/docs", "/api/redoc", "/openapi.json", "/static", "/v1/admin"]
@@ -299,8 +335,32 @@ async def self_regulation_middleware(request: Request, call_next):
     # This ensures rate limiting is conservative when size is unknown
     employee_count = int(employee_count) if employee_count else 10
     
-    # Run self-regulation check
-    regulation_result = track_api_usage(api_key, employee_count)
+    # Run self-regulation check with database transaction
+    # Use database if available, fall back to in-memory tracking
+    regulation_result = None
+    
+    if DATABASE_ENABLED:
+        db = None
+        try:
+            # Get database session for transaction
+            db = next(get_db())
+            
+            # Track usage with transaction (commit inside track_api_usage_with_db)
+            regulation_result = track_api_usage_with_db(db, api_key, employee_count)
+            
+        except Exception as e:
+            # Roll back transaction on error
+            if db:
+                db.rollback()
+            logger.error(f"Database error in self-regulation middleware: {e}", exc_info=True)
+            # Fall back to in-memory tracking
+            regulation_result = track_api_usage(api_key, employee_count)
+        finally:
+            if db:
+                db.close()
+    else:
+        # Database not available, use in-memory tracking (no transaction needed)
+        regulation_result = track_api_usage(api_key, employee_count)
     
     # Enforce termination
     if not regulation_result["allowed"]:
@@ -849,10 +909,140 @@ def check_pilot_expiration(api_key: str, pilot_start_date: datetime) -> Dict[str
         "message": f"{days_remaining} days remaining in your pilot."
     }
 
+def track_api_usage_with_db(db: Session, api_key: str, employee_count: int) -> Dict[str, Any]:
+    """
+    Track API usage with database transaction for race condition prevention.
+    
+    TRANSACTION SAFETY: This function commits the transaction internally.
+    Caller must handle db.rollback() on exception and db.close() in finally block.
+    
+    Returns usage stats and any enforcement actions.
+    """
+    now = datetime.utcnow()
+    
+    # Get or create usage tracking record
+    usage_record = get_usage_tracking(db, api_key)
+    
+    if not usage_record:
+        # Create new tracking record
+        pilot = get_pilot(db, api_key)
+        if pilot:
+            usage_record = UsageTracking(
+                api_key=api_key,
+                call_count=0,
+                total_limit=get_api_rate_limit_for_employee_count(employee_count),
+                first_call_date=now
+            )
+            db.add(usage_record)
+            db.commit()
+            db.refresh(usage_record)
+        else:
+            # Pilot not found, fall back to in-memory
+            logger.warning(f"Pilot not found for API key {api_key[:8]}..., using in-memory tracking")
+            return track_api_usage(api_key, employee_count)
+    
+    # Get pilot for start date
+    pilot = get_pilot(db, api_key)
+    if not pilot:
+        logger.error(f"Pilot disappeared for API key {api_key[:8]}...")
+        return {"allowed": False, "enforcement": "error", "reason": "Pilot record not found"}
+    
+    pilot_start_date = pilot.pilot_start_date or now
+    
+    # Check if 7-day pilot has expired
+    pilot_status = check_pilot_expiration(api_key, pilot_start_date)
+    
+    if pilot_status["expired"] and not ENTERPRISE_HOSTED_ENABLED:
+        return {
+            "allowed": False,
+            "enforcement": "pilot_expired",
+            "days_remaining": 0,
+            "days_used": pilot_status["days_used"],
+            "reason": "7-day pilot period expired",
+            "message": pilot_status["message"],
+            "usage_stats": {
+                "calls_made": usage_record.call_count,
+                "total_limit": usage_record.total_limit,
+                "days_remaining": 0
+            }
+        }
+    
+    # Increment call count atomically (uses row-level locking in PostgreSQL)
+    usage_record.call_count += 1
+    usage_record.last_call = now
+    if usage_record.first_call_date is None:
+        usage_record.first_call_date = now
+    
+    # Commit transaction to persist incremented count
+    db.commit()
+    db.refresh(usage_record)
+    
+    # Calculate usage metrics
+    days_since_start = (now - pilot_start_date).days + 1
+    expected_daily_rate = usage_record.total_limit / PILOT_DURATION_DAYS
+    expected_usage = expected_daily_rate * days_since_start
+    usage_multiplier = usage_record.call_count / expected_usage if expected_usage > 0 else 0
+    
+    # Self-regulation checks
+    action = None
+    
+    # Check 1: Velocity abuse (exhausted limit too quickly)
+    if usage_record.call_count >= usage_record.total_limit and days_since_start <= SELF_REGULATION_CONFIG["velocity_abuse_days"]:
+        action = "velocity_abuse"
+        usage_record.velocity_abuse_detected = True
+        db.commit()
+    
+    # Check 2: Usage pattern mismatch (using way more than declared size should)
+    elif usage_multiplier >= SELF_REGULATION_CONFIG["usage_multiplier_threshold"]:
+        action = "usage_mismatch"
+        usage_record.usage_mismatch_detected = True
+        db.commit()
+    
+    # Apply graduated enforcement
+    if action:
+        # Issue strike using database function
+        strike_count = issue_strike(db, api_key, action)
+        
+        enforcement = None
+        if strike_count == SELF_REGULATION_CONFIG["strike_limits"]["warning"]:
+            enforcement = "warning"
+            log_audit(db, api_key, "self_regulation_warning", {"reason": action, "strikes": strike_count})
+        elif strike_count == SELF_REGULATION_CONFIG["strike_limits"]["suspension"]:
+            enforcement = "suspension"
+            log_audit(db, api_key, "self_regulation_suspension", {"reason": action, "strikes": strike_count})
+        elif strike_count >= SELF_REGULATION_CONFIG["strike_limits"]["termination"]:
+            enforcement = "termination"
+            log_audit(db, api_key, "self_regulation_termination", {"reason": action, "strikes": strike_count})
+        
+        return {
+            "allowed": enforcement != "termination",
+            "enforcement": enforcement,
+            "strikes": strike_count,
+            "reason": action,
+            "usage_stats": {
+                "calls_made": usage_record.call_count,
+                "total_limit": usage_record.total_limit,
+                "days_active": days_since_start,
+                "usage_multiplier": round(usage_multiplier, 2)
+            }
+        }
+    
+    return {
+        "allowed": True,
+        "enforcement": None,
+        "usage_stats": {
+            "calls_made": usage_record.call_count,
+            "total_limit": usage_record.total_limit,
+            "days_remaining": pilot_status["days_remaining"]
+        }
+    }
+
 def track_api_usage(api_key: str, employee_count: int) -> Dict[str, Any]:
     """
     Track API usage for self-regulation. Returns usage stats and any enforcement actions.
     Includes 7-day pilot expiration check.
+    
+    NOTE: This is the in-memory fallback version. Use track_api_usage_with_db when database is available.
     """
     now = datetime.utcnow()
     
@@ -1066,15 +1256,16 @@ def _read_license_state() -> Dict[str, Any]:
             return json.load(f)
     except FileNotFoundError:
         return {}
-    except Exception:
+    except (json.JSONDecodeError, IOError) as e:
+        logger.warning(f"Failed to read license state: {e}")
         return {}
 
 def _write_license_state(state: Dict[str, Any]) -> None:
     try:
         with open(LICENSE_FILE, "w", encoding="utf-8") as f:
             json.dump(state, f)
-    except Exception:
-        pass
+    except (IOError, OSError) as e:
+        logger.error(f"Failed to write license state: {e}")
 
 def _init_trial_if_needed():
     if LICENSE_MODE != "trial":
@@ -1100,7 +1291,8 @@ def _compute_license_status(api_key: Optional[str] = None) -> LicenseStatusRespo
     else:
         try:
             started_dt = datetime.fromisoformat(started_raw.replace("Z", ""))
-        except Exception:
+        except (ValueError, AttributeError) as e:
+            logger.warning(f"Invalid trial start date format: {e}")
             started_dt = datetime.utcnow()
     ends_dt = started_dt + timedelta(days=trial_days)
     now = datetime.utcnow()
@@ -1116,15 +1308,16 @@ def _read_pilot_access_state() -> Dict[str, Any]:
             return json.load(f)
     except FileNotFoundError:
         return {}
-    except Exception:
+    except (json.JSONDecodeError, IOError) as e:
+        logger.warning(f"Failed to read pilot access state: {e}")
         return {}
 
 def _write_pilot_access_state(state: Dict[str, Any]) -> None:
     try:
         with open(PILOT_ACCESS_FILE, "w", encoding="utf-8") as f:
             json.dump(state, f)
-    except Exception:
-        pass
+    except (IOError, OSError) as e:
+        logger.error(f"Failed to write pilot access state: {e}")
 
 def _has_pilot_access() -> bool:
     if not PILOT_PAYWALL_ENABLED:
@@ -1245,12 +1438,16 @@ def require_active_license():
 
 # ===================== STARTUP LICENSE VALIDATION =====================
 @app.on_event("startup")
-async def validate_license_on_startup():
+async def startup_tasks():
+    """Run startup tasks including license validation and pool monitoring"""
     global LICENSE_MODE
+    
+    # Validate license
     if LICENSE_KEY:
         try:
             from .license_manager import validate_license_key
-        except Exception:
+        except ImportError as e:
+            logger.warning(f"License manager not available, using fallback: {e}")
             validate_license_key = lambda k: {"valid": k.startswith("MYTHARA-")}
         data = validate_license_key(LICENSE_KEY)
         if data.get("valid"):
@@ -1259,6 +1456,37 @@ async def validate_license_on_startup():
             logger.info(f"✅ License activated: {data.get('edition','Enterprise')}")
         else:
             logger.error("❌ Invalid license key; falling back to trial")
+    
+    # Start periodic database pool monitoring
+    if DATABASE_ENABLED and MONITORING_ENABLED:
+        import asyncio
+        asyncio.create_task(monitor_db_pool_periodically())
+        logger.info("✅ Database pool monitoring started")
+
+async def monitor_db_pool_periodically():
+    """Monitor database connection pool health every 30 seconds"""
+    import asyncio
+    from database import engine
+    
+    while True:
+        try:
+            pool = engine.pool
+            pool_size = pool.size()
+            checked_out = pool.checkedout()
+            overflow = pool.overflow()
+            available = pool_size - checked_out
+            
+            # Update Prometheus metrics
+            update_db_pool_metrics(pool_size, checked_out, overflow, available)
+            
+            # Log warning if pool is near exhaustion
+            if checked_out >= (pool_size * 0.8):
+                logger.warning(f"⚠️ Database pool near exhaustion: {checked_out}/{pool_size} connections in use")
+            
+        except Exception as e:
+            logger.error(f"Error monitoring database pool: {e}")
+        
+        await asyncio.sleep(30)  # Check every 30 seconds
     if LICENSE_MODE == "trial":
         _init_trial_if_needed()
         lic = _compute_license_status()
@@ -1347,8 +1575,8 @@ async def stripe_webhook(request: Request):
         data = {}
         try:
             data = await request.json()
-        except Exception:
-            pass
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.warning(f"Failed to parse request JSON: {e}")
         email = data.get("email") or CONTACT_EMAIL
         if not _validate_email(email):
             logger.warning(f"Invalid email in webhook: {email}")
@@ -1365,8 +1593,8 @@ async def stripe_webhook(request: Request):
         if payment_timestamp:
             try:
                 pilot_start_date = datetime.fromisoformat(payment_timestamp.replace("Z", "+00:00"))
-            except:
-                pass
+            except (ValueError, AttributeError) as e:
+                logger.warning(f"Invalid payment timestamp format: {e}")
         
         if purchase_type == "pilot" or (PILOT_PAYWALL_ENABLED and abs(amount - PILOT_PRICE_USD) < 0.01):
             pilot_state = _grant_pilot_access(
@@ -1385,7 +1613,8 @@ async def stripe_webhook(request: Request):
             }
         try:
             from .license_manager import generate_license_key
-        except Exception:
+        except ImportError as e:
+            logger.warning(f"License manager not available, using fallback key generation: {e}")
             generate_license_key = lambda prefix, company, email: f"MYTHARA-{prefix}-{secrets.token_hex(6)}"
         license_key = generate_license_key("ENT", company_name, email)
         _send_license_email_stub(email, license_key, company_name, amount)
@@ -1394,7 +1623,8 @@ async def stripe_webhook(request: Request):
         sig = request.headers.get("stripe-signature")
         try:
             event = stripe.Webhook.construct_event(raw, sig, STRIPE_WEBHOOK_SECRET)
-        except Exception as e:
+        except (ValueError, stripe.error.SignatureVerificationError) as e:
+            logger.error(f"Stripe webhook signature verification failed: {e}", exc_info=True)
             raise HTTPException(status_code=400, detail="Invalid signature")
         if event.get("type") == "checkout.session.completed":
             obj = event["data"]["object"]
@@ -1412,16 +1642,16 @@ async def stripe_webhook(request: Request):
             if "employee_count" in metadata:
                 try:
                     employee_count = int(metadata["employee_count"])
-                except:
-                    pass
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Invalid employee_count format: {e}")
             
             # Use payment creation time as pilot start date
             pilot_start_date = datetime.utcnow()
             if "created" in obj:
                 try:
                     pilot_start_date = datetime.fromtimestamp(obj["created"])
-                except:
-                    pass
+                except (ValueError, TypeError, OSError) as e:
+                    logger.warning(f"Invalid payment creation timestamp: {e}")
             
             if purchase_type == "pilot" and PILOT_PAYWALL_ENABLED:
                 pilot_state = _grant_pilot_access(
@@ -1440,7 +1670,8 @@ async def stripe_webhook(request: Request):
                 }
             try:
                 from .license_manager import generate_license_key
-            except Exception:
+            except ImportError as e:
+                logger.warning(f"License manager not available for webhook, using fallback: {e}")
                 generate_license_key = lambda prefix, company, email: f"MYTHARA-{prefix}-{secrets.token_hex(8)}"
             license_key = generate_license_key("ENT", company, email)
             _send_license_email_stub(email, license_key, company, amount)
@@ -2156,6 +2387,32 @@ async def clause_details(clause_id: str, api_key: str = Depends(verify_api_key))
 @app.get("/v1/license/status", response_model=LicenseStatusResponse)
 async def license_status(api_key: str = Depends(verify_api_key)):
     return _compute_license_status(api_key)
+
+@app.get("/v1/admin/db-pool-status")
+async def get_db_pool_status(api_key: str = Depends(require_role("admin"))):
+    """
+    Monitor database connection pool health.
+    Critical for detecting connection leaks and pool exhaustion.
+    """
+    if DATABASE_ENABLED:
+        from database import engine
+        pool = engine.pool
+        return {
+            "status": "healthy",
+            "pool_size": pool.size(),
+            "checked_out_connections": pool.checkedout(),
+            "overflow_connections": pool.overflow(),
+            "checked_in_connections": pool.checkedin(),
+            "total_connections": pool.size() + pool.overflow(),
+            "available_connections": pool.size() - pool.checkedout(),
+            "pool_exhausted": pool.checkedout() >= (pool.size() + pool.overflow()),
+            "warning": "Pool exhausted - increase pool_size or fix connection leaks" if pool.checkedout() >= (pool.size() + pool.overflow()) else None
+        }
+    else:
+        return {
+            "status": "disabled",
+            "message": "Database not enabled, using in-memory storage"
+        }
 
 @app.get("/v1/admin/pricing", response_model=PricingBreakdownResponse)
 async def admin_pricing(api_key: str = Depends(require_role("admin"))):

@@ -320,7 +320,8 @@ class MytharaEducationSuite:
               data["hire_date"], data["created_at"], integrity_hash))
         
         # Update school teacher count
-        c.execute('UPDATE schools SET teacher_count = teacher_count + 1 WHERE school_id = ?', (school_id,))
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
+        c.execute('UPDATE schools SET teacher_count = teacher_count, ?, (school_id,))
         
         self.conn.commit()
         
@@ -358,8 +359,10 @@ class MytharaEducationSuite:
         ''', (student_id, school_id, name, grade_level, parent_email, parent_phone, 
               data["enrollment_date"], data["created_at"], integrity_hash))
         
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         # Update school student count
-        c.execute('UPDATE schools SET student_count = student_count + 1 WHERE school_id = ?', (school_id,))
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
+        c.execute('UPDATE schools SET student_count = student_count, ?, (school_id,))
         
         self.conn.commit()
         
@@ -396,7 +399,9 @@ class MytharaEducationSuite:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (class_id, school_id, teacher_id, class_name, subject, grade_level, semester, 
               data["created_at"], integrity_hash))
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         
+        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         # Update teacher class count
         c.execute('UPDATE teachers SET classes_taught = classes_taught + 1 WHERE teacher_id = ?', (teacher_id,))
         

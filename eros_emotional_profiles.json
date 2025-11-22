@@ -1,0 +1,18 @@
+{
+  "profiles": [
+    {
+      "entity_id": "seeker_conflicted",
+      "stated_choice": "Stay in stable job, financial security",
+      "felt_choice": "Quit job, travel the world",
+      "heart_alignment": "Misaligned",
+      "emotional_polarity": "Leaning_Truth_B",
+      "polarity_strength": 0.5,
+      "dominant_attraction": "Fear",
+      "is_heart_torn": false,
+      "conflict_level": 0.5,
+      "eros_insight": "\ud83d\udc98 Words lie, heart speaks truth: You say one thing, but your soul chooses 'Quit job, travel the world'. Listen to the heart.",
+      "timestamp": "2025-11-22T09:49:13.850425"
+    }
+  ],
+  "total": 1
+}

@@ -55,8 +55,20 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "/v1/clauses/invoke": (50, 60),  # 50 req/min for clause invocation
             "/v1/soul/cradle": (30, 60),  # 30 req/min for paradox creation
             "/v1/soul/indifference": (10, 60),  # 10 req/min for indifference detection
-            "/health": (1000, 60),  # 1000 req/min for health checks
-            "/api/docs": (100, 60),  # 100 req/min for docs
+            "/health": (1000, 60),  # 1000 req/min for health checks (load balancers need high limit)
+            "/api/docs": (100, 60),  # 100 req/min for docs (interactive documentation)
+            "/openapi.json": (100, 60),  # 100 req/min for OpenAPI spec
+            "/api/redoc": (100, 60),  # 100 req/min for ReDoc
+        }
+        
+        # Public endpoint limits (unauthenticated per-IP - DDoS protection)
+        # These are STRICTER limits applied per IP address for public endpoints
+        self.public_endpoint_ip_limits = {
+            "/health": (100, 60),  # 100 req/min per IP (down from 1000 for DDoS protection)
+            "/api/docs": (20, 60),  # 20 req/min per IP (reasonable for docs browsing)
+            "/openapi.json": (10, 60),  # 10 req/min per IP (spec rarely changes)
+            "/api/redoc": (20, 60),  # 20 req/min per IP (docs browsing)
+            "/": (50, 60),  # 50 req/min per IP (root endpoint)
         }
         
         # Tier-based limits (override for paid tiers)
@@ -91,20 +103,41 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         # Determine rate limit based on endpoint and tier
         max_requests, window = self._get_rate_limit(path, api_key)
         
-        # Check IP-based rate limit (global DDoS protection)
-        ip_allowed, ip_remaining = self._check_limit(
-            f"ip:{ip_address}",
-            max_requests * 2,  # IPs get 2x limit (multiple users behind NAT)
-            window
-        )
-        
-        if not ip_allowed:
-            logger.warning(f"🚫 Rate limit exceeded for IP: {ip_address}")
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail=f"Rate limit exceeded. Try again in {window} seconds.",
-                headers={"Retry-After": str(window)}
+        # For public endpoints without auth, apply STRICTER per-IP limits (DDoS protection)
+        if not api_key and path in self.public_endpoint_ip_limits:
+            ip_limit, ip_window = self.public_endpoint_ip_limits[path]
+            ip_allowed, ip_remaining = self._check_limit(
+                f"public_ip:{path}:{ip_address}",
+                ip_limit,
+                ip_window
             )
+            
+            if not ip_allowed:
+                logger.warning(f"🚫 Public endpoint rate limit exceeded for IP {ip_address} on {path}")
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail=f"Rate limit exceeded for unauthenticated requests. Try again in {ip_window} seconds.",
+                    headers={
+                        "Retry-After": str(ip_window),
+                        "X-RateLimit-Limit": str(ip_limit),
+                        "X-RateLimit-Remaining": "0"
+                    }
+                )
+        else:
+            # Check IP-based rate limit (global DDoS protection for authenticated requests)
+            ip_allowed, ip_remaining = self._check_limit(
+                f"ip:{ip_address}",
+                max_requests * 2,  # IPs get 2x limit (multiple users behind NAT)
+                window
+            )
+            
+            if not ip_allowed:
+                logger.warning(f"🚫 Rate limit exceeded for IP: {ip_address}")
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail=f"Rate limit exceeded. Try again in {window} seconds.",
+                    headers={"Retry-After": str(window)}
+                )
         
         # Check API key-based rate limit
         if api_key:

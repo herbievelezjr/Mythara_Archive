@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
@@ -670,7 +671,8 @@ def example_usage():
         method="POST",
         path="/v1/clauses/invoke",
         ip_address="192.168.1.100",
-        api_key="mythara_abc123",
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        api_key=os.getenv("API_KEY", ""),  # Set via environment
         signature="hmac_signature_here",
         timestamp=int(time.time()),
         nonce="unique_nonce",

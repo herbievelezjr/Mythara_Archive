@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Engine - Performance Tests
@@ -20,7 +21,8 @@ from fastapi.testclient import TestClient
 from main import app
 
 client = TestClient(app)
-VALID_API_KEY = "dev_test_key_001"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+VALID_API_KEY = os.getenv("VALID_API_KEY", "")  # Set via environment
 
 
 def measure_response_time(func, iterations: int = 100) -> dict:

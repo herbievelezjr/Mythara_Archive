@@ -1,0 +1,25 @@
+{
+  "messages": [
+    {
+      "source": "breach_restoration_system",
+      "destination": "human_user",
+      "type": "Translation",
+      "original": "BR: -35, drift: 0.4, EQ: 22",
+      "translated": "You're struggling emotionally. Your actions have cost you connection and goodwill. You're approaching a breaking point.",
+      "clarity": "Clear",
+      "accuracy": "High",
+      "timestamp": "2025-11-22T09:53:37.315842"
+    },
+    {
+      "source": "olympus_council",
+      "destination": "entity_action",
+      "type": "Guidance",
+      "original": "Hades: Entity owes 192 BR debt for unpunished trespasses\nPersephone: Redemption available if genuine repentance\nNemesis: Escaped consequences through wealth - retribution due\nEros: Heart wants freedom but says duty\nJanus: Both truths valid - you are loyal AND trapped",
+      "translated": "GUIDANCE: \u26b0\ufe0f Address accountability issues first | \ud83c\udf38 Redemption path is available | \u2696\ufe0f Unpaid debts require attention | \ud83d\udc98 Listen to your heart's true direction | \ud83d\udeaa Both truths are valid - hold the paradox",
+      "clarity": "Crystal",
+      "accuracy": "Perfect",
+      "timestamp": "2025-11-22T09:53:37.317297"
+    }
+  ],
+  "total": 2
+}

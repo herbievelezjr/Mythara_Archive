@@ -100,6 +100,27 @@ database_queries_total = Counter(
     ["operation", "table"]
 )
 
+# Database connection pool metrics
+db_pool_size = Gauge(
+    "mythara_db_pool_size",
+    "Database connection pool size"
+)
+
+db_pool_checked_out = Gauge(
+    "mythara_db_pool_checked_out",
+    "Number of checked out database connections"
+)
+
+db_pool_overflow = Gauge(
+    "mythara_db_pool_overflow",
+    "Number of overflow database connections"
+)
+
+db_pool_available = Gauge(
+    "mythara_db_pool_available",
+    "Number of available database connections"
+)
+
 database_query_duration = Histogram(
     "mythara_database_query_duration_seconds",
     "Database query duration"
@@ -446,6 +467,14 @@ def record_redis_operation(operation: str):
 def record_redis_error():
     """Record Redis error."""
     redis_errors_total.inc()
+
+
+def update_db_pool_metrics(pool_size: int, checked_out: int, overflow: int, available: int):
+    """Update database connection pool metrics."""
+    db_pool_size.set(pool_size)
+    db_pool_checked_out.set(checked_out)
+    db_pool_overflow.set(overflow)
+    db_pool_available.set(available)
 
 
 def record_rate_limit_hit(identifier_type: str):

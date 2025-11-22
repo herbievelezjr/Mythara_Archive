@@ -1,0 +1,17 @@
+{
+  "blessings": [
+    {
+      "entity_id": "progeny_repentant",
+      "type": "second_chance",
+      "description": "Grace granted: 20 BR restored",
+      "grace_amount": 20,
+      "conditions": [
+        "Complete 3 acts of service",
+        "Forgive 2 more"
+      ],
+      "expires": "2025-12-22T09:34:44.739122",
+      "timestamp": "2025-11-22T09:34:44.739122"
+    }
+  ],
+  "total": 1
+}

@@ -24,6 +24,10 @@ railway init
 ### Step 3: Set Environment Variables
 
 ```bash
+# CRITICAL SECURITY: CORS allowed origins (REQUIRED in production)
+# Replace with your actual frontend domains (comma-separated)
+railway variables set MYTHARA_ALLOWED_ORIGINS=https://app.yourcompany.com,https://www.yourcompany.com
+
 # Enable pilot paywall
 railway variables set MYTHARA_PILOT_PAYWALL=true
 
@@ -39,6 +43,8 @@ railway variables set STRIPE_WEBHOOK_SECRET=whsec_placeholder
 # Port configuration
 railway variables set PORT=8000
 ```
+
+**⚠️ CRITICAL:** `MYTHARA_ALLOWED_ORIGINS` is **REQUIRED** in production. The API will refuse to start without it to prevent CORS security vulnerabilities.
 
 ### Step 4: Set Dockerfile Path
 

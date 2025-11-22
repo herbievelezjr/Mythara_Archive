@@ -1,0 +1,18 @@
+{
+  "insights": [
+    {
+      "entity_id": "progeny_001",
+      "type": "desire_detection",
+      "title": "True Desire: Power over others",
+      "description": "Stated: 'I want justice' | True: 'Power over others' | Authenticity: Conditioned",
+      "evidence": [
+        "Dominant drive: Revenge",
+        "Action pattern: trespass",
+        "Consequence if pursued: Self_Destructive"
+      ],
+      "confidence": 0.85,
+      "timestamp": "2025-11-22T17:31:32.146199"
+    }
+  ],
+  "total": 1
+}
