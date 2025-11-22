@@ -1,0 +1,19 @@
+{
+  "profiles": [
+    {
+      "entity_id": "progeny_001",
+      "metric_name": "benevolence_reservoir",
+      "current_stage": "Decline",
+      "current_season": "Winter",
+      "current_value": 70,
+      "growth_trend": "Declining",
+      "growth_rate": -13.75,
+      "predicted_peak": 135,
+      "harvest_readiness": "Growth_Window",
+      "primary_need": "Rest",
+      "recommendation": "Entity in Winter - Allow dormancy, do not force growth. Rest period needed.",
+      "data_points": 20
+    }
+  ],
+  "total": 1
+}

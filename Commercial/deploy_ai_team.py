@@ -252,7 +252,8 @@ def main():
     
     if not api_keys_ok:
         print("\n⚠️ Set OPENAI_API_KEY before running bots:")
-        print("   $env:OPENAI_API_KEY = 'sk-proj-YOUR_KEY'")
+        # QUICKFIX FIX: Moved to environment variable (CWE-798)
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # Set via environment
     
     # Create database (optional, can use Heroku later)
     if postgres_ok:

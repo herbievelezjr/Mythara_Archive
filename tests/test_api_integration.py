@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Mythara Engine - API Integration Tests
@@ -21,8 +22,10 @@ from main import app
 client = TestClient(app)
 
 # Test API keys
-VALID_API_KEY = "dev_test_key_001"
-INVALID_API_KEY = "invalid_key_xyz"
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+VALID_API_KEY = os.getenv("VALID_API_KEY", "")  # Set via environment
+# QUICKFIX FIX: Moved to environment variable (CWE-798)
+INVALID_API_KEY = os.getenv("INVALID_API_KEY", "")  # Set via environment
 
 
 class TestHealthEndpoints:

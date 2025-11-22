@@ -1,0 +1,18 @@
+{
+  "judgments": [
+    {
+      "entity_id": "oligarch_escaped",
+      "type": "retribution",
+      "verdict": "Arrogant entity with 4 unpunished trespasses must face justice",
+      "retribution": [
+        "Loss_of_Wealth"
+      ],
+      "br_cost": 243,
+      "victim_compensation": 97,
+      "enforcement": "Divine intervention - inevitable consequences",
+      "inevitable": true,
+      "timestamp": "2025-11-22T09:39:23.963062"
+    }
+  ],
+  "total": 1
+}

@@ -1,0 +1,19 @@
+{
+  "profiles": [
+    {
+      "entity_id": "parent_dual",
+      "face_a": "I am a nurturing parent who gives unconditional love",
+      "face_b": "I am a strict disciplinarian who enforces consequences",
+      "paradox_type": "Identity",
+      "both_valid": true,
+      "contradiction_level": 0.0,
+      "threshold_state": "At_Doorway",
+      "duality_balance": "Harmonious",
+      "can_both_coexist": true,
+      "integration_path": "Accept that 'I am a nurturing parent who gives unconditional love' and 'I am a strict disciplinarian who enforces consequences' complement each other",
+      "janus_insight": "\ud83d\udeaa You stand at the threshold where both truths meet. This IS the answer - remain here.",
+      "timestamp": "2025-11-22T09:50:37.769557"
+    }
+  ],
+  "total": 1
+}

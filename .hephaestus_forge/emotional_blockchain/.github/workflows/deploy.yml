@@ -1,0 +1,32 @@
+name: Deploy emotional_blockchain
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          pip install -r requirements.txt
+          pytest tests/
+  
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Security scan
+        run: |
+          pip install -r requirements.txt
+          python ../../adapt_bot.py .
+  
+  deploy:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to docker
+        run: echo "Deploy step here"

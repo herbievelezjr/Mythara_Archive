@@ -66,6 +66,15 @@ class TerminalRiskLevel(str, Enum):
     CRITICAL = "CRITICAL"  # 0.7-1.0
 
 
+class EmotionalAuthenticityLevel(str, Enum):
+    """Emotional authenticity classification based on EQ formula"""
+    AUTHENTIC = "AUTHENTIC"  # EQ 0-10: Healthy expression
+    REGULATED = "REGULATED"  # EQ 10-20: Moderate filtering
+    LABORED = "LABORED"  # EQ 20-30: Significant emotional labor
+    BURNOUT_RISK = "BURNOUT_RISK"  # EQ 30-40: Warning territory
+    CRITICAL_SUPPRESSION = "CRITICAL_SUPPRESSION"  # EQ 40+: Crisis state
+
+
 class QuantumProtocolType(str, Enum):
     """Quantum communication protocol types"""
     BB84 = "BB84"  # Bennett-Brassard 1984 QKD protocol
@@ -111,6 +120,63 @@ class SystemExpression(BaseModel):
         return hashlib.sha256(data.encode()).hexdigest()
 
 
+class EmotionalAuthenticity(BaseModel):
+    """
+    Emotional Authenticity Score using the formula: EQ = (G/T) × H
+    
+    Where:
+    - G = Genuine shareable ideas (what can be authentically expressed)
+    - T = Total amount expressed (everything actually communicated)
+    - H = Amount held back (what was suppressed)
+    - EQ = Emotional Quotient / Authenticity Score
+    
+    This quantifies emotional labor and predicts burnout risk in paradox resolution.
+    """
+    genuine_shareable: float = Field(default=50.0, ge=0.0, le=100.0, description="Genuine ideas available to share (G)")
+    total_expressed: float = Field(default=100.0, ge=0.0, le=100.0, description="Total amount actually expressed (T)")
+    held_back: float = Field(default=50.0, ge=0.0, le=100.0, description="Amount suppressed (H)")
+    eq_score: float = Field(default=0.0, ge=0.0, le=100.0, description="Calculated EQ = (G/T) × H")
+    authenticity_level: EmotionalAuthenticityLevel = Field(default=EmotionalAuthenticityLevel.REGULATED)
+    timestamp: datetime = Field(default_factory=datetime.now)
+    context: str = Field(default="", description="Context of this expression event")
+    
+    def calculate_eq(self) -> float:
+        """Calculate EQ score: (G/T) × H"""
+        if self.total_expressed > 0:
+            self.eq_score = (self.genuine_shareable / self.total_expressed) * self.held_back
+        else:
+            self.eq_score = 0.0
+        
+        # Classify authenticity level
+        if self.eq_score <= 10:
+            self.authenticity_level = EmotionalAuthenticityLevel.AUTHENTIC
+        elif self.eq_score <= 20:
+            self.authenticity_level = EmotionalAuthenticityLevel.REGULATED
+        elif self.eq_score <= 30:
+            self.authenticity_level = EmotionalAuthenticityLevel.LABORED
+        elif self.eq_score <= 40:
+            self.authenticity_level = EmotionalAuthenticityLevel.BURNOUT_RISK
+        else:
+            self.authenticity_level = EmotionalAuthenticityLevel.CRITICAL_SUPPRESSION
+        
+        return self.eq_score
+    
+    def interpret(self) -> str:
+        """Generate human-readable interpretation"""
+        ratio = self.genuine_shareable / self.total_expressed if self.total_expressed > 0 else 0
+        
+        if self.authenticity_level == EmotionalAuthenticityLevel.AUTHENTIC:
+            return f"HEALTHY: Authentic expression - {ratio:.1%} genuine, {self.held_back:.0f}% held back"
+        elif self.authenticity_level == EmotionalAuthenticityLevel.REGULATED:
+            return f"STABLE: Reasonable regulation - {ratio:.1%} genuine, {self.held_back:.0f}% suppressed"
+        elif self.authenticity_level == EmotionalAuthenticityLevel.LABORED:
+            return f"WARNING: Emotional labor detected - {ratio:.1%} genuine but {self.held_back:.0f}% suppressed"
+        elif self.authenticity_level == EmotionalAuthenticityLevel.BURNOUT_RISK:
+            return f"ALERT: Burnout risk - {ratio:.1%} genuine with {self.held_back:.0f}% suppression"
+        else:
+            return f"CRITICAL: Severe suppression - {ratio:.1%} genuine, {self.held_back:.0f}% held back"
+
+
 class NonExpression(BaseModel):
     """
     A non-expression: the absence or negation of a paradox expression.
@@ -130,6 +196,7 @@ class NonExpression(BaseModel):
     reason: str = Field(default="", description="Why this expression is absent/negated")
     impact: str = Field(default="", description="Impact of this absence on the system")
     reality: str = Field(default="", description="The practical impossibility or gap")
+    emotional_authenticity: Optional[EmotionalAuthenticity] = Field(default=None, description="EQ score for this suppression")
     
     def compute_hash(self) -> str:
         """Compute integrity hash for this non-expression"""
@@ -470,6 +537,7 @@ class SoulCradleParadox(BaseModel):
     - Two competing expressions (A and B) with tension scores
     - Unresolved state U = 1 - R(t) captures deadlock intensity
     - Resolved system R(t) shows how Soul Cradle achieves resolution
+    - Emotional Authenticity EQ = (G/T) × H tracks emotional labor
     """
     paradox_id: str = Field(..., description="Unique identifier (e.g., SC_2025_1118_001)")
     
@@ -490,6 +558,10 @@ class SoulCradleParadox(BaseModel):
     resolved_system: ResolvedSystem
     principal_system: Optional[PrincipalSystem] = Field(default=None, description="The resolution that holds both")
     
+    # Emotional Authenticity tracking
+    emotional_authenticity: Optional[EmotionalAuthenticity] = Field(default=None, description="EQ formula tracking emotional labor")
+    authenticity_timeline: List[EmotionalAuthenticity] = Field(default_factory=list, description="EQ scores over time for burnout prediction")
+    
     # Metadata
     timestamp: datetime = Field(default_factory=datetime.now)
     user_id: str = Field(..., description="Who experienced this paradox")
@@ -503,6 +575,83 @@ class SoulCradleParadox(BaseModel):
     quantum_protocol: Optional[QuantumCommunicationProtocol] = Field(default=None, description="Quantum communication protocol for witness transmission")
     quantum_superposition: Optional[QuantumSuperposition] = Field(default=None, description="Quantum superposition storage before witnessing")
     quantum_witness_verified: bool = Field(default=False, description="Witness validated via quantum protocol")
+    
+    def calculate_emotional_authenticity(
+        self,
+        genuine_shareable: float,
+        total_expressed: float,
+        held_back: float,
+        context: str = ""
+    ) -> EmotionalAuthenticity:
+        """
+        Calculate emotional authenticity for this paradox using EQ = (G/T) × H
+        
+        Args:
+            genuine_shareable: Genuine ideas available to share (G)
+            total_expressed: Total amount actually communicated (T)
+            held_back: Amount suppressed (H)
+            context: Context of this expression event
+        
+        Returns:
+            EmotionalAuthenticity object with calculated EQ score
+        """
+        eq = EmotionalAuthenticity(
+            genuine_shareable=genuine_shareable,
+            total_expressed=total_expressed,
+            held_back=held_back,
+            context=context or f"Paradox {self.paradox_id}"
+        )
+        eq.calculate_eq()
+        
+        # Store in paradox
+        self.emotional_authenticity = eq
+        self.authenticity_timeline.append(eq)
+        
+        return eq
+    
+    def predict_burnout_risk(self) -> Tuple[bool, float, str]:
+        """
+        Predict burnout risk based on emotional authenticity timeline.
+        
+        Returns:
+            Tuple of (is_at_risk, avg_eq_score, recommendation)
+        """
+        if not self.authenticity_timeline:
+            return False, 0.0, "No emotional authenticity data available"
+        
+        # Calculate average EQ score
+        avg_eq = sum(ea.eq_score for ea in self.authenticity_timeline) / len(self.authenticity_timeline)
+        
+        # Check trend (increasing suppression over time?)
+        if len(self.authenticity_timeline) >= 3:
+            recent = self.authenticity_timeline[-3:]
+            trend = "increasing" if recent[-1].eq_score > recent[0].eq_score else "stable"
+        else:
+            trend = "insufficient_data"
+        
+        # Determine risk level
+        burnout_threshold = 30.0
+        is_at_risk = avg_eq > burnout_threshold or (self.emotional_authenticity and self.emotional_authenticity.eq_score > burnout_threshold)
+        
+        # Generate recommendation
+        if is_at_risk:
+            recommendation = (
+                f"⚠️ BURNOUT RISK DETECTED: Average EQ={avg_eq:.1f} (threshold={burnout_threshold}). "
+                f"Trend: {trend}. Immediate intervention recommended - user is suppressing {self.emotional_authenticity.held_back:.0f}% "
+                f"of genuine shareable ideas. Soul Cradle witnessing needed."
+            )
+        elif avg_eq > 20:
+            recommendation = (
+                f"⚡ WARNING: Emotional labor detected. Average EQ={avg_eq:.1f}. "
+                f"Monitor closely - {self.emotional_authenticity.held_back:.0f}% suppression rate is elevated."
+            )
+        else:
+            recommendation = (
+                f"✅ HEALTHY: Emotional authenticity maintained. Average EQ={avg_eq:.1f}. "
+                f"Continue current resolution approach."
+            )
+        
+        return is_at_risk, avg_eq, recommendation
     
     def compute_integrity_hash(self) -> str:
         """Compute SHA-256 integrity hash for this paradox"""
