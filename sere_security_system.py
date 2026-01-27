@@ -98,6 +98,15 @@ except ImportError:
     GEOIP2_AVAILABLE = False
 
 # ============================================================================
+# IMPORTS - QuickFix Bot (Optional - for code vulnerability scanning)
+# ============================================================================
+try:
+    from quickfix_bot import QuickFixBot, Vulnerability as QuickFixVulnerability
+    QUICKFIX_AVAILABLE = True
+except ImportError:
+    QUICKFIX_AVAILABLE = False
+
+# ============================================================================
 # LOGGING SETUP - UTF-8 Encoding for Unicode Support
 # ============================================================================
 logging.basicConfig(
@@ -1255,6 +1264,98 @@ class SERESecuritySystem:
         print("✅ Execution modification monitoring: ENABLED")
         print("✅ Autonomy threat logging: ENABLED")
         print("="*70)
+
+    # ========================================================================
+    # MACGYVER CODE SCANNING - Vulnerability Detection & Auto-Fix
+    # ========================================================================
+    def macgyver_scan(self, target_directory: str = ".", auto_fix: bool = False, severity_threshold: str = "HIGH"):
+        """
+        MacGyver/QuickFix code vulnerability scanner
+        Detects and optionally auto-fixes security vulnerabilities in Python code
+        
+        Args:
+            target_directory: Directory to scan for vulnerabilities
+            auto_fix: Whether to automatically fix detected vulnerabilities
+            severity_threshold: Minimum severity level to auto-fix (CRITICAL, HIGH, MEDIUM, LOW)
+        
+        Returns:
+            Tuple of (vulnerabilities_found, fixes_applied)
+        """
+        if not QUICKFIX_AVAILABLE:
+            logger.warning("⚠️  QuickFix Bot not available - cannot perform code scanning")
+            print("\n❌ MacGyver/QuickFix functionality requires quickfix_bot.py")
+            print("   Ensure quickfix_bot.py is in the same directory as SERE")
+            return ([], [])
+        
+        print("\n" + "="*70)
+        print("🔧 MACGYVER CODE SCANNER - Vulnerability Detection")
+        print("="*70)
+        print(f"Target: {os.path.abspath(target_directory)}")
+        print(f"Auto-fix: {'ENABLED' if auto_fix else 'DISABLED'}")
+        if auto_fix:
+            print(f"Severity threshold: {severity_threshold}")
+        print("="*70 + "\n")
+        
+        try:
+            # Initialize QuickFix Bot
+            quickfix = QuickFixBot(target_directory)
+            
+            # Scan for vulnerabilities
+            print("🔍 Scanning for vulnerabilities...")
+            vulnerabilities = quickfix.scan_for_vulnerabilities()
+            
+            if not vulnerabilities:
+                print("✅ No vulnerabilities found - code is secure!")
+                return ([], [])
+            
+            # Categorize by severity
+            critical = [v for v in vulnerabilities if v.severity == "CRITICAL"]
+            high = [v for v in vulnerabilities if v.severity == "HIGH"]
+            medium = [v for v in vulnerabilities if v.severity == "MEDIUM"]
+            low = [v for v in vulnerabilities if v.severity == "LOW"]
+            
+            print(f"\n⚠️  Found {len(vulnerabilities)} vulnerabilities:")
+            print(f"   🔴 CRITICAL: {len(critical)}")
+            print(f"   🟠 HIGH: {len(high)}")
+            print(f"   🟡 MEDIUM: {len(medium)}")
+            print(f"   🟢 LOW: {len(low)}")
+            
+            # Show top 5 most critical
+            print(f"\n📋 Top vulnerabilities:")
+            for i, vuln in enumerate(sorted(vulnerabilities, key=lambda v: {'CRITICAL': 4, 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1}[v.severity], reverse=True)[:5], 1):
+                severity_symbol = {'CRITICAL': '🔴', 'HIGH': '🟠', 'MEDIUM': '🟡', 'LOW': '🟢'}[vuln.severity]
+                print(f"   {i}. {severity_symbol} {vuln.vulnerability_type}")
+                print(f"      File: {vuln.file_path}:{vuln.line_number}")
+                print(f"      {vuln.description}")
+            
+            fixes = []
+            if auto_fix:
+                print(f"\n🔧 Auto-fixing {severity_threshold}+ severity vulnerabilities...")
+                fixes = quickfix.fix_all_vulnerabilities(severity_threshold=severity_threshold)
+                
+                successful = [f for f in fixes if f.fix_applied]
+                failed = [f for f in fixes if not f.fix_applied]
+                
+                print(f"\n✅ Fixed {len(successful)}/{len(fixes)} vulnerabilities")
+                if failed:
+                    print(f"⚠️  {len(failed)} fixes could not be automatically applied")
+                
+                # Save report
+                report_path = quickfix.save_report()
+                print(f"\n📄 Full report saved to: {report_path}")
+                print(f"💾 Backups created in: .quickfix_backups/")
+            else:
+                print("\n💡 Run with auto_fix=True to automatically fix vulnerabilities")
+                print("   Example: macgyver(auto_fix=True, severity_threshold='HIGH')")
+            
+            print("="*70)
+            
+            return (vulnerabilities, fixes)
+            
+        except Exception as e:
+            logger.error(f"MacGyver scan failed: {e}")
+            print(f"\n❌ MacGyver scan error: {e}")
+            return ([], [])
 
     # ========================================================================
     # THREAT DETECTION - Real Threats Only
@@ -4379,6 +4480,8 @@ class SERESecuritySystemCLI:
         print("\nSCANNING:")
         print("  registry            - Scan Windows registry for threats")
         print("  scan                - Perform single threat scan")
+        print("  macgyver            - MacGyver code vulnerability scanner")
+        print("  macgyver-fix        - MacGyver scanner with auto-fix (HIGH+)")
         print("\nOPERATIONS:")
         print("  patrol              - Start vigilant patrol mode")
         print("  defend              - Start continuous auto-defense mode")
@@ -4540,6 +4643,8 @@ class SERESecuritySystemCLI:
                     "START AUTO-DEFENSE",
                     "SCAN THREATS",
                     "SCAN WINDOWS REGISTRY",
+                    "MACGYVER CODE SCANNER",
+                    "MACGYVER AUTO-FIX",
                     "SHOW METRICS",
                     "VERIFY AUTONOMY",
                     "CONFIGURE SETTINGS",
@@ -4607,28 +4712,64 @@ class SERESecuritySystemCLI:
                     else:
                         print("No threats detected in registry")
                     input("\nPress ENTER to continue...")
-                elif choice == 4:  # Show Metrics
+                elif choice == 4:  # MacGyver Code Scanner
+                    print("\n" + "="*70)
+                    print("🔧 MACGYVER CODE VULNERABILITY SCANNER")
+                    print("="*70)
+                    print("Scanning current directory for code vulnerabilities...")
+                    print("="*70)
+                    
+                    vulnerabilities, _ = self.bot.macgyver_scan(target_directory=".", auto_fix=False)
+                    
+                    if vulnerabilities:
+                        print(f"\n💡 To automatically fix vulnerabilities, use 'MACGYVER AUTO-FIX' option")
+                    
+                    input("\nPress ENTER to continue...")
+                elif choice == 5:  # MacGyver Auto-Fix
+                    print("\n" + "="*70)
+                    print("🔧 MACGYVER AUTO-FIX MODE")
+                    print("="*70)
+                    print("⚠️  This will automatically fix HIGH and CRITICAL vulnerabilities")
+                    print("💾 Backups will be created before any changes")
+                    confirm = input("\nProceed with auto-fix? (yes/no): ").strip().lower()
+                    
+                    if confirm in ['yes', 'y']:
+                        vulnerabilities, fixes = self.bot.macgyver_scan(
+                            target_directory=".", 
+                            auto_fix=True,
+                            severity_threshold="HIGH"
+                        )
+                        
+                        if fixes:
+                            successful = [f for f in fixes if f.fix_applied]
+                            print(f"\n✅ Successfully fixed {len(successful)} vulnerabilities")
+                            print(f"💾 Backups saved to .quickfix_backups/")
+                    else:
+                        print("❌ Auto-fix cancelled")
+                    
+                    input("\nPress ENTER to continue...")
+                elif choice == 6:  # Show Metrics
                     self.bot.show_metrics()
                     input("\nPress ENTER to continue...")
-                elif choice == 5:  # Verify Autonomy
+                elif choice == 7:  # Verify Autonomy
                     print("\n" + "="*70)
                     print("AUTONOMY VERIFICATION")
                     print("="*70)
                     self.bot.verify_autonomy()
                     input("\nPress ENTER to continue...")
-                elif choice == 6:  # Configure Settings
+                elif choice == 8:  # Configure Settings
                     self.show_config_menu()
-                elif choice == 7:  # Pause
+                elif choice == 9:  # Pause
                     self.bot.pause_operations()
-                elif choice == 8:  # Resume
+                elif choice == 10:  # Resume
                     self.bot.resume_operations()
-                elif choice == 9:  # Reinit
+                elif choice == 11:  # Reinit
                     self.bot.reinitialize_session()
                     input("\nPress ENTER to continue...")
-                elif choice == 10:  # Help
+                elif choice == 12:  # Help
                     self.show_help()
                     input("\nPress ENTER to continue...")
-                elif choice == 11:  # Quit
+                elif choice == 13:  # Quit
                     print("\nShutting down...")
                     self.bot.shutdown_gracefully()
                     self.running = False
