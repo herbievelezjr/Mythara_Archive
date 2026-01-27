@@ -10,6 +10,7 @@ and provides clear guidance on what to install if anything is missing.
 """
 
 import sys
+import importlib
 from typing import Dict, List, Tuple
 
 # ANSI color codes for terminal output
@@ -43,7 +44,8 @@ def check_package(package_name: str, description: str) -> Tuple[bool, str]:
         (is_installed, version)
     """
     try:
-        mod = __import__(package_name)
+        import importlib
+        mod = importlib.import_module(package_name)
         version = getattr(mod, '__version__', 'unknown')
         return (True, version)
     except ImportError:
@@ -162,13 +164,15 @@ def check_network_connectivity() -> None:
     """Check basic network connectivity for external APIs"""
     print(f"\n{BOLD}Network Connectivity Check:{RESET}")
     
+    # Try to import httpx and asyncio for connectivity test
+    # These imports are intentionally inside the function as they're optional
     try:
-        import httpx
+        httpx = importlib.import_module('httpx')
         print(f"  {GREEN}✅ httpx installed - can test connectivity{RESET}")
         
         # Test connectivity to ElevenLabs API
         try:
-            import asyncio
+            asyncio = importlib.import_module('asyncio')
             
             async def test_connectivity():
                 async with httpx.AsyncClient(timeout=5.0) as client:
