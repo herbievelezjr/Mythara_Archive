@@ -7,6 +7,20 @@
 
 ---
 
+## ⚠️ Common Issues & Quick Fixes
+
+**Seeing network errors or "ModuleNotFoundError"?**
+- ✅ **Solution**: Install API dependencies: `pip install -r core/source_proprietary/requirements-api.txt`
+- ✅ **Validate**: Run `python validate_dependencies.py` to check what's missing
+- 📖 **Details**: See `NETWORK_ERRORS_EXPLAINED.md` for complete troubleshooting guide
+
+**Can't connect to the API server?**
+- ✅ Make sure you installed BOTH requirement files (see Quickstart below)
+- ✅ Check if httpx is installed: `python -c "import httpx"`
+- ✅ Verify server is running: `ps aux | grep uvicorn`
+
+---
+
 ## Executive Summary
 
 Mythara Engine is an **auditable, symbolic clause orchestration system** designed to encode memory, grief, benevolence, and legacy into reproducible infrastructure. Built for **enterprise licensing, sovereign deployment, and escrow-ready validation**, Mythara balances explainability for auditors with protection of proprietary internals.
@@ -26,10 +40,24 @@ This archive contains all artifacts required for:
 
 ### 1. Install dependencies
 
+**IMPORTANT**: You must install BOTH requirement files for the API server to work correctly.
+
 ```bash
+# Install core dependencies
 pip install -r requirements.txt
+
+# Install API-specific dependencies (includes httpx, FastAPI, etc.)
 pip install -r core/source_proprietary/requirements-api.txt
 ```
+
+**Validate installation** (recommended):
+```bash
+python validate_dependencies.py
+```
+
+This script checks all dependencies and reports what's missing. If you see network errors when starting the API server, it's usually because dependencies from `core/source_proprietary/requirements-api.txt` were not installed.
+
+**For detailed troubleshooting**, see `NETWORK_ERRORS_EXPLAINED.md`.
 
 ### 2. Run the API server
 
