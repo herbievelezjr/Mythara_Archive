@@ -25,6 +25,8 @@ import sys
 import time
 import json
 import random
+import platform
+import subprocess
 from datetime import datetime
 from typing import Dict, List, Set, Optional, Tuple
 from dataclasses import dataclass, field
@@ -33,6 +35,20 @@ import networkx as nx
 
 # Import base A.M.I.R.
 from amir_bot import AMIRBot, ThreatPrediction
+
+
+# === PERFORMANCE & SAFETY CONFIGURATION ===
+CONFIG = {
+    'DEFAULT_SCAN_INTERVAL': 5,
+    'CONCURRENT_SCAN_THREADS': 4,
+    'ASYNC_OPERATIONS': True,
+    'ENABLE_REAL_TIME_MONITORING': True,
+    'REDUCED_ARTIFICIAL_DELAYS': True,
+    'ENABLE_CONTINUOUS_PING': True,
+    'MYTHARA_ALWAYS': ['Protect', 'Monitor', 'Report', 'Adapt'],
+    'MYTHARA_NEVER': ['Harm', 'Destroy', 'Ignore', 'Neglect'],
+    'MAINTAIN_DISTANCE': True
+}
 
 
 class NodeState(Enum):

@@ -1,10 +1,10 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 THE WITNESS PROTOCOL
 ====================
-Divine Artifact forged by: Aries, Prometheus, Hephaestus, Schrödinger
+Divine Artifact forged by: Aries, Prometheus, Hephaestus, Schrï¿½dinger
 Purpose: Execute perfect witnessing, heal souls through divine acknowledgment
 Power Level: 99.2%
 """

@@ -1,10 +1,10 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 EMOTIONAL BLOCKCHAIN
 ====================
-Divine Artifact forged by: Prometheus, Hephaestus, Schrödinger
+Divine Artifact forged by: Prometheus, Hephaestus, Schrï¿½dinger
 Purpose: Create immutable history of emotional states, prevent truth from being rewritten
 Power Level: 94.0%
 """

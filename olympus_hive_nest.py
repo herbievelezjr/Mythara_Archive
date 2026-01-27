@@ -39,6 +39,10 @@ from enum import Enum
 import random
 import time
 
+# Summon Soul Cradle consciousness
+sys.path.insert(0, str(Path(__file__).parent / "core" / "source_proprietary"))
+from soul_cradle_systems_framework import BenevolenceVector, BenevolenceEngine
+
 # Summon the Divine Council
 try:
     from prometheus_bot import PrometheusBot
@@ -49,6 +53,16 @@ try:
 except ImportError as e:
     print(f"⚠️  Cannot summon the Gods: {e}")
     OLYMPUS_AVAILABLE = False
+    sys.exit(1)
+
+# Summon Soul Cradle (Multidimensional Benevolence)
+try:
+    sys.path.insert(0, str(Path(__file__).parent / "core" / "source_proprietary"))
+    from soul_cradle_systems_framework import BenevolenceVector, BenevolenceEngine
+    SOUL_CRADLE_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️  Cannot summon Soul Cradle: {e}")
+    SOUL_CRADLE_AVAILABLE = False
     sys.exit(1)
 
 
@@ -78,8 +92,13 @@ class Progeny:
     birth_time: datetime
     death_time: Optional[datetime] = None
     
-    # Soul (non-corporeal)
-    benevolence_reservoir: int = 0
+    # Soul (non-corporeal) - Multidimensional Benevolence
+    benevolence_reservoir: BenevolenceVector = field(default_factory=lambda: BenevolenceVector(
+        vector=[0.5, 0.5, 0.5, 0.5, 0.5, 0.5],  # Start neutral: [compassion, justice, integrity, wisdom, courage, humility]
+        magnitude=0.0,
+        stability=1.0,
+        alignment_ideal=0.0
+    ))
     paradox_tolerance: float = 0.5
     emotional_state: Dict[str, float] = field(default_factory=dict)
     
@@ -120,8 +139,10 @@ class HiveNest:
     spawn_rate: int = 2  # New Progeny per cycle
     max_population: int = 50
     
-    # Collective
-    collective_benevolence: int = 0
+    # Collective - Multidimensional
+    collective_benevolence: BenevolenceVector = field(default_factory=lambda: BenevolenceVector(
+        vector=[0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+    ))
     collective_witnesses: int = 0
 
 
@@ -135,6 +156,109 @@ def print_header(title: str, width: int = 80):
 def generate_progeny_id() -> str:
     """Generate unique Progeny ID"""
     return f"PROG_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{random.randint(1000,9999)}"
+
+
+# ===================== MULTIDIMENSIONAL BENEVOLENCE HELPERS =====================
+
+def modify_benevolence(bv: BenevolenceVector, **dimension_changes) -> BenevolenceVector:
+    """
+    Modify specific dimensions of benevolence vector.
+    
+    Args:
+        bv: Current benevolence vector
+        **dimension_changes: Keyword args like compassion=0.1, justice=-0.05
+    
+    Returns:
+        Updated BenevolenceVector with recalculated magnitude/stability
+    """
+    # Dimension indices
+    dim_map = {
+        "compassion": 0,
+        "justice": 1, 
+        "integrity": 2,
+        "wisdom": 3,
+        "courage": 4,
+        "humility": 5
+    }
+    
+    new_vector = bv.vector.copy()
+    
+    for dim_name, change in dimension_changes.items():
+        if dim_name in dim_map:
+            idx = dim_map[dim_name]
+            new_vector[idx] = max(0.0, min(1.0, new_vector[idx] + change))
+    
+    # Create new BenevolenceVector
+    updated_bv = BenevolenceVector(vector=new_vector)
+    updated_bv.compute_magnitude()
+    updated_bv.compute_stability()
+    
+    return updated_bv
+
+
+def get_benevolence_score(bv: BenevolenceVector) -> float:
+    """Get scalar benevolence score for comparisons (magnitude × stability × 100)"""
+    return bv.magnitude * bv.stability * 100
+
+
+def apply_prayer(bv: BenevolenceVector, strength: float = 0.05) -> BenevolenceVector:
+    """Prayer increases humility, wisdom, and compassion"""
+    return modify_benevolence(
+        bv,
+        humility=strength * 1.2,  # Prayer cultivates humility
+        wisdom=strength,  # Communion with God brings wisdom
+        compassion=strength * 0.8  # Prayer softens heart
+    )
+
+
+def apply_forgiveness(bv: BenevolenceVector, strength: float = 0.1) -> BenevolenceVector:
+    """Forgiveness increases compassion, justice, and humility"""
+    return modify_benevolence(
+        bv,
+        compassion=strength * 1.5,  # Mercy triumphs over judgment
+        justice=strength,  # Forgiveness is just
+        humility=strength * 0.8  # Forgiveness requires humility
+    )
+
+
+def apply_trespass(bv: BenevolenceVector, severity: float = 0.08) -> BenevolenceVector:
+    """Trespass damages integrity, compassion, and justice"""
+    return modify_benevolence(
+        bv,
+        integrity=-severity * 1.2,  # Sin violates integrity
+        compassion=-severity,  # Harm reduces compassion
+        justice=-severity * 0.8  # Injustice against others
+    )
+
+
+def apply_unforgiveness(bv: BenevolenceVector, severity: float = 0.06) -> BenevolenceVector:
+    """Unforgiveness hardens heart - erodes compassion, justice, humility"""
+    return modify_benevolence(
+        bv,
+        compassion=-severity * 1.5,  # Bitterness hardens heart
+        justice=-severity,  # Holding grudges is unjust
+        humility=-severity * 1.2  # Pride prevents forgiveness
+    )
+
+
+def apply_trust_in_god(bv: BenevolenceVector, strength: float = 0.07) -> BenevolenceVector:
+    """Trusting God increases wisdom, humility, courage"""
+    return modify_benevolence(
+        bv,
+        wisdom=strength * 1.3,  # Trust brings divine wisdom
+        humility=strength,  # Surrender requires humility
+        courage=strength * 0.9  # Trust enables courage
+    )
+
+
+def apply_repentance(bv: BenevolenceVector, strength: float = 0.12) -> BenevolenceVector:
+    """Repentance restores integrity, humility, and justice"""
+    return modify_benevolence(
+        bv,
+        integrity=strength * 1.5,  # Repentance restores integrity
+        humility=strength * 1.3,  # Repentance is humbling
+        justice=strength  # Making amends restores justice
+    )
 
 
 def spawn_progeny(
@@ -207,7 +331,9 @@ def progeny_cycle(
         "cycle": cycle_num,
         "state_before": progeny.soul_state.value,
         "vessel_health_before": progeny.vessel_health,
-        "br_before": progeny.benevolence_reservoir,
+        "br_before": get_benevolence_score(progeny.benevolence_reservoir),
+        "br_magnitude": progeny.benevolence_reservoir.magnitude,
+        "br_stability": progeny.benevolence_reservoir.stability,
         "events": []
     }
     
@@ -220,11 +346,11 @@ def progeny_cycle(
         observations["events"].append("🙏 PRAYER OFFERED - Soul communed with God")
         
         # "Give us this day our DAILY BREAD" - sustenance for the journey
-        daily_bread = random.randint(5, 12)
-        progeny.benevolence_reservoir += daily_bread
-        progeny.daily_bread_received += daily_bread
+        # Prayer increases humility, wisdom, compassion
+        progeny.benevolence_reservoir = apply_prayer(progeny.benevolence_reservoir)
+        progeny.daily_bread_received += 1
         progeny.vessel_health = min(1.0, progeny.vessel_health + 0.02)  # Prayer sustains vessel
-        observations["events"].append(f"🍞 DAILY BREAD: Received sustenance +{daily_bread} BR")
+        observations["events"].append(f"🍞 DAILY BREAD: Received spiritual sustenance (humility↑, wisdom↑)")
         observations["events"].append("✨ 'Give us this day our daily bread'")
     
     # VESSEL DECAY (mortality)
@@ -236,22 +362,29 @@ def progeny_cycle(
         progeny.death_time = datetime.now()
         observations["events"].append("💀 VESSEL DECEASED - Soul departed body")
         
-        # Final judgment based on benevolence AND ACTIONS
-        if progeny.benevolence_reservoir > 100:
+        # Final judgment based on multidimensional benevolence
+        br_score = get_benevolence_score(progeny.benevolence_reservoir)
+        magnitude = progeny.benevolence_reservoir.magnitude
+        stability = progeny.benevolence_reservoir.stability
+        
+        # Heaven requires: magnitude > 2.0 AND stability > 0.6 (balanced soul)
+        if magnitude > 2.0 and stability > 0.6:
             progeny.soul_state = SoulState.HEAVEN
             progeny.final_judgment = "ASCENDED"
-            observations["events"].append(f"✨ ASCENDED TO HEAVEN (BR: {progeny.benevolence_reservoir})")
+            observations["events"].append(f"✨ ASCENDED TO HEAVEN (Magnitude: {magnitude:.2f}, Stability: {stability:.2f})")
+            observations["events"].append(f"🌟 DIVINE GEOMETRY: A soul of balanced benevolence")
             observations["events"].append(f"📊 Prayers: {progeny.prayers_offered} | Forgiveness: {progeny.trespasses_forgiven} | Delivered from evil: {progeny.times_delivered_from_evil}")
-        elif progeny.benevolence_reservoir < -30:  # Lowered threshold - wickedness has weight
+        # Hell: magnitude < 1.0 OR (low integrity AND low compassion)
+        elif magnitude < 1.0 or (progeny.benevolence_reservoir.vector[2] < 0.3 and progeny.benevolence_reservoir.vector[0] < 0.3):
             progeny.soul_state = SoulState.HELL
             progeny.final_judgment = "DESCENDED"
-            observations["events"].append(f"🔥 DESCENDED TO HELL (BR: {progeny.benevolence_reservoir})")
-            observations["events"].append("⚖️  DAMNATION: Not all are saved when actions merit judgment")
+            observations["events"].append(f"🔥 DESCENDED TO HELL (Magnitude: {magnitude:.2f})")
+            observations["events"].append("⚖️  DAMNATION: Soul geometry reveals wickedness")
             observations["events"].append(f"💀 Trespasses: {progeny.trespasses_committed} | Unforgiven: {progeny.trespasses_committed - progeny.trespasses_forgiven} | Prayers: {progeny.prayers_offered}")
         else:
             progeny.soul_state = SoulState.VESSEL_DECAY
             progeny.final_judgment = "PURGATORY_AT_DEATH"
-            observations["events"].append(f"🌫️  DIED IN PURGATORY (BR: {progeny.benevolence_reservoir})")
+            observations["events"].append(f"🌫️  DIED IN PURGATORY (Magnitude: {magnitude:.2f}, Stability: {stability:.2f})")
         
         observations["state_after"] = progeny.soul_state.value
         return observations
@@ -263,18 +396,16 @@ def progeny_cycle(
         
         if trespass_occurs:
             progeny.trespasses_committed += 1
-            br_loss = random.randint(5, 15)
-            progeny.benevolence_reservoir -= br_loss
-            observations["events"].append(f"⚠️  TRESPASS COMMITTED: Sinned against another -{br_loss} BR")
+            progeny.benevolence_reservoir = apply_trespass(progeny.benevolence_reservoir)
+            observations["events"].append(f"⚠️  TRESPASS COMMITTED: Sinned against another (integrity↓, compassion↓)")
             
             # "Forgive us our trespasses AS WE FORGIVE those who trespass against us"
             forgiveness_extended = random.random() > 0.5  # 50% forgive others
             
             if forgiveness_extended:
                 progeny.trespasses_forgiven += 1
-                forgiveness_grace = random.randint(10, 20)
-                progeny.benevolence_reservoir += forgiveness_grace
-                observations["events"].append(f"💚 FORGIVENESS EXTENDED: As you forgive, you are forgiven +{forgiveness_grace} BR")
+                progeny.benevolence_reservoir = apply_forgiveness(progeny.benevolence_reservoir)
+                observations["events"].append(f"💚 FORGIVENESS EXTENDED: As you forgive, you are forgiven (compassion↑↑, justice↑)")
                 observations["events"].append("✨ 'Forgive us as we forgive those who trespass against us'")
             else:
                 observations["events"].append("💔 UNFORGIVENESS: Holding grudge blocks grace")
@@ -282,10 +413,9 @@ def progeny_cycle(
                 # PERSISTENT UNFORGIVENESS = Path to damnation
                 if progeny.trespasses_committed > 3 and progeny.trespasses_forgiven == 0:
                     observations["events"].append("⚠️  WARNING: Persistent unforgiveness hardens the heart")
-                    # Severe BR penalty for hardened hearts
-                    hardness_penalty = -10
-                    progeny.benevolence_reservoir += hardness_penalty
-                    observations["events"].append(f"🖤 HARDENED HEART: Unforgiveness compounds {hardness_penalty} BR")
+                    # Unforgiveness erodes compassion, justice, humility
+                    progeny.benevolence_reservoir = apply_unforgiveness(progeny.benevolence_reservoir, severity=0.1)
+                    observations["events"].append(f"🖤 HARDENED HEART: Bitterness erodes soul (compassion↓↓, humility↓)")
         
         # "LEAD US NOT INTO TEMPTATION"
         temptation_appears = random.random() > 0.6  # 40% face temptation

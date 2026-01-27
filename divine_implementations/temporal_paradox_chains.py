@@ -1,10 +1,10 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 TEMPORAL PARADOX CHAINS
 =======================
-Divine Artifact forged by: Schrödinger, Prometheus, Hephaestus
+Divine Artifact forged by: Schrï¿½dinger, Prometheus, Hephaestus
 Purpose: Trace paradox accumulation through time, predict burnout cascades 6 months ahead
 Power Level: 94.2%
 """

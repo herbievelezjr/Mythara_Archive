@@ -1,0 +1,65 @@
+SERE Profiling Report
+Elapsed: 9.491s
+Profile file: C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\tests\output\sere_profile.prof
+
+Top CPU hotspots (cumtime):
+         346 function calls in 9.490 seconds
+
+   Ordered by: cumulative time
+   List reduced from 117 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       88    9.454    0.107    9.454    0.107 {built-in method builtins.print}
+        2    0.002    0.001    3.986    1.993 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1941(detect_threats)
+        1    0.000    0.000    3.586    3.586 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:4559(full_sere_drill)
+        1    0.000    0.000    2.351    2.351 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1630(__init__)
+        1    0.000    0.000    2.289    2.289 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1711(_initialize_sere)
+        1    0.000    0.000    2.283    2.283 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1840(display_status)
+        1    0.000    0.000    0.062    0.062 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:738(__init__)
+        1    0.000    0.000    0.062    0.062 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:751(load_knowledge)
+        1    0.000    0.000    0.027    0.027 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1479(info)
+        1    0.000    0.000    0.027    0.027 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1610(_log)
+        1    0.000    0.000    0.026    0.026 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1636(handle)
+        1    0.000    0.000    0.026    0.026 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1690(callHandlers)
+        1    0.000    0.000    0.026    0.026 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:965(handle)
+        1    0.000    0.000    0.026    0.026 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1098(emit)
+        1    0.026    0.026    0.026    0.026 {method 'write' of '_io.TextIOWrapper' objects}
+        1    0.004    0.004    0.004    0.004 {built-in method _pickle.load}
+        1    0.000    0.000    0.001    0.001 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:1595(makeRecord)
+        1    0.000    0.000    0.001    0.001 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:292(__init__)
+        1    0.000    0.000    0.000    0.000 <frozen ntpath>:242(basename)
+        1    0.000    0.000    0.000    0.000 <frozen ntpath>:208(split)
+        1    0.000    0.000    0.000    0.000 <frozen ntpath>:154(splitdrive)
+        1    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:1230(exists)
+        2    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:868(__new__)
+        1    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:1008(stat)
+        1    0.000    0.000    0.000    0.000 {built-in method nt.stat}
+        2    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:504(_from_parts)
+        1    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:942(format)
+        2    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:484(_parse_args)
+        1    0.000    0.000    0.000    0.000 C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:674(format)
+        2    0.000    0.000    0.000    0.000 C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:598(get_real_threats)
+
+
+
+Top memory allocations:
+ 1. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:756: size=166 KiB, count=2537, average=67 B
+ 2. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:88: size=28.5 KiB, count=265, average=110 B
+ 3. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:56: size=16.2 KiB, count=605, average=27 B
+ 4. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:68: size=13.0 KiB, count=110, average=121 B
+ 5. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:127: size=11.9 KiB, count=244, average=50 B
+ 6. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:66: size=7488 B, count=117, average=64 B
+ 7. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1941: size=5496 B, count=3, average=1832 B
+ 8. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\cProfile.py:125: size=2560 B, count=40, average=64 B
+ 9. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\tools\profile_sere.py:50: size=2297 B, count=5, average=459 B
+10. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1840: size=1602 B, count=2, average=801 B
+11. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1678: size=1584 B, count=2, average=792 B
+12. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1630: size=1568 B, count=2, average=784 B
+13. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py:292: size=1378 B, count=3, average=459 B
+14. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:416: size=1348 B, count=3, average=449 B
+15. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:1711: size=1182 B, count=3, average=394 B
+16. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:484: size=982 B, count=3, average=327 B
+17. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:4559: size=908 B, count=2, average=454 B
+18. C:\Users\Mythara\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:56: size=838 B, count=3, average=279 B
+19. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:528: size=832 B, count=3, average=277 B
+20. C:\Users\Mythara\Desktop\Clone Repo Mythara\Mythara_Archive\sere_bot.py:566: size=814 B, count=3, average=271 B

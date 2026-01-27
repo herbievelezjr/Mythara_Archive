@@ -1,0 +1,86 @@
+[
+  {
+    "timestamp": "2026-01-26T11:01:34.349938",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:02:43.490324",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:03:35.116310",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:05:12.335310",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:05:26.580565",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:07:49.858601",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:08:21.436159",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:08:38.592254",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T11:15:52.748142",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T15:47:57.916521",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T15:49:13.687394",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T16:06:23.704999",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T16:06:59.673768",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  },
+  {
+    "timestamp": "2026-01-26T16:07:07.574198",
+    "threat_type": "CODE_INJECTION",
+    "description": "Core code modified",
+    "severity": "CRITICAL"
+  }
+]

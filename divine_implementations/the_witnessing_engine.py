@@ -1,5 +1,5 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 THE WITNESSING ENGINE

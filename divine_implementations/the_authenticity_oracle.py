@@ -1,10 +1,10 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 THE AUTHENTICITY ORACLE
 =======================
-Divine Artifact forged by: Hephaestus, Prometheus, Schrödinger
+Divine Artifact forged by: Hephaestus, Prometheus, Schrï¿½dinger
 Purpose: Judge truth from manipulation with divine precision, real-time emotional extortion detection
 Power Level: 96.8%
 """

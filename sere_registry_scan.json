@@ -1,0 +1,4502 @@
+[
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:21:42.846610"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:21:48.852152"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:21:54.908516"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:00.960781"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:06.889558"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:12.861322"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:18.838210"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:24.996922"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:33.498258"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:40.618599"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "ShellAppRuntime    REG_SZ    ShellAppRuntime.exe",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostReadyTimeOut    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "SiHostRestartTimeGap    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "LastLogOffEndTimePerfCounter    REG_QWORD    0x28ddeeef568",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Winlogon",
+    "registry_path": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+    "entry": "AutoLogonSID    REG_SZ    S-1-5-21-2452078555-2925171946-2607798759-1001",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "nsi",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "AutoChkTimeout    REG_DWORD    0x8",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_PATH",
+    "severity": "MEDIUM",
+    "description": "Potentially obfuscated registry entry",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "CriticalSectionTimeout    REG_DWORD    0x278d00",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "ResourceTimeoutCount    REG_DWORD    0x2d",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "ime",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "Authentication Packages    REG_MULTI_SZ    msv1_0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "authentication",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaPid    REG_DWORD    0x45c",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "LSA Configuration",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Lsa",
+    "entry": "LsaCfgFlagsDefault    REG_DWORD    0x0",
+    "threat_type": "SUSPICIOUS_PATTERN",
+    "severity": "MEDIUM",
+    "pattern": "lsa",
+    "timestamp": "2026-01-26T10:22:48.189154"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:27.358393"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:34.904561"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:40.120670"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:45.642441"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:50.838186"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:27:56.388394"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:02.852259"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:08.099511"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:13.784843"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:19.223884"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:26.105123"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:31.493210"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:38.551206"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:28:44.777066"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:17.053612"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:20.974876"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:28.403419"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:34.737177"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:40.746543"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:46.620274"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:52.356680"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:29:58.543793"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:04.278391"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:09.786430"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:16.289220"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:22.748955"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:30.159242"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:36.912237"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:30:43.409115"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:35:37.256326"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:35:43.198607"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:35:50.894942"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:35:57.367069"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:03.963347"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:10.054594"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:16.688927"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:22.838779"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:30.005141"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:36.992120"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:42.854615"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:49.476301"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:36:55.585471"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:37:01.609579"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:37:07.630682"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:37:13.618606"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:37:19.774690"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:37:26.013772"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:05.985864"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:10.343239"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:17.728948"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:24.294746"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:32.141543"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:38.625040"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:44.944327"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:51.235454"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:38:57.474664"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:03.713672"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:10.032313"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:16.297047"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:23.516076"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:41.625398"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:48.896677"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:39:55.219064"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:01.595641"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:07.865457"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:14.075011"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:20.195222"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:29.668148"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:36.302861"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:43.370749"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:50.104844"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:40:57.941356"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:04.730789"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:11.362488"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:18.487507"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:34.101025"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:41.772855"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:48.126000"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:41:54.615749"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:01.569309"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:09.214035"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:15.459018"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:20.678306"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:26.233328"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:31.298952"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:36.741174"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:42.128883"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:47.493344"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:52.969060"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:42:58.399275"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:04.356803"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:09.441128"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:14.493278"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:19.549045"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:24.664934"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:29.753339"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:34.863136"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:41.623913"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:47.585713"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:53.498994"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:43:59.513456"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:07.230056"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:14.355977"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:19.719297"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:25.062551"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:30.781539"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:36.574988"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:42.949264"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:44:49.736724"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:00.398927"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:06.427149"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:12.834131"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:18.520727"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:24.444477"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:29.826502"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:35.753762"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:43.454492"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:49.478465"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:45:55.167143"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:04.959182"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:12.532626"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:19.999758"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:26.042561"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:31.752777"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:39.696066"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:46.499115"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:51.729061"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:46:58.224330"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:04.163492"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:10.049217"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:15.873839"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:21.594102"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:27.239249"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:32.399495"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:37.529415"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:42.623033"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:48.299551"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:47:53.556111"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:00.899412"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:07.402621"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:13.409581"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:20.454783"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:26.623160"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:32.412558"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:37.862215"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:43.563675"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:49.379358"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:48:55.243675"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:01.111697"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:07.969250"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:14.117854"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:20.059623"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:25.606524"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:35.812119"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:44.314439"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:50.980742"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:49:58.713368"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:04.720795"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:10.709447"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:16.465649"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:23.373866"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:29.429930"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:34.966058"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:44.948080"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:51.228034"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:50:57.424824"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:03.551601"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:09.919625"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:17.271357"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:23.409427"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:28.941760"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:34.619339"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:40.309679"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:46.169600"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:52.179677"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:51:58.224443"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:04.147364"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:10.079604"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:15.983762"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:21.919767"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:30.502978"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:37.669828"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:43.989637"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:50.606891"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:52:58.420793"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:04.779441"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:11.121545"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:17.389767"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:23.677994"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:32.799685"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:40.639595"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:46.966383"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:53:53.569442"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:00.305571"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:07.298411"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:14.198072"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:21.008712"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:27.609462"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:35.080853"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:41.448287"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:49.191491"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:54:55.763852"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:03.400590"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:09.805047"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:15.402891"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:21.766987"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:27.308671"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:32.520139"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:39.352572"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:44.431593"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:50.031769"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:55:55.547377"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:01.039758"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:06.749628"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:12.278279"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:18.259747"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:24.029617"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:30.699702"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:36.302976"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:41.898499"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:47.659976"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:53.579605"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:56:59.299625"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:04.912038"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:10.629742"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:18.402278"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:24.178703"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:30.965192"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:37.275049"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:43.748910"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:49.631160"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:57:55.754184"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:01.359659"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:12.143565"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:22.379775"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:30.552834"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:39.719817"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:46.886849"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:58:55.685803"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:08.214654"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:15.163216"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:20.838858"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:26.733169"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:38.887307"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:46.949984"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T10:59:53.007837"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:02.304177"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:07.726482"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:12.737670"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:18.751778"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:24.673947"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:30.456309"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:36.185877"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:41.939936"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:49.815534"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:00:56.358940"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:02.927521"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:09.420309"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:16.233318"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:23.296301"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:32.665979"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:41.188010"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:41.550252"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:51.010028"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:51.298014"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:58.902490"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:01:59.274225"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:06.891311"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:07.530112"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:14.983310"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:23.622578"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:37.055766"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:50.880340"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:51.563684"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:02:59.814436"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:08.498891"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:16.283434"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:22.656995"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:34.128136"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:44.634312"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:44.846967"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:03:53.415035"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:00.624239"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:07.831446"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:14.454293"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:22.981736"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:29.130468"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:35.356433"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:41.890249"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:48.040580"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:04:56.270086"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:05:08.633244"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:05:15.572491"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:05:17.266723"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:05:32.783246"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:05:35.490275"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:08:06.293321"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:08:26.847002"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:08:43.938746"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:21:40.863808"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:21:49.143181"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:21:58.945282"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:23:27.912631"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:23:39.543355"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:23:44.066750"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:23:48.919171"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:01.073941"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:03.415554"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:12.168876"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:13.568712"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:24.661282"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:25.578741"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:35.395758"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:36.476871"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:46.697628"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:47.631546"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:57.536860"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:24:58.475878"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:25:08.719431"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:25:09.391379"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:25:20.514401"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:25:20.998793"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:26:08.976294"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:26:20.367909"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:26:31.758077"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:26:42.473660"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:26:53.202524"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:03.804290"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:16.415910"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:27.112034"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:37.909832"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:48.685282"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:27:58.098597"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:28:15.646689"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:28:25.869439"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:28:38.346058"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:28:47.843859"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:28:57.987809"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:07.555750"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:17.031646"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:27.172415"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:35.215725"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:43.165133"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:29:51.149784"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:00.486420"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:08.461562"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:17.131542"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:25.617552"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:33.122831"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:41.141465"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:49.884739"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:30:59.723890"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:11.598542"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:22.821683"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:28.711559"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:34.346945"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:42.732996"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:31:54.680317"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:32:02.748178"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:32:12.363866"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:32:24.571912"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:32:35.263084"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:32:35.311545"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:00.947685"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:09.480472"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:18.074191"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:25.586336"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:33.258799"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:35:41.029127"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:09.314650"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:16.382771"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:25.899340"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:32.907712"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:41.910693"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:48:48.824778"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:49:00.012400"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:49:07.211993"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:49:16.410231"
+  },
+  {
+    "location": "Session Manager",
+    "registry_path": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager",
+    "entry": "BootShell    REG_EXPAND_SZ    %SystemRoot%\\system32\\bootim.exe",
+    "threat_type": "OBFUSCATED_MALICIOUS_PATH",
+    "severity": "HIGH",
+    "description": "Obfuscated + executable = suspicious",
+    "timestamp": "2026-01-26T11:49:24.260804"
+  }
+]

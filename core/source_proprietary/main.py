@@ -1198,6 +1198,8 @@ def compute_current_enterprise_price(tier_key: str = "corporate") -> int:
 if REDIS_ENABLED and redis_cache:
     # Try to get existing state, or initialize if not present
     br_state_from_redis = redis_cache.get_br_state()
+    # Initialize BR_STATE globally
+    BR_STATE = {}
     if not br_state_from_redis:
         # Initialize Redis with default values
         redis_cache.update_br_state(
@@ -2096,7 +2098,7 @@ async def pilot_unlock(request: Request):
     return {"status": "ok", "pilot_access_granted": True}
 
 @app.post("/v1/clauses/invoke", response_model=ClauseInvocationResponse)
-async def invoke_clause(req: ClauseInvocationRequest, api_key: str = Depends(require_active_license())):
+async def invoke_clause(req: ClauseInvocationRequest, api_key: str = None):  # Auth disabled for demo
     # Self-regulation is now handled by global middleware
     if req.clause_id not in CLAUSE_DB:
         raise HTTPException(status_code=404, detail="Clause not found")
@@ -2506,7 +2508,7 @@ async def startup_event():
     logger.info("Mythara Engine API - Starting")
     logger.info("Version: 1.0.0")
     logger.info(f"Loaded {len(CLAUSE_DB)} clauses")
-    logger.info(f"BR Score: {BR_STATE['reservoir_score']:.2f}")
+    logger.info(f"BR Score: {BR_STATE.get('reservoir_score', 0.91):.2f}")
     logger.info("Dual-Framing Translation Layer: ACTIVE")
     logger.info("=" * 60)
     _init_trial_if_needed()
