@@ -197,16 +197,16 @@ engine.clauses.register_clause(
 **Key Features**:
 - ✅ Autonomous penetration testing (A.D.A.P.T. Bot)
 - ✅ Automated vulnerability remediation (Q.U.I.C.K.F.I.X. Bot)
-- ✅ Military-grade survival protocols (S.E.R.E. Bot)
+- ✅ Military-grade survival protocols (S.E.R.E. Sovereign Security System)
 - ✅ AI-powered threat orchestration (A.M.I.R. command center)
 
-**File**: `amir_bot.py` + `adapt_bot.py` + `quickfix_bot.py` + `sere_bot.py`  
+**File**: `amir_bot.py` + `adapt_bot.py` + `quickfix_bot.py` + `sere_security_system.py`  
 **Database**: `~/.mythara_engine/AMIR/amir_cybersecurity.db`  
 **Pricing**: $25K-100K annually (enterprise licensing)
 
 **Example Use Case**:
 > *Zero-day vulnerability detected in production API*  
-> → A.D.A.P.T. Bot escalates to RAGE mode (severity 0.95) → Q.U.I.C.K.F.I.X. Bot auto-deploys patch → S.E.R.E. Bot activates EVADE protocols → A.M.I.R. logs full audit trail
+> → A.D.A.P.T. Bot escalates to RAGE mode (severity 0.95) → Q.U.I.C.K.F.I.X. Bot auto-deploys patch → S.E.R.E. Sovereign Security System activates EVADE protocols → A.M.I.R. logs full audit trail
 
 **Custom Clauses**:
 ```python

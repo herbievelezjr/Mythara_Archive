@@ -1,0 +1,118 @@
+{
+  "report_generated": "2026-01-24T02:53:09.606635",
+  "total_threats": 5,
+  "threats_with_geolocation": 5,
+  "threats_without_geolocation": 0,
+  "threats": [
+    {
+      "threat_id": "TEST_THREAT_1",
+      "attack_type": "Distributed Denial of Service",
+      "severity": "SEVERE",
+      "source_ip": "198.51.100.1",
+      "timestamp": "2026-01-24T02:53:06.613506",
+      "indicators": [
+        "Test indicator",
+        "Simulated threat"
+      ],
+      "recommended_action": "Monitor and analyze",
+      "geolocation": {
+        "ip": "198.51.100.1",
+        "city": "Ashburn",
+        "region": "Virginia",
+        "country": "United States",
+        "loc": "39.03,-77.5",
+        "org": "Google LLC",
+        "postal": "20149",
+        "timezone": "America/New_York"
+      }
+    },
+    {
+      "threat_id": "TEST_THREAT_2",
+      "attack_type": "Brute Force",
+      "severity": "SUBSTANTIAL",
+      "source_ip": "1.1.1.1",
+      "timestamp": "2026-01-24T02:53:07.237485",
+      "indicators": [
+        "Test indicator",
+        "Simulated threat"
+      ],
+      "recommended_action": "Monitor and analyze",
+      "geolocation": {
+        "ip": "1.1.1.1",
+        "city": "Hong Kong",
+        "region": "Central and Western District",
+        "country": "Hong Kong",
+        "loc": "22.3193,114.1693",
+        "org": "Cloudflare, Inc",
+        "postal": "",
+        "timezone": "Asia/Hong_Kong"
+      }
+    },
+    {
+      "threat_id": "TEST_THREAT_3",
+      "attack_type": "SQL Injection",
+      "severity": "MODERATE",
+      "source_ip": "208.67.222.222",
+      "timestamp": "2026-01-24T02:53:07.850238",
+      "indicators": [
+        "Test indicator",
+        "Simulated threat"
+      ],
+      "recommended_action": "Monitor and analyze",
+      "geolocation": {
+        "ip": "208.67.222.222",
+        "city": "San Jose",
+        "region": "California",
+        "country": "United States",
+        "loc": "37.4084,-121.954",
+        "org": "Cisco OpenDNS, LLC",
+        "postal": "95134",
+        "timezone": "America/Los_Angeles"
+      }
+    },
+    {
+      "threat_id": "TEST_THREAT_4",
+      "attack_type": "Distributed Denial of Service",
+      "severity": "SEVERE",
+      "source_ip": "45.33.32.156",
+      "timestamp": "2026-01-24T02:53:08.465528",
+      "indicators": [
+        "Test indicator",
+        "Simulated threat"
+      ],
+      "recommended_action": "Monitor and analyze",
+      "geolocation": {
+        "ip": "45.33.32.156",
+        "city": "Fremont",
+        "region": "California",
+        "country": "United States",
+        "loc": "37.5625,-122.0004",
+        "org": "Akamai Technologies, Inc.",
+        "postal": "94536",
+        "timezone": "America/Los_Angeles"
+      }
+    },
+    {
+      "threat_id": "TEST_THREAT_5",
+      "attack_type": "Brute Force",
+      "severity": "SUBSTANTIAL",
+      "source_ip": "185.199.108.153",
+      "timestamp": "2026-01-24T02:53:09.104037",
+      "indicators": [
+        "Test indicator",
+        "Simulated threat"
+      ],
+      "recommended_action": "Monitor and analyze",
+      "geolocation": {
+        "ip": "185.199.108.153",
+        "city": "San Francisco",
+        "region": "California",
+        "country": "United States",
+        "loc": "37.7823,-122.391",
+        "org": "Fastly, Inc.",
+        "postal": "94107",
+        "timezone": "America/Los_Angeles"
+      }
+    }
+  ]
+}

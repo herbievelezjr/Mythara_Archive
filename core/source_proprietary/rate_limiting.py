@@ -34,7 +34,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     - Endpoint-specific: Different limits per endpoint type
     """
     
-    def __init__(self, app, default_limit: int = 100, window_seconds: int = 60):
+    def __init__(self, app, default_limit: int = 100, window_seconds: int = 60, redis_cache=None, **kwargs):
         """
         Initialize rate limiter.
         

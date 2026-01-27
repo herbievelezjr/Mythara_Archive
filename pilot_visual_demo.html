@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mythara Engine - Visual Pilot Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { text-align: center; margin-bottom: 40px; opacity: 0.9; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .metric-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
+        .metric-card h3 { margin-bottom: 15px; font-size: 1.2em; opacity: 0.9; }
+        .metric-value { font-size: 2.5em; font-weight: bold; margin-bottom: 10px; }
+        .metric-label { opacity: 0.8; font-size: 0.9em; }
+        .invocation-panel { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        select, input, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: #fff; font-size: 1em; }
+        select option { background: #764ba2; color: #fff; }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.6); }
+        .slider-container { display: flex; align-items: center; gap: 15px; }
+        input[type="range"] { flex: 1; }
+        .slider-value { font-weight: bold; min-width: 50px; text-align: right; }
+        button { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; width: 100%; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        button:active { transform: translateY(0); }
+        .response-panel { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); display: none; }
+        .response-panel.active { display: block; }
+        .response-item { margin-bottom: 15px; }
+        .response-label { font-weight: bold; opacity: 0.9; margin-bottom: 5px; }
+        .response-value { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; word-break: break-all; font-family: 'Courier New', monospace; }
+        .status { text-align: center; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .status.error { background: rgba(255,0,0,0.3); display: block; }
+        .status.success { background: rgba(0,255,0,0.3); display: block; }
+        .connection-status { text-align: center; padding: 10px; border-radius: 8px; margin-bottom: 20px; background: rgba(255,255,255,0.1); }
+        .connection-status.connected { background: rgba(0,255,0,0.2); }
+        .connection-status.disconnected { background: rgba(255,0,0,0.2); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .loading { animation: pulse 1.5s infinite; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Mythara Engine</h1>
+        <p class="subtitle">Visual Pilot Demo - Emotional Clause Invocation</p>
+        <div class="connection-status" id="connectionStatus">Checking connection to API...</div>
+        <div class="dashboard">
+            <div class="metric-card"><h3> Emotional Fidelity</h3><div class="metric-value" id="emotionalFidelity">--</div><div class="metric-label">Target:  0.91</div></div>
+            <div class="metric-card"><h3> Blessings Delta</h3><div class="metric-value" id="blessingsDelta">--</div><div class="metric-label">Current invocation</div></div>
+            <div class="metric-card"><h3> Integrity Hash</h3><div class="metric-value" style="font-size: 1.2em; word-break: break-all;" id="integrityHash">--</div><div class="metric-label">SHA-256 verification</div></div>
+        </div>
+        <div class="invocation-panel">
+            <h2 style="margin-bottom: 25px;"> Invoke Clause</h2>
+            <div class="status" id="status"></div>
+            <form id="invocationForm">
+                <div class="form-group"><label for="clauseId">Clause ID</label><select id="clauseId" required><option value="">Select a clause...</option><option value="Legacy_Seed">Legacy_Seed (Ancestral Memory)</option><option value="Blessing_Arc">Blessing_Arc (Benevolence Flow)</option><option value="Memory_Lock">Memory_Lock (Preservation)</option><option value="cl_test">cl_test (Test Clause)</option><option value="Shadow_Resolver">Shadow_Resolver (Safety Fallback)</option></select></div>
+                <div class="form-group"><label for="messenger">Messenger</label><select id="messenger" required><option value="M-001">M-001 (Healer)</option><option value="M-002">M-002 (Witness)</option><option value="M-003">M-003 (Custodian)</option><option value="M-004">M-004 (Herald)</option><option value="M-005">M-005 (Scribe)</option></select></div>
+                <div class="form-group"><label for="emotion">Emotion</label><select id="emotion" required><option value="grief">Grief</option><option value="joy">Joy</option><option value="fear">Fear</option><option value="hope">Hope</option><option value="anger">Anger</option><option value="love">Love</option><option value="neutral">Neutral</option></select></div>
+                <div class="form-group"><label for="intensity">Intensity</label><div class="slider-container"><input type="range" id="intensity" min="0" max="1" step="0.01" value="0.5" required><span class="slider-value" id="intensityValue">0.50</span></div></div>
+                <div class="form-group"><label for="context">Context (optional)</label><textarea id="context" rows="3" placeholder="Describe the emotional context..."></textarea></div>
+                <div class="form-group"><label for="apiKey">API Key</label><input type="password" id="apiKey" placeholder="Enter your API key" value="pilot_key_001"></div>
+                <button type="submit"> Invoke Clause</button>
+            </form>
+        </div>
+        <div class="response-panel" id="responsePanel">
+            <h2 style="margin-bottom: 25px;"> Invocation Response</h2>
+            <div class="response-item"><div class="response-label">Invocation ID</div><div class="response-value" id="respInvocationId">--</div></div>
+            <div class="response-item"><div class="response-label">Clause ID</div><div class="response-value" id="respClauseId">--</div></div>
+            <div class="response-item"><div class="response-label">Messenger</div><div class="response-value" id="respMessenger">--</div></div>
+            <div class="response-item"><div class="response-label">Emotional Fidelity</div><div class="response-value" id="respEmotionalFidelity">--</div></div>
+            <div class="response-item"><div class="response-label">Blessings Delta</div><div class="response-value" id="respBlessingsDelta">--</div></div>
+            <div class="response-item"><div class="response-label">Timestamp</div><div class="response-value" id="respTimestamp">--</div></div>
+            <div class="response-item"><div class="response-label">Integrity Hash</div><div class="response-value" id="respIntegrityHash">--</div></div>
+        </div>
+    </div>
+    <script>
+        const API_URL = 'http://localhost:8000';
+        document.getElementById('intensity').addEventListener('input', (e) => { document.getElementById('intensityValue').textContent = parseFloat(e.target.value).toFixed(2); });
+        async function checkConnection() { const statusEl = document.getElementById('connectionStatus'); try { const response = await fetch(`${API_URL}/health`); if (response.ok) { statusEl.textContent = ' Connected to Mythara Engine API'; statusEl.className = 'connection-status connected'; } else { throw new Error('API not responding'); } } catch (error) { statusEl.textContent = ' Disconnected - Start the API server'; statusEl.className = 'connection-status disconnected'; } }
+        document.getElementById('invocationForm').addEventListener('submit', async (e) => { e.preventDefault(); const statusEl = document.getElementById('status'); const responsePanelEl = document.getElementById('responsePanel'); statusEl.textContent = 'Invoking clause...'; statusEl.className = 'status loading'; statusEl.style.display = 'block'; responsePanelEl.classList.remove('active'); const payload = { clause_id: document.getElementById('clauseId').value, messenger: document.getElementById('messenger').value, payload: { emotion: document.getElementById('emotion').value, intensity: parseFloat(document.getElementById('intensity').value), context: document.getElementById('context').value || 'visual_pilot_demo' }, consent_token: 'pilot_demo_consent' }; const apiKey = document.getElementById('apiKey').value; try { const response = await fetch(`${API_URL}/v1/clauses/invoke`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }, body: JSON.stringify(payload) }); if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.detail || 'Invocation failed'); } const data = await response.json(); document.getElementById('emotionalFidelity').textContent = data.emotional_fidelity.toFixed(3); document.getElementById('blessingsDelta').textContent = `+${data.blessings_delta}`; document.getElementById('integrityHash').textContent = data.integrity_hash.substring(0, 16) + '...'; document.getElementById('respInvocationId').textContent = data.invocation_id; document.getElementById('respClauseId').textContent = data.clause_id; document.getElementById('respMessenger').textContent = data.messenger; document.getElementById('respEmotionalFidelity').textContent = data.emotional_fidelity.toFixed(3); document.getElementById('respBlessingsDelta').textContent = `+${data.blessings_delta}`; document.getElementById('respTimestamp').textContent = data.timestamp; document.getElementById('respIntegrityHash').textContent = data.integrity_hash; statusEl.textContent = ' Clause invoked successfully!'; statusEl.className = 'status success'; responsePanelEl.classList.add('active'); setTimeout(() => { statusEl.style.display = 'none'; }, 3000); } catch (error) { statusEl.textContent = ` Error: ${error.message}`; statusEl.className = 'status error'; } });
+        checkConnection(); setInterval(checkConnection, 5000);
+    </script>
+</body>
+</html>
