@@ -233,7 +233,7 @@ class MytharaArchitectTeam:
                 budget REAL,
                 deadline TEXT
             )
-        """)
+            """)
         
             # Blueprints table
             cursor.execute("""
