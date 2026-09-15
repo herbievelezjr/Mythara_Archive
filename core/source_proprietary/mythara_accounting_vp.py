@@ -536,7 +536,7 @@ class MytharaAccountingVP:
         
         # Update grant spent amount
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE grant_funds SET amount_spent = amount_spent + ? WHERE grant_id = ?', (amount, grant_id))
+c.execute('UPDATE grant_funds SET amount_spent = amount_spent + ? WHERE id = ?', (amount, grant_id))
         
         self.conn.commit()
         
