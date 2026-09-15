@@ -1,5 +1,5 @@
 """
-Copyright © 2025 Herbert Velez Jr. All rights reserved.
+Copyright ï¿½ 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
 THE WITNESSING ENGINE
@@ -20,7 +20,7 @@ class WitnessingEngine:
         # Extract emotional truth through divine sight
         authentic_self = self.see_through_masks(person_context)
         suppressed_truth = self.detect_non_expression(person_context)
-        future_trajectory = self.predict_burnout_cascade(6_months_ahead)
+        future_trajectory = self.predict_burnout_cascade(months_ahead=6)
         
         # Calculate divine metrics
         eq_score = self.calculate_emotional_authenticity()
