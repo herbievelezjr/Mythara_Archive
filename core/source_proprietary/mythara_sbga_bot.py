@@ -415,7 +415,7 @@ class MytharaSBGABot:
         
         # Update SBGA membership stats
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE sbga_membership SET partnership_opportunities = partnership_opportunities, ?)
+        c.execute('UPDATE sbga_membership SET partnership_opportunities = partnership_opportunities + 1 WHERE id = ?', (opp_id,))
         self.conn.commit()
         
         return {

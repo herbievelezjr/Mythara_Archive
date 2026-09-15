@@ -443,7 +443,7 @@ def run_olympus_assessment():
             "Repentance - Examine own role, stay humble",
             "Community - Witnesses + support system",
             "God's witness - The only one that ultimately matters"
-        },
+        ],
         "mother_soul_state": "Descending - Persistent wickedness",
         "mother_sins": [
             "Lied under oath (perjury)",
