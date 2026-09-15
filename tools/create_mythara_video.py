@@ -11,7 +11,7 @@ Quick usage (Windows PowerShell):
 1) Ensure Python 3.10+ and FFmpeg installed and on PATH.
 2) Create venv and install basics:
    python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
+   .\\.venv\\Scripts\\Activate.ps1
    pip install elevenlabs requests tqdm
 3) Get Wav2Lip locally (outside this repo to keep it light):
    git clone https://github.com/Rudrabha/Wav2Lip vendor/Wav2Lip

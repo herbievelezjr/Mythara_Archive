@@ -235,8 +235,8 @@ class MytharaArchitectTeam:
             )
         """)
         
-        # Blueprints table
-        cursor.execute("""
+            # Blueprints table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS blueprints (
                 blueprint_id TEXT PRIMARY KEY,
                 project_id TEXT,
@@ -256,10 +256,10 @@ class MytharaArchitectTeam:
                 integrity_hash TEXT,
                 FOREIGN KEY (project_id) REFERENCES projects(project_id)
             )
-        """)
-        
-        # Design reviews table
-        cursor.execute("""
+            """)
+            
+            # Design reviews table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS design_reviews (
                 review_id TEXT PRIMARY KEY,
                 blueprint_id TEXT,
@@ -274,10 +274,10 @@ class MytharaArchitectTeam:
                 optimizations TEXT,  -- JSON array
                 FOREIGN KEY (blueprint_id) REFERENCES blueprints(blueprint_id)
             )
-        """)
-        
-        # Fabrication jobs table
-        cursor.execute("""
+            """)
+            
+            # Fabrication jobs table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS fabrication_jobs (
                 job_id TEXT PRIMARY KEY,
                 blueprint_id TEXT,
@@ -294,7 +294,7 @@ class MytharaArchitectTeam:
                 quality_score REAL,
                 FOREIGN KEY (blueprint_id) REFERENCES blueprints(blueprint_id)
             )
-        """)
+            """)
         
             # Material inventory table
             cursor.execute("""

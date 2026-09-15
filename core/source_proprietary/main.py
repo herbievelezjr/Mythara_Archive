@@ -2647,7 +2647,7 @@ async def chat_widget_script(request: Request):
             
             // Fetch pricing data
             try {
-                const response = await fetch(\`\${API_BASE}/v1/pricing/enterprise?tier=startup\`);
+                const response = await fetch(`${API_BASE}/v1/pricing/enterprise?tier=startup`);
                 const data = await response.json();
                 const price = data.pricing.computed_price_usd;
                 

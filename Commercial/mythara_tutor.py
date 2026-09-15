@@ -1022,13 +1022,13 @@ class MytharaTutor:
         
         # Update student total
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE students SET total_blessings_points = total_blessings_points, ?,
+        c.execute('UPDATE students SET total_blessings_points = total_blessings_points + ? WHERE student_id = ?',
                  (points, student_id))
         
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         # Update session total
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE learning_sessions SET blessings_earned = blessings_earned, ?,
+        c.execute('UPDATE learning_sessions SET blessings_earned = blessings_earned + ? WHERE session_id = ?',
                  (points, session_id))
         
         self.conn.commit()
@@ -1151,7 +1151,7 @@ class MytharaTutor:
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         if blessings > 0:
             # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-            c.execute('UPDATE steam_projects SET blessings_earned = blessings_earned, ?,
+            c.execute('UPDATE steam_projects SET blessings_earned = blessings_earned + ? WHERE project_id = ?',
                      (blessings, project_id))
             c.execute('UPDATE students SET total_blessings_points = total_blessings_points + ? WHERE student_id = ?',
                      (blessings, student_id))
