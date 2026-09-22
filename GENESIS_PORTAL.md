@@ -1,11 +1,13 @@
 # 🎯 Mythara Pilot - Complete Setup Summary
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**
 
+> **⚠️ DISABLED — Stripe integration removed. All Stripe webhooks (Test and Live) were deleted and the payment links below are not verified — no fulfillment path exists. Do not share these links.** The link URLs are preserved as text so they can be identified and deactivated in the Stripe dashboard (a manual step still required; nobody can verify or deactivate these links from the repo alone).
+
 ---
 
 ## ✅ What We Built
 
-You now have a **fully automated pilot delivery system**:
+~~You now have a **fully automated pilot delivery system**:~~ — **historical design only; this system never went live and the Stripe integration has been removed.**
 
 1. **Customer pays** → Stripe processes $49
 2. **Webhook fires** → API generates unique API key
@@ -19,19 +21,21 @@ You now have a **fully automated pilot delivery system**:
 
 ## 📋 Your Stripe Links
 
+> **⚠️ DISABLED — not verified, no fulfillment path. Do not share.** These links were written when the integration was thought to be live. The prices and tiers ($49 one-time pilot, $60,000/year enterprise) do not match any current pricing. URLs preserved for deactivation reference only.
+
 ### Pilot Access (30 days)
 ```
 https://buy.stripe.com/28E9AU85SfFCa5MbucgjC01
 ```
 **Price:** $49 one-time
-**Use in:** Emails, LinkedIn, proposals
+**Use in:** ~~Emails, LinkedIn, proposals~~ — do not use until re-verified in the Stripe dashboard
 
 ### Enterprise License (Annual)
 ```
 https://buy.stripe.com/dRm28s5XKbpm2Dk41KgjC00
 ```
 **Price:** $60,000/year
-**Use for:** Qualified leads, RFPs
+**Use for:** ~~Qualified leads, RFPs~~ — do not use until re-verified in the Stripe dashboard
 
 ---
 
@@ -40,16 +44,16 @@ https://buy.stripe.com/dRm28s5XKbpm2Dk41KgjC00
 ### Fast Track (30 minutes)
 Perfect if you want to test everything ASAP:
 
-1. **Add Stripe metadata** (5 min)
+1. ~~**Add Stripe metadata** (5 min)
    - Open `STRIPE_LINKS_CONFIG.md`
-   - Follow Step 1 & Step 2
+   - Follow Step 1 & Step 2~~ — ⚠️ DISABLED: webhooks deleted
    
 2. **Deploy API** (10 min)
    - Open `DEPLOY_RAILWAY_QUICKSTART.md`
    - Follow Steps 1-7
    
-3. **Wire webhook** (5 min)
-   - Follow `DEPLOY_RAILWAY_QUICKSTART.md` Step 8
+3. ~~**Wire webhook** (5 min)
+   - Follow `DEPLOY_RAILWAY_QUICKSTART.md` Step 8~~ — ⚠️ DISABLED: webhooks deleted, no fulfillment path
    
 4. **Host success page** (5 min)
    ```bash
@@ -69,9 +73,9 @@ Perfect if you want to test everything ASAP:
    # Upload to GitHub Releases
    ```
    
-6. **Test purchase** (5 min)
+6. ~~**Test purchase** (5 min)
    - Use test card: 4242 4242 4242 4242
-   - Verify everything works
+   - Verify everything works~~ — ⚠️ DISABLED: no live payment path
 
 ### Thorough Track (2 hours)
 Perfect if you want to understand everything:
@@ -121,7 +125,9 @@ Perfect if you want to understand everything:
 
 ## 🎯 Your Next 3 Actions
 
-### Action 1: Add Stripe Metadata (NOW - 2 minutes)
+### ~~Action 1: Add Stripe Metadata (NOW - 2 minutes)~~ — DISABLED (historical)
+
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow.** The Payment Links dashboard steps below are historical; links are unverified and no metadata workflow exists on this account.
 ```
 1. Open: https://dashboard.stripe.com/test/products
 2. Find $49 link → Edit → Metadata
@@ -150,19 +156,24 @@ railway up
 railway domain
 ```
 
-### Action 3: Wire & Test (TOMORROW - 20 minutes)
+### ~~Action 3: Wire & Test (TOMORROW - 20 minutes)~~ — DISABLED
+
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** Webhook wiring and Stripe test purchases are no longer possible on this account. The templates below reference disabled payment links — do not use.
+
 ```
-1. Create Stripe webhook with your Railway URL
-2. Update STRIPE_WEBHOOK_SECRET in Railway
+1. ~~Create Stripe webhook with your Railway URL~~ — disabled
+2. ~~Update STRIPE_WEBHOOK_SECRET in Railway~~ — disabled
 3. Create GitHub Pages + Release
-4. Update Stripe link redirect URL
-5. Test purchase with $0.50
-6. Send to first prospect! 🎉
+4. ~~Update Stripe link redirect URL~~ — disabled
+5. ~~Test purchase with $0.50~~ — disabled
+6. ~~Send to first prospect! 🎉~~ — do not send until payments are re-verified
 ```
 
 ---
 
-## 💡 How to Use Your Pilot Link
+## ~~💡 How to Use Your Pilot Link~~ — DISABLED
+
+> **⚠️ DISABLED — do not share.** The `buy.stripe.com` link in these draft templates is not verified as live and no fulfillment path exists. Do not use these templates for outreach until the link is re-verified in the Stripe dashboard. Link text preserved for deactivation reference.
 
 ### In Cold Emails (OUTREACH_WEEK1_TARGETS.md)
 ```
@@ -307,14 +318,14 @@ Every Friday, check:
 - ✅ Professional success page
 - ✅ Complete customer package
 - ✅ API with auto-key generation
-- ✅ Stripe links ready to share
+- ~~✅ Stripe links ready to share~~ — ❌ DISABLED: webhooks deleted, links unverified, no fulfillment path. Do not share.
 
 **What to do:**
-1. Add Stripe metadata (2 min)
+1. ~~Add Stripe metadata (2 min)~~ — disabled
 2. Deploy to Railway (15 min)
-3. Wire webhook (5 min)
-4. Test purchase (5 min)
-5. **Send to first prospect! 🎉**
+3. ~~Wire webhook (5 min)~~ — disabled: webhooks deleted
+4. ~~Test purchase (5 min)~~ — disabled: no payment path
+5. ~~**Send to first prospect! 🎉**~~ — do not send until payments are re-verified
 
 ---
 

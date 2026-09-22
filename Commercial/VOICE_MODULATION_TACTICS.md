@@ -44,8 +44,7 @@ VOICE_TONES = {
             "When prospect mentions budget constraints"
         ],
         "example": "I totally get it—compliance projects always feel like "
-                   "they're competing with revenue priorities. That's exactly "
-                   "why our banking clients love the 6-week timeline. "
+                   "they're competing with revenue priorities. Which is why we designed the 6-week timeline. "
                    "Less disruption, faster ROI."
     },
     

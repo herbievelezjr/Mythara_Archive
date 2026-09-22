@@ -236,7 +236,8 @@ Run: `python ai_demo.py`
 - System that learns from every attack
 - "Gets smarter over time" = defensible moat
 
-**Testimonial Script:**
+**Testimonial Script (FICTIONAL SAMPLE — not a real customer statement):**
+> *(The following is an invented placeholder script for demo/training use only. Do not present it as a real customer quote.)*
 > "We deployed Mythara's A.M.I.R. AI. Within 30 days, it learned our threat landscape and started predicting attacks before they happened. The AI-powered autonomous response contained a zero-day in 47 seconds—our previous SOAR took 2 hours. It's not just automation, it's intelligence."
 
 ### For Investors (TAM Expansion)

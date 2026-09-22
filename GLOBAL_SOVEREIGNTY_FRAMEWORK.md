@@ -269,21 +269,21 @@ The framework has been tested with intentional violations to ensure detection wo
 
 This comprehensive compliance framework is now a **massive competitive advantage** for your $2M-$25M exit:
 
-### Legal Due Diligence = PASSED
-- ✅ No international treaty violations
-- ✅ No domestic law violations
-- ✅ No regulatory framework violations
-- ✅ Global coverage (182+ countries via UN conventions)
-- ✅ Industry coverage (19 verticals)
-- ✅ Accessibility compliant (CRPD, WCAG 2.1 AA)
-- ✅ Export control compliant (ITAR, EAR)
-- ✅ Sanctions compliant (OFAC, UN, EU)
-- ✅ Anti-corruption compliant (FCPA, OECD)
-- ✅ Antitrust compliant (Sherman Act, EU Competition Law)
+### Legal Due Diligence = MAPPED (controls implemented, independent audit planned — not currently certified)
+- 🔍 No known international treaty violations (UN, WIPO, ILO, OECD)
+- 🔍 No known domestic law violations (USA, EU, UK, Canada, Australia, etc.)
+- 🔍 No known regulatory framework violations — controls mapped, independent audit planned
+- 🔍 Global coverage analysis (182+ countries via UN conventions)
+- 🔍 Industry coverage analysis (19 verticals)
+- 🔍 Accessibility alignment mapped (CRPD, WCAG 2.1 AA — no independent audit)
+- 🔍 Export control readiness (ITAR/EAR alignment mapped — no ITAR registration currently held)
+- 🔍 Sanctions screening controls (OFAC, UN, EU — no independent audit)
+- 🔍 Anti-corruption controls (FCPA, OECD — no independent certification)
+- 🔍 Antitrust controls (Sherman Act, EU Competition Law — no independent certification)
 
 ### Buyer Value Proposition
 **Updated Pitch:**
-> "MytharaConnect validates against 31 regulatory frameworks and international treaties. We check HIPAA, GDPR, UN Human Rights, CRPD, ITAR, EAR, OFAC sanctions, WIPO, ILO, FCPA, Sherman Act, and EU Competition Law. Your AI physically cannot violate international law, domestic law, or regulatory frameworks in any of 19 industries across 182+ countries. No competitor has this."
+> "MytharaConnect maps controls against 31 regulatory frameworks and international treaties — HIPAA, GDPR, UN Human Rights, CRPD, ITAR, EAR, OFAC sanctions, WIPO, ILO, FCPA, Sherman Act, and EU Competition Law. The system is designed to flag potential violations in any of 19 industries across 182+ countries. Controls are implemented and independent audits are planned — no certification is currently held, and no guarantee of legal immunity is offered. No competitor maps this broadly."
 
 ### No Competitors Have This
 - Drift, Gong, Outreach = No international treaty validation

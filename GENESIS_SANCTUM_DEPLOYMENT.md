@@ -32,11 +32,13 @@ You deploy Mythara on YOUR infrastructure (Railway, AWS, Azure, etc.) and YOU pa
 - Payment of $49 pilot fee via Stripe
 - Docker installed locally OR hosting platform account (Railway/AWS/Azure)
 
-### Step 1: Purchase Pilot License
+### ~~Step 1: Purchase Pilot License~~ — DISABLED (placeholder)
+
+> **DISABLED — webhooks deleted, no fulfillment path. Do not share.** The link below is an unwired placeholder (`your-pilot-link`), not a real payment page, and the receipt/key delivery it promises does not exist. URL text preserved for deactivation reference only.
 
 Visit: https://buy.stripe.com/your-pilot-link
 
-After payment, you'll receive:
+~~After payment, you'll receive:~~ — no live payment path exists:
 - License key (email)
 - Docker image access
 - This deployment guide

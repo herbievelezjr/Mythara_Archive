@@ -125,7 +125,7 @@
 **Ethical Guardrails**:
 - ✅ **NOT therapy** (clear disclaimers: "Not a substitute for licensed therapist")
 - ✅ **Crisis detection** (immediate 988 display for high distress)
-- ✅ **HIPAA compliant** (local encryption, zero telemetry)
+- 🔍 **HIPAA readiness** (local encryption, zero telemetry — not currently certified)
 - ✅ **Therapist referral** (partners with licensed professionals)
 
 ---
@@ -171,7 +171,7 @@
 **Revenue Model**:
 - Subscription: $25K-100K/year (based on infrastructure size)
 - Enterprise: Custom SOC integration ($500K+ for Fortune 100)
-- Government: FedRAMP-compliant deployments (classified pricing)
+- Government: FedRAMP-aligned deployments (not yet FedRAMP certified; classified pricing)
 
 **Market Size**: 750K cybersecurity professionals in US, avg company spends $18M/year on security  
 **Addressable Market**: 100K enterprise security teams × $50K/year = $5B annual opportunity
@@ -263,7 +263,7 @@
 
 ### **1. Local-First Architecture**
 - ✅ **Zero server costs** (no AWS bills, no scaling issues)
-- ✅ **Privacy by default** (HIPAA/GDPR compliant out of the box)
+- 🔍 **Privacy by default** (designed to align with HIPAA/GDPR — not currently certified)
 - ✅ **Works offline** (no internet dependency)
 
 ### **2. Ethical AI Core**

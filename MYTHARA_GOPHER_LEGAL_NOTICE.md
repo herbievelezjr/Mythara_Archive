@@ -322,11 +322,11 @@ c/o Herbert Velez Jr.
 
 ---
 
-## COMPLIANCE CERTIFICATIONS
+## COMPLIANCE READINESS
 
-✅ **GDPR Compliant** (EU General Data Protection Regulation)  
-✅ **CCPA/CPRA Compliant** (California Consumer Privacy Act)  
-✅ **COPPA Compliant** (Children's Online Privacy Protection Act)  
+🔍 **GDPR Alignment** (EU General Data Protection Regulation — controls mapped, independent audit planned, not currently certified)  
+🔍 **CCPA/CPRA Alignment** (California Consumer Privacy Act — controls mapped, independent audit planned, not currently certified)  
+🔍 **COPPA Alignment** (Children's Online Privacy Protection Act — controls mapped, independent audit planned, not currently certified)  
 ✅ **HIPAA Aware** (does not handle protected health information)  
 ✅ **SOC 2 Type II** (controls implemented, audit planned — not currently certified)  
 

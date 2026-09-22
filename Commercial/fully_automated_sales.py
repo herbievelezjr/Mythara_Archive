@@ -32,22 +32,22 @@ class FullyAutomatedSalesBot:
         pages = {
             "audit": {
                 "url": "/audit",
-                "title": "SSIP Compliance Audit - $500 (Auto-Delivered)",
+                "title": "SSIP Compliance Readiness Assessment - $500 (Auto-Delivered)",
                 "content": """
-# AI Compliance Audit - Fully Automated
+# AI Compliance Readiness Assessment - Fully Automated
 
 **$500** (Regular $2,500) - Valid until Nov 15, 2025
 
 ## What You Get (Auto-Delivered in 5 Days):
 ✅ Cryptographic proof of AI model integrity
-✅ Compliance certificate (PDF)
+✅ Readiness assessment report (PDF)
 ✅ Hash chain audit trail
-✅ Regulatory report (OCC, CFPB, FDA, FTC compliant)
+✅ Regulatory readiness report (mapped against OCC, CFPB, FDA, FTC expectations — not a certification)
 
 ## How It Works:
 1. **Pay Now** → PayPal link below
 2. **Upload your AI model** → Automated form appears after payment
-3. **Receive audit** → Delivered to your email in 5 business days
+3. **Receive assessment** → Delivered to your email in 5 business days
 4. **Zero human contact** → Fully automated process
 
 **Payment Link**: https://paypal.me/MytharaEngine/500
@@ -63,14 +63,14 @@ Questions? Email support@mythara.engine (auto-response bot, 1-hour reply time)
                 "url": "/monthly",
                 "title": "Monthly Subscription - $300/mo (Auto-Activated)",
                 "content": """
-# Unlimited AI Audits - $300/month
+# Unlimited AI Readiness Assessments - $300/month
 
 **Early Adopter Rate** - Lock in $300/mo forever (Regular $500/mo)
 
 ## What You Get:
 ✅ Unlimited AI model validations
 ✅ API access (auto-provisioned)
-✅ Compliance certificates (auto-generated)
+✅ Readiness assessment reports (auto-generated)
 ✅ 24/7 automated support
 
 ## How It Works:
@@ -136,7 +136,7 @@ Thank you for your inquiry about Mythara pricing.
 
 Our current offerings (early adopter rates until Nov 15, 2025):
 
-1. SSIP Compliance Audit: $500 (reg. $2,500)
+1. SSIP Compliance Readiness Assessment: $500 (reg. $2,500)
    Payment: https://paypal.me/MytharaEngine/500
    
 2. Monthly Subscription: $300/mo (reg. $500/mo)

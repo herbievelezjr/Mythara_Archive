@@ -59,7 +59,7 @@
 
 > Dr. Park,
 > 
-> Cryptographic hashing (SHA-256) on every AI decision—auditors can verify zero tampering. The 2 health systems piloting this already have their FDA validation reports passing.
+> Cryptographic hashing (SHA-256) on every AI decision—auditors can verify zero tampering. For example, a hypothetical health system piloting this could point its FDA auditors at passing validation reports generated from real runs.
 > 
 > Without this, your FDA auditor sees black-box AI decisions with no provable lineage. That's a 483 observation waiting to happen.
 > 
@@ -69,7 +69,9 @@
 > 
 > Herbert
 
-✅ Strengths: Answers directly, reframes to loss, social proof, urgency, assumptive close
+✅ Strengths: Answers directly, reframes to loss, hypothetical social-proof framing, urgency, assumptive close
+
+⚠️ Social-proof rule: only cite real customers or pilots with their consent. Never present a hypothetical example as an actual customer.
 
 ---
 
@@ -228,8 +230,8 @@ Don't use ONE urgency trigger. Stack them:
 - "OCC MRM guidelines require this level of documentation"
 
 ### Competitive Fear:
-- "Your competitor [X] is already piloting this"
-- "While you evaluate, they're building 6 months of audit advantage"
+- "If a competitor in your space started piloting this, they'd bank months of audit advantage"
+- "While you evaluate, any early adopter is building audit history you won't have"
 
 ### Opportunity Cost:
 - "Every week without this = 20 hours of manual prep you can't get back"
@@ -261,7 +263,7 @@ Don't use ONE urgency trigger. Stack them:
 2. Qualify hard ("Do you have X or is this exploratory?")
 3. Create scarcity ("I have 2 slots left at $500")
 4. Fear of loss ("Without this, you risk [specific bad outcome]")
-5. Social proof ("3 companies already piloting")
+5. Social proof ("for example, early adopters would bank audit data ahead of the curve" — only name real customers)
 6. Urgency ("$500 closes Friday, then it's $2,500")
 7. Assumptive close ("Tuesday 10am or Wednesday 2pm?")
 8. Indifferent exit ("If timing's not right, no worries")

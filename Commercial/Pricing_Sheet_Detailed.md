@@ -18,7 +18,7 @@
 - Integrity hash chain (SHA-256)
 - Explainability report for regulators
 - Audit trail with PGP signatures
-- Compliance certificate (NIST SP 800-53, HIPAA-ready)
+- Readiness assessment report (controls mapped against NIST SP 800-53; HIPAA readiness — not currently certified)
 
 ### Best For
 Banking, healthcare, insurance - first-time model validation
@@ -149,7 +149,7 @@ Sales orgs closing $1M+ annually, high-volume outbound
 ## Early Adopter Pricing (Limited Time)
 
 **Until November 15, 2025:**
-- SSIP Audit: ~~$2,500~~ **$500** (first 20 customers - currently at 3/20)
+- SSIP Audit: ~~$2,500~~ **$500** (first 20 customers)
 - Monthly Subscription: ~~$500/month~~ **$300/month** (first 3 months)
 
 ---
@@ -222,6 +222,6 @@ Sales orgs closing $1M+ annually, high-volume outbound
 
 ---
 
-**Limited-time offer:** First 20 SSIP Audits at $500 (normally $2,500). Currently at 3/20.
+**Limited-time offer:** First 20 SSIP Audits at $500 (normally $2,500).
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**

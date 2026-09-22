@@ -1,30 +1,12 @@
 # Copyright Notice
 
-**Copyright © 2025 Mythara Labs LLC. All rights reserved.**
+**Copyright © 2025 Herbert Velez Jr. All rights reserved.**
 
 ---
 
 ## Intellectual Property Ownership
 
-The Mythara Engine, including all associated software, documentation, test suites, compliance frameworks, mental health integration, accessibility features, cryptographic manifests, validation protocols, and related materials ("the Software"), is the exclusive intellectual property of **Mythara Labs LLC**.
-
-### IP Ownership Structure
-
-1. **Mythara Labs LLC owns:**
-   - Mythara Engine (complete proprietary software platform)
-   - Global Governance Framework (34 international regulatory frameworks)
-   - Soul Cradle Enterprise Edition (commercial implementation)
-   - All proprietary algorithms, source code, and documentation
-
-2. **Soul Cradle Foundation owns:**
-   - Soul Cradle methodology and framework documentation
-   - Soul Cradle Open Source Edition (MIT License)
-   - Educational materials and nonprofit distribution rights
-
-3. **Licensing relationship:**
-   - Foundation grants Mythara Labs LLC exclusive commercial licensing rights
-   - Mythara Labs LLC pays 5% of gross revenue to Foundation (supports mission)
-   - Foundation retains nonprofit/educational distribution rights
+The Mythara Engine, including all associated software, documentation, test suites, compliance frameworks, mental health integration, accessibility features, cryptographic manifests, validation protocols, and related materials ("the Software"), is the exclusive intellectual property of **Herbert Velez Jr.**
 
 ---
 
@@ -116,20 +98,19 @@ The following components are proprietary and confidential:
 
 To obtain a production license, contact:
 
-**Mythara Labs LLC**  
+**Herbert Velez Jr.**  
 Email: <Mythara.Engine@yahoo.com>  
 PGP Fingerprint: `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
 
 ### Available License Tiers
 
-1. **Startup (Small Teams)** — $2,988/year — <50 employees
-2. **Professional (Growing Teams)** — $11,988/year — 50-200 employees
-3. **Growth License** — $120,000/year — 200-1000 employees, $10M indemnification
-4. **Enterprise** — $300,000/year — >1000 employees, $25M indemnification
-5. **Sovereign/Air-Gap** — $180,000+/year — Government, defense, on-premise deployment
-6. **Perpetual License** — $2,000,000 one-time — Lifetime license, 5 years support included
+1. **Development License ($2,500/year)** — Internal testing and proof-of-concept
+2. **Enterprise License** — Production deployment with SLA
+3. **Sovereign License** — Air-gapped, government, defense deployments (includes source escrow)
 
-See `LICENSE.md` and `PRICING.md` for complete terms.
+No indemnification is currently offered. No insurance backs this software.
+
+See `LICENSE.md` and `Contracts/Sole_Proprietor_Agreements/Mythara_Engine_Contract_Template.md` for complete terms.
 
 ---
 
@@ -171,8 +152,8 @@ Failure to enforce any provision of this copyright notice does not constitute a 
 
 ## Contact Information
 
-**Mythara Labs LLC**  
-Herbert Velez Jr., Managing Member
+**Herbert Velez Jr.**  
+**Mythara Engine**
 
 - Email: <Mythara.Engine@yahoo.com>
 - PGP: `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
@@ -182,3 +163,5 @@ For licensing inquiries, technical support, or security disclosures, please use 
 ---
 
 **Last Updated:** November 18, 2025
+
+*Revised September 21, 2026 to remove claims about a nonexistent company (Mythara Labs LLC), a nonexistent foundation (Soul Cradle Foundation), ungranted open-source licenses, and indemnification terms with no insurance behind them. See LICENSE.md for the governing license terms.*

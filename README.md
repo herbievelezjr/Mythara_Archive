@@ -181,7 +181,7 @@ curl -H "Authorization: Bearer dev_test_key_001" \
 ### 🚀 Growth & Expansion
 
 - **Natural upsell path**: Developer ($2,988) → Growth ($35K) → Enterprise ($60K) → Sovereign ($2M) as customers mature from AI validation to enterprise governance
-- **Average customer LTV**: $2,097,988 over 24 months with 95%+ retention (compliance-critical once deployed)
+- **Projected average customer LTV**: $2,097,988 over 24 months with 95%+ retention (projected estimate, not measured; assumes compliance-critical deployments)
 - **Expansion use cases**: AI output validation → Customer service QA → Manager communication audit → Real-time compliance monitoring → Government policy analysis
 - **Professional development**: Custom pattern libraries ($25K-$50K), Emotional Safety Certification programs ($5K-$10K per cohort), Annual Summit
 - **See detailed growth strategy**: `GROWTH_STRATEGY.md` for complete expansion roadmap
@@ -209,10 +209,10 @@ curl -H "Authorization: Bearer dev_test_key_001" \
 Investors receive equity vesting tied to:
 
 - ✅ Escrow bundle acceptance  
-- ✅ HSM signing pilot completion  
-- ✅ Enterprise pilot delivery  
-- ✅ Licensing agreement signing  
-- ✅ Sovereign deployment activation
+- ⬜ HSM signing pilot completion  
+- ⬜ Enterprise pilot delivery  
+- ⬜ Licensing agreement signing  
+- ⬜ Sovereign deployment activation
 
 See `Commercial/SEED ROUND/📄 Term Sheet — Mythara Engine (Seed Round).txt` for details.
 

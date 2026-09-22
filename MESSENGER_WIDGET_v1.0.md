@@ -268,7 +268,7 @@ widget.js (615 lines)
 
 **6. ROI / Business Case**
 - **Old:** "One wrongful termination suit costs $250K to $1M. One OSHA whistleblower case costs $500K to $5M. One class action costs millions. Mythara costs $249 to $300K/year..."
-- **New:** "Manual legal reviews: $500K-$2M/year. Compliance violations: $50M average fine (GDPR). We're $30K-$600K/year. ROI calculation: One prevented violation pays for 100 years of licensing. Customers see compliance costs drop 80%, review speed increase 100×, zero regulatory fines. Healthcare org avoided $15M HIPAA penalty in first 6 months."
+- **New:** "Manual legal reviews: $500K-$2M/year. Compliance violations: $50M average fine (GDPR). We're $30K-$600K/year. ROI calculation: One prevented violation pays for 100 years of licensing. For example, if a deployment helped an organization avoid even one major HIPAA penalty (which can reach $15M), that alone would far exceed the license cost. Hypothetical illustration — not a reported customer outcome."
 
 **7. How It Works / Technical**
 - **Old:** "Soul Cradle witnesses events that violate SSIP (Symbolic Service & Integration Protocol). It cryptographically timestamps paradox events—decisions where all options violate something sacred..."

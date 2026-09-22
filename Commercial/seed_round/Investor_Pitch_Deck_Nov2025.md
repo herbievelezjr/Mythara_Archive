@@ -100,7 +100,7 @@ Pre-Money Valuation: $6.5M – $8.5M
 
 **Current Status:**
 - Escrow bundle prepared and hash-verified
-- 2 enterprise pilots in negotiation (healthcare + cybersecurity)
+- 2 enterprise pilot discussions targeted (healthcare + cybersecurity) — aspirational pipeline, not confirmed
 - PGP-signed manifest ready for third-party verification
 - Federal compliance framework embedded and tested
 
@@ -193,7 +193,7 @@ Pre-Money Valuation: $6.5M – $8.5M
 ✅ **Federal Compliance Ready** — HIPAA, NIST, FCC, FISMA embedded  
 ✅ **Escrow-Ready** — Reproducible, PGP-signed, audit-ready archive  
 ✅ **Proven Validation** — 99.98% safety recall, 99.92% determinism  
-✅ **Clear Path to Revenue** — 2 pilots in negotiation, licensing framework complete  
+✅ **Clear Path to Revenue** — pilot pipeline target (2 aspirational, not confirmed), licensing framework complete  
 ✅ **Milestone-Based Vesting** — Equity tied to delivery milestones
 
 **Exit Opportunities:**

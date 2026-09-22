@@ -92,17 +92,17 @@
 6. ✅ **Cryptographic Audit Trails** - SHA-256 integrity hashes on all compliance checks
 7. ✅ **AI Self-Understanding** - MytharaConnect knows what it sells (93% alignment)
 
-### Legal Immunity Checklist:
-- ✅ No international treaty violations (UN, WIPO, ILO, OECD)
-- ✅ No domestic law violations (USA, EU, UK, Canada, Australia, etc.)
-- ✅ No regulatory framework violations (HIPAA, GDPR, SOX, FINRA, etc.)
-- ✅ Export control compliant (ITAR, EAR - can sell to defense)
-- ✅ Sanctions compliant (OFAC, UN, EU - geofencing built-in)
-- ✅ Anti-corruption compliant (FCPA, OECD - government contracts)
-- ✅ Antitrust compliant (Sherman Act, EU Competition Law)
-- ✅ Accessibility compliant (CRPD, WCAG 2.1 AA - disability rights)
-- ✅ Labor standards compliant (ILO - no child labor, no discrimination)
-- ✅ Copyright compliant (WIPO, Berne Convention - AI training data)
+### Legal Readiness Checklist (controls mapped — not currently certified; no "legal immunity" is claimed):
+- 🔍 International treaty alignment mapped (UN, WIPO, ILO, OECD) — controls implemented, independent review planned
+- 🔍 Domestic law alignment mapped (USA, EU, UK, Canada, Australia, etc.) — controls implemented, independent review planned
+- 🔍 Regulatory framework alignment mapped (HIPAA, GDPR, SOX, FINRA, etc.) — controls implemented, independent audit planned
+- 🔍 Export control readiness (ITAR/EAR alignment mapped — no ITAR registration currently held)
+- 🔍 Sanctions screening controls (OFAC, UN, EU — geofencing built-in; no independent audit)
+- 🔍 Anti-corruption controls (FCPA, OECD — government contracts; no independent certification)
+- 🔍 Antitrust controls (Sherman Act, EU Competition Law — no independent certification)
+- 🔍 Accessibility alignment (CRPD, WCAG 2.1 AA mapped — no independent audit; disability rights)
+- 🔍 Labor standards alignment (ILO — no child labor, no discrimination)
+- 🔍 Copyright controls (WIPO, Berne Convention — AI training data)
 
 ---
 
@@ -259,13 +259,13 @@ A: Yes. Run `python core\source_proprietary\mythara_global_governance.py` - live
 A: 20 regulatory (HIPAA, GDPR, SOX, etc.) + 11 treaties (UN, ITAR, OFAC, FCPA, etc.). Full list in `INTERNATIONAL_TREATY_COMPLIANCE_COMPLETE.md`.
 
 **Q: Can you sell to defense contractors?**  
-A: Yes. ITAR/EAR compliant (export control).
+A: Designed to align with ITAR/EAR export-control requirements; no ITAR registration currently held — independent review planned.
 
 **Q: Can you sell to government agencies?**  
-A: Yes. FCPA compliant (anti-corruption).
+A: Anti-corruption controls designed around FCPA/OECD expectations; no independent certification currently held.
 
 **Q: Can you operate globally?**  
-A: Yes. OFAC/UN/EU sanctions screening built-in (geofencing).
+A: Sanctions screening controls (geofencing) implemented; OFAC/UN/EU alignment mapped — no independent audit currently completed.
 
 **Q: Are you accessible to people with disabilities?**  
 A: Yes. UN CRPD + WCAG 2.1 AA compliant.

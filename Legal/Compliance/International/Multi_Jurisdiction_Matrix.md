@@ -13,21 +13,22 @@
 
 | **Jurisdiction** | **Accessibility** | **Privacy** | **AI/ML** | **Healthcare** | **Education** | **Overall Status** |
 |------------------|-------------------|-------------|-----------|----------------|---------------|-------------------|
-| **United States** | ✅ ADA, 508, CVAA | ✅ HIPAA, COPPA | ⚠️ Voluntary | ✅ FDA (if applicable) | ✅ FERPA, IDEA | ✅ COMPLIANT |
-| **European Union** | ✅ EAA, WAD, EN 301 549 | ✅ GDPR | ✅ AI Act | ✅ MDR (if applicable) | ✅ GDPR-ED | ✅ COMPLIANT |
-| **United Kingdom** | ✅ Equality Act | ✅ UK GDPR, DPA | ⚠️ Voluntary | ✅ MHRA (if applicable) | ✅ DPA 2018 | ✅ COMPLIANT |
-| **Canada** | ✅ ACA, AODA | ✅ PIPEDA | ⚠️ AIDA (pending) | ✅ Health Canada | ✅ PIPEDA | ✅ COMPLIANT |
-| **Australia** | ✅ DDA | ✅ Privacy Act | ⚠️ Voluntary | ✅ TGA (if applicable) | ✅ Privacy Act | ✅ COMPLIANT |
-| **Japan** | ✅ JIS X 8341-3 | ✅ APPI | ⚠️ Voluntary | ✅ PMDA (if applicable) | ✅ APPI | ✅ COMPLIANT |
+| **United States** | ✅ ADA, 508, CVAA | ✅ HIPAA, COPPA | ⚠️ Voluntary | ✅ FDA (if applicable) | ✅ FERPA, IDEA | 🔍 MAPPED — not certified |
+| **European Union** | ✅ EAA, WAD, EN 301 549 | ✅ GDPR | ✅ AI Act | ✅ MDR (if applicable) | ✅ GDPR-ED | 🔍 MAPPED — not certified |
+| **United Kingdom** | ✅ Equality Act | ✅ UK GDPR, DPA | ⚠️ Voluntary | ✅ MHRA (if applicable) | ✅ DPA 2018 | 🔍 MAPPED — not certified |
+| **Canada** | ✅ ACA, AODA | ✅ PIPEDA | ⚠️ AIDA (pending) | ✅ Health Canada | ✅ PIPEDA | 🔍 MAPPED — not certified |
+| **Australia** | ✅ DDA | ✅ Privacy Act | ⚠️ Voluntary | ✅ TGA (if applicable) | ✅ Privacy Act | 🔍 MAPPED — not certified |
+| **Japan** | ✅ JIS X 8341-3 | ✅ APPI | ⚠️ Voluntary | ✅ PMDA (if applicable) | ✅ APPI | 🔍 MAPPED — not certified |
 | **China** | ✅ GB/T standards | ✅ PIPL | ✅ Algorithm Reg | ⚠️ NMPA (if applicable) | ✅ PIPL | ⚠️ PARTIAL* |
 | **India** | ✅ RPWD Act | ⚠️ DPDP Act (new) | ⚠️ Voluntary | ⚠️ CDSCO (if applicable) | ⚠️ DPDP Act | ⚠️ EVOLVING |
-| **Singapore** | ✅ ENGA guidelines | ✅ PDPA | ⚠️ Model AI Gov | ⚠️ HSA (if applicable) | ✅ PDPA | ✅ COMPLIANT |
-| **South Korea** | ✅ KCAG | ✅ PIPA | ⚠️ Voluntary | ⚠️ MFDS (if applicable) | ✅ PIPA | ✅ COMPLIANT |
+| **Singapore** | ✅ ENGA guidelines | ✅ PDPA | ⚠️ Model AI Gov | ⚠️ HSA (if applicable) | ✅ PDPA | 🔍 MAPPED — not certified |
+| **South Korea** | ✅ KCAG | ✅ PIPA | ⚠️ Voluntary | ⚠️ MFDS (if applicable) | ✅ PIPA | 🔍 MAPPED — not certified |
 
 **Legend:**
-- ✅ = Fully compliant
-- ⚠️ = Partial compliance, evolving regulation, or conditional compliance
-- ❌ = Non-compliant or not assessed
+- ✅ = Alignment mapped / controls documented (not independently audited)
+- 🔍 = Readiness mapped — controls implemented, independent audit planned — not currently certified
+- ⚠️ = Partial readiness, evolving regulation, or conditional mapping
+- ❌ = Not assessed or not mapped
 - * = Requires local partner/data localization
 
 ---
@@ -73,12 +74,12 @@
 |------------------------|-------------|----------------|-------------------|
 | European Accessibility Act (2019/882) | June 28, 2025 | ✅ Ready | `EU/EAA_Compliance_Declaration.md` |
 | Web Accessibility Directive (2016/2102) | Sept 23, 2020 (past) | ✅ WCAG 2.1 AA | `EU/WAD_Accessibility_Statement.md` |
-| EN 301 549 v3.2.1 | Current standard | ✅ Conformant | `EU/EN_301_549_Conformance.md` |
+| EN 301 549 v3.2.1 | Current standard | 🔍 Aligned — not certified | `EU/EN_301_549_Conformance.md` |
 
 #### Privacy & Data Protection
 | **Regulation** | **Key Requirements** | **Compliance** | **Documentation** |
 |----------------|---------------------|----------------|-------------------|
-| GDPR | Lawful basis, data rights, DPIA | ✅ Full compliance | `EU/GDPR_Compliance_Framework.md` |
+| GDPR | Lawful basis, data rights, DPIA | 🔍 Alignment mapped | `EU/GDPR_Compliance_Framework.md` |
 | ePrivacy Directive | Cookies, electronic comms | ✅ Cookie consent | `EU/ePrivacy_Compliance.md` |
 | Data Protection Directive | Cross-border transfers | ✅ SCCs/adequacy | `EU/Data_Transfer_Mechanisms.md` |
 
@@ -106,12 +107,12 @@
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
 | Equality Act 2010 | Reasonable adjustments | ✅ WCAG 2.1 AA |
-| Public Sector Bodies Regulations 2018 | WCAG 2.1 AA | ✅ Compliant |
+| Public Sector Bodies Regulations 2018 | WCAG 2.1 AA | 🔍 Aligned — not certified |
 
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
-| UK GDPR + Data Protection Act 2018 | UK version of GDPR | ✅ ICO registered |
+| UK GDPR + Data Protection Act 2018 | UK version of GDPR | ⏳ Registration planned (not currently registered) |
 | Investigatory Powers Act 2016 | Data access provisions | ✅ Lawful access procedures |
 
 #### Healthcare (If Applicable)
@@ -126,13 +127,13 @@
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
 | Accessible Canada Act (Bill C-81) | WCAG 2.1 AA | ✅ Accessibility plan |
-| AODA (Ontario) | WCAG 2.0 AA | ✅ Compliant |
+| AODA (Ontario) | WCAG 2.0 AA | 🔍 Aligned — not certified |
 
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
 | PIPEDA | Consent, breach notification | ✅ Privacy assessment |
-| Provincial laws (Quebec, BC, AB) | Provincial privacy requirements | ✅ Multi-province compliant |
+| Provincial laws (Quebec, BC, AB) | Provincial privacy requirements | 🔍 Multi-province aligned — not certified |
 
 #### AI Regulation
 - AIDA (Artificial Intelligence and Data Act): Pending - monitoring ⚠️
@@ -150,7 +151,7 @@
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
-| Privacy Act 1988 (amended 2022) | 13 Australian Privacy Principles | ✅ Compliant |
+| Privacy Act 1988 (amended 2022) | 13 Australian Privacy Principles | 🔍 Aligned — not certified |
 | Notifiable Data Breaches scheme | Breach notification | ✅ Procedures documented |
 
 ---
@@ -161,12 +162,12 @@
 | **Standard** | **Requirement** | **Compliance** |
 |--------------|----------------|----------------|
 | JIS X 8341-3:2016 | Based on WCAG 2.0 | ✅ Level AA |
-| Act for Eliminating Discrimination | Reasonable accommodation | ✅ Compliant |
+| Act for Eliminating Discrimination | Reasonable accommodation | 🔍 Aligned — not certified |
 
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
-| APPI (Act on Protection of Personal Information) | Data protection | ✅ Compliant |
+| APPI (Act on Protection of Personal Information) | Data protection | 🔍 Aligned — not certified |
 | 2022 Amendments | Cross-border transfer restrictions | ✅ Transfer mechanisms |
 
 ---
@@ -223,8 +224,8 @@
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
-| PDPA (Personal Data Protection Act) | Consent, DPO | ✅ Compliant |
-| 2020 Amendments | Data portability, breach notification | ✅ Compliant |
+| PDPA (Personal Data Protection Act) | Consent, DPO | 🔍 Aligned — not certified |
+| 2020 Amendments | Data portability, breach notification | 🔍 Aligned — not certified |
 
 #### AI Governance
 | **Framework** | **Status** | **Compliance** |
@@ -238,14 +239,14 @@
 #### Accessibility
 | **Standard** | **Requirement** | **Compliance** |
 |--------------|----------------|----------------|
-| KCAG (Korean web Content Accessibility Guidelines) | Based on WCAG | ✅ Compliant |
+| KCAG (Korean web Content Accessibility Guidelines) | Based on WCAG | 🔍 Aligned — not certified |
 | Act on Promotion of Information and Communications Network Utilization | Accessibility certification | ✅ Ready for certification |
 
 #### Privacy
 | **Law** | **Requirement** | **Compliance** |
 |---------|----------------|----------------|
-| PIPA (Personal Information Protection Act) | Strict consent requirements | ✅ Compliant |
-| Network Act | Online service provider obligations | ✅ Compliant |
+| PIPA (Personal Information Protection Act) | Strict consent requirements | 🔍 Aligned — not certified |
+| Network Act | Online service provider obligations | 🔍 Aligned — not certified |
 
 ---
 
@@ -273,7 +274,7 @@
 
 | **Jurisdiction** | **Requirements** | **Compliance** |
 |------------------|-----------------|----------------|
-| United States | FERPA (student privacy) | ✅ Compliant |
+| United States | FERPA (student privacy) | 🔍 Aligned — not certified |
 | | COPPA (under 13) | ✅ Parental consent |
 | | IDEA (special education) | ✅ Accessibility |
 | European Union | GDPR Article 8 (child consent) | ✅ Age verification |

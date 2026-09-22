@@ -44,7 +44,7 @@ Quick question—do you have regulatory pressure in next 90 days or is this expl
 
 I have 2 early adopter slots left at $500 (normally $2,500). After Friday it's full price.
 
-The 3 companies already piloting will have 6 months of audit data before you'd even start.
+For example, an early adopter starting today would have 6 months of audit data before a latecomer even started—early adopters bank a data head start.
 
 I'm booking Tuesday/Wednesday this week. Which works better—10am or 2pm MT?
 ```

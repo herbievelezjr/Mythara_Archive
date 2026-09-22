@@ -475,7 +475,7 @@ class MytharaWidget {
         
         // Proof / Case studies
         if (lowerInput.includes('proof') || lowerInput.includes('case study') || lowerInput.includes('customer') || lowerInput.includes('reference')) {
-            return "We've tested the system pretty extensively—you can see the test results in our repo. We're working with some pilot customers but can't share names publicly because of NDAs. If you want to talk specifics or get a reference call set up, email Mythara.Engine@yahoo.com and we can figure something out.";
+            return "We've tested the system pretty extensively—you can see the test results in our repo. We run an early-access program, but we don't name participants publicly. If you want to talk specifics or get a reference conversation set up, email Mythara.Engine@yahoo.com and we can figure something out.";
         }
         
         // Startup specific
@@ -602,7 +602,7 @@ class MytharaWidget {
             this.showTypingIndicator();
             setTimeout(() => {
                 this.hideTypingIndicator();
-                this.addMessage("Want to see ROI examples from customers?");
+                this.addMessage("Want to see hypothetical ROI scenarios?");
                 this.addQuickReplies(['Yes, show ROI', 'Show pricing', 'Technical details']);
             }, 1000);
         }

@@ -49,7 +49,7 @@ This document tracks the comprehensive line-by-line security audit of the entire
 - [x] `security_audit_compliance.py` - 100/100 security score
 - [x] Rate limiting implemented
 - [x] Authentication enforcement added
-- [x] HIPAA validation complete
+- [x] HIPAA control validation (internal) — controls implemented, independent audit planned — not currently certified
 - [x] Audit log integrity hashes
 
 ### Phase 2: API & Authentication (IN PROGRESS)
@@ -119,14 +119,14 @@ This document tracks the comprehensive line-by-line security audit of the entire
 - ✅ Violation reporting
 - ✅ Forensic trail preservation
 
-### Compliance
-- ✅ HIPAA (45 CFR § 164.312)
-- ✅ PCI DSS v4.0
-- ✅ FCC TCPA
-- ✅ NLRA
-- ✅ SOX
-- ✅ FLSA
-- ✅ 45+ regulatory frameworks
+### Compliance (readiness mapping — controls mapped, independent audit planned, not currently certified)
+- 🔍 HIPAA (45 CFR § 164.312) — controls mapped, not currently certified
+- 🔍 PCI DSS v4.0 — controls mapped, not currently certified
+- 🔍 FCC TCPA — controls mapped, not currently certified
+- 🔍 NLRA — controls mapped, not currently certified
+- 🔍 SOX — controls mapped, not currently certified
+- 🔍 FLSA — controls mapped, not currently certified
+- 🔍 45+ regulatory frameworks — controls mapped, not currently certified
 
 ---
 

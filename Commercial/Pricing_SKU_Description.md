@@ -18,7 +18,7 @@
 **Delivery:** 5 business days
 
 **Description:**
-Single AI model validation with cryptographic proof. Includes SSIP clause fingerprint ledger, integrity hash chain (SHA-256), explainability report for regulators, audit trail with PGP signatures, and compliance certificate (NIST SP 800-53, HIPAA-ready).
+Single AI model validation with cryptographic proof. Includes SSIP clause fingerprint ledger, integrity hash chain (SHA-256), explainability report for regulators, audit trail with PGP signatures, and readiness assessment report (controls mapped against NIST SP 800-53; HIPAA readiness — not currently certified).
 
 **Best For:** Banking, healthcare, insurance - first-time model validation
 

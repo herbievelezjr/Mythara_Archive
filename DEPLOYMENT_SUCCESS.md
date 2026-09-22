@@ -143,7 +143,10 @@ curl https://heroic-flexibility-production.up.railway.app/v1/pilot/status
 - B) Deploy docs/ to Netlify
 - C) Add success endpoint to API
 
-### Action 3: Wire Stripe Webhook
+### ~~Action 3: Wire Stripe Webhook~~ — DISABLED (historical)
+
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** All Stripe webhooks (Test and Live) were deleted from the account. The instructions below are historical — the webhook endpoints no longer exist and re-creating them requires new account work. Do not rely on or share these steps.
+
 ```
 1. Go to: https://dashboard.stripe.com/test/webhooks
 2. Add endpoint: https://heroic-flexibility-production.up.railway.app/api/webhooks/stripe
@@ -157,9 +160,11 @@ curl https://heroic-flexibility-production.up.railway.app/v1/pilot/status
 
 ---
 
-## 🧪 Test Purchase Flow
+## 🧪 ~~Test Purchase Flow~~ — DISABLED (historical)
 
-Once you've chosen a success page solution:
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** Kept for historical reference only.
+
+~~Once you've chosen a success page solution:
 
 1. **Add Stripe metadata:**
    - Dashboard → Products → $49 link → Edit → Metadata
@@ -178,7 +183,7 @@ Once you've chosen a success page solution:
    5. Should redirect to success page
    6. Check Stripe webhook logs
    7. Verify API: curl https://heroic-flexibility-production.up.railway.app/v1/pilot/status
-   ```
+   ```~~ — ⚠️ DISABLED: webhooks deleted, no fulfillment path. Do not follow.
 
 ---
 
@@ -194,11 +199,11 @@ Once you've chosen a success page solution:
 ⏸️ **Blocked (waiting for decision):**
 - Success page hosting (choose Option 1, 2, or 3 above)
 
-⏳ **Pending (5 minutes each):**
+~~⏳ **Pending (5 minutes each):**
 - Stripe webhook setup
 - Stripe metadata setup
 - Stripe redirect URL setup
-- End-to-end test
+- End-to-end test~~ — ⚠️ DISABLED: Stripe webhooks deleted; these steps no longer apply.
 
 ---
 
@@ -214,22 +219,22 @@ Once you've chosen a success page solution:
 2. **Enable GitHub Pages** (30 seconds)
    - Settings → Pages → main, /docs
 
-3. **Add Stripe metadata** (2 minutes)
+~~3. **Add Stripe metadata** (2 minutes)
    - license_type=pilot on $49 link
    - license_type=enterprise on $60k link
 
-4. **Create webhook** (3 minutes)
+4. **Create webhook** (3 minutes)~~ — ⚠️ DISABLED: webhooks deleted, no fulfillment path.
    - Add endpoint in Stripe Dashboard
    - Update Railway with real secret
 
-5. **Update redirect** (2 minutes)
+~~5. **Update redirect** (2 minutes)
    - Set redirect URL in Payment Link
 
 6. **Test** (2 minutes)
    - Complete test purchase
    - Verify everything works
 
-**Then you're LIVE and selling!** 🚀
+**Then you're LIVE and selling!** 🚀~~ — ⚠️ DISABLED: webhooks deleted, no fulfillment path. This launch checklist no longer applies.
 
 ---
 

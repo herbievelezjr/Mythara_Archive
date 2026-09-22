@@ -14,7 +14,7 @@ Copy-paste these into PayPal invoice templates for quick sending.
 **SKU**: MYTH-AUDIT-001  
 **Amount**: $500.00  
 **Description**:  
-Single AI model validation with cryptographic proof. Includes integrity hash chain and compliance certificate. Delivered within 5 business days.
+Single AI model validation with cryptographic proof. Includes integrity hash chain and readiness assessment report. Delivered within 5 business days.
 
 **Regular Price**: ~~$2,500~~ **$500** (Early Adopter - Save $2,000!)  
 **Valid Until**: November 15, 2025

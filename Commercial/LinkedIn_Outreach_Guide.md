@@ -41,7 +41,7 @@ Thanks for connecting, [First Name]!
 
 Quick question: Is [Company] validating AI models for regulatory compliance yet?
 
-We're offering SSIP Compliance Audits at early adopter pricing ($500, reg. $2,500) - cryptographic proof + compliance certificate in 5 days.
+We're offering SSIP Compliance Readiness Assessments at early adopter pricing ($500, reg. $2,500) - cryptographic proof + readiness assessment report in 5 days.
 
 Perfect timing with new AI regulations. Worth a quick call?
 
@@ -64,7 +64,7 @@ Thanks for connecting, [First Name]!
 
 Quick question: How is [Company] handling AI model audits at scale?
 
-We built Mythara Engine for healthcare - on-premise deployment, unlimited validation, HIPAA-ready. Enterprise clients love the dedicated compliance dashboard.
+We built Mythara Engine for healthcare - on-premise deployment, unlimited validation, HIPAA-ready. The dedicated compliance dashboard is designed for enterprise healthcare teams.
 
 Open to a brief demo call?
 

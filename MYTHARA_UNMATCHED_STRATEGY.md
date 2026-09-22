@@ -258,20 +258,22 @@ predictions = amir.predict_threats()
 
 ## 🔥 PROOF POINTS: CUSTOMER TESTIMONIALS (TEMPLATE)
 
-### Design Partner 1: Healthcare SaaS
+> ⚠️ **FICTIONAL — DO NOT PRESENT AS REAL.** Every quote below is an invented SAMPLE for placeholder/template use only. Replace each with a genuine customer testimonial (with the customer's consent) before using any of these in sales or marketing. Presenting these as real customer statements would be deceptive.
+
+### Design Partner 1: Healthcare SaaS — **SAMPLE (FICTIONAL)**
 > "We evaluated Drata, Vanta, and OneTrust. They're great for policy management. But when our auditors asked 'How do you prove this AI decision wasn't tampered with?'—only Mythara had an answer. The cryptographic integrity proofs saved our SOC 2 audit."
 > 
-> **— VP Engineering, Healthcare AI Platform (42,000 providers)**
+> **— [FICTIONAL] VP Engineering, Healthcare AI Platform (42,000 providers)**
 
-### Design Partner 2: Financial Services
+### Design Partner 2: Financial Services — **SAMPLE (FICTIONAL)**
 > "Our air-gapped deployment requirement eliminated every competitor. Splunk and Palo Alto required internet for updates. Mythara runs fully sovereign—zero external dependencies. That's why we're here."
 >
-> **— CISO, Regional Bank ($18B AUM)**
+> **— [FICTIONAL] CISO, Regional Bank ($18B AUM)**
 
-### Design Partner 3: Government Contractor
+### Design Partner 3: Government Contractor — **SAMPLE (FICTIONAL)**
 > "Mythara's A.M.I.R. responded to a zero-day in 47 seconds—autonomous containment, no human approval. Our previous SOAR tool would've taken 3 hours minimum. That 47-second response prevented what our forensics team estimated would've been a $2.3M breach."
 >
-> **— Director of Cybersecurity, Defense Contractor (Secret clearance)**
+> **— [FICTIONAL] Director of Cybersecurity, Defense Contractor (Secret clearance)**
 
 ---
 

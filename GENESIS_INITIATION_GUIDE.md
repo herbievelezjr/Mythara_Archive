@@ -11,7 +11,9 @@ After a client purchases pilot access via Stripe, you send them TWO things:
 
 ## Step 1: Generate Client API Key (After Payment)
 
-After Stripe webhook confirms payment, generate a unique API key for the client:
+> **⚠️ DISABLED — no payment path exists.** All Stripe webhooks (Test and Live) were deleted, so no webhook can confirm payment. The key-generation instructions below are historical; do not present this as a live flow.
+
+~~After Stripe webhook confirms payment, generate a unique API key for the client:~~
 
 ```bash
 # Generate a unique pilot API key
