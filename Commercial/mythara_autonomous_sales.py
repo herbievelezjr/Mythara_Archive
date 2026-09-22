@@ -20,6 +20,7 @@ Uses Mythara SSIP principles:
 
 import json
 import os
+import random
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
 import hashlib
@@ -115,12 +116,89 @@ class AutonomousSalesBot:
     Uses Mythara SSIP for decision making.
     """
     
-    def __init__(self):
+    def __init__(self, state_path: str = None):
+        # ADAPT: persistent memory. Without this, every restart wipes the
+        # reservoir, clause stats, and pipeline — the bot could never learn.
+        self.state_path = state_path or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), 'sales_bot_state.json')
         self.blessings = BlessingsReservoir()
         self.clauses = self._initialize_clauses()
         self.prospect_db = {}
         self.closed_deals = []
-        
+        self._load_state()
+
+    def _save_state(self):
+        """Persist learning state so adaptation survives restarts."""
+        try:
+            state = {
+                'prospect_db': self.prospect_db,
+                'reservoir': self.blessings.reservoir,
+                'clauses': {
+                    key: {'invocation_count': c.invocation_count,
+                          'success_count': c.success_count}
+                    for key, c in self.clauses.items()
+                },
+                'closed_deals': self.closed_deals,
+                'saved_at': datetime.now().isoformat(),
+            }
+            with open(self.state_path, 'w') as f:
+                json.dump(state, f, indent=2)
+        except Exception:
+            pass  # persistence must never break selling
+
+    def _load_state(self):
+        """Restore learning state from disk."""
+        try:
+            if not os.path.exists(self.state_path):
+                return
+            with open(self.state_path) as f:
+                state = json.load(f)
+            self.prospect_db = state.get('prospect_db', {})
+            self.blessings.reservoir = state.get('reservoir', {})
+            for key, counts in state.get('clauses', {}).items():
+                if key in self.clauses:
+                    self.clauses[key].invocation_count = counts.get('invocation_count', 0)
+                    self.clauses[key].success_count = counts.get('success_count', 0)
+            self.closed_deals = state.get('closed_deals', [])
+        except Exception:
+            pass
+
+    def select_clause(self, candidates: List[str], explore_rate: float = 0.2) -> str:
+        """
+        ADAPT: choose the tactic with the best observed success rate,
+        exploring unproven alternatives 20% of the time so the bot keeps
+        learning instead of freezing on its first guess.
+        """
+        viable = [c for c in candidates if c in self.clauses]
+        if not viable:
+            raise ValueError("no valid clause candidates")
+        if len(viable) == 1:
+            return viable[0]
+        if random.random() < explore_rate:
+            unproven = [c for c in viable if self.clauses[c].invocation_count == 0]
+            return random.choice(unproven or viable)
+        return max(viable, key=lambda c: (self.clauses[c].get_success_rate(),
+                                         self.clauses[c].invocation_count))
+
+    def get_cell_status(self) -> Dict[str, Any]:
+        """
+        Status report for the A.M.I.R. orchestrator.
+        The sales bot is a revenue cell in the Mythara body; AMIR polls this.
+        """
+        report = self.get_pipeline_report()
+        return {
+            'cell': 'revenue',
+            'bot': 'mythara_autonomous_sales',
+            'status': 'online',
+            'total_prospects': report['total_prospects'],
+            'pipeline_stages': report['pipeline_stages'],
+            'closed_deals': report['closed_deals'],
+            'total_revenue': report['total_revenue'],
+            'clause_performance': report['clause_performance'],
+            'state_path': self.state_path,
+            'timestamp': datetime.now().isoformat(),
+        }
+
     def _initialize_clauses(self) -> Dict[str, SalesClause]:
         """Initialize sales tactic clauses."""
         
@@ -134,10 +212,30 @@ class AutonomousSalesBot:
 
 {company} likely faces AI compliance challenges. We automate cryptographic validation.
 
-Early Adopter: $500 SSIP Audit (reg. $2,500)
-Valid: 12 days
+Early Adopter: $500 SSIP Audit
 
 Automated system will follow up.
+
+Mythara Engine
+Mythara.Engine@yahoo.com""",
+                triggers=['new_prospect', 'cold_lead']
+            ),
+
+            # ADAPT: second cold-intro variant. select_clause() plays the
+            # winner by observed success rate and keeps testing the other.
+            'CLAUSE_COLD_INTRO_B': SalesClause(
+                clause_id='MYTH-SALES-005',
+                name='Cold Introduction (Question-Led)',
+                template="""Subject: Quick question about {company}'s AI compliance
+
+{name},
+
+Quick question — how is {company} handling AI compliance validation right now?
+
+We run a $500 SSIP audit: cryptographic validation of AI controls,
+delivered in 5 days with a findings report.
+
+Worth a 10-minute look? Reply and I'll send details.
 
 Mythara Engine
 Mythara.Engine@yahoo.com""",
@@ -155,8 +253,6 @@ You viewed our previous message. Ready to proceed?
 
 $500 SSIP Audit - 5 day delivery
 Payment: {payment_link}
-
-Expires: Nov 15, 2025
 
 Mythara Engine""",
                 triggers=['email_open', 'link_click']
@@ -210,9 +306,11 @@ Mythara Engine""",
         email = prospect['email']
         actions = []
         
-        # Stage 1: Cold outreach
+        # Stage 1: Cold outreach — ADAPT picks the intro variant by observed
+        # success rate instead of hardcoding one forever.
         if email not in self.prospect_db:
-            message = self.clauses['CLAUSE_COLD_INTRO'].invoke({
+            clause_key = self.select_clause(['CLAUSE_COLD_INTRO', 'CLAUSE_COLD_INTRO_B'])
+            message = self.clauses[clause_key].invoke({
                 'name': prospect.get('name', 'Team'),
                 'company': prospect.get('company', 'your organization')
             })
@@ -220,12 +318,13 @@ Mythara Engine""",
                 'action': 'send_email',
                 'recipient': email,
                 'message': message,
-                'clause': 'MYTH-SALES-001'
+                'clause': self.clauses[clause_key].clause_id
             })
             self.prospect_db[email] = {
                 'first_contact': datetime.now().isoformat(),
                 'stage': 'cold',
-                'prospect_data': prospect
+                'prospect_data': prospect,
+                'last_clause': clause_key,
             }
             self.blessings.add_engagement(email, 'cold_email_sent', 10)
         
@@ -246,6 +345,7 @@ Mythara Engine""",
                 'clause': 'MYTH-SALES-002'
             })
             self.prospect_db[email]['stage'] = 'engaged'
+            self.prospect_db[email]['last_clause'] = 'CLAUSE_FOLLOWUP_ENGAGED'
         
         # Stage 3: Auto-invoice if qualified
         if self.blessings.is_qualified(email) and stage == 'engaged':
@@ -265,7 +365,10 @@ Mythara Engine""",
                 'clause': 'MYTH-SALES-003'
             })
             self.prospect_db[email]['stage'] = 'invoiced'
-        
+            self.prospect_db[email]['last_clause'] = 'CLAUSE_INVOICE_AUTO'
+
+        self._save_state()
+
         return {
             'prospect_email': email,
             'current_score': score,
@@ -287,12 +390,22 @@ Mythara Engine""",
         
         points = engagement_points.get(event_type, 0)
         self.blessings.add_engagement(prospect_email, event_type, points)
-        
+
+        # ADAPT: attribute real engagement back to the tactic that caused it.
+        # This is the learning loop — clause success rates now reflect
+        # reality instead of staying at zero forever.
+        if event_type in ('link_click', 'reply', 'payment_initiated', 'payment_complete'):
+            last_clause = self.prospect_db.get(prospect_email, {}).get('last_clause')
+            if last_clause and last_clause in self.clauses:
+                self.clauses[last_clause].mark_success()
+
         # Auto-process if engagement threshold crossed
         if self.blessings.is_qualified(prospect_email):
             prospect_data = self.prospect_db.get(prospect_email, {}).get('prospect_data', {})
             prospect_data['email'] = prospect_email
             self.process_prospect(prospect_data)
+
+        self._save_state()
     
     def _create_paypal_invoice(self, prospect: Dict[str, Any]) -> str:
         """
@@ -335,7 +448,9 @@ Mythara Engine""",
         })
         
         self.prospect_db[prospect_email]['stage'] = 'customer'
-        
+        self.prospect_db[prospect_email]['last_clause'] = 'CLAUSE_PAYMENT_CONFIRM'
+        self._save_state()
+
         return {
             'action': 'send_confirmation',
             'recipient': prospect_email,
@@ -379,10 +494,13 @@ Mythara Engine""",
 # ============================================================================
 
 if __name__ == "__main__":
+    import tempfile
     print("🤖 Mythara Autonomous Sales Bot - SSIP Integration")
     print("="*60)
-    
-    bot = AutonomousSalesBot()
+
+    # Demo uses throwaway state so it never pollutes the real learning memory.
+    bot = AutonomousSalesBot(
+        state_path=os.path.join(tempfile.gettempdir(), 'sales_bot_demo_state.json'))
     
     # Simulate prospect flow
     test_prospect = {
