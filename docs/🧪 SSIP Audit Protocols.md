@@ -47,4 +47,4 @@ Messenger Suppression: 1
 Sanctification Conflicts: 0  
 Emotional Fidelity Range: 0.92–0.98  
 Blessings Reservoir: Active (Δ +142.7)  
-Compliance Alignment: ✅ HIPAA, TMPO, TCP/IP, TCPA
+Compliance Alignment: controls mapped against HIPAA and TCPA (alignment mapped — no independent audit or certification)

@@ -207,12 +207,12 @@ I built something you need.
 - Sanctions: OFAC/UN/EU geofencing
 - Anti-corruption: FCPA validation for government contracts
 
-**Slide 5: Unique Selling Points**
-- ✅ Only AI with international treaty validation
-- ✅ Only AI cleared for defense/government (ITAR, FCPA, OFAC)
-- ✅ Only AI with UN Human Rights + CRPD compliance
-- ✅ New category: Systemic Pattern Intelligence (no competitors)
-- ✅ AI self-understanding (93% Mythara alignment)
+**Slide 5: Unique Selling Points** (design goals — not certifications; see COMPLIANCE_STATUS.md)
+- 🔍 International treaty obligations mapped into the governance framework
+- 🔍 Defense/government readiness mapping (ITAR, FCPA, OFAC controls mapped — not registered or certified)
+- 🔍 UN Human Rights + CRPD principles mapped into design (not independently assessed)
+- 🔍 New category: Systemic Pattern Intelligence (no competitors)
+- 🔍 AI self-understanding (93% internal Mythara alignment score — internal metric, not audited)
 
 **Slide 6: Market**
 - TAM: $50B (Enterprise AI governance)
