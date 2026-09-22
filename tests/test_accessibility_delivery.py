@@ -4,7 +4,6 @@ Mythara Engine - Accessibility Token Delivery Test
 Tests braille and audio token generation and delivery.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import argparse

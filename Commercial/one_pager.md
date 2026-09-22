@@ -1,4 +1,6 @@
-# Mythara Engine — Mythara Labs LLC
+# Mythara Engine — Mythara Labs LLC (planned — not yet formed)
+
+> **Note:** Mythara Labs LLC is not yet formed; all entity references describe the planned structure.
 
 ## Overview
 

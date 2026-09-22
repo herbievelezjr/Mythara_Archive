@@ -279,8 +279,9 @@ A: No - automatic. You just get notified via Stripe email/dashboard.
 
 ### Win 1: Track in Spreadsheet
 ```csv
+# SAMPLE ROW — replace with your real pilot customer data
 Date,Email,Company,Amount,API_Key,Status
-2025-11-11,john@acme.com,ACME Corp,49,sk_pilot_xxx,Active
+2025-11-11,example@sampleclient.com,Sample Client,49,sk_pilot_xxx,Active
 ```
 
 ### Win 2: Auto-Reply to Stripe Emails

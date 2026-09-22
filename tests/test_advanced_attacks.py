@@ -4,7 +4,6 @@ Ultra-Comprehensive Loophole Detection
 Tests all advanced evasion techniques after framework hardening.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

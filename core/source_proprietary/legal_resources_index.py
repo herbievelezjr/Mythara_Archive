@@ -3,7 +3,6 @@ Mythara Engine - Legal Resources Index
 Comprehensive legal knowledge base for covenant integrity system.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from enum import Enum

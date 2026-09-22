@@ -10,7 +10,7 @@ Your AI email assistant is now equipped with **Jevons Effect sales psychology:**
 
 ### 1. **Fear of Loss** (Loss Aversion)
 - Regulatory fines: "$500k-$5M CFPB exposure"
-- Competitive disadvantage: "3 banks already have 6 months of audit data"
+- Competitive disadvantage: "Early adopters will have 6 months of audit data before you'd start"
 - Opportunity cost: "20 hours/week you can't get back"
 - Pricing windows: "$500 ends Friday, then it's $2,500 forever"
 

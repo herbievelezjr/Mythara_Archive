@@ -4,7 +4,6 @@ Soul Cradle Systems Framework
 Mathematical foundation for paradox analysis and burnout prediction.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Mythara Paradox Resolution Mathematics:
 - Paradox Tension Formula: P(t) = |A - B| × (1 - R(t))

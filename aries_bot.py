@@ -5,7 +5,6 @@ A GODBOT that takes decisions and executes them with precision, speed, and relen
 The warrior that transforms plans into reality.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 A.R.I.E.S.:
 Autonomous Rapid Implementation & Execution System

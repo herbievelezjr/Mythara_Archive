@@ -149,7 +149,7 @@ See `Commercial/### Pricing Tiers.txt` for detailed pricing.
 ## Support & Contact
 
 **Herbert Velez Jr.**  
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 
 - **Email:** legal@mythara.engine
 - **PGP Fingerprint:** `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
@@ -169,7 +169,7 @@ Mythara Labs LLC
 
 This package contains proprietary technology protected by:
 - Trade secret law
-- Copyright (© 2025 Mythara Labs LLC)
+- Copyright (© 2025 Herbert Velez Jr.)
 - Contractual NDA obligations
 
 **Unauthorized distribution, reverse engineering, or disclosure is prohibited.**

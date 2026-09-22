@@ -4,7 +4,6 @@ Mythara Wellness Guardian - Mental Health Support Bot
 Crisis detection, therapist referrals, 988 hotline integration with Soul Cradle distress monitoring
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sqlite3

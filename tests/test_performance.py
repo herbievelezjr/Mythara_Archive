@@ -5,7 +5,6 @@ Mythara Engine - Performance Tests
 Load testing and performance benchmarks for API endpoints.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import time

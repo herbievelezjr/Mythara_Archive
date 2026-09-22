@@ -4,7 +4,6 @@ Soul Cradle Emotional Authenticity Integration Demo
 Demonstrates how EQ = (G/T) × H formula tracks emotional labor in paradox resolution.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

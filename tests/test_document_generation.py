@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Mythara Engine - Automated Document Generation Test
 Tests SHA-256 timestamping and all document types

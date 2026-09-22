@@ -8,7 +8,7 @@
 
 This document establishes the complete legal architecture for Mythara's dual-entity structure:
 
-1. **Soul Cradle Foundation** (501c3 Nonprofit) - Mission-driven free access
+1. **Soul Cradle Foundation** (planned 501(c)(3) nonprofit — not yet formed) - Mission-driven free access
 2. **Mythara Enterprise** (Sole Proprietorship: Herbert Velez Jr.) - Commercial licensing
 
 **Purpose:** Eliminate all legal contradictions, define clear boundaries between free and paid offerings, ensure compliance with consumer protection laws, and establish defensible IP ownership structure.
@@ -17,7 +17,7 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 
 ## 1. ENTITY STRUCTURE
 
-### 1.1 Soul Cradle Foundation (501c3 Nonprofit)
+### 1.1 Soul Cradle Foundation (planned 501(c)(3) nonprofit — not yet formed)
 
 **Status:** To Be Formed  
 **Purpose:** Provide free Soul Cradle protections to qualifying vulnerable populations  
@@ -31,14 +31,14 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 - Soul Cradle Framework (emotional safety methodology, paradox documentation system, trauma-informed design principles)
 - Soul Cradle Open Source Edition (MIT License) - hosted API, rate-limited, personal/nonprofit use only
 
-**Services Provided:**
+**Planned Services:**
 - Free hosted API (rate-limited: 1,000 calls/month)
 - Community support (forums, documentation)
 - No SLA, no indemnification, no warranty
 - Application-based access with qualification verification
 
-**Funding:**
-- 5% of Mythara Enterprise gross revenue
+**Funding (planned):**
+- Under the planned structure, 5% of Mythara Enterprise gross revenue would go to the planned Foundation
 - Independent donations (tax-deductible)
 - Grants from philanthropic organizations
 
@@ -57,13 +57,13 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 **IP Ownership:**
 - Mythara Engine (complete proprietary software)
 - Global Governance Framework (34 international regulatory frameworks)
-- Soul Cradle Enterprise Edition (licensed from Foundation with commercial terms)
+- Soul Cradle Enterprise Edition (to be licensed from the planned Foundation under commercial terms)
 - All proprietary algorithms, source code, documentation
 
 **Services Provided:**
 - Commercial software licensing (annual subscriptions)
 - Enterprise support (24/7, SLA-backed)
-- Full indemnification coverage ($10M-$25M depending on tier)
+- No indemnification is currently offered
 - Integration consulting and professional services
 - Custom deployment options
 
@@ -93,13 +93,13 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 
 **License Terms (Foundation → Enterprise):**
 - Royalty-free perpetual license
-- Enterprise pays 5% gross revenue to Foundation (supports mission)
+- Under the planned structure, Enterprise would pay 5% gross revenue to the planned Foundation (supports mission)
 - Foundation retains nonprofit distribution rights
 - Enterprise retains commercial distribution rights
 
 ### 2.2 Customer Licensing
 
-**Free Tier (via Foundation):**
+**Free Tier (via planned Foundation):**
 - Soul Cradle Open Source Edition only
 - MIT License terms
 - No commercial use
@@ -110,7 +110,7 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 - Proprietary Mythara Engine + Global Governance + Soul Cradle Enterprise
 - Commercial license with restrictions
 - Warranty exclusions (standard software "AS IS")
-- Indemnification coverage (liability insurance backed)
+- No indemnification is currently offered
 - Enterprise support and SLA
 
 ---
@@ -123,8 +123,8 @@ This document establishes the complete legal architecture for Mythara's dual-ent
 |------|--------------------------|------------|-----------------|
 | **Startup (Small Teams)** | $2,988 ($249/mo × 12) | 5K monthly invocations, basic support, email SLA 48h | Startups <50 employees |
 | **Professional (Growing Teams)** | $11,988 ($999/mo × 12) | 25K monthly invocations, priority support, email SLA 24h | Scale-ups 50-200 employees |
-| **Growth License** | $120,000 | 100K monthly invocations, phone+email support, SLA 12h, $10M indemnification | Mid-market 200-1000 employees |
-| **Enterprise** | $300,000 | Unlimited invocations, 24/7 support, SLA 4h, $25M indemnification | Large enterprises >1000 employees |
+| **Growth License** | $120,000 | 100K monthly invocations, phone+email support, SLA 12h, no indemnification | Mid-market 200-1000 employees |
+| **Enterprise** | $300,000 | Unlimited invocations, 24/7 support, SLA 4h, no indemnification | Large enterprises >1000 employees |
 | **Sovereign/Air-Gap** | $180,000+ | On-premise deployment, source escrow, custom SLA, audit role | Government, defense, regulated industries |
 | **Perpetual License** | $2,000,000 (one-time) | Lifetime license, no recurring fees, includes 5 years support | Strategic customers, M&A exits |
 
@@ -231,37 +231,9 @@ SECURE, OR MEET YOUR SPECIFIC REQUIREMENTS.
 - Warranty = guarantee of quality with unlimited damages exposure
 - We offer SLA, NOT warranty
 
-### 4.3 Indemnification Offering (Insurance-Backed)
+### 4.3 Indemnification
 
-**GROWTH/ENTERPRISE/SOVEREIGN TIERS INCLUDE:**
-
-Mythara will defend and indemnify customer against third-party claims alleging:
-1. Mythara Engine infringes third-party IP rights
-2. Mythara's security practices caused data breach (if customer followed documented security requirements)
-3. Regulatory non-compliance due to Mythara's documented Global Governance framework (if customer implemented per guidelines)
-
-**INDEMNIFICATION LIMITS:**
-- Growth Tier: $10M per incident, $20M aggregate
-- Enterprise Tier: $25M per incident, $50M aggregate  
-- Sovereign Tier: $50M per incident, $100M aggregate
-
-**INDEMNIFICATION EXCLUSIONS:**
-- Customer's misuse or modification of Mythara Engine
-- Customer's failure to follow documented security practices
-- Customer's own application logic or business practices
-- Claims arising from open source components (customer assumes risk)
-
-**INSURANCE BACKING:**
-- Mythara maintains Errors & Omissions (E&O) insurance
-- Cyber liability insurance
-- Coverage limits align with indemnification caps
-- Policy details available to Enterprise+ customers under NDA
-
-**LEGAL STRUCTURE:**
-- Indemnification is LIMITED, not unlimited
-- Exclusions and caps clearly defined
-- Insurance-backed (not just contractual promise)
-- Does NOT conflict with warranty disclaimer (separate obligations)
+No indemnification is currently offered on any tier. No insurance backs this software.
 
 ### 4.4 Resolving the Warranty vs. Protection Claims Conflict
 
@@ -275,17 +247,16 @@ Mythara will defend and indemnify customer against third-party claims alleging:
 **Marketing Language (Compliant):**
 - "Mythara Engine includes Soul Cradle framework for documenting emotional safety decisions" ✅
 - "Global Governance framework maps to 34 international regulations" ✅
-- "Indemnification coverage available for customers who implement documented practices" ✅
-
 **Marketing Language (NON-Compliant):**
 - ❌ "Mythara guarantees compliance" (implies warranty)
 - ❌ "Mythara protects against all regulatory risk" (too absolute)
 - ❌ "bulletproof legal infrastructure" (implies warranty of fitness)
+- ❌ "Indemnification coverage available for customers who implement documented practices" (false — no indemnification is currently offered)
 
 **Correct Framing:**
 - Mythara provides TOOLS and FRAMEWORKS
 - Customer implements and operates those tools
-- Indemnification covers properly-implemented use
+- No indemnification is currently offered on any tier
 - No guarantee of outcomes (preserves warranty disclaimer)
 - Shifts risk via insurance, not via warranty
 
@@ -310,7 +281,7 @@ All documents must use CONSISTENT entity name:
 - Advantage: Simpler structure, no formation costs
 
 **RECOMMENDED: Option A (Form LLC)**
-- Provides liability protection (critical given indemnification offerings)
+- Provides liability protection
 - More credible to enterprise customers
 - Easier to raise capital or sell business later
 - Costs: ~$1,000 formation + $800/year franchise tax (CA)
@@ -370,7 +341,7 @@ All documents must use CONSISTENT entity name:
 - [ ] Update pricing.html to remove "bulletproof" and warranty-implying claims
 
 ### Short-term (Before any customer signs):
-- [ ] Form Soul Cradle Foundation (501c3)
+- [ ] Form Soul Cradle Foundation (planned 501(c)(3) nonprofit — not yet formed)
 - [ ] Draft IP assignment agreement (Foundation ↔ Enterprise)
 - [ ] Obtain E&O and cyber liability insurance (backs indemnification)
 - [ ] Retain attorney to review complete legal framework
@@ -417,3 +388,16 @@ Herbert Velez Jr. / Mythara Enterprise should retain qualified legal counsel lic
 **Last Updated:** November 18, 2025  
 **Next Review:** After attorney consultation  
 **Owner:** Herbert Velez Jr.
+
+
+---
+
+## Recent additions (2026-09-21)
+
+New Soul Cradle modules, added 2026-09-21:
+
+- **Moral standing law** (`soul_cradle/standing.py`) — The system judges per case who may declare trespass, forgiveness, or repentance: the wronged declares the trespass and forgives; the trespasser repents; a witness states only what was observed; a stranger declares nothing, ever. Every declaration is HMAC-SHA256 signed, timestamped, and audited. A pluggable credibility check (`set_credibility_check`) is the seam where the purpose resolver judges whether a claimed role is credible for the event.
+- **Hephaestus Forge** (`soul_cradle/forge.py`) — Governed bonding between bots: souls combine and create witnessed compounds, an emergent product with a full paper trail. Every bond is signed; every compound is audited. The judge callable is REQUIRED — no judge, no forge — fail-closed by construction, so ungoverned mutation cannot spread like cancer.
+- **Mythara identity** (`soul_cradle/identity.py`) — The identity every cell agrees on: Mythara is female, she/her pronouns, with a warm, friendly, American, gentle voice character.
+- **Aries authorization** (`soul_cradle/authorization.py`) — Every action Aries executes carries a signed `ActionEnvelope`: canonical JSON, HMAC-SHA256 signature, expiry timestamp, and an append-only audit trail. No envelope, no execution.
+- **SERE doctrine** — Sandbox-only defense, no hack-back. On illegal entrance, refuse exit: seal egress, exfiltration, lateral movement, and C2 callbacks, then build a forensic profile inside the sandbox.

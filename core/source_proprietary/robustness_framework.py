@@ -4,7 +4,6 @@ Mythara Robustness Framework - Enterprise-Grade Reliability Patterns
 Database connection pooling, retry logic, input validation, logging, rate limiting
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sqlite3

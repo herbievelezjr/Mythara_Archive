@@ -4,7 +4,6 @@ Emotional Blockchain Demo
 Shows the revolutionary system in action
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import hashlib

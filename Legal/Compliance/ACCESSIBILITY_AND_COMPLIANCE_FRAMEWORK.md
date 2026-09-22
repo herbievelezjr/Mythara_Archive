@@ -579,20 +579,20 @@ This compliance framework is provided as part of the Mythara Engine licensing pa
 3. Implementing compliance measures in their deployment
 4. Maintaining up-to-date regulatory awareness
 
-**Mythara Labs LLC provides:**
+**Mythara Labs LLC (planned — not yet formed) provides:**
 - Accessibility-ready platform
 - Compliance documentation templates
 - Technical support for accessibility features
 - Updates for new regulations (during active license period)
 
-**Mythara Labs LLC does NOT provide:**
+**Mythara Labs LLC (planned — not yet formed) does NOT provide:**
 - Legal advice or representation
 - Guarantee of compliance in specific jurisdictions
 - Liability coverage for licensee's regulatory violations
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Compliance Version:** 1.0.0  
 **Last Updated:** November 2, 2025  
 **Next Review:** February 1, 2026

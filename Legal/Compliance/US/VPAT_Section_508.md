@@ -228,7 +228,7 @@ Refer to Revised Section 508 Chapter 5 (Software) - same conformance.
 
 ## Legal Disclaimer
 
-This Voluntary Product Accessibility Template (VPAT) is for informational purposes only. It does not constitute a warranty or guarantee of accessibility. Mythara Labs LLC makes reasonable efforts to ensure accuracy but assumes no liability for errors or omissions.
+This Voluntary Product Accessibility Template (VPAT) is for informational purposes only. It does not constitute a warranty or guarantee of accessibility. Mythara Labs LLC (planned — not yet formed) makes reasonable efforts to ensure accuracy but assumes no liability for errors or omissions.
 
 **Compliance Responsibility:** Licensees are responsible for conducting their own accessibility assessments and ensuring compliance with applicable laws in their jurisdiction.
 
@@ -237,7 +237,7 @@ This Voluntary Product Accessibility Template (VPAT) is for informational purpos
 ---
 
 **Report Prepared By:**  
-Mythara Labs LLC Accessibility Team  
+Mythara Labs LLC (planned) Accessibility Team  
 accessibility@mythara.ai
 
 **Contact for Questions:**  
@@ -248,6 +248,6 @@ accessibility@mythara.ai
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **VPAT Version:** 1.0.0  
 **Report Date:** November 2, 2025

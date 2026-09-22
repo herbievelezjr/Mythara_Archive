@@ -4,7 +4,6 @@ Mythara Engine - Public Database Contact Harvester
 Legally extracts business contacts from public government databases.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Data Sources (All Public & Legal):
 - CMS Hospital Compare (Healthcare)

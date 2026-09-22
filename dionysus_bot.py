@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 DIONYSUS - God of Primal Emotions and Desire
 =============================================

@@ -4,7 +4,6 @@ Mythara VOIP Bot - AI Phone Support Agent
 Real-time sentiment analysis, call routing, supervisor escalation with Soul Cradle distress detection
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sqlite3

@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara VP of Sales & Marketing - Autonomous Operations Bot
@@ -348,7 +347,6 @@ Date: {datetime.now().isoformat()}
     def _linkedin_bot_template(self) -> str:
         """Template for LinkedIn automation bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 '''
 LinkedIn Automation Bot
@@ -401,7 +399,6 @@ if __name__ == "__main__":
     def _email_nurture_template(self) -> str:
         """Template for email nurture bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 '''
 Email Nurture Sequence Bot
@@ -453,7 +450,6 @@ if __name__ == "__main__":
     def _affiliate_recruiter_template(self) -> str:
         """Template for affiliate recruiter bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 '''
 Affiliate Recruiter Bot
@@ -513,7 +509,6 @@ if __name__ == "__main__":
     def _generic_bot_template(self, bot_type: str, spec: Dict[str, Any]) -> str:
         """Generic bot template."""
         return f"""# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 '''
 {spec['name']}
@@ -541,7 +536,6 @@ if __name__ == "__main__":
     def _generate_runner(self, bot_type: str) -> str:
         """Generate runner script for bot."""
         return f"""# Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 import sys
 import os

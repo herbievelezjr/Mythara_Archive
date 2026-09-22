@@ -643,7 +643,7 @@ The Mythara Engine has been designed and tested for conformance with WCAG 2.1 Le
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Report Version:** 1.0.0  
 **Date:** November 2, 2025  
 **Next Audit:** November 2, 2026

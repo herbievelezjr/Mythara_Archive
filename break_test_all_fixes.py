@@ -4,7 +4,6 @@ Mythara Engine - Comprehensive Break Test Suite
 Tests all 5 critical fixes under load and edge cases.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import requests

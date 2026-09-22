@@ -176,7 +176,7 @@ All documents in this package are **Proprietary and Confidential**. Do not distr
 **Compliance certifications** (for client due diligence):
 - HIPAA: Business Associate Agreement available upon contract signing
 - GDPR: Data Processing Agreement for EU deployments
-- SOC 2: Audit in progress (expected Q2 2026)
+- SOC 2: Type II controls implemented, audit planned (not currently certified)
 
 **Intellectual property**:
 - Soul Cradle Operator: Patent pending (application filed October 2025)

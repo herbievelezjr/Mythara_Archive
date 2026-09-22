@@ -557,7 +557,7 @@ This compliance framework provides **technical safeguards** to support HIPAA, PC
 - **Regular assessments** (risk analyses, penetration tests, vulnerability scans)
 - **Legal review** (consultation with healthcare attorneys, compliance consultants)
 
-**Compliance is an ongoing process, not a one-time event.** Mythara Labs LLC provides tools to assist with compliance but does not guarantee regulatory compliance. Organizations are responsible for their own compliance programs and should consult legal counsel and compliance professionals.
+**Compliance is an ongoing process, not a one-time event.** Mythara Labs LLC (planned — not yet formed) provides tools to assist with compliance but does not guarantee regulatory compliance. Organizations are responsible for their own compliance programs and should consult legal counsel and compliance professionals.
 
 ---
 

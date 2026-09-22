@@ -1,6 +1,5 @@
 # Mythara Engine - Week 1 Outreach Target List
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 **Created**: November 10, 2025
 **Goal**: 10 personalized outreach messages this week
@@ -159,7 +158,7 @@ I can also share a one-pager and a signed manifest we use for audits.
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 
 
 ---

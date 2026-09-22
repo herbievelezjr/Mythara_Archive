@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Simple PNG export using inline SVG rendering.

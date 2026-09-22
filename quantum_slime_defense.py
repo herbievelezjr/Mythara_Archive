@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Q.S.D. - QUANTUM SLIME DEFENSE
 Quantum Universal Autonomous Security & Response

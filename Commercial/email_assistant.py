@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara Email Assistant - AI-powered outreach reply handler
@@ -343,7 +342,7 @@ Return ONLY the category name and a confidence score (0-1) as JSON:
    - COMPETITIVE LOSS: "While you evaluate, competitors are building auditable AI advantage"
    - OPPORTUNITY COST: "Every week without this = 20+ hours of manual audit prep you can't get back"
    - PRICING LOSS: "$500 expires Friday. After that it's $2,500 (I can't make exceptions)"
-   - SOCIAL PROOF LOSS: "The 3 banks already piloting will have 6 months of validated data before you start"
+   - SOCIAL PROOF LOSS: "Early adopters will have 6 months of validated data before you start"
 
 3. SENSE OF URGENCY (TIME COMPRESSION):
    - EXTERNAL DEADLINES: "Fed AI governance rules effective Q2 2026—setup takes 60 days"
@@ -406,7 +405,7 @@ Return ONLY the category name and a confidence score (0-1) as JSON:
 **JEVONS EFFECT APPLICATION:**
 1. Answer their question directly (2 sentences max use RAG context)
 2. REFRAME TO LOSS - Tie answer to what they are losing without it
-3. SOCIAL PROOF SCARCITY - The 2 banks piloting this already have their validation reports passing
+3. SOCIAL PROOF SCARCITY - Early adopters will have their validation reports ready first
 4. URGENCY INJECTION - Early adopter pricing $500 closes Friday then it is $2500
 5. ASSUMPTIVE ADVANCE - 15-min screen share Tuesday or Wednesday which is better
 6. INDIFFERENCE OPTION - Or I can send our validation report now and you can evaluate async up to you

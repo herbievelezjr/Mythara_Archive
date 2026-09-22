@@ -4,7 +4,6 @@ A.D.A.P.T. Bot - Adaptive Defense & Penetration Tester
 Part of the A.M.I.R. Cybersecurity Suite
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 A.D.A.P.T. (Adaptive Defense & Penetration Tester) operates in three modes:
 1. CALM MODE: Methodical analysis, gentle testing, comprehensive reporting

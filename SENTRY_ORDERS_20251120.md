@@ -70,7 +70,6 @@
 - All new files MUST include copyright header:
   ```
   Copyright © 2025 Herbert Velez Jr. All rights reserved.
-  Proprietary and Confidential.
   ```
 - Verify presence before any commit
 

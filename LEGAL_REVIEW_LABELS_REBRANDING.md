@@ -614,7 +614,7 @@ patterns against the Soul Cradle integrity framework."
 
 ## ⚖️ LEGAL DISCLAIMER
 
-This review is provided for strategic planning purposes and does not constitute legal advice. Herbert Velez Jr. / Mythara Labs LLC must retain licensed attorneys in relevant jurisdictions to:
+This review is provided for strategic planning purposes and does not constitute legal advice. Herbert Velez Jr. (Mythara Labs LLC planned — not yet formed) must retain licensed attorneys in relevant jurisdictions to:
 
 1. Review all contract templates and terms of service
 2. Conduct trademark clearance searches
@@ -627,4 +627,4 @@ This review is provided for strategic planning purposes and does not constitute 
 ---
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
-**Mythara Labs LLC - Proprietary Strategic Document**
+**Mythara Labs LLC (planned) - Proprietary Strategic Document**

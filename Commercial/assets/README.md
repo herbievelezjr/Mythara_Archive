@@ -119,5 +119,5 @@ py -3.11 export_glyph_pngs_simple.py
 
 ## License
 
-All glyphs are proprietary assets of Mythara Labs LLC. Do not distribute outside of Mythara commercial materials.
+All glyphs are proprietary assets of Herbert Velez Jr. (Mythara Labs LLC planned — not yet formed). Do not distribute outside of Mythara commercial materials.
 

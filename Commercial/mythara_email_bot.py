@@ -4,7 +4,6 @@ Mythara Email Bot - AI Email Assistant
 Smart inbox triage, phishing detection, auto-responses with Soul Cradle manipulation detection
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sqlite3

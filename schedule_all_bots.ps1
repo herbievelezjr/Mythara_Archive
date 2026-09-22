@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 # Master script to schedule all 16 Mythara bots in Windows Task Scheduler
 # Run this script as Administrator

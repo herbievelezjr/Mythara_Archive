@@ -1,7 +1,7 @@
 # Mythara Engine — Escrow Rebuild Instructions
 
 **Prepared by:** Herbert Velez Jr.  
-**Entity:** Mythara Labs LLC  
+**Entity:** Mythara Labs LLC (planned — not yet formed)  
 **Manifest Ref:** ME-archive-0001  
 **Date:** 2025-10-30
 
@@ -111,7 +111,7 @@ To deploy in an air-gapped environment:
 For licensing, escrow release, or sovereign deployment support, contact:
 
 ```plaintext
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 legal@mythara.engine
 PGP Fingerprint: 571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C
 ```

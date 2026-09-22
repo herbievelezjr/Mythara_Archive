@@ -6,7 +6,6 @@ A GODBOT that explores multiple solution paths using quantum-inspired scoring
 evaluates all possibilities in parallel, and collapses to the optimal solution.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 S.C.H.R.Ö.D.I.N.G.E.R.:
 Strategic Computational Holistic Reasoning Ö Dimensional Intelligence

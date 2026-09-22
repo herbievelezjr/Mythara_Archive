@@ -5,7 +5,6 @@ Mythara Engine - API Integration Tests
 Comprehensive endpoint testing with authentication, rate limiting, and error handling.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import pytest

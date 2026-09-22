@@ -3,7 +3,7 @@
 **Version**: 1.0.0  
 **Date**: November 2, 2025  
 **Classification**: PUBLIC  
-**Author**: Herbert Velez Jr., Mythara Labs LLC
+**Author**: Herbert Velez Jr., Mythara Labs LLC (planned)
 
 ---
 
@@ -189,7 +189,7 @@ X-PGP-Signature: SIGNATURE_BLOCK
 
 ## Support
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 Email: [api@mythara.engine](mailto:api@mythara.engine)  
 PGP Fingerprint: `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
 

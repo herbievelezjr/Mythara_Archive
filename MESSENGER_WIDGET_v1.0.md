@@ -31,7 +31,7 @@ The MytharaConnect chat widget has been completely rebuilt from the ground up to
 
 **Content: Global Governance Positioning**
 - ✅ All responses updated from Soul Cradle spiritual focus → technical infrastructure focus
-- ✅ Mentions 34 frameworks, adversarial hardening, $10M-$25M indemnification
+- ✅ Mentions 34 frameworks, adversarial hardening (indemnification claims removed)
 - ✅ Pricing updated: Startup ($2,500/mo), Growth ($10,000/mo), Enterprise ($50,000/mo), On-Premise ($2M)
 - ✅ ROI examples: "One prevented violation pays for 100 years of licensing"
 
@@ -251,20 +251,20 @@ widget.js (615 lines)
 
 **1. What is Mythara / Global Governance**
 - **Old:** "Mythara Engine is a legal-risk infrastructure system designed to witness and document impossible choices. Soul Cradle is the symbolic witness—it holds what standard tools can't: paradox density, emotional strain..."
-- **New:** "Global Governance is legal infrastructure that validates AI systems against 34 regulatory frameworks in real-time (<50ms). We detect adversarial loopholes like Unicode homoglyphs, Cyrillic substitution, zero-width characters—attacks compliance tools miss. We provide $10M-$25M legal indemnification. Not a compliance tool. The operating system for legal risk."
+- **New:** "Global Governance is legal infrastructure that validates AI systems against 34 regulatory frameworks in real-time (<50ms). We detect adversarial loopholes like Unicode homoglyphs, Cyrillic substitution, zero-width characters—attacks compliance tools miss. No indemnification is currently offered. Not a compliance tool. The operating system for legal risk."
 
 **2. Pricing / Cost**
 - **Old:** "Four tiers: $49 for a 7-Day Pilot (full access, no strings). $249/month for Startup (1-10 employees). $25K-$100K/year for Enterprise..."
-- **New:** "Four tiers: **Startup License** ($2,500/mo, 100K API calls, <$5M ARR). **Growth License** ($10,000/mo, 1M calls, $5M-$50M ARR). **Enterprise License** ($50,000/mo, unlimited calls, $10M indemnification, $50M+ ARR). **On-Premise Perpetual** ($2M + $200K/year, full source code, $25M indemnification, government/defense). Compare: manual legal reviews cost $500K-$2M/year. We're 10× cheaper, 100× faster."
+- **New:** "Four tiers: **Startup License** ($2,500/mo, 100K API calls, <$5M ARR). **Growth License** ($10,000/mo, 1M calls, $5M-$50M ARR). **Enterprise License** ($50,000/mo, unlimited calls, no indemnification, $50M+ ARR). **On-Premise Perpetual** ($2M + $200K/year, full source code, no indemnification, government/defense). Compare: manual legal reviews cost $500K-$2M/year. We're 10× cheaper, 100× faster."
 
 **3. 34 Frameworks**
-- **New topic:** "34 frameworks covered: HIPAA, GDPR, FINRA, FDA 21 CFR Part 11, ISO 27001, SOC 2, EU AI Act, CCPA, ITAR, FedRAMP, NIST, PCI DSS, GLBA, and 21 more. Updated in real-time as regulations change. Every validation cryptographically signed. Adversarially hardened against Unicode attacks, homoglyphs, Cyrillic substitution, zero-width characters. Attackers can't hide from us."
+- **New topic:** "34 frameworks covered as validation targets (not certifications held — Mythara itself is not currently SOC 2/ISO 27001 certified; controls implemented, audit planned): HIPAA, GDPR, FINRA, FDA 21 CFR Part 11, ISO 27001, SOC 2, EU AI Act, CCPA, ITAR, FedRAMP, NIST, PCI DSS, GLBA, and 21 more. Updated in real-time as regulations change. Every validation cryptographically signed. Adversarially hardened against Unicode attacks, homoglyphs, Cyrillic substitution, zero-width characters. Attackers can't hide from us."
 
 **4. Adversarial Hardening**
 - **New topic:** "We catch attacks compliance tools miss: Unicode homoglyphs (а vs a), Cyrillic substitution (С vs C), zero-width characters, semantic evasion, prompt injection, data exfiltration. Every input validated against adversarial patterns. Cryptographic integrity ensures nothing gets tampered with. 97/97 tests passed. Legal teams trust us because attackers can't fool us."
 
 **5. Legal Indemnification**
-- **New topic:** "$10M indemnification (Enterprise License), $25M (On-Premise Perpetual). Conditions: proper use of API, timely updates, immediate notification of legal actions. Unique in market—no competitor offers this. Why? Because our adversarial hardening works. We stand behind our framework."
+- **New topic:** "No indemnification is currently offered on any tier."
 
 **6. ROI / Business Case**
 - **Old:** "One wrongful termination suit costs $250K to $1M. One OSHA whistleblower case costs $500K to $5M. One class action costs millions. Mythara costs $249 to $300K/year..."
@@ -279,7 +279,7 @@ widget.js (615 lines)
 - **New:** "AI companies across healthcare (HIPAA), finance (FINRA, GLBA), defense (ITAR, FedRAMP), pharma (FDA 21 CFR Part 11), government (FedRAMP, NIST). Any AI system handling regulated data needs us. Medical diagnostic AI, financial trading bots, defense systems, patient data platforms. If you touch regulated data, you need Global Governance."
 
 **9. Competition / Alternatives**
-- **New topic:** "Competitors: OneTrust (2-15 frameworks, $500K-$2M), Drata (basic matching, no adversarial hardening), manual legal teams ($500K-$2M/year). We have: 34 frameworks, adversarial hardening, $10M-$25M indemnification, <50ms latency, $30K-$600K/year. Not compliance software. The operating system for legal risk. Category-defining."
+- **New topic:** "Competitors: OneTrust (2-15 frameworks, $500K-$2M), Drata (basic matching, no adversarial hardening), manual legal teams ($500K-$2M/year). We have: 34 frameworks, adversarial hardening, no indemnification, <50ms latency, $30K-$600K/year. Not compliance software. The operating system for legal risk. Category-defining."
 
 **10. Implementation / Onboarding**
 - **New:** "Startup License: Sign up, get API keys, integrate in <1 day. Growth/Enterprise: Kickoff call, custom integration support, dedicated account manager, 2-day team training. On-Premise: Full white-glove onboarding, 2-week deployment, dedicated engineering support. Most teams are fully operational within 1 week."

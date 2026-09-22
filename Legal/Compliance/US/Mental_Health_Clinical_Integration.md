@@ -761,7 +761,7 @@ health condition.
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Mental Health Integration Version:** 1.0.0  
 **DSM-5-TR Edition:** March 2022  
 **Last Updated:** November 2, 2025  

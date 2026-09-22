@@ -456,7 +456,7 @@ This compliance framework provides **technical validation tools** to assist with
 5. **Documentation**: Maintain complete documentation of compliance efforts
 6. **Remediation**: Address identified violations promptly
 
-**Mythara Labs LLC does not provide legal advice.** Use of this compliance framework does not guarantee regulatory compliance. Organizations must implement comprehensive compliance programs that include administrative, physical, and technical safeguards.
+**Mythara Labs LLC (planned — not yet formed) does not provide legal advice.** Use of this compliance framework does not guarantee regulatory compliance. Organizations must implement comprehensive compliance programs that include administrative, physical, and technical safeguards.
 
 ---
 
@@ -484,3 +484,16 @@ This compliance framework provides **technical validation tools** to assist with
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**
 **Proprietary and Confidential.**
+
+
+---
+
+## Recent additions (2026-09-21)
+
+New Soul Cradle modules, added 2026-09-21:
+
+- **Moral standing law** (`soul_cradle/standing.py`) — The system judges per case who may declare trespass, forgiveness, or repentance: the wronged declares the trespass and forgives; the trespasser repents; a witness states only what was observed; a stranger declares nothing, ever. Every declaration is HMAC-SHA256 signed, timestamped, and audited. A pluggable credibility check (`set_credibility_check`) is the seam where the purpose resolver judges whether a claimed role is credible for the event.
+- **Hephaestus Forge** (`soul_cradle/forge.py`) — Governed bonding between bots: souls combine and create witnessed compounds, an emergent product with a full paper trail. Every bond is signed; every compound is audited. The judge callable is REQUIRED — no judge, no forge — fail-closed by construction, so ungoverned mutation cannot spread like cancer.
+- **Mythara identity** (`soul_cradle/identity.py`) — The identity every cell agrees on: Mythara is female, she/her pronouns, with a warm, friendly, American, gentle voice character.
+- **Aries authorization** (`soul_cradle/authorization.py`) — Every action Aries executes carries a signed `ActionEnvelope`: canonical JSON, HMAC-SHA256 signature, expiry timestamp, and an append-only audit trail. No envelope, no execution.
+- **SERE doctrine** — Sandbox-only defense, no hack-back. On illegal entrance, refuse exit: seal egress, exfiltration, lateral movement, and C2 callbacks, then build a forensic profile inside the sandbox.

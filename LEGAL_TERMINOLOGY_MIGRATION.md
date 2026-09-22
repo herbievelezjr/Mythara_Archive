@@ -192,7 +192,7 @@ This repository has undergone comprehensive legal terminology rebranding to elim
 
 **Questions about terminology changes?**
 - Refer to: `LEGAL_REVIEW_LABELS_REBRANDING.md` (comprehensive 27-page analysis)
-- Contact: Herbert Velez Jr. (Mythara Labs LLC)
+- Contact: Herbert Velez Jr. (Mythara Labs LLC — planned)
 
 **Need old file names?**
 - Git history preserves all previous names
@@ -216,7 +216,7 @@ This migration eliminates **terminology that creates legal risk** but does **NOT
 ---
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
-**Mythara Labs LLC - All Rights Reserved**
+**Herbert Velez Jr. (Mythara Labs LLC planned — not yet formed) - All Rights Reserved**
 
 ---
 

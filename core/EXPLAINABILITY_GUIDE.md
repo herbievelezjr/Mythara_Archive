@@ -1,7 +1,7 @@
 # EXPLAINABILITY_GUIDE.md
 
 **Prepared by:** Herbert Velez Jr.  
-**Entity:** Mythara Labs LLC  
+**Entity:** Mythara Labs LLC (planned — not yet formed)  
 **Manifest Ref:** ME-archive-0001  
 **Date:** 2025-10-30
 

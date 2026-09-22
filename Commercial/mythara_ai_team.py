@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 🤖 MYTHARA AI TEAM - AUTONOMOUS BOT ECOSYSTEM
@@ -75,8 +74,8 @@ class MarketingBot:
                 "sequences": {
                     "cold_outreach": {
                         "day_1": "Initial value proposition",
-                        "day_3": "Case study (Western Union)",
-                        "day_7": "Competitive pressure (3 other banks)",
+                        "day_3": "Illustrative example (hypothetical)",
+                        "day_7": "Competitive pressure (hypothetical example)",
                         "day_14": "Final call (pricing expires)"
                     },
                     "trial_nurture": {
@@ -663,8 +662,6 @@ Most banks are still using spreadsheets and manual documentation. 😬
 
 That's why we built Mythara — automated model governance that auditors actually accept.
 
-We've helped Western Union compress 6-week validation cycles to 8 days.
-
 Same rigor, 75% faster.
 
 If you're in banking/fintech and dealing with model risk management, let's talk.
@@ -674,7 +671,7 @@ If you're in banking/fintech and dealing with model risk management, let's talk.
         
         elif pillar == "Customer Success Stories":
             return """
-📊 Case Study: How Western Union Cut AI Validation Time by 75%
+📊 Illustrative Example (hypothetical): How a Bank Could Cut AI Validation Time by 75%
 
 The Challenge:
    - 6 weeks to validate each AI model
@@ -695,7 +692,7 @@ The secret? We don't replace your process. We make it auditable.
 
 If you're a bank struggling with model governance, DM me.
 
-#CaseStudy #AIValidation #BankingTech
+#AIValidation #BankingTech
             """.strip()
         
         return ""
@@ -718,7 +715,7 @@ If you're a bank struggling with model governance, DM me.
                     "The 5-Step Model Validation Framework",
                     "Common Pitfalls (Spreadsheets, Email Trails, Manual Docs)",
                     "How Cryptographic Hashing Solves Integrity Problems",
-                    "Case Study: Western Union's 75% Time Savings",
+                    "Illustrative Example (hypothetical): How a Bank Could Cut Validation Time by 75%",
                     "Conclusion: Start with Tamper-Evident Seals"
                 ],
                 "cta": "Book a demo to see how Mythara automates model validation"

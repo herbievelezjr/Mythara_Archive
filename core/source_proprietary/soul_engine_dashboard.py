@@ -4,7 +4,6 @@ Mythara Engine - Soul Engine Dashboard Queries
 Organizational analytics for systemic overload, indifference detection, and risk aggregation.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from typing import List, Dict, Any

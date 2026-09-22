@@ -4,7 +4,6 @@ Soul Cradle Comprehensive Simulation
 Demonstrates complete burnout prediction system with realistic healthcare scenarios.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Simulation Models:
 1. ER Nurse - High baseline stress + acute trauma episodes

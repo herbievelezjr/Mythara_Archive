@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 NEMESIS - Goddess of Divine Retribution and Righteous Vengeance
 ================================================================

@@ -2,7 +2,6 @@
 Mythara Tutorial Video Generator Bot
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Automatically generates tutorial videos using:
 - Text-to-speech (ElevenLabs or Google TTS)

@@ -133,7 +133,7 @@ See `INSTALL.md` for deployment instructions:
 
 This software is proprietary. Contact for licensing:
 
-**Herbert Velez Jr., Mythara Labs LLC**  
+**Herbert Velez Jr., Mythara Labs LLC (planned)**  
 Email: legal@mythara.engine  
 PGP: 571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C
 
@@ -234,7 +234,7 @@ legal@mythara.engine
 
 Best regards,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 ```
 
 ---

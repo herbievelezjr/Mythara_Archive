@@ -4,7 +4,6 @@ Advanced Loophole Detection - Edge Cases & Attack Vectors
 Tests sophisticated bypass attempts that could evade the governance framework.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

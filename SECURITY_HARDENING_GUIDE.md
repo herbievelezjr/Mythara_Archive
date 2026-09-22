@@ -322,7 +322,7 @@ response = requests.post(
 
 ---
 
-## 🎖️ Security Certifications Supported
+## 🎖️ Security Frameworks Supported (alignment, not certification)
 
 The hardening implementation aligns with:
 

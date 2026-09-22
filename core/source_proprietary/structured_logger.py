@@ -4,7 +4,6 @@ Mythara Engine - Structured Logging
 Production-grade logging with correlation IDs and structured output.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import logging

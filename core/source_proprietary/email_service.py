@@ -4,7 +4,6 @@ Mythara Engine - Email Service
 SendGrid integration for automated API key delivery and alerts.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from sendgrid import SendGridAPIClient

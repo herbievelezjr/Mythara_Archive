@@ -4,7 +4,6 @@ A.M.I.R. AI - Autonomous Mythara Intelligence & Response with AI Enhancement
 The One Ring of Cybersecurity - Now with GPT-4 Powered Intelligence
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 AI-ENHANCED CAPABILITIES:
 - GPT-4 powered threat prediction (real-time analysis)

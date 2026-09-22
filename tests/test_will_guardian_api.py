@@ -3,7 +3,6 @@
 Tests for the emotional extortion detector API (will_integrity_guardian).
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

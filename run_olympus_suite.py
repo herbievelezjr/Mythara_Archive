@@ -4,7 +4,6 @@ OLYMPUS SUITE - Complete GODBOT Pipeline
 Running full Prometheus → Schrödinger → Hephaestus → Aries analysis on Mythara Archive
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

@@ -4,7 +4,6 @@ Test Suite: Zim Formal Logic Extension
 Tests the corrected Zim notation implementation (SEPARATE from Mythara core)
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import pytest

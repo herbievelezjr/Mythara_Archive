@@ -4,7 +4,6 @@ Systems Framework Standalone Testing Harness
 Test terminal risk prediction without Soul Engine dependencies.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

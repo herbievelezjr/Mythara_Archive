@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 VoIP Sales Bot with AI Voice - Q1 2026 Upgrade Project

@@ -147,7 +147,7 @@ This model honors the sacred mission while sustaining Mythara's ability to serve
 - Mythara-hosted enterprise cloud (99.99% uptime SLA)
 - Optional hybrid (some modules on-premise, dashboards in cloud)
 - Disaster recovery and data redundancy included
-- Compliance certifications (HIPAA, GDPR, SOC 2)
+- Compliance readiness (controls designed around HIPAA, GDPR, SOC 2 Type II frameworks; certifications not currently held)
 
 ### Cost
 - **Setup**: $50,000 (one-time)
@@ -177,7 +177,7 @@ This model honors the sacred mission while sustaining Mythara's ability to serve
 
 ### Enhanced Compliance
 - **HIPAA Business Associate Agreement**: $2,500/year
-- **SOC 2 Compliance Package**: $7,500/year
+- **SOC 2 Readiness Package**: $7,500/year (controls review and audit preparation; certification audit not yet completed)
 - **GDPR Data Processing Agreement**: $3,000/year
 
 ### Extended Support

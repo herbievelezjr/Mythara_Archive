@@ -4,7 +4,6 @@ Mythara Email Bot - Simple Manual Version
 Read exported emails and generate drafts using Mythara Engine.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 SETUP INSTRUCTIONS:
 1. Export emails from Yahoo Mail to a folder
@@ -70,7 +69,7 @@ Would a 30-day pilot be valuable? I can send the pilot package today.
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mythara.engine@yahoo.com
 Enterprise: $60K/year (firm pricing)""",
 

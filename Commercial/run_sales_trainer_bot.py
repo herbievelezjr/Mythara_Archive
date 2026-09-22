@@ -1,6 +1,5 @@
 import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Sales Trainer Bot Runner - Runs every 6 hours
@@ -54,7 +53,7 @@ def run_sales_trainer_bot():
         {
             "id": "conv_003",
             "outcome": "closed",
-            "messages": ["Your competitors are using this", "Really? Who?", "Western Union", "I'm interested"],
+            "messages": ["Your competitors are using this", "Really? Who?", "[hypothetical example bank]", "I'm interested"],
             "tactics_used": ["competitive_pressure", "social_proof"]
         }
     ]

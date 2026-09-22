@@ -4,7 +4,6 @@ Mythara Engine - Redis Cache Layer
 Persistent state management for Blessings Reservoir and Soul Cradle data.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import redis

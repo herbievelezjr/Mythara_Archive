@@ -158,7 +158,7 @@ Added 5 new autonomous VP bots to the Mythara C-Suite, bringing total leadership
 - **CVSS scoring:** Industry-standard 0-10 severity rating
 - **Deployment gates:** Security check required before production deployment
 - **Secret scanning:** Detects API keys, tokens in code
-- **Compliance frameworks:** OWASP Top 10, SOC 2 Type II
+- **Compliance frameworks (validation targets):** OWASP Top 10, SOC 2 Type II controls (Mythara itself: controls implemented, audit planned — not currently certified)
 
 ### Severity Levels
 - Critical (CVSS 9.0-10.0) - Auto-escalated

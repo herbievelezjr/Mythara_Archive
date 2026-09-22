@@ -33,7 +33,7 @@
 > 
 > Quick question before we schedule—do you have a model risk review or audit in the next 90 days, or is this exploratory?
 > 
-> Asking because I have 2 early adopter slots left at $500 (normally $2,500). After Friday I'm at full price and booked until February. The 3 banks already piloting will have 6 months of validated audit data before you'd even start.
+> Asking because I have 2 early adopter slots left at $500 (normally $2,500). After Friday I'm at full price and booked until February. Early adopters will have 6 months of validated audit data before you'd even start.
 > 
 > If you have near-term regulatory pressure: I can do Tuesday 10am or Wednesday 2pm MT for 15 minutes.
 > 
@@ -145,7 +145,7 @@
 > 
 > A CFPB fine for un-auditable AI decisions is $500k-$5M. A failed model risk review costs you 200+ hours of remediation work. The $500 is for companies that can move fast—it's normally $2,500.
 > 
-> That said, if budget's tight, might make sense to wait until you have an audit forcing the issue. The 3 banks already piloting didn't hesitate because they had regulatory deadlines.
+> That said, if budget's tight, might make sense to wait until you have an audit forcing the issue. Companies facing regulatory deadlines don't hesitate — that's the pattern this is built for.
 > 
 > Are you in that boat, or more exploratory?
 > 
@@ -233,7 +233,7 @@ Don't use ONE urgency trigger. Stack them:
 
 ### Opportunity Cost:
 - "Every week without this = 20 hours of manual prep you can't get back"
-- "The 3 banks already using this will have better audit outcomes than you"
+- "Early adopters of this will have better audit outcomes than you"
 
 ### Pricing Fear:
 - "$500 expires Friday—after that it's $2,500 and I can't make exceptions"

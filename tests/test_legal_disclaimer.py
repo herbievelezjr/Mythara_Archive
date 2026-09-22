@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Mythara Gopher - Legal Disclaimer Test
 Verifies disclaimer integration across all features

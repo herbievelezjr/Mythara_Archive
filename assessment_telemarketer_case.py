@@ -4,7 +4,6 @@ Soul Cradle Assessment: Real-World Case Analysis
 Using EQ = (G/T) × H formula to analyze telemarketer burnout trajectory
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

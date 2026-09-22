@@ -4,7 +4,6 @@ BIG MEANIE - Maximum Adversarial Enforcement System
 "The Hacker Bot Cry Baby Maker" - Legendary Red Team Attack Framework
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 ════════════════════════════════════════════════════════════════════════
      WHY "BIG MEANIE"? 
