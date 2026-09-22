@@ -599,3 +599,29 @@ if __name__ == "__main__":
     print(f"Conditions: {', '.join(blessing.conditions)}")
     
     persephone.export_blessings()
+
+__ASSESSOR_ID__ = 'persephone'
+
+
+# ---------------------------------------------------------------------------
+# Evidence-fed witness path (canonical core) — added 2026-09-22
+# ---------------------------------------------------------------------------
+# The calculators above take pre-scored structured inputs: whoever calls
+# them decides the scores first, and the math launders those guesses into
+# authoritative-looking output. They remain for backward compatibility.
+#
+# New code must use the witness core instead: soul_cradle.assessors holds
+# the versioned rubric for this assessor, reads observable evidence (not
+# pre-scored inputs), abstains when its domain is not engaged, seals every
+# judgment by content hash, and speaks only as WITNESS. See
+# soul_cradle/assessors.py for the evidence schema.
+
+def consult_evidence(action_description, evidence):
+    """Judge an action as witness. Preferred entry point for new code.
+
+    action_description: plain-words description of the proposed action.
+    evidence: dict of evidence-schema keys (see soul_cradle/assessors.py).
+    Returns an AssessorJudgment (verdict: clear | flagged | abstain).
+    """
+    from soul_cradle.assessors import consult
+    return consult(__ASSESSOR_ID__, action_description, evidence)
