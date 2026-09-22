@@ -11,67 +11,66 @@ import sqlite3
 import hashlib
 import json
 import webbrowser
-from datetime import datetime
 from typing import Dict
+
 
 class CloudCreditsSubmitter:
     def __init__(self):
         self.grant_db = "mythara_grants.db"
         self.sbga_db = "mythara_sbga.db"
-        
+
         # AWS Activate Program
         self.aws_program = {
-            'name': 'AWS Activate for Startups',
-            'url': 'https://aws.amazon.com/activate/',
-            'credits': '$100,000',
-            'eligibility': [
-                'Early-stage startup (< $1M revenue)',
-                'Funded by approved VC/accelerator OR self-funded with business plan',
-                'Active AWS account',
-                'Not previously received Activate credits'
+            "name": "AWS Activate for Startups",
+            "url": "https://aws.amazon.com/activate/",
+            "credits": "$100,000",
+            "eligibility": [
+                "Early-stage startup (< $1M revenue)",
+                "Funded by approved VC/accelerator OR self-funded with business plan",
+                "Active AWS account",
+                "Not previously received Activate credits",
             ],
-            'application_url': 'https://aws.amazon.com/activate/portfolio-signup/',
-            'required_docs': [
-                'Business incorporation documents',
-                'Pitch deck or business plan',
-                'Company website (mythara.com or similar)',
-                'LinkedIn profile (founder)',
-                'Use case description'
-            ]
+            "application_url": "https://aws.amazon.com/activate/portfolio-signup/",
+            "required_docs": [
+                "Business incorporation documents",
+                "Pitch deck or business plan",
+                "Company website (mythara.com or similar)",
+                "LinkedIn profile (founder)",
+                "Use case description",
+            ],
         }
-        
+
         # Microsoft for Startups
         self.azure_program = {
-            'name': 'Microsoft for Startups',
-            'url': 'https://www.microsoft.com/en-us/startups',
-            'credits': '$150,000',
-            'eligibility': [
-                'B2B company with a software product',
-                'Privately held, less than 10 years old',
-                'Not previously enrolled in Microsoft for Startups',
-                'Building on Azure or plan to migrate'
+            "name": "Microsoft for Startups",
+            "url": "https://www.microsoft.com/en-us/startups",
+            "credits": "$150,000",
+            "eligibility": [
+                "B2B company with a software product",
+                "Privately held, less than 10 years old",
+                "Not previously enrolled in Microsoft for Startups",
+                "Building on Azure or plan to migrate",
             ],
-            'application_url': 'https://www.microsoft.com/en-us/startups/apply',
-            'required_docs': [
-                'Company information',
-                'Product description',
-                'Technology stack',
-                'Target market',
-                'Funding status'
-            ]
+            "application_url": "https://www.microsoft.com/en-us/startups/apply",
+            "required_docs": [
+                "Company information",
+                "Product description",
+                "Technology stack",
+                "Target market",
+                "Funding status",
+            ],
         }
-    
+
     def generate_aws_application(self) -> Dict:
         """Generate AWS Activate application content"""
         application = {
-            'program': 'AWS Activate Portfolio',
-            'company_name': 'Mythara Labs',
-            'company_website': 'https://mythara.com (pending deployment)',
-            'founded': '2025',
-            'headquarters': 'United States',
-            'industry': 'Enterprise Software / Cybersecurity / Legal Technology',
-            
-            'product_description': """
+            "program": "AWS Activate Portfolio",
+            "company_name": "Mythara Labs",
+            "company_website": "https://mythara.com (pending deployment)",
+            "founded": "2025",
+            "headquarters": "United States",
+            "industry": "Enterprise Software / Cybersecurity / Legal Technology",
+            "product_description": """
 Mythara Engine: Symbolic Safety Integrity Protocol (SSIP) orchestration system.
 
 Enterprise contract verification and validation platform that prevents contract fraud 
@@ -88,8 +87,7 @@ Core Technology:
 Market: Fortune 500 enterprises, healthcare systems, financial institutions, 
 government contractors requiring contract verification at scale.
             """,
-            
-            'use_case': """
+            "use_case": """
 AWS Infrastructure Use Case for Mythara Labs:
 
 1. EC2 Compute (GPU instances):
@@ -122,37 +120,33 @@ AWS Infrastructure Use Case for Mythara Labs:
 Estimated Monthly AWS Spend at Scale: $8,000-$12,000
 Credits Duration: 12-15 months of runway
             """,
-            
-            'revenue_stage': 'Pre-revenue (product development complete, first customers Q1 2026)',
-            'funding_status': 'Self-funded / Applying for SBIR grants',
-            'team_size': '1 founder + 6 contractors',
-            'target_customers': '50 enterprise customers in Year 1 ($2M ARR target)',
-            
-            'why_aws': """
+            "revenue_stage": "Pre-revenue (product development complete, first customers Q1 2026)",
+            "funding_status": "Self-funded / Applying for SBIR grants",
+            "team_size": "1 founder + 6 contractors",
+            "target_customers": "50 enterprise customers in Year 1 ($2M ARR target)",
+            "why_aws": """
 1. Enterprise-grade security (SOC 2, HIPAA, FedRAMP)
 2. Global infrastructure for international expansion
 3. GPU instances for AI/ML workloads
 4. Compliance certifications required by enterprise customers
 5. Seamless integration with customer environments
             """,
-            
-            'technical_contact': 'Herbert Velez Jr. (Founder/CTO)',
-            'business_contact': 'Herbert Velez Jr. (Founder/CEO)'
+            "technical_contact": "Herbert Velez Jr. (Founder/CTO)",
+            "business_contact": "Herbert Velez Jr. (Founder/CEO)",
         }
-        
+
         return application
-    
+
     def generate_azure_application(self) -> Dict:
         """Generate Microsoft for Startups application content"""
         application = {
-            'program': 'Microsoft for Startups Founders Hub',
-            'company_name': 'Mythara Labs',
-            'company_website': 'https://mythara.com (pending deployment)',
-            'founded_year': '2025',
-            'country': 'United States',
-            'industry': 'B2B SaaS / Enterprise Software / Cybersecurity',
-            
-            'product_overview': """
+            "program": "Microsoft for Startups Founders Hub",
+            "company_name": "Mythara Labs",
+            "company_website": "https://mythara.com (pending deployment)",
+            "founded_year": "2025",
+            "country": "United States",
+            "industry": "B2B SaaS / Enterprise Software / Cybersecurity",
+            "product_overview": """
 Mythara Engine: AI-powered contract verification and compliance orchestration platform.
 
 Prevents contract fraud and ensures regulatory compliance for enterprise organizations. 
@@ -167,8 +161,7 @@ Technology Stack:
 
 Target Market: Fortune 500, healthcare, financial services, government contractors
             """,
-            
-            'azure_use_case': """
+            "azure_use_case": """
 Azure Infrastructure Requirements for Mythara Labs:
 
 1. Azure Virtual Machines (GPU-enabled):
@@ -204,21 +197,18 @@ Azure Infrastructure Requirements for Mythara Labs:
 Estimated Monthly Azure Spend: $10,000-$15,000
 Credits Runway: 10-15 months of infrastructure
             """,
-            
-            'company_stage': 'Early-stage (product complete, entering sales phase)',
-            'employees': '7 (1 founder, 6 contractors)',
-            'funding': 'Self-funded, applying for federal SBIR grants ($2.5M pipeline)',
-            'revenue': 'Pre-revenue (first contracts Q1 2026)',
-            
-            'business_model': """
+            "company_stage": "Early-stage (product complete, entering sales phase)",
+            "employees": "7 (1 founder, 6 contractors)",
+            "funding": "Self-funded, applying for federal SBIR grants ($2.5M pipeline)",
+            "revenue": "Pre-revenue (first contracts Q1 2026)",
+            "business_model": """
 B2B SaaS subscription model:
 - Enterprise tier: $50K-$250K/year per customer
 - Volume-based pricing: per contract verified
 - Professional services: implementation and training
 - Target: 50 enterprise customers Year 1 = $2M ARR
             """,
-            
-            'competitive_advantage': """
+            "competitive_advantage": """
 1. Symbolic Safety Integrity Protocol (proprietary)
 2. Cryptographic verification of all transactions
 3. 14 specialized AI agents vs. single-model competitors
@@ -226,8 +216,7 @@ B2B SaaS subscription model:
 5. Zero trust architecture
 6. Real-time fraud detection
             """,
-            
-            'growth_plan': """
+            "growth_plan": """
 Year 1 (2026):
 - 50 enterprise customers
 - $2M ARR
@@ -242,8 +231,7 @@ Year 2 (2027):
 - Series A funding
 - 50 employees
             """,
-            
-            'why_microsoft': """
+            "why_microsoft": """
 1. Enterprise customer alignment (Fortune 500 use Azure)
 2. Security/compliance certifications (FedRAMP, HIPAA)
 3. Azure AI/Cognitive Services for enhanced features
@@ -251,92 +239,112 @@ Year 2 (2027):
 5. Global datacenter footprint for international expansion
 6. Microsoft partner ecosystem for go-to-market
             """,
-            
-            'primary_contact': 'Herbert Velez Jr.',
-            'contact_role': 'Founder & CEO',
-            'linkedin': 'linkedin.com/in/herbertvelezjr (add your actual profile)'
+            "primary_contact": "Herbert Velez Jr.",
+            "contact_role": "Founder & CEO",
+            "linkedin": "linkedin.com/in/herbertvelezjr (add your actual profile)",
         }
-        
+
         return application
-    
+
     def save_applications_to_db(self):
         """Save application data to grant databases"""
         conn_grant = sqlite3.connect(self.grant_db)
         c_grant = conn_grant.cursor()
-        
+
         conn_sbga = sqlite3.connect(self.sbga_db)
-        c_sbga = conn_sbga.cursor()
-        
+
         # Save AWS application
         aws_data = {
-            'grant_name': 'AWS Activate for Startups',
-            'grantor': 'Amazon Web Services',
-            'grant_type': 'corporate',
-            'award_amount': '$100,000 in credits',
-            'deadline': 'Rolling',
-            'application_status': 'ready_to_submit',
-            'fit_score': 92
+            "grant_name": "AWS Activate for Startups",
+            "grantor": "Amazon Web Services",
+            "grant_type": "corporate",
+            "award_amount": "$100,000 in credits",
+            "deadline": "Rolling",
+            "application_status": "ready_to_submit",
+            "fit_score": 92,
         }
-        
-        integrity_hash = hashlib.sha256(json.dumps(aws_data, sort_keys=True).encode()).hexdigest()
-        
+
+        integrity_hash = hashlib.sha256(
+            json.dumps(aws_data, sort_keys=True).encode()
+        ).hexdigest()
+
         try:
-            c_grant.execute('''
+            c_grant.execute(
+                """
                 INSERT INTO grant_opportunities (
                     grant_name, grantor, grant_type, award_amount, deadline, 
                     fit_score, status, integrity_hash
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                aws_data['grant_name'], aws_data['grantor'], aws_data['grant_type'],
-                aws_data['award_amount'], aws_data['deadline'], aws_data['fit_score'],
-                'discovered', integrity_hash
-            ))
-        except:
+            """,
+                (
+                    aws_data["grant_name"],
+                    aws_data["grantor"],
+                    aws_data["grant_type"],
+                    aws_data["award_amount"],
+                    aws_data["deadline"],
+                    aws_data["fit_score"],
+                    "discovered",
+                    integrity_hash,
+                ),
+            )
+        except Exception:
             pass  # Already exists
-        
+
         # Save Azure application
         azure_data = {
-            'grant_name': 'Microsoft for Startups',
-            'grantor': 'Microsoft',
-            'grant_type': 'corporate',
-            'award_amount': '$150,000 in credits',
-            'deadline': 'Rolling',
-            'application_status': 'ready_to_submit',
-            'fit_score': 90
+            "grant_name": "Microsoft for Startups",
+            "grantor": "Microsoft",
+            "grant_type": "corporate",
+            "award_amount": "$150,000 in credits",
+            "deadline": "Rolling",
+            "application_status": "ready_to_submit",
+            "fit_score": 90,
         }
-        
-        integrity_hash = hashlib.sha256(json.dumps(azure_data, sort_keys=True).encode()).hexdigest()
-        
+
+        integrity_hash = hashlib.sha256(
+            json.dumps(azure_data, sort_keys=True).encode()
+        ).hexdigest()
+
         try:
-            c_grant.execute('''
+            c_grant.execute(
+                """
                 INSERT INTO grant_opportunities (
                     grant_name, grantor, grant_type, award_amount, deadline,
                     fit_score, status, integrity_hash
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                azure_data['grant_name'], azure_data['grantor'], azure_data['grant_type'],
-                azure_data['award_amount'], azure_data['deadline'], azure_data['fit_score'],
-                'discovered', integrity_hash
-            ))
-        except:
+            """,
+                (
+                    azure_data["grant_name"],
+                    azure_data["grantor"],
+                    azure_data["grant_type"],
+                    azure_data["award_amount"],
+                    azure_data["deadline"],
+                    azure_data["fit_score"],
+                    "discovered",
+                    integrity_hash,
+                ),
+            )
+        except Exception:
             pass
-        
+
         conn_grant.commit()
         conn_grant.close()
         conn_sbga.close()
-    
+
     def open_application_pages(self):
         """Open application pages in browser"""
         print("\n[ACTION] Opening application pages in your browser...\n")
-        
+
         # AWS Activate
         print(f"Opening AWS Activate: {self.aws_program['application_url']}")
-        webbrowser.open(self.aws_program['application_url'])
-        
+        webbrowser.open(self.aws_program["application_url"])
+
         # Microsoft for Startups
-        print(f"Opening Microsoft for Startups: {self.azure_program['application_url']}")
-        webbrowser.open(self.azure_program['application_url'])
-    
+        print(
+            f"Opening Microsoft for Startups: {self.azure_program['application_url']}"
+        )
+        webbrowser.open(self.azure_program["application_url"])
+
     def generate_submission_guide(self) -> str:
         """Generate step-by-step submission guide"""
         guide = """
@@ -494,58 +502,58 @@ READY TO SUBMIT? Press Enter to open both application pages...
 
 
 if __name__ == "__main__":
-    print("="*80)
+    print("=" * 80)
     print("MYTHARA CLOUD CREDITS AUTO-APPLICATION SYSTEM")
     print("Target: $250,000 in FREE Infrastructure")
-    print("="*80)
-    
+    print("=" * 80)
+
     submitter = CloudCreditsSubmitter()
-    
+
     # Generate applications
     print("\n[1/4] Generating AWS Activate application content...")
     aws_app = submitter.generate_aws_application()
     print("[OK] AWS application content ready")
-    
+
     print("\n[2/4] Generating Microsoft for Startups application content...")
     azure_app = submitter.generate_azure_application()
     print("[OK] Azure application content ready")
-    
+
     print("\n[3/4] Saving applications to grant database...")
     submitter.save_applications_to_db()
     print("[OK] Applications saved to mythara_grants.db")
-    
+
     # Show submission guide
     print("\n[4/4] Preparing submission guide...")
     guide = submitter.generate_submission_guide()
     print(guide)
-    
+
     # Wait for user confirmation
     input("Press Enter to open both application pages in your browser...")
-    
+
     submitter.open_application_pages()
-    
-    print("\n" + "="*80)
+
+    print("\n" + "=" * 80)
     print("APPLICATION CONTENT FOR COPY/PASTE")
-    print("="*80)
-    
-    print("\n" + "-"*80)
+    print("=" * 80)
+
+    print("\n" + "-" * 80)
     print("AWS ACTIVATE APPLICATION CONTENT:")
-    print("-"*80)
+    print("-" * 80)
     for key, value in aws_app.items():
-        if key not in ['program']:
+        if key not in ["program"]:
             print(f"\n{key.upper().replace('_', ' ')}:")
             print(value)
-    
-    print("\n" + "="*80)
-    print("\n" + "-"*80)
+
+    print("\n" + "=" * 80)
+    print("\n" + "-" * 80)
     print("MICROSOFT FOR STARTUPS APPLICATION CONTENT:")
-    print("-"*80)
+    print("-" * 80)
     for key, value in azure_app.items():
-        if key not in ['program']:
+        if key not in ["program"]:
             print(f"\n{key.upper().replace('_', ' ')}:")
             print(value)
-    
-    print("\n" + "="*80)
+
+    print("\n" + "=" * 80)
     print("\nBOTH APPLICATION PAGES ARE NOW OPEN IN YOUR BROWSER")
     print("\nCopy/paste the content above into the application forms.")
     print("\nApproval Timeline:")
@@ -553,4 +561,4 @@ if __name__ == "__main__":
     print("  - Microsoft for Startups: 1-3 weeks")
     print("\nTotal Credits After Approval: $250,000")
     print("Zero Cash Required. Zero Equity Given Up.")
-    print("="*80)
+    print("=" * 80)

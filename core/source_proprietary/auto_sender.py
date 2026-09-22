@@ -1,4 +1,3 @@
-import os
 #!/usr/bin/env python3
 """
 Mythara Auto Sender - Fully Automated Email Outreach
@@ -59,14 +58,15 @@ PROGRESS_FILE = OUTPUT_DIR / "send_progress.json"
 # EMAIL TEMPLATES
 # ============================================================================
 
+
 def generate_email_healthcare(contact: Dict) -> Dict:
     """Healthcare facility email"""
-    hospital_name = contact.get('name', 'Your Organization')
-    city = contact.get('city', '')
-    state = contact.get('state', '')
-    
+    hospital_name = contact.get("name", "Your Organization")
+    city = contact.get("city", "")
+    state = contact.get("state", "")
+
     subject = f"Soul Cradle is free for {hospital_name} — Because this work matters"
-    
+
     body = f"""Hi there,
 
 I'm Herbert Velez Jr., founder of Mythara Labs. I'm reaching out to {hospital_name} in {city}, {state} because your team carries a weight most people never see.
@@ -93,18 +93,18 @@ Herbert Velez Jr.
 Founder, Mythara Labs LLC
 
 P.S. — This is a one-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""
-    
+
     return {"subject": subject, "body": body}
 
 
 def generate_email_banking(contact: Dict) -> Dict:
     """Banking facility email"""
-    bank_name = contact.get('name', 'Your Organization')
-    city = contact.get('city', '')
-    state = contact.get('state', '')
-    
+    bank_name = contact.get("name", "Your Organization")
+    city = contact.get("city", "")
+    state = contact.get("state", "")
+
     subject = f"Soul Cradle for {bank_name} — When compliance conflicts with doing right by customers"
-    
+
     body = f"""Hi there,
 
 I'm Herbert Velez Jr., founder of Mythara Labs. I'm reaching out to {bank_name} in {city}, {state} because your people face impossible moments that never make it into compliance reports.
@@ -131,16 +131,16 @@ Herbert Velez Jr.
 Founder, Mythara Labs LLC
 
 P.S. — One-time email. Reply "unsubscribe" to opt out."""
-    
+
     return {"subject": subject, "body": body}
 
 
 def generate_email_government(contact: Dict) -> Dict:
     """Government agency email"""
-    agency_name = contact.get('name', 'Your Agency')
-    
+    agency_name = contact.get("name", "Your Agency")
+
     subject = f"Soul Cradle is free for {agency_name} — Because public servants deserve support"
-    
+
     body = f"""Hi there,
 
 I'm Herbert Velez Jr., founder of Mythara Labs. I'm reaching out to {agency_name} because your people carry an impossible burden: serving the public while enforcing policies that sometimes hurt the very people they're trying to help.
@@ -169,16 +169,16 @@ Herbert Velez Jr.
 Founder, Mythara Labs LLC
 
 P.S. — One-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""
-    
+
     return {"subject": subject, "body": body}
 
 
 def generate_email_dod(contact: Dict) -> Dict:
     """DoD/Military email"""
-    org_name = contact.get('name', 'Your Organization')
-    
+    org_name = contact.get("name", "Your Organization")
+
     subject = f"Soul Cradle for {org_name} — When orders conflict with what's right"
-    
+
     body = f"""Hi there,
 
 I'm Herbert Velez Jr., founder of Mythara Labs. I'm reaching out to {org_name} because service members face impossible tactical and ethical choices that never make it into after-action reports.
@@ -208,7 +208,7 @@ Founder, Mythara Labs LLC
 Veteran-focused technology
 
 P.S. — One-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""
-    
+
     return {"subject": subject, "body": body}
 
 
@@ -216,10 +216,11 @@ P.S. — One-time email. Reply "unsubscribe" if you'd prefer not to hear from us
 # CORE SENDING LOGIC
 # ============================================================================
 
+
 def load_contacts(csv_path: str) -> List[Dict]:
     """Load contacts from harvester CSV"""
     contacts = []
-    with open(csv_path, 'r', encoding='utf-8') as f:
+    with open(csv_path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             contacts.append(row)
@@ -229,14 +230,14 @@ def load_contacts(csv_path: str) -> List[Dict]:
 def load_progress() -> Dict:
     """Load sending progress"""
     if PROGRESS_FILE.exists():
-        with open(PROGRESS_FILE, 'r') as f:
+        with open(PROGRESS_FILE, "r") as f:
             return json.load(f)
     return {"sent_emails": [], "failed_emails": [], "last_index": 0}
 
 
 def save_progress(progress: Dict):
     """Save sending progress"""
-    with open(PROGRESS_FILE, 'w') as f:
+    with open(PROGRESS_FILE, "w") as f:
         json.dump(progress, f, indent=2)
 
 
@@ -244,43 +245,43 @@ def log_email(contact: Dict, status: str, error: str = None):
     """Log email send attempt"""
     log_entry = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
-        "to": contact.get('email', 'unknown'),
-        "name": contact.get('name', 'unknown'),
-        "industry": contact.get('industry', 'unknown'),
+        "to": contact.get("email", "unknown"),
+        "name": contact.get("name", "unknown"),
+        "industry": contact.get("industry", "unknown"),
         "status": status,
-        "error": error
+        "error": error,
     }
-    
+
     # Append to log file
     logs = []
     if LOG_FILE.exists():
-        with open(LOG_FILE, 'r') as f:
+        with open(LOG_FILE, "r") as f:
             logs = json.load(f)
-    
+
     logs.append(log_entry)
-    
-    with open(LOG_FILE, 'w') as f:
+
+    with open(LOG_FILE, "w") as f:
         json.dump(logs, f, indent=2)
-    
+
     return log_entry
 
 
 def send_email(smtp_conn, to_email: str, to_name: str, subject: str, body: str) -> bool:
     """Send a single email via SMTP"""
     try:
-        msg = MIMEMultipart('alternative')
-        msg['From'] = f"Herbert Velez Jr. <{YAHOO_EMAIL}>"
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        
+        msg = MIMEMultipart("alternative")
+        msg["From"] = f"Herbert Velez Jr. <{YAHOO_EMAIL}>"
+        msg["To"] = to_email
+        msg["Subject"] = subject
+
         # Plain text version
-        text_part = MIMEText(body, 'plain')
+        text_part = MIMEText(body, "plain")
         msg.attach(text_part)
-        
+
         # Send
         smtp_conn.send_message(msg)
         return True
-        
+
     except Exception as e:
         print(f"   ❌ Error: {str(e)}")
         return False
@@ -288,7 +289,7 @@ def send_email(smtp_conn, to_email: str, to_name: str, subject: str, body: str) 
 
 def send_campaign(contacts: List[Dict], start_index: int = 0):
     """Send full email campaign with rate limiting"""
-    
+
     print("\n" + "=" * 60)
     print("MYTHARA AUTO SENDER")
     print("=" * 60)
@@ -298,113 +299,115 @@ def send_campaign(contacts: List[Dict], start_index: int = 0):
     print(f"Rate Limit: {EMAILS_PER_HOUR} emails/hour")
     print(f"Batch Size: {BATCH_SIZE} emails per batch")
     print("=" * 60)
-    
+
     # Verify password
     if not YAHOO_APP_PASSWORD:
         print("\n❌ ERROR: YAHOO_APP_PASSWORD not set")
-        print("   Run: $env:YAHOO_APP_PASSWORD=\"your-password\"")
+        print('   Run: $env:YAHOO_APP_PASSWORD="your-password"')
         return
-    
+
     # Load progress
     progress = load_progress()
-    sent_count = len(progress['sent_emails'])
-    failed_count = len(progress['failed_emails'])
-    
-    print(f"\n📊 Previous Progress:")
+    sent_count = len(progress["sent_emails"])
+    failed_count = len(progress["failed_emails"])
+
+    print("\n📊 Previous Progress:")
     print(f"   Sent: {sent_count}")
     print(f"   Failed: {failed_count}")
-    
+
     # Connect to SMTP
     print(f"\n🔌 Connecting to {SMTP_SERVER}...")
-    
+
     try:
         smtp = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
         smtp.starttls()
         smtp.login(YAHOO_EMAIL, YAHOO_APP_PASSWORD)
         print("   ✅ Connected successfully")
-        
+
     except Exception as e:
         print(f"   ❌ Connection failed: {str(e)}")
         return
-    
+
     # Send emails
     print("\n" + "=" * 60)
     print("SENDING EMAILS")
     print("=" * 60)
-    
+
     batch_count = 0
-    
+
     for i, contact in enumerate(contacts[start_index:], start=start_index):
         # Check if already sent
-        if contact.get('email') in progress['sent_emails']:
+        if contact.get("email") in progress["sent_emails"]:
             continue
-        
+
         # Skip if no email
-        if not contact.get('email') or '@' not in contact.get('email', ''):
+        if not contact.get("email") or "@" not in contact.get("email", ""):
             continue
-        
+
         # Determine industry and generate email
-        industry = contact.get('industry', '').lower()
-        
-        if 'healthcare' in industry or 'hospital' in industry:
+        industry = contact.get("industry", "").lower()
+
+        if "healthcare" in industry or "hospital" in industry:
             email_data = generate_email_healthcare(contact)
-        elif 'bank' in industry or 'credit union' in industry:
+        elif "bank" in industry or "credit union" in industry:
             email_data = generate_email_banking(contact)
-        elif 'government' in industry or 'federal' in industry:
+        elif "government" in industry or "federal" in industry:
             email_data = generate_email_government(contact)
-        elif 'dod' in industry or 'defense' in industry:
+        elif "dod" in industry or "defense" in industry:
             email_data = generate_email_dod(contact)
         else:
             continue  # Skip unknown industries
-        
+
         # Send email
-        to_email = contact['email']
-        to_name = contact.get('name', 'there')
-        
+        to_email = contact["email"]
+        to_name = contact.get("name", "there")
+
         print(f"\n📧 [{i+1}/{len(contacts)}] Sending to: {to_name} ({to_email})")
-        
-        success = send_email(smtp, to_email, to_name, email_data['subject'], email_data['body'])
-        
+
+        success = send_email(
+            smtp, to_email, to_name, email_data["subject"], email_data["body"]
+        )
+
         if success:
-            print(f"   ✅ Sent successfully")
-            progress['sent_emails'].append(to_email)
+            print("   ✅ Sent successfully")
+            progress["sent_emails"].append(to_email)
             log_email(contact, "sent")
             sent_count += 1
         else:
-            print(f"   ❌ Failed to send")
-            progress['failed_emails'].append(to_email)
+            print("   ❌ Failed to send")
+            progress["failed_emails"].append(to_email)
             log_email(contact, "failed", "SMTP error")
             failed_count += 1
-        
+
         # Update progress
-        progress['last_index'] = i + 1
+        progress["last_index"] = i + 1
         save_progress(progress)
-        
+
         # Rate limiting
         batch_count += 1
-        
+
         if batch_count >= BATCH_SIZE:
             print(f"\n⏸️  Batch complete ({batch_count} emails)")
             print(f"   Pausing for {PAUSE_BETWEEN_BATCHES/60} minutes...")
             smtp.quit()
             time.sleep(PAUSE_BETWEEN_BATCHES)
-            
+
             # Reconnect
             print(f"\n🔌 Reconnecting to {SMTP_SERVER}...")
             smtp = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
             smtp.starttls()
             smtp.login(YAHOO_EMAIL, YAHOO_APP_PASSWORD)
             print("   ✅ Reconnected")
-            
+
             batch_count = 0
-        
+
         else:
             # Delay between emails
             time.sleep(DELAY_BETWEEN_EMAILS)
-    
+
     # Cleanup
     smtp.quit()
-    
+
     print("\n" + "=" * 60)
     print("✅ CAMPAIGN COMPLETE")
     print("=" * 60)
@@ -432,41 +435,41 @@ if __name__ == "__main__":
     
     ===============================================
     """)
-    
+
     # Find most recent contacts file
     prospecting_dir = Path("prospecting_data")
-    
+
     if not prospecting_dir.exists():
         print("❌ prospecting_data/ folder not found")
         print("   Run: py public_contact_harvester.py first")
         exit(1)
-    
+
     contact_files = sorted(prospecting_dir.glob("all_contacts_*.csv"), reverse=True)
-    
+
     if not contact_files:
         print("❌ No contact files found")
         print("   Run: py public_contact_harvester.py first")
         exit(1)
-    
+
     latest_file = contact_files[0]
     print(f"📂 Using: {latest_file}")
-    
+
     # Load contacts
     contacts = load_contacts(str(latest_file))
     print(f"✅ Loaded {len(contacts)} contacts")
-    
+
     # Load progress
     progress = load_progress()
-    start_index = progress.get('last_index', 0)
-    
+    start_index = progress.get("last_index", 0)
+
     # Confirm send
-    print(f"\n⚠️  READY TO SEND")
+    print("\n⚠️  READY TO SEND")
     print(f"   From: {YAHOO_EMAIL}")
     print(f"   To: {len(contacts) - start_index} contacts")
     print(f"   Rate: {EMAILS_PER_HOUR} emails/hour")
-    
+
     confirm = input("\n   Type 'SEND' to start: ")
-    
+
     if confirm.strip().upper() == "SEND":
         send_campaign(contacts, start_index)
     else:

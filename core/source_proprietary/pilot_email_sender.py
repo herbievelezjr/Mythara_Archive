@@ -19,21 +19,22 @@ FROM_EMAIL = os.getenv("MYTHARA_FROM_EMAIL", "Mythara.Engine@yahoo.com")
 FROM_NAME = os.getenv("MYTHARA_FROM_NAME", "Mythara Labs")
 PILOT_DOWNLOAD_URL = os.getenv("MYTHARA_PILOT_DOWNLOAD_URL", "")
 
+
 def send_pilot_welcome_email(
     to_email: str,
     api_key: str,
     customer_name: Optional[str] = None,
-    payment_id: Optional[str] = None
+    payment_id: Optional[str] = None,
 ) -> bool:
     """
     Send pilot welcome email with API key and download link.
-    
+
     Args:
         to_email: Customer email address
         api_key: Generated pilot API key (sk_pilot_xxx)
         customer_name: Optional customer name
         payment_id: Optional Stripe payment ID for reference
-    
+
     Returns:
         True if email sent successfully, False otherwise
     """
@@ -41,20 +42,20 @@ def send_pilot_welcome_email(
         logger.warning("SENDGRID_API_KEY not set, skipping email")
         _log_email_to_console(to_email, api_key, customer_name, payment_id)
         return False
-    
+
     if not PILOT_DOWNLOAD_URL:
         logger.error("MYTHARA_PILOT_DOWNLOAD_URL not set, cannot send email")
         return False
-    
+
     try:
         import sendgrid
         from sendgrid.helpers.mail import Mail, Email, To, Content
-        
+
         sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
-        
+
         # Build email
         subject = "🎉 Welcome to Mythara Engine Pilot Program"
-        
+
         html_content = f"""
         <html>
         <head>
@@ -152,23 +153,25 @@ def send_pilot_welcome_email(
         </body>
         </html>
         """
-        
+
         message = Mail(
             from_email=Email(FROM_EMAIL, FROM_NAME),
             to_emails=To(to_email),
             subject=subject,
-            html_content=Content("text/html", html_content)
+            html_content=Content("text/html", html_content),
         )
-        
+
         response = sg.send(message)
-        
+
         if response.status_code in [200, 201, 202]:
-            logger.info(f"Pilot welcome email sent to {to_email} (status: {response.status_code})")
+            logger.info(
+                f"Pilot welcome email sent to {to_email} (status: {response.status_code})"
+            )
             return True
         else:
             logger.error(f"SendGrid returned unexpected status: {response.status_code}")
             return False
-            
+
     except ImportError:
         logger.error("sendgrid package not installed. Run: pip install sendgrid")
         _log_email_to_console(to_email, api_key, customer_name, payment_id)
@@ -180,42 +183,39 @@ def send_pilot_welcome_email(
 
 
 def _log_email_to_console(
-    to_email: str,
-    api_key: str,
-    customer_name: Optional[str],
-    payment_id: Optional[str]
+    to_email: str, api_key: str, customer_name: Optional[str], payment_id: Optional[str]
 ) -> None:
     """Log email content to console for manual sending if automated email fails."""
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info("PILOT WELCOME EMAIL (manual send required)")
-    logger.info("="*80)
+    logger.info("=" * 80)
     logger.info(f"To: {to_email}")
-    logger.info(f"Subject: Welcome to Mythara Engine Pilot Program")
+    logger.info("Subject: Welcome to Mythara Engine Pilot Program")
     logger.info("")
     logger.info(f"Customer: {customer_name or 'N/A'}")
     logger.info(f"API Key: {api_key}")
     logger.info(f"Download: {PILOT_DOWNLOAD_URL or 'NOT CONFIGURED'}")
     logger.info(f"Payment ID: {payment_id or 'N/A'}")
-    logger.info("="*80)
+    logger.info("=" * 80)
 
 
 if __name__ == "__main__":
     # Test the email sender
     logging.basicConfig(level=logging.INFO)
-    
+
     test_email = "test@example.com"
     test_key = "sk_pilot_test123456789"
-    
+
     print("Testing pilot email sender...")
     print(f"SENDGRID_API_KEY set: {bool(SENDGRID_API_KEY)}")
     print(f"PILOT_DOWNLOAD_URL: {PILOT_DOWNLOAD_URL or 'NOT SET'}")
     print()
-    
+
     success = send_pilot_welcome_email(
         to_email=test_email,
         api_key=test_key,
         customer_name="Test Customer",
-        payment_id="test_payment_123"
+        payment_id="test_payment_123",
     )
-    
+
     print(f"\nEmail send {'succeeded' if success else 'failed'}")

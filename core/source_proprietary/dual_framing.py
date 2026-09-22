@@ -28,13 +28,14 @@ Flow:
     - Adds symbolic depth to performance reporting
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from enum import Enum
 
 
 class FramingMode(str, Enum):
     """Framing modes for Mythara Engine terminology."""
-    MYTHIC = "mythic"      # Internal truth: Blessings Reservoir, Soul Encoding, etc.
+
+    MYTHIC = "mythic"  # Internal truth: Blessings Reservoir, Soul Encoding, etc.
     INDUSTRY = "industry"  # External overlay: Resonance Reservoir, Trust Index, etc.
 
 
@@ -44,81 +45,81 @@ MYTHIC_TO_INDUSTRY: Dict[str, Dict[str, str]] = {
         "industry_term": "Resonance Reservoir",
         "managerial_explanation": "Tracks cumulative benevolent force; externally framed as cumulative positive impact.",
         "mythic_term": "Blessings Reservoir",
-        "category": "metric"
+        "category": "metric",
     },
     "integrity_metric": {
         "industry_term": "Trust Index",
         "managerial_explanation": "Measures alignment with compliance, honesty, and reliability in field performance.",
         "mythic_term": "Integrity Metric",
-        "category": "metric"
+        "category": "metric",
     },
     "expression_metric": {
         "industry_term": "Engagement Index",
         "managerial_explanation": "Captures how reps present, connect, and resonate with clients beyond raw numbers.",
         "mythic_term": "Expression Metric",
-        "category": "metric"
+        "category": "metric",
     },
     "soul_encoding": {
         "industry_term": "Impact Vault",
         "managerial_explanation": "Stores symbolic depth of actions; externally framed as measurable long-term impact.",
         "mythic_term": "Soul Encoding",
-        "category": "concept"
+        "category": "concept",
     },
     "legacy_reservoir": {
         "industry_term": "Continuity Index",
         "managerial_explanation": "Reflects sustainability and cultural resonance; externally framed as continuity of performance.",
         "mythic_term": "Legacy Reservoir",
-        "category": "metric"
+        "category": "metric",
     },
     "soul_cradle_operator": {
         "industry_term": "Resonance Operator",
         "managerial_explanation": "Measures obedience under paradox; externally framed as decision-making integrity under pressure.",
         "mythic_term": "Soul Cradle Operator",
-        "category": "operator"
+        "category": "operator",
     },
     "trial_entity": {
         "industry_term": "Challenge Vector",
         "managerial_explanation": "Models testing/obscuration of choices; externally framed as decision friction factors.",
         "mythic_term": "Trial Entity",
-        "category": "entity"
+        "category": "entity",
     },
     "grace_light": {
         "industry_term": "Optimal Performance",
         "managerial_explanation": "Biblical continuum anchor representing peak alignment and positive outcomes.",
         "mythic_term": "Grace/Light",
-        "category": "continuum"
+        "category": "continuum",
     },
     "wilderness_darkness": {
         "industry_term": "Challenge State",
         "managerial_explanation": "Biblical continuum anchor representing trial, testing, or suboptimal conditions.",
         "mythic_term": "Wilderness/Darkness",
-        "category": "continuum"
+        "category": "continuum",
     },
     "divine_drift_suppression": {
         "industry_term": "Compliance Stability",
         "managerial_explanation": "Measures drift from sacred mission; externally framed as operational compliance stability.",
         "mythic_term": "Divine Drift Suppression",
-        "category": "ssip_metric"
+        "category": "ssip_metric",
     },
     "messenger_pairing_fidelity": {
         "industry_term": "Communication Alignment",
         "managerial_explanation": "Measures alignment between action and communication; externally framed as message consistency.",
         "mythic_term": "Messenger Pairing Fidelity",
-        "category": "ssip_metric"
+        "category": "ssip_metric",
     },
     "emotional_fidelity": {
         "industry_term": "Sentiment Accuracy",
         "managerial_explanation": "Measures symbolic-emotional resonance; externally framed as sentiment tracking precision.",
         "mythic_term": "Emotional Fidelity",
-        "category": "ssip_metric"
-    }
+        "category": "ssip_metric",
+    },
 }
 
 
 def translate_term(
     mythic_key: str,
     mode: FramingMode = FramingMode.INDUSTRY,
-    include_explanation: bool = False
+    include_explanation: bool = False,
 ) -> str:
     """
     Translate a mythic term to industry-safe terminology.
@@ -153,8 +154,7 @@ def translate_term(
 
 
 def translate_response(
-    response_data: Dict[str, Any],
-    mode: FramingMode = FramingMode.INDUSTRY
+    response_data: Dict[str, Any], mode: FramingMode = FramingMode.INDUSTRY
 ) -> Dict[str, Any]:
     """
     Recursively translate mythic keys in a response dictionary to industry-safe terms.
@@ -213,19 +213,21 @@ def generate_dual_framing_chart() -> List[Dict[str, str]]:
     """
     chart = []
     for key, entry in MYTHIC_TO_INDUSTRY.items():
-        chart.append({
-            "mythic_term": entry["mythic_term"],
-            "industry_term": entry["industry_term"],
-            "managerial_explanation": entry["managerial_explanation"],
-            "category": entry["category"]
-        })
+        chart.append(
+            {
+                "mythic_term": entry["mythic_term"],
+                "industry_term": entry["industry_term"],
+                "managerial_explanation": entry["managerial_explanation"],
+                "category": entry["category"],
+            }
+        )
     return chart
 
 
 def format_for_manager_dashboard(
     metrics: Dict[str, Any],
     mode: FramingMode = FramingMode.INDUSTRY,
-    include_kpis: bool = True
+    include_kpis: bool = True,
 ) -> Dict[str, Any]:
     """
     Format metrics for manager dashboards with dual-framing support.
@@ -258,7 +260,7 @@ def format_for_manager_dashboard(
     dashboard = {
         "resonance_metrics": translate_response(metrics, mode),
         "framing_mode": mode.value,
-        "compliance_note": "Compliance intact, workflows unchanged. Symbolic depth added to performance reporting."
+        "compliance_note": "Compliance intact, workflows unchanged. Symbolic depth added to performance reporting.",
     }
 
     if include_kpis:
@@ -339,7 +341,9 @@ if __name__ == "__main__":
     print("-" * 70)
     print(f"Mythic: {translate_term('blessings_reservoir', FramingMode.MYTHIC)}")
     print(f"Industry: {translate_term('blessings_reservoir', FramingMode.INDUSTRY)}")
-    print(f"With Explanation: {translate_term('blessings_reservoir', FramingMode.INDUSTRY, include_explanation=True)}")
+    print(
+        f"With Explanation: {translate_term('blessings_reservoir', FramingMode.INDUSTRY, include_explanation=True)}"
+    )
     print()
 
     # Example 2: Translate full response
@@ -349,10 +353,13 @@ if __name__ == "__main__":
         "blessings_reservoir": 145,
         "integrity_metric": 0.95,
         "expression_metric": 0.88,
-        "soul_encoding": {"depth": 42, "status": "resonant"}
+        "soul_encoding": {"depth": 42, "status": "resonant"},
     }
     print("Original (Mythic):", sample_response)
-    print("Translated (Industry):", translate_response(sample_response, FramingMode.INDUSTRY))
+    print(
+        "Translated (Industry):",
+        translate_response(sample_response, FramingMode.INDUSTRY),
+    )
     print()
 
     # Example 3: Manager dashboard
@@ -360,6 +367,7 @@ if __name__ == "__main__":
     print("-" * 70)
     dashboard = format_for_manager_dashboard(sample_response, FramingMode.INDUSTRY)
     import json
+
     print(json.dumps(dashboard, indent=2))
     print()
 

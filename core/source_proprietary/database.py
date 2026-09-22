@@ -7,11 +7,19 @@ Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 """
 
-from sqlalchemy import create_engine, Column, String, Integer, DateTime, Boolean, JSON, Float
+from sqlalchemy import (
+    create_engine,
+    Column,
+    String,
+    Integer,
+    DateTime,
+    Boolean,
+    JSON,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-from datetime import datetime
-from typing import Optional, Dict, Any, List
+from datetime import datetime, timedelta
+from typing import Optional, Dict, Any
 import os
 import logging
 
@@ -32,7 +40,7 @@ engine = create_engine(
     pool_pre_ping=True,  # Verify connections before using
     pool_timeout=30,  # Timeout waiting for connection from pool (seconds)
     pool_recycle=3600,  # Recycle connections after 1 hour to prevent stale connections
-    echo=False  # Set to True for SQL debugging
+    echo=False,  # Set to True for SQL debugging
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -44,18 +52,21 @@ class Pilot(Base):
     Pilot tier customer - tracks API key, domain, and pilot start date.
     One pilot per business domain enforced by unique domain constraint.
     """
+
     __tablename__ = "pilots"
 
     api_key = Column(String, primary_key=True, index=True)
     email = Column(String, nullable=False, index=True)
-    domain = Column(String, unique=True, nullable=False, index=True)  # Unique domain constraint
+    domain = Column(
+        String, unique=True, nullable=False, index=True
+    )  # Unique domain constraint
     company_name = Column(String, nullable=False)
     employee_count = Column(Integer, nullable=False)
     pilot_start_date = Column(DateTime, nullable=False, default=datetime.utcnow)
     stripe_payment_id = Column(String, nullable=True)  # Track payment source
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
+
     # Self-regulation fields
     strike_count = Column(Integer, default=0)
     suspended_until = Column(DateTime, nullable=True)
@@ -67,18 +78,19 @@ class UsageTracking(Base):
     API call usage tracking per pilot - enforces 7-day total limits.
     Separate table allows efficient queries without loading full pilot data.
     """
+
     __tablename__ = "usage_tracking"
 
     api_key = Column(String, primary_key=True, index=True)
     call_count = Column(Integer, default=0, nullable=False)
     total_limit = Column(Integer, nullable=False)
     last_call = Column(DateTime, nullable=True)
-    
+
     # Abuse detection metrics
     first_call_date = Column(DateTime, nullable=True)
     velocity_abuse_detected = Column(Boolean, default=False)
     usage_mismatch_detected = Column(Boolean, default=False)
-    
+
     # Alert tracking
     sent_80_percent_alert = Column(Boolean, default=False)
     sent_24hr_expiration_alert = Column(Boolean, default=False)
@@ -89,12 +101,15 @@ class AuditLog(Base):
     Immutable audit log for compliance and forensics.
     Tracks all critical actions: pilot creation, API calls, strikes, terminations.
     """
+
     __tablename__ = "audit_log"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     api_key = Column(String, index=True, nullable=True)
-    action = Column(String, nullable=False)  # e.g., "pilot_created", "api_call", "strike_issued"
+    action = Column(
+        String, nullable=False
+    )  # e.g., "pilot_created", "api_call", "strike_issued"
     details = Column(JSON, nullable=True)
     ip_address = Column(String, nullable=True)
     user_agent = Column(String, nullable=True)
@@ -105,6 +120,7 @@ class EmailQueue(Base):
     Outbound email queue for async delivery.
     Ensures emails are sent even if SendGrid is temporarily down.
     """
+
     __tablename__ = "email_queue"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -112,9 +128,11 @@ class EmailQueue(Base):
     subject = Column(String, nullable=False)
     body_html = Column(String, nullable=False)
     body_text = Column(String, nullable=False)
-    template_type = Column(String, nullable=False)  # e.g., "api_key_delivery", "80_percent_alert"
+    template_type = Column(
+        String, nullable=False
+    )  # e.g., "api_key_delivery", "80_percent_alert"
     api_key = Column(String, nullable=True, index=True)
-    
+
     # Delivery tracking
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     sent_at = Column(DateTime, nullable=True)
@@ -168,7 +186,7 @@ def create_pilot(
     company_name: str,
     employee_count: int,
     pilot_start_date: datetime,
-    stripe_payment_id: Optional[str] = None
+    stripe_payment_id: Optional[str] = None,
 ) -> Pilot:
     """
     Create new pilot account.
@@ -182,21 +200,21 @@ def create_pilot(
         employee_count=employee_count,
         pilot_start_date=pilot_start_date,
         stripe_payment_id=stripe_payment_id,
-        is_active=True
+        is_active=True,
     )
     db.add(pilot)
     db.commit()
     db.refresh(pilot)
-    
+
     # Initialize usage tracking
     usage = UsageTracking(
         api_key=api_key,
         call_count=0,
-        total_limit=get_api_rate_limit_for_employee_count(employee_count)
+        total_limit=get_api_rate_limit_for_employee_count(employee_count),
     )
     db.add(usage)
     db.commit()
-    
+
     # Audit log
     audit = AuditLog(
         api_key=api_key,
@@ -204,12 +222,12 @@ def create_pilot(
         details={
             "domain": domain,
             "employee_count": employee_count,
-            "stripe_payment_id": stripe_payment_id
-        }
+            "stripe_payment_id": stripe_payment_id,
+        },
     )
     db.add(audit)
     db.commit()
-    
+
     logger.info(f"Pilot created: {domain} ({api_key[:8]}...)")
     return pilot
 
@@ -232,12 +250,12 @@ def increment_usage(db: Session, api_key: str) -> UsageTracking:
             usage = UsageTracking(
                 api_key=api_key,
                 call_count=0,
-                total_limit=get_api_rate_limit_for_employee_count(pilot.employee_count)
+                total_limit=get_api_rate_limit_for_employee_count(pilot.employee_count),
             )
             db.add(usage)
             db.commit()
             db.refresh(usage)
-    
+
     if usage:
         usage.call_count += 1
         usage.last_call = datetime.utcnow()
@@ -245,7 +263,7 @@ def increment_usage(db: Session, api_key: str) -> UsageTracking:
             usage.first_call_date = datetime.utcnow()
         db.commit()
         db.refresh(usage)
-    
+
     return usage
 
 
@@ -257,9 +275,9 @@ def issue_strike(db: Session, api_key: str, reason: str) -> Pilot:
     pilot = get_pilot(db, api_key)
     if not pilot:
         raise ValueError(f"Pilot not found: {api_key}")
-    
+
     pilot.strike_count += 1
-    
+
     if pilot.strike_count == 2:
         # Second strike = 7-day suspension
         pilot.suspended_until = datetime.utcnow() + timedelta(days=7)
@@ -267,9 +285,9 @@ def issue_strike(db: Session, api_key: str, reason: str) -> Pilot:
         # Third strike = termination
         pilot.is_active = False
         pilot.termination_reason = reason
-    
+
     db.commit()
-    
+
     # Audit log
     audit = AuditLog(
         api_key=api_key,
@@ -277,14 +295,18 @@ def issue_strike(db: Session, api_key: str, reason: str) -> Pilot:
         details={
             "reason": reason,
             "strike_count": pilot.strike_count,
-            "suspended_until": pilot.suspended_until.isoformat() if pilot.suspended_until else None,
-            "terminated": pilot.strike_count >= 3
-        }
+            "suspended_until": (
+                pilot.suspended_until.isoformat() if pilot.suspended_until else None
+            ),
+            "terminated": pilot.strike_count >= 3,
+        },
     )
     db.add(audit)
     db.commit()
-    
-    logger.warning(f"Strike issued to {api_key[:8]}...: {reason} (strike {pilot.strike_count})")
+
+    logger.warning(
+        f"Strike issued to {api_key[:8]}...: {reason} (strike {pilot.strike_count})"
+    )
     return pilot
 
 
@@ -294,7 +316,7 @@ def log_audit(
     api_key: Optional[str] = None,
     details: Optional[Dict[str, Any]] = None,
     ip_address: Optional[str] = None,
-    user_agent: Optional[str] = None
+    user_agent: Optional[str] = None,
 ):
     """
     Log audit event for compliance tracking.
@@ -305,7 +327,7 @@ def log_audit(
         action=action,
         details=details,
         ip_address=ip_address,
-        user_agent=user_agent
+        user_agent=user_agent,
     )
     db.add(audit)
     db.commit()
@@ -318,7 +340,7 @@ def queue_email(
     body_html: str,
     body_text: str,
     template_type: str,
-    api_key: Optional[str] = None
+    api_key: Optional[str] = None,
 ) -> EmailQueue:
     """
     Queue email for async delivery.
@@ -331,7 +353,7 @@ def queue_email(
         body_text=body_text,
         template_type=template_type,
         api_key=api_key,
-        status="pending"
+        status="pending",
     )
     db.add(email)
     db.commit()
@@ -355,7 +377,3 @@ def get_api_rate_limit_for_employee_count(employee_count: int) -> int:
         return 30_000
     else:
         return 50_000
-
-
-# Ensure timedelta is imported for issue_strike function
-from datetime import timedelta
