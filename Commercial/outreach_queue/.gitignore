@@ -1,0 +1,4 @@
+# VP outreach drafts land here at runtime — they are working files, not repo content.
+*.md
+!README.md
+!.gitignore

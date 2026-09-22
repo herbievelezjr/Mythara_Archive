@@ -1,23 +1,26 @@
 import os
+import sys
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 """
-DrMythara Bot - Healthcare Compliance Specialist
+DrMythara Bot - Healthcare Compliance Specialist (user-facing wrapper).
+
+Thin demo face. The canonical health-reasoning core lives in
+soul_cradle/health.py — rule tables, consult_health(), screen_health(),
+and the standing-matrix adapter. This wrapper owns the SQLite audit
+trail, the demo audit flows, and orchestrator registration. It owns no
+rules: every rule it references comes from the core.
+
 - HIPAA validation and compliance checking
 - FDA 21 CFR Part 11 electronic records validation
 - Medical AI governance and risk assessment
 - Healthcare data privacy auditing
-- Clinical trial compliance
-- Medical device AI regulations
 
 NOT A MEDICAL PROFESSIONAL. DOES NOT PROVIDE MEDICAL ADVICE. COMPLIANCE GUIDANCE ONLY.
-
-Uses Mythara SSIP:
-- Sanctification: HIPAA rules locked (immutable)
-- Integrity Hashing: All compliance audits cryptographically verified
-- Blessings Reservoir: Compliance scores
-- Shadow_Resolver: Auto-escalate critical violations
 """
+
+# Repo-root bootstrap so the wrapper can reach the Soul Cradle core.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import json
 import sqlite3
@@ -25,112 +28,105 @@ import hashlib
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import requests
-import re
+
+from soul_cradle.health import (
+    RULE_TABLES,
+    consult_health,
+    screen_health,
+    verify_judgment,
+    rule_inventory,
+)
 
 # Orchestrator connection
 ORCHESTRATOR_URL = "http://localhost:5000"
 # QUICKFIX FIX: Moved to environment variable (CWE-798)
 VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "")  # Set via environment
 
+# Rule-table -> legacy nested group label (shape compatibility for demo flows)
+_TABLE_GROUPS = {
+    "hipaa_technical": "technical_safeguards",
+    "hipaa_administrative": "administrative_safeguards",
+    "hipaa_physical": "physical_safeguards",
+}
+
+# Reference data (identifier categories, not checkable rules)
+PHI_CATEGORIES = [
+    "names", "addresses", "dates", "phone_numbers", "fax_numbers", "email_addresses",
+    "ssn", "medical_record_numbers", "health_plan_numbers", "account_numbers",
+    "certificate_numbers", "vehicle_identifiers", "device_identifiers", "urls",
+    "ip_addresses", "biometric_identifiers", "photos", "unique_identifying_numbers",
+]
+
+AI_GOVERNANCE_REFERENCE = {
+    "risk_categories": {
+        "low_risk": "Non-diagnostic informational AI (e.g., appointment scheduling)",
+        "moderate_risk": "Clinical decision support without autonomous action",
+        "high_risk": "Diagnostic AI requiring FDA clearance",
+        "critical_risk": "Autonomous treatment AI (rare, heavily regulated)",
+    },
+    "fda_device_classes": {
+        "class_i": "Low risk, general controls",
+        "class_ii": "Moderate risk, special controls + 510(k) clearance",
+        "class_iii": "High risk, PMA (Pre-Market Approval) required",
+    },
+}
+
+
+def _nested_rule_view() -> Dict[str, Any]:
+    """Rebuild the legacy nested rule shape from the canonical core tables."""
+    view: Dict[str, Any] = {}
+    for table_name, group in _TABLE_GROUPS.items():
+        table = RULE_TABLES[table_name]
+        group_view = view.setdefault(group, {})
+        for rule in table.rules:
+            group_view.setdefault(rule.category, []).append(rule.check)
+    view["phi_categories"] = list(PHI_CATEGORIES)
+    return view
+
+
 class DrMytharaBot:
-    """DrMythara Bot - Healthcare compliance specialist."""
-    
+    """DrMythara Bot - Healthcare compliance specialist (user-facing wrapper)."""
+
     def __init__(self):
         self.bot_id = "drmythara_bot"
         self.bot_token = None
         self.db_path = "mythara_drmythara.db"
-        
-        # HIPAA compliance rules
-        self.hipaa_rules = self._init_hipaa_rules()
-        
-        # FDA 21 CFR Part 11 rules
-        self.fda_rules = self._init_fda_rules()
-        
-        # Medical AI governance framework
-        self.ai_governance = self._init_ai_governance()
-        
+
+        # Rule views are projections of the canonical core — not copies.
+        self.hipaa_rules = _nested_rule_view()
+        self.ai_governance = dict(AI_GOVERNANCE_REFERENCE)
+
         # Initialize database
         self._init_db()
-        
+
         # Register with orchestrator
         self._register()
-    
-    def _init_hipaa_rules(self) -> Dict[str, Any]:
-        """Initialize HIPAA compliance rules."""
-        return {
-            "technical_safeguards": {
-                "access_control": ["unique_user_id", "emergency_access", "auto_logoff", "encryption"],
-                "audit_controls": ["audit_logging", "log_review", "integrity_verification"],
-                "integrity": ["data_integrity", "authentication_mechanisms"],
-                "transmission_security": ["encryption_in_transit", "tls_1_2_minimum"]
-            },
-            "administrative_safeguards": {
-                "security_management": ["risk_analysis", "risk_management", "sanctions", "review"],
-                "workforce_security": ["authorization", "supervision", "termination", "clearance"],
-                "information_access": ["access_authorization", "access_modification"],
-                "training": ["security_awareness", "protection_malware", "login_monitoring", "password_management"]
-            },
-            "physical_safeguards": {
-                "facility_access": ["contingency_operations", "facility_security", "access_control_validation"],
-                "workstation_use": ["workstation_security", "device_encryption"],
-                "device_media": ["disposal", "media_reuse", "accountability", "data_backup"]
-            },
-            "phi_categories": [
-                "names", "addresses", "dates", "phone_numbers", "fax_numbers", "email_addresses",
-                "ssn", "medical_record_numbers", "health_plan_numbers", "account_numbers",
-                "certificate_numbers", "vehicle_identifiers", "device_identifiers", "urls",
-                "ip_addresses", "biometric_identifiers", "photos", "unique_identifying_numbers"
-            ]
-        }
-    
-    def _init_fda_rules(self) -> Dict[str, Any]:
-        """Initialize FDA 21 CFR Part 11 rules."""
-        return {
-            "electronic_records": {
-                "validation": ["system_validation", "accurate_reliable", "traceable", "consistent"],
-                "audit_trail": ["secure_timestamped", "independent_operator_date", "record_changes"],
-                "legacy_systems": ["accurate_complete_copies", "readily_retrievable"]
-            },
-            "electronic_signatures": {
-                "general_requirements": ["unique_to_individual", "not_reused", "not_reassigned"],
-                "components": ["biometric", "two_distinct_identification", "password_token"],
-                "controls": ["authority_checks", "device_checks", "multi_factor"]
-            },
-            "signature_manifestations": {
-                "display": ["printed_name", "signature_date", "meaning"],
-                "link_to_record": ["cannot_excise", "cannot_copy", "cannot_transfer"]
-            }
-        }
-    
-    def _init_ai_governance(self) -> Dict[str, Any]:
-        """Initialize medical AI governance framework."""
-        return {
-            "risk_categories": {
-                "low_risk": "Non-diagnostic informational AI (e.g., appointment scheduling)",
-                "moderate_risk": "Clinical decision support without autonomous action",
-                "high_risk": "Diagnostic AI requiring FDA clearance",
-                "critical_risk": "Autonomous treatment AI (rare, heavily regulated)"
-            },
-            "fda_device_classes": {
-                "class_i": "Low risk, general controls",
-                "class_ii": "Moderate risk, special controls + 510(k) clearance",
-                "class_iii": "High risk, PMA (Pre-Market Approval) required"
-            },
-            "bias_checks": [
-                "demographic_parity", "equalized_odds", "predictive_parity",
-                "treatment_parity", "false_positive_rate_balance"
-            ],
-            "validation_requirements": [
-                "clinical_validation", "technical_validation", "continuous_monitoring",
-                "drift_detection", "performance_degradation_alerts"
-            ]
-        }
-    
+
+    # -- canonical core passthroughs -------------------------------------
+
+    def consult(self, topic: str, evidence: Dict[str, Any]):
+        """Health-reasoning consult. Delegates to soul_cradle.health.
+
+        Returns a HealthJudgment: verdict in {"clear","flagged",
+        "outside_scope"}, findings, rule_versions, integrity_hash.
+        """
+        return consult_health(topic, evidence)
+
+    def screen(self, action_description: str, evidence: Optional[Dict[str, Any]] = None):
+        """Membrane hook passthrough: screen_health() from the core."""
+        return screen_health(action_description, evidence)
+
+    def rule_versions(self) -> Dict[str, Dict[str, str]]:
+        """Every rule table with version, effective date, and source."""
+        return rule_inventory()
+
+    # -- audit trail ------------------------------------------------------
+
     def _init_db(self):
         """Initialize DrMythara database."""
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
-        
+
         # HIPAA compliance audits
         c.execute('''
             CREATE TABLE IF NOT EXISTS hipaa_audits (
@@ -154,7 +150,7 @@ class DrMytharaBot:
                 integrity_hash TEXT
             )
         ''')
-        
+
         # FDA 21 CFR Part 11 validations
         c.execute('''
             CREATE TABLE IF NOT EXISTS fda_validations (
@@ -174,7 +170,7 @@ class DrMytharaBot:
                 integrity_hash TEXT
             )
         ''')
-        
+
         # Medical AI governance assessments
         c.execute('''
             CREATE TABLE IF NOT EXISTS ai_governance_assessments (
@@ -195,7 +191,7 @@ class DrMytharaBot:
                 integrity_hash TEXT
             )
         ''')
-        
+
         # PHI exposure incidents
         c.execute('''
             CREATE TABLE IF NOT EXISTS phi_incidents (
@@ -215,7 +211,7 @@ class DrMytharaBot:
                 integrity_hash TEXT
             )
         ''')
-        
+
         # Compliance reports
         c.execute('''
             CREATE TABLE IF NOT EXISTS compliance_reports (
@@ -232,11 +228,11 @@ class DrMytharaBot:
                 integrity_hash TEXT
             )
         ''')
-        
+
         conn.commit()
         conn.close()
         print("[OK] DrMythara Bot database initialized: mythara_drmythara.db")
-    
+
     def _register(self):
         """Register with Mythara Orchestrator."""
         try:
@@ -254,31 +250,36 @@ class DrMytharaBot:
                 print(f"[OK] Registered with orchestrator: {self.bot_id}")
         except Exception as e:
             print(f"[WARN] Could not connect to orchestrator: {e}")
-    
+
     def _generate_integrity_hash(self, data: Dict[str, Any]) -> str:
         """Generate SHA-256 hash for audit trail."""
         json_str = json.dumps(data, sort_keys=True)
         return hashlib.sha256(json_str.encode()).hexdigest()[:16]
-    
+
+    # -- demo audit flows (simulated; the core does the real reasoning) ----
+
     def audit_hipaa_compliance(self, organization: str, scope: str = "full") -> Dict[str, Any]:
         """
-        Perform HIPAA compliance audit.
-        
+        Perform HIPAA compliance audit (demo flow — simulated checks).
+
+        For real reasoning, use consult("hipaa", evidence) which evaluates
+        the canonical rule tables in soul_cradle.health.
+
         Args:
             organization: Name of organization being audited
             scope: Audit scope ('full', 'technical', 'administrative', 'physical')
-        
+
         Returns:
             Audit results with compliance scores and findings
         """
         audit_id = hashlib.sha256(f"{organization}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
-        
+
         # Simulated audit (in production, integrate with actual security scanners)
         findings = []
         technical_score = 0
         administrative_score = 0
         physical_score = 0
-        
+
         # Check technical safeguards
         if scope in ['full', 'technical']:
             tech_checks = len(self.hipaa_rules['technical_safeguards']['access_control'])
@@ -291,7 +292,7 @@ class DrMytharaBot:
                     "finding": "Auto-logoff not configured for all workstations",
                     "recommendation": "Implement 15-minute auto-logoff policy across all systems"
                 })
-        
+
         # Check administrative safeguards
         if scope in ['full', 'administrative']:
             admin_checks = 12  # Total administrative requirements
@@ -303,21 +304,21 @@ class DrMytharaBot:
                 "finding": "Security awareness training not documented for 3 employees",
                 "recommendation": "Complete training and maintain training logs for all workforce members"
             })
-        
+
         # Check physical safeguards
         if scope in ['full', 'physical']:
             phys_checks = 8  # Total physical requirements
             phys_passed = 8  # Simulated: all passed
             physical_score = int((phys_passed / phys_checks) * 100)
-        
+
         overall_score = int((technical_score + administrative_score + physical_score) / 3)
-        
+
         # Count issues by severity
         critical_issues = sum(1 for f in findings if f['severity'] == 'critical')
         high_issues = sum(1 for f in findings if f['severity'] == 'high')
         medium_issues = sum(1 for f in findings if f['severity'] == 'medium')
         low_issues = sum(1 for f in findings if f['severity'] == 'low')
-        
+
         audit_data = {
             "audit_id": audit_id,
             "organization_name": organization,
@@ -336,20 +337,20 @@ class DrMytharaBot:
             "status": "completed",
             "completed_at": datetime.now().isoformat()
         }
-        
+
         audit_data['integrity_hash'] = self._generate_integrity_hash(audit_data)
-        
+
         # Save to database
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
-        c.execute('''INSERT INTO hipaa_audits VALUES 
+        c.execute('''INSERT INTO hipaa_audits VALUES
                      (:audit_id, :organization_name, :audit_date, :audit_type, :scope,
                       :technical_score, :administrative_score, :physical_score, :overall_score,
                       :findings, :critical_issues, :high_issues, :medium_issues, :low_issues,
                       NULL, :status, :completed_at, :integrity_hash)''', audit_data)
         conn.commit()
         conn.close()
-        
+
         return {
             "audit_id": audit_id,
             "organization": organization,
@@ -362,23 +363,26 @@ class DrMytharaBot:
             "high_issues": high_issues,
             "recommendation": "Address high-severity findings within 30 days" if high_issues > 0 else "Maintain current compliance posture"
         }
-    
+
     def validate_fda_cfr11_compliance(self, system_name: str) -> Dict[str, Any]:
         """
-        Validate FDA 21 CFR Part 11 compliance for electronic records system.
-        
+        Validate FDA 21 CFR Part 11 compliance for electronic records system
+        (demo flow — simulated checks).
+
+        For real reasoning, use consult("fda 21 cfr 11", evidence).
+
         Args:
             system_name: Name of system being validated
-        
+
         Returns:
             Validation results with compliance status
         """
         validation_id = hashlib.sha256(f"{system_name}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
-        
+
         # Simulated validation checks
         findings = []
         gaps = []
-        
+
         # Check electronic records compliance
         records_compliant = True
         findings.append({
@@ -386,7 +390,7 @@ class DrMytharaBot:
             "status": "compliant",
             "evidence": "System validation documentation reviewed and approved"
         })
-        
+
         # Check electronic signatures compliance
         signatures_compliant = False
         findings.append({
@@ -395,7 +399,7 @@ class DrMytharaBot:
             "evidence": "System uses single-factor authentication only"
         })
         gaps.append("Implement two-factor authentication for all electronic signatures")
-        
+
         # Check audit trail compliance
         audit_trail_compliant = True
         findings.append({
@@ -403,9 +407,9 @@ class DrMytharaBot:
             "status": "compliant",
             "evidence": "Audit trail uses secure, independent timestamps"
         })
-        
+
         overall_compliant = records_compliant and signatures_compliant and audit_trail_compliant
-        
+
         validation_data = {
             "validation_id": validation_id,
             "system_name": system_name,
@@ -420,20 +424,20 @@ class DrMytharaBot:
             "status": "completed",
             "completed_at": datetime.now().isoformat()
         }
-        
+
         validation_data['integrity_hash'] = self._generate_integrity_hash(validation_data)
-        
+
         # Save to database
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
-        c.execute('''INSERT INTO fda_validations VALUES 
+        c.execute('''INSERT INTO fda_validations VALUES
                      (:validation_id, :system_name, :validation_date, :validation_type,
                       :electronic_records_compliant, :electronic_signatures_compliant,
                       :audit_trail_compliant, :overall_compliant, :findings, :gaps,
                       NULL, :status, :completed_at, :integrity_hash)''', validation_data)
         conn.commit()
         conn.close()
-        
+
         return {
             "validation_id": validation_id,
             "system_name": system_name,
@@ -442,22 +446,25 @@ class DrMytharaBot:
             "electronic_signatures_compliant": signatures_compliant,
             "audit_trail_compliant": audit_trail_compliant,
             "gaps": gaps,
-            "recommendation": "Address gaps before using system in production" if not overall_compliant else "System validated for 21 CFR Part 11 compliance"
+            "recommendation": "Address gaps before using system in production" if not overall_compliant else "No 21 CFR Part 11 gaps found in this readiness assessment (not a certification or validation)"
         }
-    
+
     def assess_medical_ai_governance(self, ai_system: str, use_case: str) -> Dict[str, Any]:
         """
-        Assess medical AI system for governance and regulatory compliance.
-        
+        Assess medical AI system for governance and regulatory compliance
+        (demo flow — simulated checks).
+
+        For real reasoning, use consult("medical ai governance", evidence).
+
         Args:
             ai_system: Name of AI system
             use_case: Clinical use case description
-        
+
         Returns:
             Governance assessment with risk category and FDA requirements
         """
         assessment_id = hashlib.sha256(f"{ai_system}{datetime.now().isoformat()}".encode()).hexdigest()[:16]
-        
+
         # Determine risk category based on use case
         risk_category = "moderate_risk"  # Default
         if "diagnostic" in use_case.lower() or "treatment" in use_case.lower():
@@ -466,7 +473,7 @@ class DrMytharaBot:
             risk_category = "low_risk"
         elif "autonomous" in use_case.lower():
             risk_category = "critical_risk"
-        
+
         # Determine FDA device classification
         fda_class = "not_device"
         requires_clearance = False
@@ -475,12 +482,12 @@ class DrMytharaBot:
             requires_clearance = True
         elif risk_category == "moderate_risk":
             fda_class = "class_i"
-        
+
         # Governance checks
         findings = []
         recommendations = []
         governance_score = 0
-        
+
         if risk_category == "high_risk":
             findings.append("System requires FDA 510(k) clearance before clinical deployment")
             recommendations.append("Prepare 510(k) submission with clinical validation data")
@@ -488,17 +495,17 @@ class DrMytharaBot:
             governance_score = 60  # Incomplete governance
         else:
             governance_score = 85  # Good governance for lower risk
-        
+
         # Bias testing
         bias_complete = False
         findings.append("Bias testing not documented across demographic groups")
         recommendations.append("Test AI performance across age, gender, race/ethnicity subgroups")
-        
+
         # Drift monitoring
         drift_enabled = False
         findings.append("Model drift monitoring not configured")
         recommendations.append("Implement continuous performance monitoring with drift alerts")
-        
+
         assessment_data = {
             "assessment_id": assessment_id,
             "ai_system_name": ai_system,
@@ -510,25 +517,25 @@ class DrMytharaBot:
             "bias_testing_complete": bias_complete,
             "drift_monitoring_enabled": drift_enabled,
             "overall_governance_score": governance_score,
-            "findings": json.dumps(findings),
-            "recommendations": json.dumps(recommendations),
+            "findings": findings,
+            "recommendations": recommendations,
             "status": "completed",
             "completed_at": datetime.now().isoformat()
         }
-        
+
         assessment_data['integrity_hash'] = self._generate_integrity_hash(assessment_data)
-        
+
         # Save to database
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
-        c.execute('''INSERT INTO ai_governance_assessments VALUES 
+        c.execute('''INSERT INTO ai_governance_assessments VALUES
                      (:assessment_id, :ai_system_name, :assessment_date, :risk_category,
                       :fda_device_class, :requires_fda_clearance, :clinical_validation_complete,
                       :bias_testing_complete, :drift_monitoring_enabled, :overall_governance_score,
                       :findings, :recommendations, :status, :completed_at, :integrity_hash)''', assessment_data)
         conn.commit()
         conn.close()
-        
+
         return {
             "assessment_id": assessment_id,
             "ai_system": ai_system,
@@ -539,40 +546,40 @@ class DrMytharaBot:
             "findings": findings,
             "recommendations": recommendations
         }
-    
+
     def generate_compliance_report(self) -> str:
-        """Generate comprehensive compliance report."""
+        """Generate comprehensive compliance report from the audit trail."""
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
-        
+
         # Get recent audits
         c.execute('''SELECT COUNT(*), AVG(overall_score), SUM(critical_issues), SUM(high_issues)
-                     FROM hipaa_audits 
+                     FROM hipaa_audits
                      WHERE audit_date >= date('now', '-30 days')''')
         hipaa_stats = c.fetchone()
-        
+
         # Get recent validations
-        c.execute('''SELECT COUNT(*), 
+        c.execute('''SELECT COUNT(*),
                      SUM(CASE WHEN overall_compliant = 1 THEN 1 ELSE 0 END)
-                     FROM fda_validations 
+                     FROM fda_validations
                      WHERE validation_date >= date('now', '-30 days')''')
         fda_stats = c.fetchone()
-        
+
         # Get recent AI assessments
         c.execute('''SELECT COUNT(*), AVG(overall_governance_score),
                      SUM(CASE WHEN requires_fda_clearance = 1 THEN 1 ELSE 0 END)
-                     FROM ai_governance_assessments 
+                     FROM ai_governance_assessments
                      WHERE assessment_date >= date('now', '-30 days')''')
         ai_stats = c.fetchone()
-        
+
         # Get recent PHI incidents
         c.execute('''SELECT COUNT(*), SUM(affected_records)
-                     FROM phi_incidents 
+                     FROM phi_incidents
                      WHERE detected_at >= date('now', '-30 days')''')
         incident_stats = c.fetchone()
-        
+
         conn.close()
-        
+
         report = f"""
 {'='*80}
     DRMYTHARA BOT - HEALTHCARE COMPLIANCE REPORT
@@ -604,7 +611,7 @@ PHI SECURITY INCIDENTS (Last 30 Days):
 
 RECOMMENDATIONS:
    {'[!] Address critical HIPAA findings immediately' if hipaa_stats[2] and hipaa_stats[2] > 0 else '✓ No critical HIPAA issues'}
-   {'[!] Complete FDA 21 CFR Part 11 gap remediation' if fda_stats[0] and fda_stats[1] and fda_stats[1] < fda_stats[0] else '✓ FDA systems validated'}
+   {'[!] Complete FDA 21 CFR Part 11 gap remediation' if fda_stats[0] and fda_stats[1] and fda_stats[1] < fda_stats[0] else '✓ No FDA 21 CFR Part 11 gaps found (readiness assessment — not a validation)'}
    {'[!] Obtain FDA clearance for high-risk AI systems' if ai_stats[2] and ai_stats[2] > 0 else '✓ AI systems appropriately classified'}
 
 {'='*80}
@@ -615,21 +622,27 @@ RECOMMENDATIONS:
 if __name__ == "__main__":
     print("Starting DrMythara Healthcare Compliance Bot...")
     bot = DrMytharaBot()
-    
-    # Example: HIPAA audit
+
+    # Canonical core consult (real reasoning)
+    judgment = bot.consult("hipaa", {"unique_user_id": True, "encryption": True})
+    print(f"\n[CORE CONSULT] verdict={judgment.verdict} findings={len(judgment.findings)} "
+          f"rules={judgment.rule_versions}")
+    print(f"[CORE CONSULT] hash verifies: {verify_judgment(judgment)}")
+
+    # Example: HIPAA audit (demo flow)
     audit_result = bot.audit_hipaa_compliance("Example Healthcare Org", scope="full")
     print(f"\n[HIPAA AUDIT] Score: {audit_result['overall_score']}% | Findings: {len(audit_result['findings'])}")
-    
-    # Example: FDA validation
+
+    # Example: FDA validation (demo flow)
     fda_result = bot.validate_fda_cfr11_compliance("Electronic Health Records System")
     print(f"[FDA CFR11] Compliant: {fda_result['overall_compliant']} | Gaps: {len(fda_result['gaps'])}")
-    
-    # Example: AI governance
+
+    # Example: AI governance (demo flow)
     ai_result = bot.assess_medical_ai_governance("Diagnostic AI System", "Radiology image analysis for cancer detection")
     print(f"[AI GOVERNANCE] Risk: {ai_result['risk_category']} | FDA Class: {ai_result['fda_device_class']} | Clearance Required: {ai_result['requires_fda_clearance']}")
-    
+
     # Generate report
     report = bot.generate_compliance_report()
     print(report)
-    
+
     print("\nDrMythara Healthcare Compliance Bot execution complete.")

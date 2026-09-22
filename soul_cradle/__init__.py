@@ -36,6 +36,7 @@ from .identity import (
     VOICE_GENDER,
     get_identity,
 )
+from .will import ALLOW, ESCALATE, Will, WillError, check as will_check, scan_text
 
 __all__ = [
     "ActionEnvelope",
@@ -66,4 +67,10 @@ __all__ = [
     "VOICE_DESCRIPTION",
     "VOICE_GENDER",
     "get_identity",
+    "ALLOW",
+    "ESCALATE",
+    "Will",
+    "WillError",
+    "will_check",
+    "scan_text",
 ]

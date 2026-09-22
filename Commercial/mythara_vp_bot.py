@@ -18,6 +18,23 @@ from typing import Dict, List, Any
 import hashlib
 
 
+# ---------------------------------------------------------------------------
+# Herb's will: every VP decision passes through it before execution.
+# Fail-closed: if the will can't load, every decision escalates to Herb.
+# ---------------------------------------------------------------------------
+import sys as _sys
+
+_sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+try:
+    from soul_cradle import will as _will_module
+
+    _WILL_AVAILABLE = True
+except Exception:
+    _will_module = None
+    _WILL_AVAILABLE = False
+
+
 # ============================================================================
 # MYTHARA VP BOT - EXECUTIVE AI
 # ============================================================================
@@ -34,6 +51,29 @@ class MytharaVPBot:
         self.budget = self._initialize_budget()
         self.decisions = []
         self.deployed_bots = []
+        self.escalation_queue = []  # will-blocked decisions wait for Herb here
+
+    def _will_check(self, decision: Dict[str, Any]):
+        """Judge a decision against Herb's will. Fail-closed."""
+        if not _WILL_AVAILABLE or _will_module is None:
+            return ("escalate", "will module unavailable: fail closed")
+        try:
+            return _will_module.check(decision)
+        except Exception as e:
+            return ("escalate", f"will check errored ({e}): fail closed")
+
+    def _stamp_will_verdict(self, decision: Dict[str, Any]) -> Dict[str, Any]:
+        """Attach the will's verdict (allow/escalate + reason + hash)."""
+        verdict, reason = self._will_check(decision)
+        decision["will_verdict"] = {
+            "verdict": verdict,
+            "reason": reason,
+            "integrity_hash": hashlib.sha256(
+                f"{decision.get('decision_id', '')}:{verdict}:{reason}".encode()
+            ).hexdigest()[:16],
+            "checked_at": datetime.now().isoformat(),
+        }
+        return decision
         
     def _initialize_team(self) -> Dict[str, Any]:
         """Initialize current AI team structure."""
@@ -76,30 +116,28 @@ class MytharaVPBot:
         }
     
     def _initialize_kpis(self) -> Dict[str, Any]:
-        """Initialize performance targets (Sanctified)."""
+        """Freelance-campaign targets (Sanctified). Herb's will: $0 spend."""
         return {
-            'monthly_revenue_target': 10000,
-            'monthly_lead_target': 100,
-            'conversion_rate_target': 0.05,  # 5%
-            'customer_acquisition_cost_max': 200,
-            'affiliate_commission_rate_max': 0.30,  # 30%
-            'bot_deployment_budget_monthly': 500,
+            'proposals_sent_target_monthly': 40,
+            'reply_rate_target': 0.10,  # 10%
+            'clients_target': 5,  # first 5 clients
+            'max_spend': 0,
             'sanctified': True,
-            'integrity_hash': hashlib.sha256(json.dumps({'revenue': 10000, 'leads': 100}).encode()).hexdigest()[:16]
+            'integrity_hash': hashlib.sha256(json.dumps({'proposals': 40, 'clients': 5}).encode()).hexdigest()[:16]
         }
     
     def _initialize_budget(self) -> Dict[str, Any]:
-        """Initialize budget allocation."""
+        """Zero-spend budget. Anything above $0 escalates to Herb."""
         return {
-            'total_monthly': 500,
+            'total_monthly': 0,
             'allocated': {
-                'ai_apis': 0,  # Currently free
+                'ai_apis': 0,
                 'automation_tools': 0,
                 'advertising': 0,
                 'affiliate_commissions': 0,
                 'infrastructure': 0
             },
-            'available': 500
+            'available': 0
         }
     
     def analyze_team_performance(self) -> Dict[str, Any]:
@@ -119,45 +157,44 @@ class MytharaVPBot:
         }
         
         # Check if we're hitting KPIs
-        # In production, this would query actual metrics
-        current_revenue = 0  # Would fetch from Payment Monitor
-        current_leads = 0    # Would fetch from Marketing Bot
+        # Proposal/draft counts would come from the outreach queue in production
+        current_proposals = 0  # Would count Commercial/outreach_queue drafts
+        current_clients = 0    # Would fetch from Herb
         
-        # Decision 1: Need more lead generation?
-        if current_leads < self.kpis['monthly_lead_target']:
+        # Decision 1: Need more proposals out?
+        if current_proposals < self.kpis['proposals_sent_target_monthly']:
             analysis['issues_detected'].append({
-                'issue': 'leads_below_target',
-                'current': current_leads,
-                'target': self.kpis['monthly_lead_target'],
-                'severity': 'medium'
-            })
-            
-            # VP Decision: Deploy LinkedIn automation bot
-            decision = self._decide_deploy_bot('linkedin_automation_bot', 'increase_lead_generation')
-            analysis['decisions'].append(decision)
-        
-        # Decision 2: Need better conversion?
-        if current_revenue < self.kpis['monthly_revenue_target']:
-            analysis['issues_detected'].append({
-                'issue': 'revenue_below_target',
-                'current': current_revenue,
-                'target': self.kpis['monthly_revenue_target'],
+                'issue': 'proposals_below_target',
+                'current': current_proposals,
+                'target': self.kpis['proposals_sent_target_monthly'],
                 'severity': 'high'
             })
             
-            # VP Decision: Deploy email nurture bot
-            decision = self._decide_deploy_bot('email_nurture_bot', 'improve_conversion')
+            # VP Decision: Deploy proposal drafter (drafts only, will allows)
+            decision = self._decide_deploy_bot('proposal_drafter', 'increase_proposal_output')
             analysis['decisions'].append(decision)
         
-        # Decision 3: Opportunities - scale what's working
-        analysis['opportunities'].append({
-            'opportunity': 'scale_affiliate_program',
-            'reason': 'Zero CAC, passive revenue stream',
-            'action': 'recruit_more_affiliates'
-        })
+        # Decision 2: Need clients?
+        if current_clients < self.kpis['clients_target']:
+            analysis['issues_detected'].append({
+                'issue': 'clients_below_target',
+                'current': current_clients,
+                'target': self.kpis['clients_target'],
+                'severity': 'high'
+            })
+            
+            # VP Decision: Deploy outreach queue (queues for Herb, will allows)
+            decision = self._decide_deploy_bot('outreach_queue', 'queue_outreach_for_approval')
+            analysis['decisions'].append(decision)
         
-        decision = self._decide_deploy_bot('affiliate_recruiter_bot', 'scale_affiliate_program')
-        analysis['decisions'].append(decision)
+        # Opportunities - note: contact-based playbooks (LinkedIn automation,
+        # email nurture, affiliate recruiting) exist as specs but Herb's will
+        # escalates them. The VP does not deploy what the will forbids.
+        analysis['opportunities'].append({
+            'opportunity': 'honest_volume',
+            'reason': 'Drafts are free and unlimited; Herb approves the sends',
+            'action': 'keep_proposal_pipeline_full'
+        })
         
         return analysis
     
@@ -207,6 +244,23 @@ class MytharaVPBot:
                 'cost_per_month': 0,
                 'priority': 'low',
                 'code_template': 'customer_success_template.py'
+            },
+            'proposal_drafter': {
+                'name': 'Proposal Drafter',
+                'purpose': 'Draft tailored freelance proposals from gig postings using the freelance kit templates. Drafts only — never sends.',
+                'estimated_proposals_per_month': 40,
+                'cost_per_month': 0,
+                'priority': 'high',
+                'code_template': 'proposal_drafter.py',
+                'already_implemented': True
+            },
+            'outreach_queue': {
+                'name': 'Outreach Queue',
+                'purpose': 'Queue outreach drafts (proposals, emails, messages) as timestamped files for Herb approval. No send capability by design.',
+                'cost_per_month': 0,
+                'priority': 'high',
+                'code_template': 'outreach_queue.py',
+                'already_implemented': True
             }
         }
         
@@ -223,9 +277,12 @@ class MytharaVPBot:
             'deployment_status': 'pending',
             'created_at': datetime.now().isoformat()
         }
-        
+
+        # Herb's will judges every decision before it can run.
+        self._stamp_will_verdict(decision)
+
         self.decisions.append(decision)
-        
+
         return decision
     
     def execute_decision(self, decision_id: str) -> Dict[str, Any]:
@@ -238,14 +295,37 @@ class MytharaVPBot:
         
         if not decision:
             return {'error': 'Decision not found'}
-        
+
+        # Re-judge against the will at execution time: the will is the
+        # single source of truth and may have changed since decide-time.
+        self._stamp_will_verdict(decision)
+        verdict = decision['will_verdict']
+
+        if verdict['verdict'] == 'escalate':
+            decision['deployment_status'] = 'escalated'
+            self.escalation_queue.append({
+                'decision_id': decision['decision_id'],
+                'bot_type': decision.get('bot_type'),
+                'reason': decision.get('reason'),
+                'will_reason': verdict['reason'],
+                'verdict_hash': verdict['integrity_hash'],
+                'escalated_at': datetime.now().isoformat(),
+            })
+            print(f"\n⛔ Will escalated decision {decision['decision_id']}: {verdict['reason']}")
+            return {
+                'status': 'escalated',
+                'decision_id': decision['decision_id'],
+                'reason': verdict['reason'],
+                'verdict_hash': verdict['integrity_hash'],
+            }
+
         if decision['decision_type'] == 'deploy_bot':
             result = self._deploy_bot(decision)
             decision['deployment_status'] = 'deployed'
             decision['deployed_at'] = datetime.now().isoformat()
-            
+
             return result
-        
+
         return {'error': 'Unknown decision type'}
     
     def _deploy_bot(self, decision: Dict[str, Any]) -> Dict[str, Any]:
@@ -259,7 +339,25 @@ class MytharaVPBot:
         print(f"\n🤖 VP Bot deploying: {spec['name']}")
         print(f"   Purpose: {spec['purpose']}")
         print(f"   Priority: {spec['priority']}")
-        
+
+        # Real executors ship implemented: record the deployment, skip codegen.
+        if spec.get('already_implemented'):
+            module_file = spec['code_template']
+            module_path = os.path.join(os.path.dirname(__file__), module_file)
+            if os.path.exists(module_path):
+                print(f"   ✅ Already implemented: {module_file}")
+                self.deployed_bots.append({
+                    'bot_type': bot_type,
+                    'files_created': [module_file],
+                    'deployed_at': datetime.now().isoformat()
+                })
+                return {
+                    'status': 'deployed',
+                    'bot_type': bot_type,
+                    'files': [module_file],
+                    'next_steps': f"Import from: {module_file}"
+                }
+
         # Generate bot code from template
         bot_code = self._generate_bot_code(bot_type, spec)
         
@@ -584,13 +682,13 @@ TEAM STATUS:
 
 {'='*60}
 
-KPIS (Sanctified Targets):
-- Monthly Revenue Target: ${self.kpis['monthly_revenue_target']:,}
-- Monthly Lead Target: {self.kpis['monthly_lead_target']}
-- Target Conversion Rate: {self.kpis['conversion_rate_target']*100:.1f}%
-- Max CAC: ${self.kpis['customer_acquisition_cost_max']}
+KPIS (Sanctified Targets — freelance campaign):
+- Proposals/Month Target: {self.kpis['proposals_sent_target_monthly']}
+- Reply Rate Target: {self.kpis['reply_rate_target']*100:.1f}%
+- Clients Target (first 5): {self.kpis['clients_target']}
+- Max Spend: ${self.kpis['max_spend']} (Herb's will)
 
-{'='*60}
+WILL: {('loaded OK') if _WILL_AVAILABLE and _will_module._WILL else 'UNAVAILABLE — fail closed'}
 
 BUDGET:
 - Total Monthly Budget: ${self.budget['total_monthly']}
@@ -608,8 +706,28 @@ RECENT DECISIONS:
                 report += f"\n  Bot: {decision.get('spec', {}).get('name', 'N/A')}"
                 report += f"\n  Reason: {decision['reason']}"
                 report += f"\n  Status: {decision['deployment_status']}"
+                wv = decision.get('will_verdict', {})
+                if wv:
+                    report += f"\n  Will: {wv.get('verdict', '?')} ({wv.get('integrity_hash', '?')})"
         else:
             report += "\nNo decisions made yet"
+
+        report += "\n  Will verdicts shown per decision above.\n"
+        
+        report += f"""
+
+{'='*60}
+
+ESCALATED TO HERB (will-blocked, never executed):
+"""
+        
+        if self.escalation_queue:
+            for esc in self.escalation_queue[-5:]:
+                report += f"\n⛔ {esc['bot_type']} ({esc['decision_id']})"
+                report += f"\n  Will: {esc['will_reason']}"
+                report += f"\n  Hash: {esc['verdict_hash']}"
+        else:
+            report += "\nNone \u2014 all decisions within Herb's will"
         
         report += f"""
 
@@ -632,8 +750,8 @@ DEPLOYED BOTS:
 VP BOT RECOMMENDATIONS:
 1. Continue monitoring KPIs daily
 2. Deploy new bots when gaps detected
-3. Scale what's working (affiliates, automation)
-4. Keep costs at $0 until $10k MRR achieved
+3. Queue every outreach for Herb's approval; never send autonomously
+4. Stay honest: no invented clients, metrics, or certifications, ever
 
 Next review: {(datetime.now() + timedelta(days=7)).strftime('%B %d, %Y')}
 """

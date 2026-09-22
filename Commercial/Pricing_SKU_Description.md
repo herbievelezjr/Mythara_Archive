@@ -173,7 +173,7 @@ Full VoIP bot source code with 5 voice personas (Confident, Empathetic, Urgent, 
 
 | SKU | Regular Price | Early Adopter Price | Savings | Slots |
 |-----|--------------|---------------------|---------|-------|
-| MYTH-AUDIT-001 | $2,500 | **$500** | $2,000 | 3/20 filled |
+| MYTH-AUDIT-001 | $2,500 | **$500** | $2,000 | — |
 | MYTH-SUB-MONTH | $500/month | **$300/month** | $200/mo | First 3 months |
 
 ---

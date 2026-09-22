@@ -173,9 +173,9 @@ The Soul Cradle Operator is gifted to faith organizations. They pay only for cus
 
 All documents in this package are **Proprietary and Confidential**. Do not distribute without client NDA in place.
 
-**Compliance certifications** (for client due diligence):
-- HIPAA: Business Associate Agreement available upon contract signing
-- GDPR: Data Processing Agreement for EU deployments
+**Compliance readiness** (for client due diligence; no certifications are claimed):
+- HIPAA: Readiness assessment mapped; no HIPAA audit completed. Business Associate Agreement available upon contract signing
+- GDPR: Data-handling controls mapped. Data Processing Agreement for EU deployments
 - SOC 2: Type II controls implemented, audit planned (not currently certified)
 
 **Intellectual property**:
