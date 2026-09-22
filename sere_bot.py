@@ -6,8 +6,9 @@ Part of the A.M.I.R. Cybersecurity Suite
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
-S.E.R.E. (Survive, Evade, Resist, and Escape) provides military-grade
-survival protocols adapted for cybersecurity defense:
+S.E.R.E. (Survive, Evade, Resist, and Escape) provides structured
+survival protocols for cybersecurity defense. This console module is a
+conceptual model; the real system is described in the SERE architecture spec.
 - SURVIVE: System resilience under attack
 - EVADE: Threat detection and avoidance
 - RESIST: Active defense mechanisms
@@ -127,8 +128,8 @@ class EscapeProtocol:
 class SEREBot:
     """
     S.E.R.E. Bot - Survive, Evade, Resist, and Escape
-    
-    Military-grade survival and evasion system for cybersecurity
+
+    Survival and evasion framework for cybersecurity (console simulation)
     """
     
     def __init__(self):

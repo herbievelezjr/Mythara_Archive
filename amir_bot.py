@@ -520,8 +520,8 @@ class AMIRBot:
         print("  All systems running at peak efficiency")
     
     def predict_threats(self) -> List[ThreatPrediction]:
-        """ONE RING: Predictive threat intelligence using historical patterns"""
-        print("\n🔮 THE ONE RING: Analyzing future threat landscape...")
+        """ONE RING: Static illustrative threat scenarios (reference baseline, not live predictions)"""
+        print("\n🔮 THE ONE RING: Illustrative threat baseline (static reference scenarios)...")
         print("    Processing attack pattern history...")
         
         predictions = []
@@ -602,7 +602,7 @@ class AMIRBot:
         for pred in predictions:
             print(f"\n  ├─ {pred.threat_type}")
             print(f"  │  Probability: {pred.probability*100:.1f}% | Impact: {pred.estimated_impact}")
-            print(f"  │  Time Horizon: {pred.time_horizon} | Confidence: {pred.confidence_score*100:.1f}%")
+            print(f"  │  Time Horizon: {pred.time_horizon} | Reference weight: {pred.confidence_score*100:.1f}% (static)")
             print(f"  └─ Top Action: {pred.recommended_preemptive_actions[0]}")
         
         return predictions

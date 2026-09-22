@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 SCHRÖDINGER - The Quantum Reasoning Engine
-A GODBOT that explores multiple solution paths simultaneously through quantum superposition,
+A GODBOT that explores multiple solution paths using quantum-inspired scoring
+(classical simulation only — no quantum hardware involved),
 evaluates all possibilities in parallel, and collapses to the optimal solution.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
