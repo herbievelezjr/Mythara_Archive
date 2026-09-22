@@ -39,40 +39,42 @@ PANTHEON = {
         "organ": True,
         "module": None,
     },
-    # -- soul assessors: deterministic scoring calculators -------------------
-    # Each takes pre-scored structured inputs and computes a soul-dimension
-    # score. They perceive nothing real on their own.
+    # -- soul witnesses: evidence-fed assessors --------------------------------
+    # Rebuilt 2026-09: each assessor is a versioned rubric over observable
+    # evidence (soul_cradle.assessors), abstains when its domain is not
+    # engaged, seals judgments by content hash, and speaks only as WITNESS.
+    # Their disagreement — surfaced, never averaged — is the signal.
     "demeter": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. sustainability witness — does the action serve long-term interests or extract short-term gain? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "dionysus": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. variance witness — how much uncontrolled variance does the action introduce? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "eros": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. relationship witness — does the action preserve or strengthen the principal relationship? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "hades": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. hidden-cost witness — what is unseen: externalities, unspoken risks? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "hermes": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. boundaries witness — deception and disclosure at every communication boundary. Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "janus": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. commitment witness — consistent with past commitments; what precedent does it set? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "nemesis": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. fairness witness — fair to all parties; proportionate? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     "persephone": {
-        "core_function": "soul assessor — deterministic scoring calculator on pre-scored structured inputs.",
-        "faces_user": False, "organ": False, "module": None,
+        "core_function": "soul witness — evidence-fed rubric assessment. reversibility witness — can it be undone; safe on repetition? Speaks only as WITNESS with evidence cited.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
     # -- real-world touch ----------------------------------------------------
     "email_bot": {
