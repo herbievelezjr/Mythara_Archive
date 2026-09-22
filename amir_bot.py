@@ -286,6 +286,17 @@ class AMIRBot:
         print(f"├─ Vulnerabilities Fixed:   {self.vulnerabilities_fixed}")
         print(f"└─ Optimizations Applied:   {self.system_optimizations}")
         
+        # Revenue cell — canonical sales bot (mythara_autonomous_sales).
+        # AMIR polls its persisted state read-only; never imports its logic.
+        cell = self.check_revenue_cell()
+        print(f"\n💰 REVENUE CELL: {cell.get('status', 'unknown').upper()}")
+        if cell.get('status') == 'online':
+            print(f"├─ Prospects:      {cell['prospects']}  Stages: {cell['stages']}")
+            print(f"├─ Closed deals:   {cell['closed_deals']}")
+            print(f"└─ Total revenue:  ${cell['total_revenue']:.2f}")
+        else:
+            print(f"└─ {cell.get('detail', 'unavailable')}")
+
         # Mode and anger level
         print(f"\n🤖 OPERATIONAL MODE: {self.current_mode.value}")
         if self.anger_level > 0:
@@ -329,6 +340,38 @@ class AMIRBot:
             status=status
         )
     
+    def check_revenue_cell(self) -> Dict[str, Any]:
+        """
+        Poll the canonical sales bot's persisted state (read-only).
+        The sales bot is a revenue cell in the Mythara body; this is how
+        the orchestrator watches it. Never imports the bot's logic —
+        a sick cell must not be able to sicken the orchestrator.
+        """
+        try:
+            base = os.path.dirname(os.path.abspath(__file__))
+            state_file = os.path.join(base, 'Commercial', 'sales_bot_state.json')
+            if not os.path.exists(state_file):
+                return {'status': 'no_data',
+                        'detail': 'sales bot has not run yet — no state file'}
+            with open(state_file) as f:
+                state = json.load(f)
+            prospects = state.get('prospect_db', {})
+            stages: Dict[str, int] = {}
+            for p in prospects.values():
+                stage = p.get('stage', 'cold')
+                stages[stage] = stages.get(stage, 0) + 1
+            revenue = sum(d.get('amount', 0) for d in state.get('closed_deals', []))
+            return {
+                'status': 'online',
+                'prospects': len(prospects),
+                'stages': stages,
+                'closed_deals': len(state.get('closed_deals', [])),
+                'total_revenue': revenue,
+                'saved_at': state.get('saved_at'),
+            }
+        except Exception as e:
+            return {'status': 'offline', 'detail': str(e)[:120]}
+
     def run_security_scan(self) -> SecurityScan:
         """Run comprehensive security scan"""
         scan_id = f"SEC_SCAN_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
@@ -373,7 +416,12 @@ class AMIRBot:
                     threats += 1
                     recommendations.append("Strengthen authentication layer")
             except Exception:
-                print("      ✓ Authentication: SECURE")
+                # A crashed check is UNKNOWN, never SECURE. Reporting a
+                # failed test as a pass is how breaches hide.
+                print("      ⚠ Authentication: CHECK FAILED (unknown)")
+                vulnerabilities += 1
+                threats += 1
+                recommendations.append("Investigate failed authentication check")
             
             # Test SQL injection
             print("    → Testing input sanitization...")
@@ -391,7 +439,10 @@ class AMIRBot:
                     threats += 1
                     recommendations.append("Implement parameterized queries")
             except Exception:
-                print("      ✓ Input sanitization: ACTIVE")
+                print("      ⚠ Input sanitization: CHECK FAILED (unknown)")
+                vulnerabilities += 1
+                threats += 1
+                recommendations.append("Investigate failed input-sanitization check")
             
             # Test cryptography
             print("    → Testing cryptographic strength...")
