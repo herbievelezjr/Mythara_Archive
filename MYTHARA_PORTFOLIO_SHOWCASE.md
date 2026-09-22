@@ -286,7 +286,7 @@
 #### **🎯 Competitive Moat**
 ✅ **Soul Cradle monitors emotional wellness** (detects bullying, depression, suicidal ideation)  
 ✅ Only EdTech with crisis detection (988 integration)  
-✅ FERPA-compliant by design (not an afterthought)  
+✅ Designed to align with FERPA (not an afterthought — not currently certified)  
 
 **TAM**: $2.1B (EdTech compliance market)
 
@@ -445,15 +445,15 @@
 #### **💰 Mental Health Impact**
 | Metric | Value |
 |--------|-------|
-| **Lives Saved** | 18 confirmed crisis interventions in beta (100% escalated to 988) |
-| **Early Intervention** | 67% of crises detected 2+ weeks before traditional screening |
-| **Access** | 92% of users without insurance connected to affordable therapists |
-| **Daily Engagement** | 76% daily check-in rate (vs. 12% industry average) |
+| **Lives Saved** | Target: ~18 crisis interventions per deployment cohort (projected, not measured; 100% escalation to 988 designed in) |
+| **Early Intervention** | Target: 67% of crises detected 2+ weeks before traditional screening (projected) |
+| **Access** | Target: 92% of users without insurance connected to affordable therapists (projected) |
+| **Daily Engagement** | Target: 76% daily check-in rate vs. 12% industry average (projected) |
 
 #### **🎯 Competitive Moat**
 ✅ **Only mental health app with real-time Soul Cradle distress monitoring**  
 ✅ 988 integration (immediate crisis escalation)  
-✅ HIPAA-compliant by design (encrypted PHI)  
+✅ Designed to align with HIPAA (encrypted PHI — not currently certified)  
 
 **TAM**: $4.2B (Mental health app market)
 
@@ -556,7 +556,7 @@
 │      • Real-time 988 integration (Wellness Guardian,     │
 │        VOIP Bot)                                         │
 │      • Detects suicidal ideation, self-harm, distress    │
-│      • 18 confirmed crisis interventions in beta         │
+│      • Target: ~18 crisis interventions per deployment cohort (projected) │
 │                                                           │
 │  5️⃣  CRYPTOGRAPHIC INTEGRITY                             │
 │      • SHA-256 tamper-proof audit trails                 │
@@ -613,10 +613,10 @@ Consumer Products: $1.7M (26%)
 
 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white;">
 
-### **LIVES SAVED**
-- **18 confirmed crisis interventions** (Wellness Guardian + VOIP Bot)
-- **100% escalation rate** to 988 Suicide & Crisis Lifeline
-- **67% of crises detected 2+ weeks early** (before traditional screening)
+### **LIVES SAVED (PROJECTED TARGETS — NOT MEASURED OUTCOMES)**
+- **Target: ~18 crisis interventions per deployment cohort** (aspirational — not observed; Wellness Guardian + VOIP Bot)
+- **Target: 100% escalation rate** to 988 Suicide & Crisis Lifeline (design goal, not measured)
+- **Target: 67% of crises detected 2+ weeks early** (aspirational — before traditional screening)
 
 ### **ACCESS TO JUSTICE**
 - **87% of Gopher users** can't afford $350/hour attorneys

@@ -554,7 +554,7 @@ P.S. I can send our FDA-style validation report showing how this supports 510(k)
             
             return f"""{opener} SHA-256 hashing on every AI decision. Auditors can verify zero tampering. It's the same crypto that secures Bitcoin—nobody's breaking it.
 
-The 2 companies piloting this already have their validation reports passing. You're behind if you're still in "evaluation mode."
+For example, a hypothetical early adopter would have validation reports ready while latecomers are still in "evaluation mode."
 
 Without this? Your auditors see black-box AI with no provable lineage. That's a finding waiting to happen.
 

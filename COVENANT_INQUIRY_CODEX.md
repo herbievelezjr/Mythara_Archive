@@ -197,7 +197,7 @@ If that's not you, Mythara might be overkill."
 - Having compliance policies (your current process)
 - Proving to auditors that you followed them (Mythara)
 
-Most of our customers use Mythara to generate the audit trail that auditors ask for during reviews."
+A company adopting Mythara would use it to generate the audit trail that auditors ask for during reviews."
 
 ---
 

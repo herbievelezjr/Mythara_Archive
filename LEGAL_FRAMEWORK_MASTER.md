@@ -342,7 +342,7 @@ All documents must use CONSISTENT entity name:
 
 ### Short-term (Before any customer signs):
 - [ ] Form Soul Cradle Foundation (planned 501(c)(3) nonprofit — not yet formed)
-- [ ] Draft IP assignment agreement (Foundation ↔ Enterprise)
+- [x] Draft IP assignment agreement (Herbert Velez Jr. → Mythara Labs LLC upon formation — template created at `legal/IP_Assignment_Agreement.md`; awaiting counsel review + LLC formation)
 - [ ] Obtain E&O and cyber liability insurance (backs indemnification)
 - [ ] Retain attorney to review complete legal framework
 - [ ] Update LICENSE.md to reflect dual-entity structure

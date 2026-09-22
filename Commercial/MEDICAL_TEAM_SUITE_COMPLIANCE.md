@@ -60,7 +60,7 @@ The Mythara Medical Team Suite implements comprehensive compliance with three ma
 
 - ✅ **Transmission Security** (§ 164.312(e))
   - TLS 1.3 encryption for data in transit
-  - AES-256 encryption for data at rest (FIPS 140-2 compliant)
+  - AES-256 encryption for data at rest (no FIPS 140-2 validated module in use)
   - Encrypted PHI storage using cryptography.fernet
 
 ### Privacy Rule (45 CFR § 164.502)

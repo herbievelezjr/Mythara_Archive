@@ -208,7 +208,7 @@ Best regards,
 
 ### Healthcare (6 prospects)
 **Pain Points:** Contract compliance, patient data integrity, vendor management, HIPAA  
-**Value Prop:** Immutable audit trails, HIPAA-compliant contract verification  
+**Value Prop:** Immutable audit trails, contract verification designed to align with HIPAA  
 **ROI:** Reduce compliance costs by 70%, eliminate contract disputes
 
 ### Technology (19 prospects)
@@ -218,7 +218,7 @@ Best regards,
 
 ### Manufacturing (4 prospects)
 **Pain Points:** Supplier contracts, quality assurance, defense compliance, audit trails  
-**Value Prop:** Supply chain transparency, cryptographic verification, CMMC compliance  
+**Value Prop:** Supply chain transparency, cryptographic verification, CMMC readiness (controls mapped — not currently certified)  
 **ROI:** Prevent supply chain fraud, reduce supplier disputes by 95%
 
 ---

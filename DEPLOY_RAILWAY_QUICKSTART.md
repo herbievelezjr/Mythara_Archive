@@ -103,7 +103,9 @@ curl $API_URL/v1/pilot/status
 # Should return: access_granted: true (because force unlock is on)
 ```
 
-### Step 8: Wire Stripe Webhook
+### ~~Step 8: Wire Stripe Webhook~~ — DISABLED (historical)
+
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** All Stripe webhooks (Test and Live) were deleted from the account. The instructions below are historical — the webhook endpoints no longer exist and re-creating them requires new account work. Do not rely on or share these steps.
 
 1. **Go to Stripe Dashboard → Developers → Webhooks**
 2. **Add endpoint:**
@@ -232,7 +234,7 @@ railway domain
 2. ✅ Update success.html with real API URL
 3. ✅ Create GitHub Pages for success page
 4. ✅ Create GitHub Release with pilot package
-5. ✅ Update Stripe Payment Link redirect URL
-6. ✅ Test full flow with $0.50 test purchase
+5. ~~✅ Update Stripe Payment Link redirect URL~~ — disabled: webhooks deleted
+6. ~~✅ Test full flow with $0.50 test purchase~~ — disabled: no fulfillment path
 
 **Ready to deploy?** Run the commands above!

@@ -306,7 +306,7 @@ logging.warning(f"Strike issued: {api_key[:8]}... | Reason: {reason} | Stats: {s
 - Appeal process available
 - No discrimination (rules apply equally)
 
-✅ **GDPR/CCPA Compliant**
+🔍 **GDPR/CCPA Readiness** (controls implemented, independent audit planned — not currently certified)
 - Minimal data collection
 - No tracking of individual users
 - Aggregate usage statistics only

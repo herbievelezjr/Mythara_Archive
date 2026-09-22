@@ -19,11 +19,11 @@
 - **Why it matters**: Zero manual work - customers get API keys instantly post-payment
 - **Status**: READY - SendGrid API key configured in `.env`
 
-### 3. Stripe Webhook Integration ✅
+### 3. ~~Stripe Webhook Integration ✅~~ — DISABLED
 - **File**: `core/source_proprietary/main.py` (webhook handler updated)
 - **What it does**: Captures payment → creates pilot → emails API key
 - **Why it matters**: End-to-end automation from payment to access
-- **Status**: READY - Captures company_name, employee_count, pilot_start_date
+- **Status**: ❌ DISABLED — all Stripe webhooks (Test and Live) were deleted; no fulfillment path exists. Do not treat as live.
 
 ### 4. Pilot Dashboard Endpoint ✅
 - **Endpoint**: `GET /v1/pilot/dashboard`
@@ -74,7 +74,10 @@ git commit -m "Add database persistence and automated email delivery"
 git push origin main
 ```
 
-### Step 4: Configure Stripe Webhook
+### ~~Step 4: Configure Stripe Webhook~~ — DISABLED (historical)
+
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** Kept for historical reference only.
+
 ```bash
 # In Stripe dashboard:
 1. Go to Developers → Webhooks
@@ -149,7 +152,7 @@ git push origin main
 
 **Database**: ✅ Persistent storage implemented  
 **Email**: ✅ Automated delivery configured  
-**Webhook**: ✅ End-to-end payment flow  
+**Webhook**: ❌ DISABLED — webhooks deleted, no end-to-end payment flow  
 **Dashboard**: ✅ Customer visibility enabled  
 **Alerts**: ✅ Proactive warnings implemented  
 **Policy**: ✅ Legal protection documented  

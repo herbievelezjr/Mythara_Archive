@@ -268,7 +268,7 @@ This package contains **Mythara Archive**, a proprietary software repository tha
 5. ✅ Priority legal issues list with remediation plan
 
 ### **Phase 2: Short-Term (Within 30 Days)**
-6. ✅ Privacy policy draft (GDPR + CCPA compliant)
+6. ✅ Privacy policy draft (designed to align with GDPR + CCPA)
 7. ✅ Data Processing Agreement template
 8. ✅ Open source audit report
 9. ✅ Indemnification clause draft with insurance recommendations

@@ -68,24 +68,26 @@ Railway will auto-redeploy (~2 minutes).
 
 ---
 
-## ✅ You're Live!
+## ~~✅ You're Live!~~ — ⚠️ DISABLED
+
+> **DISABLED — webhooks deleted, no fulfillment path. Do not follow these steps.** The test-purchase flow below assumes a live Stripe webhook that no longer exists (all webhooks were deleted from the Stripe account). Kept for historical reference only.
 
 After Railway redeploys:
 
 ### Test Purchase:
-1. Open: https://buy.stripe.com/28E9AU85SfFCa5MbucgjC01
+1. ~~Open: https://buy.stripe.com/28E9AU85SfFCa5MbucgjC01~~ — link disabled, do not open as a purchase path
 2. Use test card: `4242 4242 4242 4242`
 3. Complete payment
 
 ### What Happens:
-1. ✅ Stripe charges $49 (test mode)
+~~1. ✅ Stripe charges $49 (test mode)
 2. ✅ Webhook fires to your API
 3. ✅ API generates unique API key
 4. ✅ **Email sent automatically** with:
    - API key
    - Download link
    - Quick start guide
-   - Support contact
+   - Support contact~~ — none of this is wired: webhooks deleted, no live payment path.
 
 ---
 

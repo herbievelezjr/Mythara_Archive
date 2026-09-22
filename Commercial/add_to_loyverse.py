@@ -22,11 +22,11 @@ HEADERS = {
 # Mythara products
 PRODUCTS = [
     {
-        "item_name": "Mythara SSIP Compliance Audit",
+        "item_name": "Mythara SSIP Compliance Readiness Assessment",
         "sku": "MYTH-AUDIT-001",
         "category": "Professional Services",
         "price": 2500.00,
-        "description": "Single AI model validation with cryptographic proof. Includes integrity hash chain and compliance certificate.",
+        "description": "Single AI model validation with cryptographic proof. Includes integrity hash chain and readiness assessment report.",
         "track_stock": False
     },
     {

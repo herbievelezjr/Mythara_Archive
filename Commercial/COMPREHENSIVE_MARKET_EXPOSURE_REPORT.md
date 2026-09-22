@@ -160,7 +160,7 @@ The full `mythara_prospect_database_expanded.py` file includes complete prospect
 - **State/Local Gov Software:** Tyler Technologies, Motorola Solutions
 
 **Use Cases:**
-- CMMC-compliant contract verification
+- Contract verification mapped to CMMC practices (not CMMC certified)
 - Federal contract compliance
 - Classified agreement verification
 - Defense subcontractor automation
@@ -488,7 +488,7 @@ Status: 36/200+ prospects loaded (script stopped early)
 
 5. **Healthcare Enterprise**
    - Kaiser, UnitedHealth, CVS, Pfizer
-   - HIPAA-compliant contract verification
+   - Contract verification designed to align with HIPAA (not currently certified)
    - Provider network automation
 
 6. **Strategic Partnerships**

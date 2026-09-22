@@ -368,7 +368,7 @@ All products powered by Mythara Engine SDK share:
 - ✅ **100% Local Storage** (no cloud dependency)
 - ✅ **SHA-256 Integrity Verification** (tamper detection)
 - ✅ **Zero Telemetry** (no tracking, no analytics servers)
-- ✅ **HIPAA/GDPR Compliant** (user owns their data)
+- 🔍 **HIPAA/GDPR Readiness** (controls designed around these frameworks; user owns their data — not currently certified)
 - ✅ **Blockchain-Style Audit Trail** (immutable logs)
 
 ---

@@ -386,7 +386,7 @@ Return ONLY the category name and a confidence score (0-1) as JSON:
 1. Acknowledge interest (1 sentence do not gush)
 2. QUALIFY HARD - Quick question do you have regulatory pressure in next 90 days or is this exploratory
 3. CREATE SCARCITY - I have 2 early adopter slots left at $500 (normally $2500) After Friday it is full price
-4. FEAR OF LOSS - The 3 companies already piloting will have 6 months of audit data before you would even start
+4. FEAR OF LOSS - For example, an early adopter starting today would have 6 months of audit data before a latecomer even starts
 5. ASSUMPTIVE CLOSE - I am booking Tuesday or Wednesday this week Which works better 10am or 2pm MT
 6. INDIFFERENCE SAFETY NET - If timing is not right totally understand just do not want you to miss the $500 window
 7. Keep under 130 words

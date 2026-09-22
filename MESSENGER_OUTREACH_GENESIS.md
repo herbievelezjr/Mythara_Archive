@@ -100,6 +100,8 @@
 
 ## 📧 Message Template (Customize for Each)
 
+> **⚠️ DISABLED — webhooks deleted, no fulfillment path. Do not share.** The `buy.stripe.com` pilot link in these draft messages is not verified as live and the receipt/key delivery it promises does not exist. Do not send any message containing the link until it is re-verified and re-activated in the Stripe dashboard. Link text preserved for deactivation reference.
+
 **Subject line options:**
 1. "Compliance validation pilot for [Company] government contracts"
 2. "[Company] - reducing compliance review time from weeks to days"

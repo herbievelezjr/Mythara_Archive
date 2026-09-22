@@ -125,7 +125,7 @@ if result["analysis"]["distress_score"] > 0.7:
 - ✅ Distress level analysis (immediate crisis detection)
 - ✅ Therapist referral network (location-based matching)
 - ✅ Crisis hotline integration (988 Suicide & Crisis Lifeline)
-- ✅ HIPAA-compliant local storage (encrypted SQLite)
+- ✅ Local storage designed to align with HIPAA (encrypted SQLite — not currently certified)
 
 **File**: `mythara_wellness_guardian.py` *(to be created)*  
 **Database**: `~/.mythara_engine/WellnessGuardian/wellness_guardian.db` (encrypted)  
@@ -387,7 +387,7 @@ engine.clauses.invoke_clause(
 - ✅ Multi-subject support (Math, Science, English, History, Languages, Computer Science, Art, Music)
 - ✅ Homework help with step-by-step explanations
 - ✅ Study schedule generation (personalized based on weak subjects)
-- ✅ Progress tracking and parent reports (FERPA-compliant)
+- ✅ Progress tracking and parent reports (designed to align with FERPA)
 - ✅ Achievement badges (Blessings Reservoir gamification)
 - ✅ Frustration detection (Soul Cradle: suggests breaks or easier questions when distress > 0.7)
 - ✅ Learning style adaptation (visual, auditory, kinesthetic, reading/writing)
@@ -430,7 +430,7 @@ engine.clauses.register_clause(
 - ✅ Curriculum alignment tracking (Common Core, state standards)
 - ✅ Behavioral monitoring (incident reporting, auto-escalation for serious issues)
 - ✅ At-risk student detection (low GPA < 2.0, attendance < 85%, engagement level ≤ 2)
-- ✅ FERPA-compliant data security (SHA-256 integrity hashing on all records)
+- ✅ Data security designed to align with FERPA (SHA-256 integrity hashing on all records — not currently certified)
 
 **File**: `Commercial/mythara_education_suite.py` (850 lines)  
 **Database**: `mythara_education.db`  
@@ -590,7 +590,7 @@ All products inherit Mythara Engine's security:
 - ✅ **100% Local Storage** (no cloud dependency)
 - ✅ **SHA-256 Integrity Verification** (blockchain-style audit trail)
 - ✅ **Zero Telemetry** (no tracking servers)
-- ✅ **HIPAA/GDPR Compliant** (user owns data)
+- 🔍 **HIPAA/GDPR Readiness** (controls designed around these frameworks; user owns data — not currently certified)
 - ✅ **Tamper Detection** (Sanctification subsystem)
 
 ---
