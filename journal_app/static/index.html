@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a1a2e">
+<title>Witnessed Journal</title>
+<link rel="manifest" href="/manifest.json">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, system-ui, sans-serif; background:#1a1a2e; color:#eee; padding:16px; max-width:640px; margin:0 auto; }
+  h1 { font-size:1.3rem; margin:0.5rem 0; }
+  .contract { font-size:0.8rem; color:#aaa; border-left:3px solid #e2b33d; padding:6px 10px; margin:12px 0; background:#22223a; }
+  label { display:block; font-size:0.85rem; color:#bbb; margin:10px 0 4px; }
+  input, textarea, select { width:100%; padding:10px; border-radius:8px; border:1px solid #444; background:#22223a; color:#eee; font-size:1rem; }
+  textarea { min-height:80px; resize:vertical; }
+  input[type=range] { padding:0; }
+  button { width:100%; padding:12px; margin-top:12px; border-radius:8px; border:0; background:#e2b33d; color:#1a1a2e; font-weight:700; font-size:1rem; }
+  button.ghost { background:#2a2a44; color:#eee; border:1px solid #555; }
+  .tabs { display:flex; gap:8px; margin:16px 0 4px; }
+  .tabs button { margin:0; padding:8px; font-size:0.85rem; }
+  .tabs button.active { outline:2px solid #e2b33d; }
+  .card { background:#22223a; border-radius:10px; padding:12px; margin:10px 0; }
+  .card .emo { font-size:1.1rem; font-weight:700; }
+  .badge { display:inline-block; font-size:0.72rem; padding:2px 8px; border-radius:20px; margin-left:6px; vertical-align:middle;}
+  .clear { background:#1d4d2b; color:#8fe3a8; }
+  .contested { background:#5a4517; color:#f5c86e; }
+  .flagged { background:#5a4517; color:#f5c86e; }
+  .blocked { background:#5c1f1f; color:#f09292; }
+  .meta { font-size:0.78rem; color:#999; margin-top:6px; }
+  .wit { font-size:0.78rem; color:#bbb; margin-top:4px; }
+  .hidden { display:none; }
+  #status { font-size:0.85rem; color:#8fe3a8; min-height:1.2em; margin-top:8px;}
+  .analysis { font-size:0.85rem; }
+</style>
+</head>
+<body>
+<h1>Witnessed Journal</h1>
+<div class="contract">This journal proves your records are <b>unaltered</b> — never that they are true. Eight AI witnesses attest each entry with cited evidence; their disagreement is preserved. Nothing here verifies what you felt. That remains yours.</div>
+
+<label>Who is this record about? (your name)</label>
+<input id="subject" placeholder="e.g. herb" autocomplete="off">
+
+<div class="tabs">
+  <button id="tabWrite" class="active" onclick="showTab('write')">Write</button>
+  <button id="tabRead" onclick="showTab('read')">Record</button>
+  <button id="tabCheck" onclick="showTab('check')">Verify</button>
+</div>
+
+<div id="paneWrite">
+  <label>Emotion (your word)</label>
+  <input id="emotion" placeholder="e.g. steady" autocomplete="off">
+  <label>Intensity: <span id="ival">0.5</span></label>
+  <input type="range" id="intensity" min="0" max="1" step="0.05" value="0.5" oninput="document.getElementById('ival').textContent=this.value">
+  <label>Context — what happened, in your words</label>
+  <textarea id="context" placeholder="What happened, plainly."></textarea>
+  <button onclick="attest()">Attest &amp; chain this entry</button>
+  <div id="status"></div>
+</div>
+
+<div id="paneRead" class="hidden">
+  <button class="ghost" onclick="loadHistory()">Load my witnessed record</button>
+  <button class="ghost" onclick="exportRecord()">Export verification report (JSON)</button>
+  <div id="history"></div>
+</div>
+
+<div id="paneCheck" class="hidden">
+  <button class="ghost" onclick="verifyChain()">Verify chain integrity</button>
+  <button class="ghost" onclick="loadAnalysis()">Pattern analysis (heuristic)</button>
+  <div id="checkOut"></div>
+</div>
+
+<script>
+function showTab(t){
+  for (const p of ['write','read','check']) document.getElementById('pane'+p[0].toUpperCase()+p.slice(1)).classList.add('hidden');
+  document.getElementById('pane'+t[0].toUpperCase()+t.slice(1)).classList.remove('hidden');
+  for (const b of ['tabWrite','tabRead','tabCheck']) document.getElementById(b).classList.remove('active');
+  document.getElementById('tab'+t[0].toUpperCase()+t.slice(1)).classList.add('active');
+}
+async function attest(){
+  const s=document.getElementById('subject').value.trim(), e=document.getElementById('emotion').value.trim(),
+        c=document.getElementById('context').value.trim(), i=parseFloat(document.getElementById('intensity').value);
+  const st=document.getElementById('status');
+  if(!s||!e||!c){ st.style.color='#f09292'; st.textContent='Name, emotion, and context are all required.'; return; }
+  st.style.color='#bbb'; st.textContent='Witnesses are attesting…';
+  const r=await fetch('/api/records',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({subject_id:s,emotion:e,intensity:i,context:c})});
+  const j=await r.json();
+  if(!r.ok){ st.style.color='#f09292'; st.textContent=j.error||'failed'; return; }
+  st.style.color='#8fe3a8';
+  st.textContent=`Chained. Panel: ${j.panel_verdict.toUpperCase()}${j.verified?' — verified':''}${j.flagged_by.length?' — flagged by '+j.flagged_by.join(', '):''}`;
+  document.getElementById('emotion').value=''; document.getElementById('context').value='';
+}
+async function loadHistory(){
+  const s=document.getElementById('subject').value.trim(); if(!s) return;
+  const j=await (await fetch('/api/history?subject='+encodeURIComponent(s))).json();
+  const h=document.getElementById('history'); h.innerHTML='';
+  if(!j.records.length){ h.innerHTML='<div class="card">No records yet.</div>'; return; }
+  for(const r of j.records.slice().reverse()){
+    const d=document.createElement('div'); d.className='card';
+    d.innerHTML=`<span class="emo">${esc(r.emotion)}</span><span class="badge ${r.panel_verdict}">${r.panel_verdict}</span>
+      <div class="meta">${esc(r.context)} · intensity ${r.intensity} · hash ${esc(r.record_hash)}</div>
+      <div class="wit">Witnesses: ${r.engaged_witnesses.join(', ')||'none engaged'}${r.flagged_by.length?'<br>Flagged by: '+r.flagged_by.join(', '):''}${r.coercion_markers.length?'<br>Coercion markers (heuristic): '+r.coercion_markers.join(', '):''}</div>`;
+    h.appendChild(d);
+  }
+}
+async function verifyChain(){
+  const j=await (await fetch('/api/verify')).json();
+  document.getElementById('checkOut').innerHTML=`<div class="card"><b>${j.ok?'VALID':'COMPROMISED'}</b> — ${j.records} records${j.failures.length?'<br>'+j.failures.map(f=>esc(f.record_id+': '+f.reason)).join('<br>'):''}<div class="meta">Valid means: no record altered, no witness seal forged, no link broken.</div></div>`;
+}
+async function loadAnalysis(){
+  const s=document.getElementById('subject').value.trim(); if(!s) return;
+  const j=await (await fetch('/api/analysis?subject='+encodeURIComponent(s))).json();
+  document.getElementById('checkOut').innerHTML=`<div class="card analysis"><b>Concern: ${j.concern}</b><br>${esc(j.recommendation)}<div class="meta">contested ${j.contested_rate} · volatile ${j.volatility_rate} · coercion markers ${j.coercion_marker_rate}<br>${esc(j.method)}</div></div>`;
+}
+function exportRecord(){
+  const s=document.getElementById('subject').value.trim(); if(!s) return;
+  location.href='/api/export?subject='+encodeURIComponent(s);
+}
+function esc(x){ return String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>
