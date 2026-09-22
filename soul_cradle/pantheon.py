@@ -76,7 +76,13 @@ PANTHEON = {
         "core_function": "soul witness — evidence-fed rubric assessment. reversibility witness — can it be undone; safe on repetition? Speaks only as WITNESS with evidence cited.",
         "faces_user": False, "organ": True, "module": "soul_cradle.assessors",
     },
-    # -- real-world touch ----------------------------------------------------
+    # -- memory: the witnessed chain ----------------------------------------
+    # The soul's memory — a tamper-evident chain of witness-sealed records.
+    # Proves the record is unaltered, never that it is true.
+    "emotional_chain": {
+        "core_function": "memory organ — tamper-evident chain of emotional records, each attested by the eight assessor-witnesses with sealed judgments. Proves the record is unaltered, not that it is true; refuses non-consensual third-party records.",
+        "faces_user": False, "organ": True, "module": "soul_cradle.emotional_chain",
+    },
     "email_bot": {
         "core_function": "real-world touch — Gmail draft generation via OAuth. The only bot that acts outside the machine.",
         "faces_user": True,
