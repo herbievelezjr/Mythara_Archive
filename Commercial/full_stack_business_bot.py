@@ -3,6 +3,11 @@ import os
 
 """
 Full-Stack Autonomous Business Bot
+DEPRECATED 2026-09-22 — superseded by Commercial/mythara_autonomous_sales.py
+(the canonical sales bot). This file is a retail POS + tax-document
+generator with unrelated accessibility features, not outreach/closing.
+Kept for the Stripe payment-link pattern (the only real Stripe usage among
+the sales bots), worth lifting into the canonical bot later.
 
 This bot handles EVERYTHING:
 1. Sales operations (emails, calls, closing)

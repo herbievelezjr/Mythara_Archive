@@ -2,6 +2,10 @@
 
 """
 Full-Stack Autonomous Revenue System
+DEPRECATED 2026-09-22 — superseded by Commercial/mythara_autonomous_sales.py
+(the canonical sales bot). This file is finance/tax bookkeeping plus
+speculative features (AI-buyer negotiator, sign-language sessions), not a
+sales pipeline. Kept for the payment/tax record-keeping logic only.
 
 This system handles EVERYTHING:
 1. Sales operations (email outreach, negotiations, closing)
