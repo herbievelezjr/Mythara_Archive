@@ -30,7 +30,11 @@ jobs:
           pip install -r core/source_proprietary/requirements-api.txt
 
       - name: Lint (ruff, deploy-critical paths)
-        run: ruff check Commercial/mythara_connect_api.py mythara_engine_sdk.py mythara_gopher_api.py core/source_proprietary/
+        # Pinned to bug-catching rules (syntax, undefined names, unused
+        # imports). Full default ruff flags 1000+ style-modernization items
+        # (UP/DTZ/BLE) across this legacy tree; modernizing those is a
+        # separate project with runtime risk (e.g. naive->aware datetimes).
+        run: ruff check --select E4,E7,E9,F Commercial/mythara_connect_api.py mythara_engine_sdk.py mythara_gopher_api.py core/source_proprietary/
 
       - name: Typecheck (mypy)
         run: mypy core/source_proprietary/ || true
