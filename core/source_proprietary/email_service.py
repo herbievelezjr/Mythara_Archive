@@ -56,12 +56,6 @@ def send_email(
         return {"success": False, "error": str(e)}
 
 
-
-
-
-
-
-
 def send_strike_warning(
     to_email: str,
     api_key: str,
