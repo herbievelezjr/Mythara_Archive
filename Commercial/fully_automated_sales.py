@@ -2,6 +2,11 @@
 
 """
 FULLY AUTOMATED SALES SYSTEM - Zero Human Contact
+DEPRECATED 2026-09-22 — superseded by Commercial/mythara_autonomous_sales.py
+(the canonical sales bot). Kept for its email templates and landing-page
+copy, which are real and worth salvaging. Do not build on this file:
+it crashes on init (loyverse_token AttributeError) and its fulfillment
+methods are print-only stubs.
 Bot handles everything: Lead gen → Emails → Invoices → Payment tracking → Delivery
 """
 

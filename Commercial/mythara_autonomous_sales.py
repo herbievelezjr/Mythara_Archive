@@ -2,6 +2,13 @@
 
 """
 Mythara Autonomous Sales Bot
+CANONICAL SALES BOT — decided 2026-09-22. This is the one keeper among the
+four overlapping sales bots (the others are marked DEPRECATED). It is the
+only one that is actually a sales pipeline: prospect → engagement scoring →
+clause templates → PayPal invoicing → pipeline report, with real state and
+the least theater. Still missing: real email sending and real lead-finding —
+it is the best chassis, not a finished machine.
+
 Fully automated sales system - zero human contact required.
 
 Uses Mythara SSIP principles:
