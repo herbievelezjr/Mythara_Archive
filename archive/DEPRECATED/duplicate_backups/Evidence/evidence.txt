@@ -1,7 +1,0 @@
-Subfolder (redacted): prompt_templates/
-
-perception_prompt_v1.txt
-
-renderer_prompt_v1.txt
-
-File: prompt_hashes_manifest.json

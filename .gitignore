@@ -47,3 +47,6 @@ generate_pricing_video*
 deploy_railway.sh
 railway.toml
 Procfile
+
+# CI-generated test outputs (regenerated on every run, never commit)
+tests/output/

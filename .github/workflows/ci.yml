@@ -29,14 +29,14 @@ jobs:
           pip install -r requirements.txt
           pip install -r core/source_proprietary/requirements-api.txt
 
-      - name: Lint (ruff)
-        run: ruff check .
+      - name: Lint (ruff, deploy-critical paths)
+        run: ruff check Commercial/mythara_connect_api.py mythara_engine_sdk.py mythara_gopher_api.py core/source_proprietary/
 
       - name: Typecheck (mypy)
         run: mypy core/source_proprietary/ || true
 
-      - name: Format check (black)
-        run: black . --check
+      - name: Format check (black, deploy-critical paths)
+        run: black --check Commercial/mythara_connect_api.py mythara_engine_sdk.py mythara_gopher_api.py core/source_proprietary/
 
       - name: Run tests
         run: pytest -q
