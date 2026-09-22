@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
 Q.U.A.S.A.R. - Quantum Universal Autonomous Security & Response
-Quantum-Level Penetration Testing and Security Orchestration
+Classical simulation of quantum attack/defense concepts for security training
+(no quantum hardware involved)
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
 
-Q.U.A.S.A.R. extends A.M.I.R.'s orchestration to quantum computing systems:
+Q.U.A.S.A.R. extends A.M.I.R.'s orchestration to quantum computing concepts
+(all simulated classically — a conceptual training model, not quantum execution):
 
 QUANTUM ATTACK VECTORS:
 - Quantum state manipulation and measurement attacks
@@ -25,7 +27,7 @@ QUANTUM DEFENSE CAPABILITIES:
 
 "One Ring to rule quantum realms, where superposition meets security."
 
-Q.U.A.S.A.R. - Beyond classical limits, securing the quantum future.
+Q.U.A.S.A.R. - A classical simulation for reasoning about quantum-era security concepts.
 """
 
 import os
