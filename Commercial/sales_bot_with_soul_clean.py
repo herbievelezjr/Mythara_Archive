@@ -441,9 +441,7 @@ class SalesBotWithSoul(AutonomousSalesBot):
             # Banking: Conservative, regulatory-focused, ROI-driven
             return f"""Thank you for your interest. I appreciate you taking the time.
 
-Here's what matters: We've helped 3 regulated financial institutions achieve zero audit findings using cryptographic proof of AI governance. The OCC and CFPB auditors had nothing to cite.
-
-Recent example: A top-10 bank reduced model risk validation time from 6 weeks to 8 days using our provable audit trails.
+Here's what matters: Mythara produces cryptographic proof of AI governance decisions — per-invocation integrity hashes and tamper-evident audit trails that map to SR 11-7 model-risk expectations. No customer claims are made here; ask us for a live technical walkthrough instead of a reference story.
 
 The regulatory landscape is tightening (SR 11-7, OCC Bulletin 2023-17). Early adopters are building 6+ months of clean audit history before their next examination.
 

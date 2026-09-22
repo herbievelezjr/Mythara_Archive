@@ -729,9 +729,9 @@ if __name__ == "__main__":
         details={
             'location': 'Remote',
             'lede': 'Mythara Engine today announced $2.5M in seed funding to accelerate development of its Symbolic Safety Integrity Protocol (SSIP) for enterprise AI systems.',
-            'body': 'The funding will support expansion of the engineering team, enterprise customer acquisition, and regulatory compliance certifications across North America and Europe.',
+            'body': 'The funding will support expansion of the engineering team, enterprise customer acquisition, and compliance readiness work across North America and Europe.',
             'quote': '"AI safety cannot be an afterthought. SSIP provides cryptographic guarantees that AI systems operate within defined ethical and operational boundaries," said Herbert Velez Jr., Founder & CEO.',
-            'background': 'Founded in 2024, Mythara Engine has deployed SSIP technology with early enterprise customers in healthcare, finance, and government sectors.'
+            'background': 'Founded in 2024, Mythara Engine builds SSIP integrity technology for AI systems. Early design partners and pilots are not publicly disclosed; no customer claims are made in this draft.'
         }
     )
     print(f"   Release ID: {press_release['release_id']}")

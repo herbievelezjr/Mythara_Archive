@@ -1282,7 +1282,7 @@ class MytharaProspectDatabaseExpanded:
             website="lockheedmartin.com",
             pain_points="Defense contracts; Subcontractor agreements; CMMC compliance; Security clearances",
             notes="Largest defense contractor - security clearance required, CMMC Level 3 needed",
-            use_case="Defense contract verification, CMMC-compliant audit trails",
+            use_case="Defense contract verification, CMMC-aligned audit trails (readiness mapping, not certification)",
             competitor_current="Classified internal systems",
             budget_cycle="Government fiscal year (Oct)"
         )

@@ -190,7 +190,7 @@ Hi [First Name],
 
 Quick question: Does [Company] have a process for proving AI model decisions are auditable and tamper-evident?
 
-I built **Mythara Engine** — cryptographic integrity + SSIP audit trails for AI workflows. Banks and insurers use it to pass model risk reviews faster.
+I built **Mythara Engine** — cryptographic integrity + SSIP audit trails for AI workflows, designed to help regulated teams evidence model-risk controls.
 
 **What you get:**
 - Per-invocation integrity hashes

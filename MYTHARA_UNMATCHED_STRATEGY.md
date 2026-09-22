@@ -208,7 +208,7 @@ predictions = amir.predict_threats()
 ### When prospects ask: "How are you different from [Competitor]?"
 
 **MASTER RESPONSE:**
-> "They're excellent compliance **tracking** platforms. We're a compliance **validation and orchestration** engine with cryptographic integrity proofs. Think of it this way: Drata tells you IF you're compliant. Mythara proves to auditors THAT you're compliant—with reproducible, mathematically verifiable evidence. We're not competitive; we're complementary. Several customers use both."
+> "They're excellent compliance **tracking** platforms. We're a compliance **validation and orchestration** engine with cryptographic integrity proofs. Think of it this way: Drata tells you IF you're compliant. Mythara proves to auditors THAT you're compliant—with reproducible, mathematically verifiable evidence. We're not competitive; we're complementary — some teams run both kinds of tooling side by side."
 
 **Why This Works:**
 1. **Compliment competitor** (reduces defensiveness)
