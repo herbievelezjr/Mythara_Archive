@@ -102,7 +102,7 @@ industry_data = translate_response(data, FramingMode.INDUSTRY)
 - ❌ SHA-256 hashes (computed on mythic terms)
 - ❌ Database schemas (internal storage)
 - ❌ Source code (core modules)
-- ❌ Compliance status (HIPAA, SOC 2, GDPR)
+- ❌ Compliance status (no SOC 2/ISO 27001 certifications held; posture designed around HIPAA, SOC 2, GDPR frameworks)
 
 ---
 

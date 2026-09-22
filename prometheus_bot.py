@@ -4,7 +4,6 @@ P.R.O.M.E.T.H.E.U.S. - Pattern Recognition & Omniscient Mastery for Engineering 
 The Titan Who Stole Divine Fire - Bringer of Innovation & Revolutionary Ideas
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Prometheus STEALS the divine fire of creativity by analyzing existing systems (Mythara),
 then DELIVERS revolutionary innovations to Hephaestus for forging into reality.

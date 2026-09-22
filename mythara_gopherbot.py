@@ -4,7 +4,6 @@ Mythara Gopherbot - Your Personal Legal Research Assistant
 Fetches, analyzes, and delivers legal resources on demand.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 "Go fetch!" - The bot that retrieves what you need, when you need it.
 """

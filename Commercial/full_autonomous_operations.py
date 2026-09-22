@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Full Autonomous Sales Operations System
@@ -727,8 +726,8 @@ if __name__ == '__main__':
     
     customer = {
         "name": "Sarah Chen",
-        "company": "Western Union",
-        "email": "sarah.chen@westernunion.com"
+        "company": "Example Bank",
+        "email": "sarah.chen@examplebank.com"
     }
     
     deal = ops.close_deal(customer, package="standard")

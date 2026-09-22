@@ -34,7 +34,7 @@
 ### 3. ✅ **Global Governance Framework** (31 Frameworks)
 - **File:** `core/source_proprietary/mythara_global_governance.py` (1,420 lines)
 - **Coverage:** 
-  - **20 Regulatory Frameworks:** HIPAA, GDPR, SOX, FINRA, FDA, FTC, FCRA, AI Act, DPA, PIPEDA, PIPL, APPI, Privacy Act, LGPD, PDPA, DIFC, POPIA, PCI-DSS, ISO 27001, SOC 2
+  - **20 Regulatory Frameworks (mapped for validation — not certifications held):** HIPAA, GDPR, SOX, FINRA, FDA, FTC, FCRA, AI Act, DPA, PIPEDA, PIPL, APPI, Privacy Act, LGPD, PDPA, DIFC, POPIA, PCI-DSS, ISO 27001, SOC 2
   - **11 International Treaties:** UN Human Rights (UDHR), UN CRPD (disability rights), OECD AI Principles, WCAG 2.1/2.2, ISO 27701 Privacy, WIPO Copyright, ILO Labor Standards, FCPA/OECD Anti-Corruption, ITAR/EAR Export Control, OFAC/UN Sanctions, Sherman Act/EU Competition Law
 - **Geographic Coverage:** 182+ countries (via UN conventions)
 - **Industry Coverage:** 19 verticals

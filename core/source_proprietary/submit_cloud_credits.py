@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara Cloud Credits Application Submission Script
@@ -82,7 +81,7 @@ Core Technology:
 - Cryptographic integrity hashing for all transactions
 - Autonomous AI orchestration with 14 specialized agents
 - Real-time contract analysis and risk scoring
-- SOC 2 Type II and CMMC Level 3 compliance architecture
+- SOC 2 Type II controls-implemented architecture (audit planned, not currently certified); CMMC-aligned architecture
 
 Market: Fortune 500 enterprises, healthcare systems, financial institutions, 
 government contractors requiring contract verification at scale.
@@ -97,7 +96,7 @@ AWS Infrastructure Use Case for Mythara Labs:
    
 2. RDS/Aurora (Database):
    - PostgreSQL clusters for contract audit trails
-   - HIPAA/SOC 2 compliant data storage
+   - Data storage built to HIPAA/SOC 2 control standards (not currently certified)
    - 99.99% uptime SLA for enterprise customers
    
 3. S3 (Storage):
@@ -157,7 +156,7 @@ Technology Stack:
 - AI/ML contract analysis with symbolic reasoning
 - Cryptographic integrity verification
 - 14 autonomous AI agents for contract lifecycle management
-- SOC 2 Type II compliance architecture
+- SOC 2 Type II controls-implemented architecture (audit planned, not currently certified)
 
 Target Market: Fortune 500, healthcare, financial services, government contractors
             """,
@@ -170,7 +169,7 @@ Azure Infrastructure Requirements for Mythara Labs:
    
 2. Azure SQL Database / Cosmos DB:
    - Globally distributed contract audit database
-   - HIPAA/SOC 2 compliant data tier
+   - Data tier built to HIPAA/SOC 2 control standards (not currently certified)
    - 99.99% availability SLA
    
 3. Azure Blob Storage:
@@ -212,7 +211,7 @@ B2B SaaS subscription model:
 1. Symbolic Safety Integrity Protocol (proprietary)
 2. Cryptographic verification of all transactions
 3. 14 specialized AI agents vs. single-model competitors
-4. Built-in SOC 2/CMMC compliance
+4. Built-in SOC 2/CMMC-aligned controls (not currently certified)
 5. Zero trust architecture
 6. Real-time fraud detection
             """,

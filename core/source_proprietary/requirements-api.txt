@@ -1,6 +1,5 @@
 # Mythara Engine - API Dependencies
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 # FastAPI framework
 fastapi==0.104.1

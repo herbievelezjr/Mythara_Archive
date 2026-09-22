@@ -4,7 +4,6 @@ Mythara Email Bot - Automated Draft Generator (OAuth Version)
 Monitors mythara.engine@yahoo.com and generates email drafts using Mythara Engine.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import imaplib
@@ -149,7 +148,7 @@ Would a 30-day pilot be valuable? I can send the pilot package and credentials t
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mythara.engine@yahoo.com
 Enterprise: $60K/year (firm pricing)""",
 
@@ -206,7 +205,7 @@ If you have any questions about Mythara Engine or need additional information, f
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mythara.engine@yahoo.com"""
     }
     

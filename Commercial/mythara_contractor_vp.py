@@ -1,6 +1,5 @@
 import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara VP of Contractor Management - 3rd Party Delegation System

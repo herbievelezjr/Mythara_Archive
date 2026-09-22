@@ -354,7 +354,7 @@
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Compliance Contact:** compliance@mythara.ai  
 **Legal Contact:** legal@mythara.ai  
 **Accessibility Contact:** accessibility@mythara.ai

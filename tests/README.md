@@ -116,4 +116,4 @@ This directory is created automatically if it doesn't exist.
 
 ## License
 
-Proprietary - Mythara Labs LLC
+Proprietary - Herbert Velez Jr. (Mythara Labs LLC planned — not yet formed)

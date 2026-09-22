@@ -138,7 +138,7 @@ Authorization: Bearer {api_key}
 - ✅ **Cryptographic Hashes**: SHA-256 integrity computed on mythic terms
 - ✅ **Database Schemas**: Internal storage uses mythic keys
 - ✅ **Source Code**: Core modules (`soul_cradle_operator.py`, `soul_proportion_model.py`) untouched
-- ✅ **Compliance**: HIPAA, SOC 2, GDPR status unchanged
+- ✅ **Compliance**: posture unchanged (no SOC 2/ISO 27001 certifications held; controls designed around HIPAA, SOC 2, GDPR frameworks)
 
 **Bottom Line:** Dual-framing is a **presentation layer only**. The engine's symbolic soul remains intact.
 

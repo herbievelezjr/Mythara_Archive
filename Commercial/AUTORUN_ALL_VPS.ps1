@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 #
 # Schedule all Mythara VP bots in Windows Task Scheduler
 

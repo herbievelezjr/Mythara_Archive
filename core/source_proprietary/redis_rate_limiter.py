@@ -4,7 +4,6 @@ Mythara Engine - Redis-backed Rate Limiter
 Distributed rate limiting with graceful degradation.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import time

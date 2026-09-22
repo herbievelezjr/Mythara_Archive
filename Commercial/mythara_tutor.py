@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 MytharaTutor - AI-Powered Personalized STEAM Learning Assistant

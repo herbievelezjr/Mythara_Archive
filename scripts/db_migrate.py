@@ -4,7 +4,6 @@ Mythara Engine - Database Migration Tool
 Manages database schema migrations for production deployments.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

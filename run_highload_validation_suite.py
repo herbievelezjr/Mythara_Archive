@@ -4,7 +4,6 @@ Mythara Engine - High-Load Validation Suite Runner
 Runs all validation tests with increased load for stress testing.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

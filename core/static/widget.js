@@ -2,7 +2,6 @@
  * MytharaConnect Chat Widget - Enterprise Grade
  * 
  * Copyright © 2025 Herbert Velez Jr. All rights reserved.
- * Proprietary and Confidential.
  * 
  * Best-in-class chat widget for Global Governance positioning
  * - 100% reliable with comprehensive error handling
@@ -431,7 +430,7 @@ class MytharaWidget {
         
         // Legal indemnification
         if (lowerInput.includes('indemnif') || lowerInput.includes('legal') || lowerInput.includes('liability') || lowerInput.includes('coverage')) {
-            return "Enterprise License includes 10 million dollar legal indemnification. Our On Premise Perpetual tier gets 25 million dollars. This covers IP claims, data breaches, and regulatory issues when you follow our documented practices. Most companies need this before their board approves AI deployment. Which tier aligns with your risk profile?";
+            return "No indemnification is currently offered on any tier. Can I help you compare tiers on features, support, or compliance coverage instead?";
         }
         
         // ROI / Business case
@@ -451,7 +450,7 @@ class MytharaWidget {
         
         // Competition / Alternatives
         if (lowerInput.includes('competitor') || lowerInput.includes('alternative') || lowerInput.includes('versus') || lowerInput.includes('compare')) {
-            return "You could definitely build something yourself or use other compliance tools. Main difference with us is we specifically focus on AI safety and manipulation detection, which isn't something most tools do. Plus the optional insurance backing. But yeah, there are other options out there—happy to talk through what makes sense for your situation.";
+            return "You could definitely build something yourself or use other compliance tools. Main difference with us is we specifically focus on AI safety and manipulation detection, which isn't something most tools do. But yeah, there are other options out there—happy to talk through what makes sense for your situation.";
         }
         
         // Implementation / Onboarding
@@ -486,7 +485,7 @@ class MytharaWidget {
         
         // Enterprise specific
         if (lowerInput.includes('enterprise') && !lowerInput.includes('license')) {
-            return "Enterprise License at 50 thousand per month gets you the full package—unlimited API calls, 24 7 premium support, 10 million dollar legal indemnification, dedicated account manager, the works. It's built for Fortune 500 companies and major enterprises where a compliance issue would be a really big deal. If you're at that scale, happy to walk through what's included.";
+            return "Enterprise License at 50 thousand per month gets you the full package—unlimited API calls, 24 7 premium support, dedicated account manager, the works. It's built for Fortune 500 companies and major enterprises where a compliance issue would be a really big deal. If you're at that scale, happy to walk through what's included.";
         }
         
         // On-premise specific
@@ -542,7 +541,7 @@ class MytharaWidget {
             } else if (millions < 50) {
                 return "At your revenue level, Growth License at 10 thousand per month makes sense. You get 1 million API calls per month, unlimited users, and priority support. Want to schedule a demo?";
             } else {
-                return "At your scale, Enterprise License at 50 thousand per month is the right fit. You get unlimited API calls, 10 million dollar legal indemnification, and 24 7 premium support. Should I have our enterprise team reach out?";
+                return "At your scale, Enterprise License at 50 thousand per month is the right fit. You get unlimited API calls and 24 7 premium support. Should I have our enterprise team reach out?";
             }
         }
         

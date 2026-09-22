@@ -4,7 +4,6 @@ S.E.R.E. Bot - Survive, Evade, Resist, and Escape
 Part of the A.M.I.R. Cybersecurity Suite
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 S.E.R.E. (Survive, Evade, Resist, and Escape) provides structured
 survival protocols for cybersecurity defense. This console module is a

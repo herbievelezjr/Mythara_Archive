@@ -286,7 +286,7 @@ This package contains **Mythara Archive**, a proprietary software repository tha
 ## 💼 BUSINESS CONTEXT FOR ATTORNEY
 
 ### **Company:**
-- **Entity:** Mythara Labs LLC (Herbert Velez Jr., sole proprietor)
+- **Entity:** Mythara Labs LLC (planned — not yet formed; Herbert Velez Jr., sole proprietor)
 - **Product:** Mythara Engine - AI governance and symbolic orchestration platform
 - **Stage:** Pre-revenue; launching commercial tier
 - **Target Market:** Healthcare AI, financial AI, enterprise AI safety
@@ -391,7 +391,7 @@ Upon completion of review, please provide signed opinion letter addressing:
 
 ## 🔐 CONFIDENTIALITY NOTICE
 
-This repository contains proprietary and confidential information of Mythara Labs LLC. 
+This repository contains proprietary and confidential information of Herbert Velez Jr. (Mythara Labs LLC planned — not yet formed). 
 
 **Attorney-Client Privilege:**
 - This package is provided to legal counsel under attorney-client privilege
@@ -422,7 +422,7 @@ This repository contains proprietary and confidential information of Mythara Lab
 ---
 
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
-**Mythara Labs LLC - Proprietary & Confidential**
+**Mythara Labs LLC (planned) - Proprietary & Confidential**
 
 **Prepared by:** Herbert Velez Jr., Founder  
 **Date Prepared:** November 19, 2025  

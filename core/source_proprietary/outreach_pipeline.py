@@ -4,7 +4,6 @@ Mythara Outreach Pipeline - Harvest to Email
 Connects public database harvester to automated email outreach.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 PIPELINE:
 1. Harvest contacts from public databases
@@ -73,7 +72,7 @@ If your team is carrying that weight, let's talk: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mytharaarchive-production.up.railway.app/pricing
 
 P.S. — This is a one-time email. Reply with "unsubscribe" and I won't reach out again."""
@@ -116,7 +115,7 @@ If your team faces those impossible moments: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mytharaarchive-production.up.railway.app/pricing
 
 P.S. — One-time outreach. Reply "unsubscribe" to opt out."""
@@ -157,7 +156,7 @@ If your team is carrying that weight: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Mythara Labs LLC
+Mythara Labs LLC (planned)
 mytharaarchive-production.up.railway.app/pricing
 
 P.S. — This is a one-time email. Reply "unsubscribe" to opt out."""

@@ -2,7 +2,6 @@
 """
 Unified Compliance Framework - Security Controls Implementation
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Multi-framework security compliance system with:
 - Authentication & Authorization

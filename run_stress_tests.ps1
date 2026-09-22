@@ -1,6 +1,5 @@
 # Mythara Engine - Comprehensive Stress Test Runner
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 Write-Host "==> Mythara Engine - Comprehensive Stress Test Suite" -ForegroundColor Cyan
 Write-Host "Started: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ss'))Z`n" -ForegroundColor Gray

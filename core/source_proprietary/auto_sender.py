@@ -4,7 +4,6 @@ Mythara Auto Sender - Fully Automated Email Outreach
 Sends personalized emails directly via Yahoo SMTP.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 SETUP:
 # QUICKFIX FIX: Moved to environment variable (CWE-798)
@@ -90,7 +89,7 @@ If this resonates, I'm here: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Founder, Mythara Labs LLC
+Founder, Mythara Labs LLC (planned)
 
 P.S. — This is a one-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""
 
@@ -128,7 +127,7 @@ If this resonates, I'm here: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Founder, Mythara Labs LLC
+Founder, Mythara Labs LLC (planned)
 
 P.S. — One-time email. Reply "unsubscribe" to opt out."""
 
@@ -166,7 +165,7 @@ If this resonates, I'm here: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Founder, Mythara Labs LLC
+Founder, Mythara Labs LLC (planned)
 
 P.S. — One-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""
 
@@ -204,7 +203,7 @@ If this resonates, I'm here: Mythara.Engine@yahoo.com
 
 Best,
 Herbert Velez Jr.
-Founder, Mythara Labs LLC
+Founder, Mythara Labs LLC (planned)
 Veteran-focused technology
 
 P.S. — One-time email. Reply "unsubscribe" if you'd prefer not to hear from us."""

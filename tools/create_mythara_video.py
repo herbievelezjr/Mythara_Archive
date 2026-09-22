@@ -5,7 +5,6 @@ Create a Mythara talking-head video by generating narration (ElevenLabs)
 then lip-syncing a character image with Wav2Lip.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Quick usage (Windows PowerShell):
 1) Ensure Python 3.10+ and FFmpeg installed and on PATH.

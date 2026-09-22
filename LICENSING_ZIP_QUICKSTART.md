@@ -185,7 +185,7 @@ Company deploys using `INSTALL.md` instructions
 
 ## Support for Licensed Companies
 
-**Herbert Velez Jr., Mythara Labs LLC**
+**Herbert Velez Jr., Mythara Labs LLC (planned)**
 
 - **Email:** legal@mythara.engine
 - **PGP:** `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`

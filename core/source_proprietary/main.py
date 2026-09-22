@@ -4,7 +4,6 @@ Mythara Engine - FastAPI Server
 Production-ready API for clause invocation and symbolic orchestration.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from fastapi import (
@@ -1485,7 +1484,7 @@ async def mythara_chat(req: ChatRequest, request: Request):
         word in message_lower
         for word in ["gdpr", "hipaa", "compliance", "regulation", "sox"]
     ):
-        response = "We've got GDPR, HIPAA, SOC 2, and industry-specific regulations baked in. Every API response includes audit trails with SHA-256 hashes. Air-gap deployment available if you need maximum sovereignty. Rate limiting and RBAC included too."
+        response = "Our controls are designed around GDPR, HIPAA, and SOC 2 Type II frameworks (SOC 2 Type II controls implemented, audit planned — not currently certified). Every API response includes audit trails with SHA-256 hashes. Air-gap deployment available if you need maximum sovereignty. Rate limiting and RBAC included too."
 
     elif any(
         word in message_lower

@@ -4,7 +4,6 @@ Mythara Engine - Monitoring & Observability
 Prometheus metrics, health checks, and performance monitoring.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from prometheus_client import (

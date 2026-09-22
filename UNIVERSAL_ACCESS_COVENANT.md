@@ -345,7 +345,7 @@ Your Mythara Archive now supports:
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Compliance Version:** 1.0.0  
 **Date:** November 2, 2025  
 **Next Review:** February 1, 2026

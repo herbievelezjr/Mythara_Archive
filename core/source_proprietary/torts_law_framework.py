@@ -4,7 +4,6 @@ Mythara Engine - Comprehensive Torts Law Framework
 Public domain legal knowledge integrated into covenant integrity system.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from enum import Enum

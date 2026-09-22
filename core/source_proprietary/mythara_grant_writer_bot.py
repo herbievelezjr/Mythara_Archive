@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara Grant Writing Specialist Bot
@@ -168,7 +167,7 @@ class MytharaGrantWriterBot:
                 "description": "Database servers with high-IOPS storage (PostgreSQL cluster)",
                 "cost": 20000,
                 "priority": "critical",
-                "justification": "Store contract integrity hashes, audit trails, and customer data with HIPAA/SOC 2 compliance",
+                "justification": "Store contract integrity hashes, audit trails, and customer data with storage built to HIPAA/SOC 2 control standards (not currently certified)",
                 "grant_alignment": "Cybersecurity grants, Healthcare IT grants",
             },
             {
@@ -629,7 +628,7 @@ in industries including healthcare, financial services, government, and manufact
 
 This grant will enable Mythara Labs to deploy dedicated server infrastructure capable 
 of processing 10,000+ contract verifications per day while maintaining 99.9% uptime 
-and meeting stringent security requirements (SOC 2, CMMC Level 3, HIPAA).
+and meeting stringent security requirements aligned with SOC 2, CMMC Level 3, and HIPAA control frameworks (certifications not currently held).
 
 PROBLEM STATEMENT:
 Organizations lose $1.2 trillion annually to contract fraud, disputes, and inefficiencies. 

@@ -4,7 +4,6 @@ Mythara Engine - Determinism Test Runner
 Tests reproducibility of clause selection across multiple runs.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import argparse

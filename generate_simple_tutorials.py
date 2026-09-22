@@ -2,7 +2,6 @@
 Mythara Simple Tutorial Generator
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Generates tutorial audio + slides (you combine them manually)
 Much simpler than full video automation.

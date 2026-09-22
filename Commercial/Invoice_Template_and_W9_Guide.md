@@ -137,8 +137,8 @@ Keep a simple tracking sheet:
 
 | Invoice # | Date | Customer | Amount | Status | Paid Date |
 |---|---|---|---|---|---|
-| INV-20251104-001 | 11/4/25 | Western Union | $2,500 | Sent | |
-| INV-20251104-002 | 11/4/25 | Ping Identity | $500 | Sent | |
+| INV-20251104-001 | 11/4/25 | Sample Client | $2,500 | SAMPLE | |
+| INV-20251104-002 | 11/4/25 | Sample Client | $500 | SAMPLE | |
 
 ---
 

@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 DEMETER - Goddess of Growth, Harvest, and Seasons
 ==================================================

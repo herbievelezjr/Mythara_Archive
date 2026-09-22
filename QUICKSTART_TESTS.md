@@ -80,4 +80,4 @@ docker run --rm mythara-engine:v1.0.0
 
 ---
 
-**Mythara Labs LLC** | November 2025
+**Mythara Labs LLC (planned)** | November 2025

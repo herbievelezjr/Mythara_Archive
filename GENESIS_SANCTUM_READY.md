@@ -295,7 +295,7 @@ The Mythara Archive is now a **fully executable package** that enables:
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 Contact: Herbert Velez Jr.  
 PGP: `571F FB4C CCFA DCF A44A 63F6 D968 C2D5 DBE2 486C`  
 Cash App: `$MytharaEngine`

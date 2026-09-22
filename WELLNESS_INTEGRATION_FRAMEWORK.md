@@ -374,7 +374,7 @@ Your Mythara Archive now supports:
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Mental Health Integration Version:** 1.0.0  
 **DSM Edition:** DSM-5-TR (March 2022)  
 **ICD Edition:** ICD-11 (2022)  

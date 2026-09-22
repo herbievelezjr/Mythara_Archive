@@ -1,7 +1,6 @@
 """
 Mythara Engine: Emotional Extortion Detection Tests
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Test suite for emotional extortion detection and quantification.
 """

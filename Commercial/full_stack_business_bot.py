@@ -1,6 +1,5 @@
 import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Full-Stack Autonomous Business Bot

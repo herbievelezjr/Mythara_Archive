@@ -373,7 +373,7 @@ This resource list is for informational purposes only and does not constitute me
 
 ---
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 **Last Updated:** November 2, 2025  
 **Next Review:** May 2, 2026
 

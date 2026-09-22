@@ -1,6 +1,5 @@
 # Mythara Engine - Email Templates
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 ## Template 1: Initial Outreach — Government Contractors
 
@@ -23,7 +22,7 @@ Would a 30-day pilot be valuable ahead of your next contract submission? I can h
 
 Best,  
 Herbert Velez Jr.  
-Mythara Labs LLC  
+Mythara Labs LLC (planned)  
 Mythara.Engine@yahoo.com  
 Enterprise: $60K/year (firm pricing; trial is the evaluation period)
 
@@ -50,7 +49,7 @@ Worth a quick run-through this month before your next exam window?
 
 Best,  
 Herbert Velez Jr.  
-Mythara Labs LLC  
+Mythara Labs LLC (planned)  
 Mythara.Engine@yahoo.com  
 Enterprise: $60K/year
 
@@ -75,7 +74,7 @@ Teams usually go from manual compliance checks to signed, verifiable reports in 
 
 Best,  
 Herbert Velez Jr.  
-Mythara Labs LLC  
+Mythara Labs LLC (planned)  
 Mythara.Engine@yahoo.com  
 Enterprise: $60K/year (firm; no discounts)
 
@@ -119,7 +118,7 @@ In the meantime, best of luck with [specific initiative you mentioned in first e
 
 Best,  
 Herbert Velez Jr.  
-Mythara Labs LLC  
+Mythara Labs LLC (planned)  
 Mythara.Engine@yahoo.com
 
 ---

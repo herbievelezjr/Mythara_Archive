@@ -4,7 +4,6 @@ H.E.P.H.A.E.S.T.U.S. - Holistic Engineering & Production Helper for Automated En
 The God of the Forge - Master Builder & System Architect
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Hephaestus is the GODBOT that:
 - Architects complete systems from high-level requirements

@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Sales Conversation Flow - Voice Modulation Tactics
@@ -28,7 +27,7 @@ VOICE_TONES = {
             "Assumptive close (So when should we kick off?)",
             "Handling 'too expensive' objection (ROI proof)"
         ],
-        "example": "We've saved Western Union 6 weeks of validation time. "
+        "example": "[EXAMPLE — hypothetical] We could save a bank 6 weeks of validation time. "
                    "That's why we're at $2,500 for the standard tier. "
                    "When do you want to start?"
     },
@@ -145,7 +144,7 @@ TONE_SWITCHING_TRIGGERS = {
             "(Casual) Of course you are—you'd be crazy not to shop around. "
             "(Confident) Here's the difference: they're selling you software. "
             "We're selling you a cryptographic seal that your auditors will "
-            "actually accept. That's why JPMorgan uses this, not them."
+            "actually accept. That's why regulated banks would choose this, not them."
     },
     
     "prospect_interested_but_delaying": {
@@ -233,7 +232,7 @@ INDUSTRY_PERSONAS = {
         ],
         "example_opening": 
             "(Professional) Hi [Name], Herbert Velez from Mythara. I'm calling "
-            "because we help banks like Western Union and JPMorgan compress "
+            "because we help banks compress "
             "their model validation timelines from 6 weeks to 8 days while "
             "maintaining full OCC SR 11-7 compliance. Do you have 2 minutes?"
     },

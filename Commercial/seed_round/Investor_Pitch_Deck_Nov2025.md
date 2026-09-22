@@ -3,7 +3,9 @@
 **Seed Round Presentation**  
 **November 2, 2025**  
 **Herbert Velez Jr., Founder**  
-**Mythara Labs LLC**
+**Mythara Labs LLC (planned — not yet formed)**
+
+> **Note:** Mythara Labs LLC is not yet formed; all entity references describe the planned structure.
 
 ---
 

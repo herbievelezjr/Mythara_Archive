@@ -4,7 +4,6 @@ Robustness Test Suite - Verify Improvements to All Bots
 Tests connection pooling, error handling, validation, retry logic, rate limiting
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

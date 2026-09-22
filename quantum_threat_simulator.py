@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 QUANTUM THREAT SIMULATOR
 Self-evolving adversarial AI for quantum security testing

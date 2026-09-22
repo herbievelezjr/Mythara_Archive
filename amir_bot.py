@@ -4,7 +4,6 @@ A.M.I.R. - Autonomous Mythara Intelligence & Response
 The One Ring of Cybersecurity - Command Center for All Security Operations
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 A.M.I.R. (Autonomous Mythara Intelligence & Response) is the unified orchestrator
 that rules all cybersecurity operations across Mythara Industries:

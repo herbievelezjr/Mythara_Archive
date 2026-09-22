@@ -1,5 +1,5 @@
 # Mythara Labs LLC Formation Guide
-**Copyright © 2025 Mythara Labs LLC. All rights reserved.**
+**Copyright © 2025 Herbert Velez Jr. All rights reserved.**
 **Proprietary and Confidential.**
 
 ---
@@ -84,8 +84,8 @@
 
 **Required Policies:**
 - General Liability: $1M per occurrence, $2M aggregate (protects against basic business risks)
-- Professional Liability (E&O): $10M coverage (backs indemnification in Growth tier)
-- Cyber Liability: $25M coverage (backs indemnification in Enterprise tier)
+- Professional Liability (E&O): $10M coverage (no indemnification is currently offered; obtain only if indemnification is introduced in future)
+- Cyber Liability: $25M coverage (no indemnification is currently offered; obtain only if indemnification is introduced in future)
 - Directors & Officers (D&O): Optional for LLC, but recommended if taking investors
 
 **Insurance Providers:**

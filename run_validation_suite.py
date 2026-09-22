@@ -4,7 +4,6 @@ Mythara Engine - Validation Suite Runner
 Runs all validation tests in sequence.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

@@ -212,13 +212,13 @@ grep "Auto-blacklisted" logs/mythara.log
 
 ---
 
-## 🎖️ Compliance & Certifications
+## 🎖️ Compliance Alignment (not certifications)
 
-The hardening implementation supports:
+The hardening implementation aligns with:
 
 - ✅ **OWASP Top 10**: All major web vulnerabilities covered
-- ✅ **SOC 2 Type II**: Security controls documented
-- ✅ **ISO 27001**: Information security standards met
+- ⏳ **SOC 2 Type II**: Security controls documented (controls implemented, audit planned — not currently certified)
+- ⏳ **ISO 27001**: Controls designed around the standard (not currently certified)
 - ✅ **NIST CSF**: Cybersecurity framework aligned
 - ✅ **PCI DSS**: Payment data protection (if applicable)
 - ✅ **GDPR**: Privacy by design implemented

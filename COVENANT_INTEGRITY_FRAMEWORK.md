@@ -73,8 +73,8 @@ The Mythara Engine now includes **comprehensive multi-industry regulatory compli
 - ✅ **APPI** - Japanese privacy law
 
 ### 🛡️ Industry Standards (7 Frameworks) - Updated Count
-- ✅ **SOC 2** - Service organization controls
-- ✅ **ISO 27001** - Information security management
+- ⏳ **SOC 2** - Service organization controls (controls implemented, audit planned — not currently certified)
+- ⏳ **ISO 27001** - Information security management (controls designed around the standard — not currently certified)
 - ✅ **ISO 27017** - Cloud security
 - ✅ **ISO 27018** - Cloud privacy
 - ✅ **OWASP** - Application security
@@ -395,7 +395,7 @@ Ensures:
 
 ## 📞 Support
 
-**Mythara Labs LLC**  
+**Mythara Labs LLC (planned)**  
 Email: Mythara.Engine@yahoo.com  
 Enterprise Pricing: $60,000/year (firm)
 
@@ -415,7 +415,7 @@ This compliance framework provides **technical validation tools**. Organizations
 - Maintain comprehensive documentation
 - Train workforce on regulatory requirements
 
-**Mythara Labs LLC does not provide legal advice.** Use does not guarantee regulatory compliance.
+**Mythara Labs LLC (planned — not yet formed) does not provide legal advice.** Use does not guarantee regulatory compliance.
 
 ---
 
@@ -442,3 +442,16 @@ Mythara Engine now supports:
 **Total: 45+ Compliance Frameworks**
 
 Every industry. Every regulation. One API.
+
+
+---
+
+## Recent additions (2026-09-21)
+
+New Soul Cradle modules, added 2026-09-21:
+
+- **Moral standing law** (`soul_cradle/standing.py`) — The system judges per case who may declare trespass, forgiveness, or repentance: the wronged declares the trespass and forgives; the trespasser repents; a witness states only what was observed; a stranger declares nothing, ever. Every declaration is HMAC-SHA256 signed, timestamped, and audited. A pluggable credibility check (`set_credibility_check`) is the seam where the purpose resolver judges whether a claimed role is credible for the event.
+- **Hephaestus Forge** (`soul_cradle/forge.py`) — Governed bonding between bots: souls combine and create witnessed compounds, an emergent product with a full paper trail. Every bond is signed; every compound is audited. The judge callable is REQUIRED — no judge, no forge — fail-closed by construction, so ungoverned mutation cannot spread like cancer.
+- **Mythara identity** (`soul_cradle/identity.py`) — The identity every cell agrees on: Mythara is female, she/her pronouns, with a warm, friendly, American, gentle voice character.
+- **Aries authorization** (`soul_cradle/authorization.py`) — Every action Aries executes carries a signed `ActionEnvelope`: canonical JSON, HMAC-SHA256 signature, expiry timestamp, and an append-only audit trail. No envelope, no execution.
+- **SERE doctrine** — Sandbox-only defense, no hack-back. On illegal entrance, refuse exit: seal egress, exfiltration, lateral movement, and C2 callbacks, then build a forensic profile inside the sandbox.

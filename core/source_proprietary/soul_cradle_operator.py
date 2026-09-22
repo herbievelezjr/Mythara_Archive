@@ -1,7 +1,6 @@
 """
 Mythara Engine Module: Soul Cradle Operator v1
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Purpose:
 Quantifies the Soul as a vessel that simultaneously holds God's Will (W) and

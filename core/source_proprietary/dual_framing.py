@@ -2,7 +2,6 @@
 """
 Mythara Engine — Dual Framing Translation Layer
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 This module provides a translation layer between Mythara's mythic truth
 and industry-safe terminology for enterprise audiences. The engine remains

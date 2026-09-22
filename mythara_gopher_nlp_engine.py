@@ -5,7 +5,6 @@ A GPT-like conversational AI trained on Mythara's legal knowledge base.
 Provides natural language understanding for legal queries without external APIs.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import re

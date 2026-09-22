@@ -1,7 +1,6 @@
 """
 Mythara Engine Module: Emotional Extortion Detection & Quantification
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Purpose:
 Detects and quantifies emotional extortion patterns in AI systems and human

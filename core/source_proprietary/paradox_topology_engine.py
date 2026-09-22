@@ -4,7 +4,6 @@ Mythara Paradox Topology Engine
 The Universal Framework for Mapping Systemic Impossible Choices
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 This is not a burnout predictor. This is a reality cartographer.
 It maps the shape of systemic failure across organizations, industries, and time.

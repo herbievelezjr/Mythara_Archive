@@ -1,7 +1,6 @@
 """
 Mythara Soul Proportion Model (S(t))
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Formal emotional vitality tracking system for Mythara Engine.
 Treats "soul" as an emotional proportion S(t) ∈ [0,1] representing

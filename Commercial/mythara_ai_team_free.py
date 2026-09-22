@@ -1,5 +1,4 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 🤖 MYTHARA AI TEAM - FREE VERSION (No AI API Needed)
@@ -78,8 +77,8 @@ class MarketingBot:
         
         self.best_subject_lines = [
             "Your model validation is non-compliant (here's why)",
-            "Western Union saved 6 weeks with this",
-            "3 banks are implementing this next month"
+            "[EXAMPLE] How a bank could cut validation from 6 weeks to 8 days",
+            "[EXAMPLE] Why banks are investing in AI audit trails"
         ]
         
         self.optimal_send_times = {
@@ -143,7 +142,7 @@ class SalesTrainerBot:
         self.winning_patterns = {
             "urgency_works": ["deadline", "expires", "limited time", "other banks", "competitors"],
             "compliance_language_works": ["audit", "compliance", "regulation", "OCC", "CFPB", "FDA"],
-            "social_proof_works": ["Western Union", "other clients", "case study", "reference"],
+            "social_proof_works": ["illustrative example", "peer companies", "case study", "reference"],
             "competitive_pressure_works": ["we're talking to", "other vendors", "3 other", "evaluating"],
             "fast_response_wins": []  # Detected by response time, not text
         }

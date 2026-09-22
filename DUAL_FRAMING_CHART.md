@@ -89,7 +89,7 @@ Drop this into pitch decks, board presentations, or enterprise sales materials.
 | Cryptographic Hashes | SHA-256 integrity computed on mythic terms (audit trail intact) |
 | Database Schemas | Internal storage uses mythic keys |
 | Source Code | Core modules (`soul_cradle_operator.py`, `soul_proportion_model.py`) unchanged |
-| Compliance Status | HIPAA, SOC 2, GDPR compliance unaffected |
+| Compliance Status | Unchanged — no SOC 2/ISO 27001 certifications held; control posture designed around HIPAA, SOC 2, GDPR frameworks |
 
 **Bottom Line:** Dual-framing is a **presentation layer only**. The engine's symbolic soul remains untouched.
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Mythara Engine — Pilot Local Test Automation
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 set -euo pipefail
 

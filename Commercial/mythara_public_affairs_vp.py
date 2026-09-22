@@ -1,6 +1,5 @@
 import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Mythara VP of Public Affairs - Autonomous Brand & Communication Management
@@ -458,7 +457,6 @@ https://mythara.engine
 
 ###
 
-Proprietary and Confidential.
 """,
             'distribution_list': ['PR Newswire', 'TechCrunch', 'VentureBeat', 'AI News'],
             'embargo_until': None,

@@ -1,6 +1,5 @@
 """
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 PERSEPHONE - Goddess of Spring Rebirth and Second Chances
 ==========================================================

@@ -1,5 +1,4 @@
 # Copyright  2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 Autonomous Sales Bot with Self-Healing & Adaptive Learning
@@ -490,7 +489,7 @@ Herbert"""
 
 AI governance rules have gotten stricter (Fed guidance just dropped), so I wanted to see if you're feeling more regulatory pressure now.
 
-We just helped 3 banks pass model risk audits using cryptographic audit trails. Happy to show you how it works15 min.
+Cryptographic audit trails help banks pass model risk audits. Happy to show you how it works15 min.
 
 Tuesday or Wednesday work?
 

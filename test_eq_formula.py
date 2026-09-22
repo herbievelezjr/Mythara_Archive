@@ -9,7 +9,6 @@ Where:
 - EQ = Emotional Quotient / Authenticity Score
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 This formula measures emotional authenticity by calculating:
 (Genuine shareable / Total expressed) × Held back

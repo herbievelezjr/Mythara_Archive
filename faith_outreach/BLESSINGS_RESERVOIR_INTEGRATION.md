@@ -319,7 +319,7 @@ Every BR transaction generates:
 ### Compliance Certifications
 - **HIPAA**: Mythara is HIPAA-compliant (Business Associate Agreement available)
 - **GDPR**: EU data handling protocols for international deployments
-- **SOC 2**: Audit in progress (expected Q2 2026)
+- **SOC 2**: Type II controls implemented, audit planned (not currently certified)
 
 ---
 

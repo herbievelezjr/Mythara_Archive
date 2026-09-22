@@ -1,6 +1,5 @@
 # Mythara Engine API - Production Dockerfile
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 # Build: 2025-11-18T01:10:00Z - Force rebuild with numpy
 
 FROM python:3.11.6-slim-bookworm

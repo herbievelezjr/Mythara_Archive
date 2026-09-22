@@ -4,7 +4,6 @@ Mythara Legal Team Suite - Comprehensive Legal Bot Architecture
 Enterprise-grade legal support across all practice areas.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 import sys

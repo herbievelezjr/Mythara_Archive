@@ -4,7 +4,6 @@ Mythara Engine - Adversarial Attack Test Suite
 Comprehensive red team testing for security vulnerabilities.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Attack Categories:
 1. Authentication & Authorization Bypass

@@ -1,6 +1,5 @@
 # Mythara Engine - Prospect Questions & Answers
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 **Preparation Guide for Pilot Calls**
 
@@ -57,7 +56,7 @@ Think of it this way:
 - Drata/Vanta tell you IF you're compliant
 - Mythara proves to auditors THAT you're compliant with reproducible evidence
 
-We're complementary, not competitive. Several of our pilot customers use Vanta for policies and Mythara for validation."
+We're complementary, not competitive — Vanta handles policies, Mythara handles validation."
 
 **Why this works:** You're not attacking competitors, you're positioning as a different category.
 
@@ -138,15 +137,15 @@ The clause system is extensible, so you can add custom compliance rules specific
 
 #### 11. **"Is this SOC 2 certified? Do you have a security audit?"**
 
-**DON'T SAY:** "No, we're too small for that"
-**DO SAY:** "Mythara itself is the auditing mechanism. Our validation suite includes:
+**DON'T SAY:** "No, we're too small for that" or deflect
+**DO SAY:** "SOC 2 Type II controls implemented, audit planned (not currently certified). Our validation suite includes:
 - 100,000+ adversarial security probes (99.98% safety recall)
 - Leakage detection with 0 high-severity issues
 - Determinism testing (99.92% reproducibility)
 
 All validation reports are included in the pilot package. Since you'll be deploying Mythara on your infrastructure with your security controls, you inherit your own SOC 2/security posture."
 
-**Why this works:** Deflects "are you secure" to "your deployment is secure."
+**Why this works:** Gives the honest status directly, then backs it with evidence.
 
 ---
 

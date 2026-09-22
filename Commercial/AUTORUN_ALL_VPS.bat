@@ -1,6 +1,5 @@
 @echo off
 REM Copyright (c) 2025 Herbert Velez Jr. All rights reserved.
-REM Proprietary and Confidential.
 REM 
 REM Schedule all Mythara VP bots in Windows Task Scheduler
 REM Run this script as Administrator

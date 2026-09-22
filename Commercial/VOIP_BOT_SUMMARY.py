@@ -1,6 +1,5 @@
 import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
-# Proprietary and Confidential.
 
 """
 ================================================================================
@@ -182,7 +181,7 @@ WHY VOICE BEATS EMAIL:
 1. CONFIDENT
    - Use: Opening pitch, pricing discussion, assumptive close
    - Tone: Medium-high pitch, steady pace, strong volume
-   - Example: "We've saved Western Union 6 weeks. $2,500. When do you start?"
+   - Example (hypothetical): "We could help a bank compress 6 weeks of validation. $2,500. When do you start?"
 
 2. EMPATHETIC
    - Use: Prospect concerns, budget objections, first 'no'
@@ -309,7 +308,6 @@ KEY DIFFERENTIATOR:
 ================================================================================
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 For licensing inquiries: Mythara.Engine@yahoo.com
 """

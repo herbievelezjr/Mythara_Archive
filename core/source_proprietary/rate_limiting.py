@@ -4,7 +4,6 @@ Mythara Engine - Rate Limiting Middleware
 Prevent abuse and DDoS attacks with per-user and per-org rate limiting.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 """
 
 from fastapi import Request, HTTPException, status
@@ -273,13 +272,13 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if not api_key:
             return "free"
 
-        # Extract tier from API key prefix
+        # Extract tier from API key prefix.
+        # NOTE: the legacy "sk_pilot_" prefix is intentionally NOT honored —
+        # pilot keys were exposed and must not grant any tier.
         if api_key.startswith("sk_sovereign_"):
             return "sovereign"
         elif api_key.startswith("sk_enterprise_"):
             return "enterprise"
-        elif api_key.startswith("sk_pilot_"):
-            return "pilot"
         else:
             return "free"
 

@@ -4,7 +4,6 @@ Unified Compliance Framework for Mythara Engine
 Implements multi-industry regulatory compliance standards
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
-Proprietary and Confidential.
 
 Supported Compliance Frameworks:
 - Financial: PCI DSS, FINRA, SOX, GLBA, Dodd-Frank, BSA/AML

@@ -211,7 +211,7 @@ GET /v1/dual-framing/flow
 - **Cryptographic hashes**: SHA-256 integrity hashes computed on mythic terms (audit trails preserved)
 - **Database schemas**: Internal storage uses mythic keys
 - **Source code**: Core modules (`soul_cradle_operator.py`, `soul_proportion_model.py`) unchanged
-- **Compliance status**: HIPAA, SOC 2, GDPR compliance unaffected
+- **Compliance status**: Unchanged — no SOC 2/ISO 27001 certifications held; controls designed around HIPAA, SOC 2, GDPR frameworks
 
 **Bottom Line:** Dual-framing is a **presentation layer only**. The engine's symbolic integrity remains untouched.
 

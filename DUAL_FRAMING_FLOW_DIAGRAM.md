@@ -63,7 +63,7 @@
 │  │  ✓ SHA-256 hashes computed on mythic terms (audit trail)          │ │
 │  │  ✓ Engine logic unchanged (calculations identical)                │ │
 │  │  ✓ Database schemas use mythic keys (internal storage)            │ │
-│  │  ✓ Compliance status preserved (HIPAA, SOC 2, GDPR)               │ │
+│  │  ✓ Compliance posture unchanged (no SOC 2/ISO 27001 certs held)   │ │
 │  └───────────────────────────────────────────────────────────────────┘ │
 │                                                                         │
 └────────────────────────────────┬────────────────────────────────────────┘
