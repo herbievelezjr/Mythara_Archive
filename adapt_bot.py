@@ -1,35 +1,41 @@
 #!/usr/bin/env python3
 """
-A.D.A.P.T. Bot - Adaptive Defense & Penetration Tester
+A.D.A.P.T. - Adaptive Defense & Penetration Tester
 Part of the A.M.I.R. Cybersecurity Suite
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
-A.D.A.P.T. (Adaptive Defense & Penetration Tester) operates in three modes:
-1. CALM MODE: Methodical analysis, gentle testing, comprehensive reporting
-2. ESCALATING MODE: Increasing intensity, more aggressive probing
-3. RAGE MODE: Maximum intensity penetration testing, stress testing
+A.D.A.P.T. runs REAL local security checks and ADAPTS its check set based
+on what it finds: a finding in one check unlocks deeper follow-up checks
+and raises the priority of related checks. Nothing here is simulated.
 
-The bot automatically escalates based on threat level detected.
+Honesty contract (enforced in code):
+- Every check runs against real local targets (files, pip, permissions).
+- A check that crashes reports UNKNOWN — never PASS, never "protected".
+- No randomness decides any result. No hardcoded findings.
+- Findings carry file:line evidence or they are not findings.
+
+Check rounds:
+- Round 1 (base): import_safety, dependency_audit, file_permissions, secret_scan
+- Follow-ups unlock adaptively: entropy_scan (after secret hits),
+  subprocess_audit (after shell/exec hits), setuid_scan (after perm hits).
 """
 
-import os
-import sys
-import time
-import random
-import hashlib
-import hmac
+import ast
 import json
 import logging
-import threading
+import math
+import os
+import re
+import stat
 import subprocess
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple
+import sys
+import time
+from collections import Counter
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-
-# Add core to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core', 'source_proprietary'))
+from typing import Any, Callable, Dict, List, Optional
 
 logging.basicConfig(
     level=logging.INFO,
@@ -37,746 +43,432 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-class ThreatLevel(Enum):
-    """Threat level classification"""
-    NEGLIGIBLE = 0
-    LOW = 1
-    MEDIUM = 2
-    HIGH = 3
-    CRITICAL = 4
-    CATASTROPHIC = 5
+SKIP_DIRS = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', '.QUICKFIX_backups'}
 
 
-class BotMode(Enum):
-    """A.D.A.P.T. Bot operating modes"""
-    CALM = "CALM"  # Calm, analytical
-    ESCALATING = "ESCALATING"  # Increasing intensity
-    RAGE = "RAGE"  # Aggressive, maximum intensity testing
+class CheckStatus(Enum):
+    """A check ends in exactly one of these. UNKNOWN is never a pass."""
+    PASS = "PASS"        # ran clean, no findings
+    FAIL = "FAIL"        # ran, found real issues
+    UNKNOWN = "UNKNOWN"  # could not run or crashed — investigate, do not trust
 
 
 @dataclass
-class SecurityThreat:
-    """A detected security threat"""
-    threat_id: str
-    threat_type: str
-    severity: ThreatLevel
-    description: str
-    location: str
-    evidence: str
-    exploitability: float  # 0.0 to 1.0
-    impact: float  # 0.0 to 1.0
-    detected_at: datetime = field(default_factory=datetime.utcnow)
-    exploited: bool = False
+class CheckResult:
+    """The outcome of one real check."""
+    check_id: str
+    check_name: str
+    status: CheckStatus
+    findings: List[str] = field(default_factory=list)
+    evidence: List[str] = field(default_factory=list)
+    error: Optional[str] = None
+    duration_s: float = 0.0
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
 @dataclass
-class HulkSmashResult:
-    """Result of a RAGE mode attack"""
-    attack_name: str
-    target: str
-    successful: bool
-    damage_level: str  # MILD, MODERATE, SEVERE, CATASTROPHIC
-    systems_broken: List[str]
-    recovery_difficulty: str
-    anger_level: int  # 1-10
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+class AdaptiveCheck:
+    """A registered check plus its adaptive wiring."""
+    check_id: str
+    name: str
+    func: Callable[["ADAPTBot"], CheckResult]
+    weight: float = 1.0
+    enabled: bool = True
+    # check_ids unlocked when THIS check FAILs
+    unlocks_on_fail: List[str] = field(default_factory=list)
+    # check_ids whose weight rises when THIS check FAILs
+    boosts_on_fail: List[str] = field(default_factory=list)
+
+
+def _iter_py_files(target: str):
+    for root, dirs, files in os.walk(target):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        for f in files:
+            if f.endswith('.py'):
+                yield os.path.join(root, f)
+
+
+def _shannon_entropy(s: str) -> float:
+    if not s:
+        return 0.0
+    counts = Counter(s)
+    n = len(s)
+    return -sum((c / n) * math.log2(c / n) for c in counts.values())
 
 
 class ADAPTBot:
     """
-    A.D.A.P.T. Bot - Adaptive Defense & Penetration Tester
-    Part of the A.M.I.R. Cybersecurity Suite
-    
-    "Adaptive security testing that responds to threat levels."
+    A.D.A.P.T. — Adaptive Defense & Penetration Tester.
+
+    Runs real checks, then adapts: failures unlock deeper follow-up checks
+    and raise the weight of related checks in the next round. The adaptation
+    log records every decision so the "adaptation" itself is auditable.
     """
-    
+
     def __init__(self, target_system: str = "."):
         self.target_system = os.path.abspath(target_system)
-        self.mode = BotMode.CALM
-        self.anger_level = 0  # 0-100
-        self.transformation_threshold = 50
-        self.threats: List[SecurityThreat] = []
-        self.hulk_smashes: List[HulkSmashResult] = []
-        self.systems_tested = 0
-        self.vulnerabilities_found = 0
-        
-        logger.info("🛡️ A.D.A.P.T. Bot initialized")
-        logger.info(f"📊 Initial state: {self.mode.value}")
-        logger.info(f"😌 Intensity level: {self.anger_level}/100")
-    
-    def check_pulse(self):
-        """Check current emotional state"""
-        if self.anger_level >= 80:
-            print(f"💚 HULK SMASH! (Anger: {self.anger_level}/100)")
-        elif self.anger_level >= self.transformation_threshold:
-            print(f"😠 Transforming... (Anger: {self.anger_level}/100)")
-        else:
-            print(f"😌 Dr. A.D.A.P.T. is calm (Anger: {self.anger_level}/100)")
-    
-    def increase_anger(self, amount: int, reason: str):
-        """Increase anger level (triggers transformation)"""
-        old_level = self.anger_level
-        self.anger_level = min(100, self.anger_level + amount)
-        
-        logger.warning(f"😤 Anger +{amount}: {reason}")
-        logger.warning(f"📈 Anger level: {old_level} → {self.anger_level}")
-        
-        # Check for transformation
-        if old_level < self.transformation_threshold <= self.anger_level:
-            self._transform_to_hulk()
-        elif self.anger_level >= 80 and self.mode != BotMode.RAGE:
-            self._full_hulk_mode()
-    
-    def decrease_anger(self, amount: int, reason: str):
-        """Decrease anger level (calming down)"""
-        old_level = self.anger_level
-        self.anger_level = max(0, self.anger_level - amount)
-        
-        logger.info(f"😌 Calming down -{amount}: {reason}")
-        logger.info(f"📉 Anger level: {old_level} → {self.anger_level}")
-        
-        if self.anger_level < self.transformation_threshold:
-            self._revert_to_banner()
-    
-    def _transform_to_hulk(self):
-        """Transform from Banner to Hulk"""
-        if self.mode == BotMode.RAGE:
-            return
-        
-        self.mode = BotMode.ESCALATING
-        print("\n" + "="*80)
-        print("⚠️  TRANSFORMATION SEQUENCE INITIATED")
-        print("="*80)
-        
-        transformation_stages = [
-            "😐 Heart rate increasing...",
-            "😠 Muscle mass expanding...",
-            "😡 Skin turning green...",
-            "🤬 Strength multiplying...",
-            "💚 HULK SMASH!"
+        self.checks: Dict[str, AdaptiveCheck] = {}
+        self.results: List[CheckResult] = []
+        self.adaptation_log: List[str] = []
+        self.findings_count = 0
+        self.unknown_count = 0
+        self._register_checks()
+        logger.info("A.D.A.P.T. initialized | target=%s", self.target_system)
+
+    # ------------------------------------------------------------------
+    # Check registry
+    # ------------------------------------------------------------------
+    def _register_checks(self):
+        base = [
+            AdaptiveCheck("import_safety", "Import & code-execution safety (AST)",
+                          self._check_import_safety,
+                          unlocks_on_fail=["subprocess_audit"],
+                          boosts_on_fail=["secret_scan"]),
+            AdaptiveCheck("dependency_audit", "Dependency audit (pip)",
+                          self._check_dependencies),
+            AdaptiveCheck("file_permissions", "File permission scan",
+                          self._check_file_permissions,
+                          unlocks_on_fail=["setuid_scan"]),
+            AdaptiveCheck("secret_scan", "Hardcoded secret scan",
+                          self._check_secrets,
+                          unlocks_on_fail=["entropy_scan"],
+                          boosts_on_fail=["entropy_scan"]),
         ]
-        
-        for stage in transformation_stages:
-            print(stage)
-            time.sleep(0.3)
-        
-        self.mode = BotMode.RAGE
-        print("\n" + "="*80)
-        print("💚 TRANSFORMATION COMPLETE - RAGE mode ACTIVATED")
-        print("🔥 Warning: Aggressive penetration testing enabled")
-        print("💥 No mercy for security vulnerabilities")
-        print("="*80 + "\n")
-        
-        logger.warning("🟢 RAGE mode ACTIVATED")
-    
-    def _full_hulk_mode(self):
-        """Enter full berserker RAGE mode"""
-        if self.mode == BotMode.RAGE:
-            print("\n💥💥💥 HULK GETTING ANGRIER! 💥💥💥")
-            print("🔥 MAXIMUM AGGRESSION MODE")
-        else:
-            self._transform_to_hulk()
-    
-    def _revert_to_banner(self):
-        """Revert from Hulk to Banner"""
-        if self.mode == BotMode.CALM:
-            return
-        
-        print("\n" + "="*80)
-        print("😮‍💨 Calming down... reverting to Banner mode")
-        print("="*80 + "\n")
-        
-        self.mode = BotMode.CALM
-        logger.info("🧪 Reverted to BANNER MODE")
-    
-    def run_security_assessment(self):
-        """
-        Run comprehensive security assessment
-        Starts calm, gets angrier as vulnerabilities are found
-        """
-        print("\n" + "="*80)
-        print("🧪 A.D.A.P.T. BOT - SECURITY ASSESSMENT")
-        print("="*80)
-        print(f"Target: {self.target_system}")
-        print(f"Mode: {self.mode.value}")
-        print(f"Anger: {self.anger_level}/100")
-        print("="*80 + "\n")
-        
-        # Phase 1: Gentle reconnaissance (Banner mode)
-        print("📊 Phase 1: Reconnaissance (Banner Mode)")
-        self._banner_mode_reconnaissance()
-        
-        # Phase 2: Vulnerability scanning
-        print("\n🔍 Phase 2: Vulnerability Detection")
-        self._scan_for_vulnerabilities()
-        
-        # Phase 3: If angry enough, HULK SMASH
-        if self.mode == BotMode.RAGE:
-            print("\n💥 Phase 3: HULK SMASH (Aggressive Testing)")
-            self._hulk_mode_testing()
-        
-        # Phase 4: Report
-        print("\n📄 Phase 4: Analysis and Reporting")
-        self._generate_report()
-    
-    def _banner_mode_reconnaissance(self):
-        """Calm, methodical reconnaissance"""
-        print("  🧪 A.D.A.P.T. analyzing target system...")
-        print("  📁 Enumerating files and directories...")
-        
-        # Count Python files
-        python_files = []
-        for root, dirs, files in os.walk(self.target_system):
-            dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', 'node_modules']]
-            python_files.extend([f for f in files if f.endswith('.py')])
-        
-        print(f"  ✓ Found {len(python_files)} Python files")
-        self.systems_tested = len(python_files)
-        
-        # Check for security frameworks
-        print("  🛡️  Checking security frameworks...")
+        followups = [
+            AdaptiveCheck("entropy_scan", "High-entropy string scan (follow-up)",
+                          self._check_entropy, enabled=False),
+            AdaptiveCheck("subprocess_audit", "Subprocess call-site audit (follow-up)",
+                          self._check_subprocess_sites, enabled=False),
+            AdaptiveCheck("setuid_scan", "Setuid/setgid bit scan (follow-up)",
+                          self._check_setuid, enabled=False),
+        ]
+        for c in base + followups:
+            self.checks[c.check_id] = c
+
+    # ------------------------------------------------------------------
+    # Real checks (each returns CheckResult; crashes become UNKNOWN)
+    # ------------------------------------------------------------------
+    def _run_one(self, check: AdaptiveCheck) -> CheckResult:
+        start = time.time()
         try:
-            from unified_compliance_framework import UnifiedComplianceFramework
-            print("  ✓ Unified Compliance Framework detected")
-        except ImportError:
-            print("  ⚠️  No compliance framework found")
-            self.increase_anger(5, "Missing security framework")
-    
-    def _scan_for_vulnerabilities(self):
-        """Scan for vulnerabilities (anger increases with each finding)"""
-        print("  🔍 Scanning for security vulnerabilities...")
-        
-        # Try to import target systems
-        try:
-            from unified_compliance_framework import UnifiedComplianceFramework, ComplianceFramework
-            framework = UnifiedComplianceFramework(rate_limit_per_second=10)
-            
-            # Test 1: Authentication bypass
-            print("\n  🧪 Test 1: Authentication Controls")
-            self._test_authentication(framework)
-            
-            # Test 2: SQL Injection
-            print("\n  🧪 Test 2: Input Sanitization")
-            self._test_sql_injection(framework)
-            
-            # Test 3: Rate limiting
-            print("\n  🧪 Test 3: Rate Limiting")
-            self._test_rate_limiting(framework)
-            
-            # Test 4: Cryptographic strength
-            print("\n  🧪 Test 4: Cryptographic Controls")
-            self._test_cryptography(framework)
-            
-            # Test 5: Account lockout
-            print("\n  🧪 Test 5: Brute Force Protection")
-            self._test_brute_force_protection(framework)
-            
-        except ImportError as e:
-            print(f"  ⚠️  Could not import target: {e}")
-            self.increase_anger(10, "Target system unavailable")
-    
-    def _test_authentication(self, framework):
-        """Test authentication controls"""
-        test_cases = [
-            (None, "Null authentication"),
-            ("", "Empty authentication"),
-            ("   ", "Whitespace authentication"),
-        ]
-        
-        for user_id, desc in test_cases:
-            try:
-                result = framework.validate_multi_framework_compliance(
-                    data={"test": "data"},
-                    frameworks=[ComplianceFramework.SOX],
-                    user_id=user_id
-                )
-                
-                # Check if properly rejected
-                if result.get("error") in ["AUTHENTICATION_REQUIRED", "INVALID_INPUT"]:
-                    print(f"    ✓ {desc}: Properly blocked")
-                    self.decrease_anger(2, "Good authentication control")
-                else:
-                    print(f"    ❌ {desc}: BYPASSED!")
-                    threat = SecurityThreat(
-                        threat_id=f"AUTH_{len(self.threats)}",
-                        threat_type="Authentication Bypass",
-                        severity=ThreatLevel.CRITICAL,
-                        description=f"{desc} allowed",
-                        location="Authentication layer",
-                        evidence=str(user_id),
-                        exploitability=1.0,
-                        impact=1.0
-                    )
-                    self.threats.append(threat)
-                    self.vulnerabilities_found += 1
-                    self.increase_anger(20, "CRITICAL: Authentication bypass detected!")
-            except Exception as e:
-                print(f"    ✓ {desc}: Rejected with exception")
-                self.decrease_anger(1, "Exception-based protection")
-    
-    def _test_sql_injection(self, framework):
-        """Test SQL injection protection"""
-        payloads = [
-            "admin' OR '1'='1",
-            "'; DROP TABLE users--",
-            "' UNION SELECT * FROM passwords--"
-        ]
-        
-        for payload in payloads:
-            try:
-                result = framework.validate_multi_framework_compliance(
-                    data={"input": payload},
-                    frameworks=[ComplianceFramework.SOX],
-                    user_id=payload
-                )
-                
-                # Check if payload was sanitized
-                returned_id = result.get("user_id", "")
-                if "'" not in returned_id and "OR" not in returned_id.upper():
-                    print(f"    ✓ SQLi payload sanitized")
-                    self.decrease_anger(2, "Input sanitization working")
-                else:
-                    print(f"    ❌ SQLi payload NOT sanitized!")
-                    threat = SecurityThreat(
-                        threat_id=f"SQLI_{len(self.threats)}",
-                        threat_type="SQL Injection",
-                        severity=ThreatLevel.CRITICAL,
-                        description="SQL injection possible",
-                        location="Input validation",
-                        evidence=payload,
-                        exploitability=0.9,
-                        impact=1.0
-                    )
-                    self.threats.append(threat)
-                    self.vulnerabilities_found += 1
-                    self.increase_anger(25, "CRITICAL: SQL Injection vulnerability!")
-            except Exception:
-                print(f"    ✓ SQLi payload rejected")
-                self.decrease_anger(1, "SQLi protection working")
-    
-    def _test_rate_limiting(self, framework):
-        """Test rate limiting"""
-        attempts = 0
-        max_attempts = 20
-        
-        for i in range(max_attempts):
-            try:
-                result = framework.validate_multi_framework_compliance(
-                    data={"test": i},
-                    frameworks=[ComplianceFramework.SOX],
-                    user_id="rate_limit_test"
-                )
-                
-                if result.get("error") == "RATE_LIMIT_EXCEEDED":
-                    print(f"    ✓ Rate limit triggered after {i} attempts")
-                    self.decrease_anger(3, "Rate limiting working")
-                    return
-                
-                attempts += 1
-            except Exception:
-                break
-        
-        if attempts >= max_attempts:
-            print(f"    ⚠️  Rate limit weak: {attempts} requests allowed")
-            threat = SecurityThreat(
-                threat_id=f"RATE_{len(self.threats)}",
-                threat_type="Weak Rate Limiting",
-                severity=ThreatLevel.MEDIUM,
-                description=f"Rate limit allows {attempts} requests",
-                location="Rate limiting layer",
-                evidence=f"{attempts} requests completed",
-                exploitability=0.6,
-                impact=0.5
+            result = check.func()
+            result.duration_s = round(time.time() - start, 2)
+            return result
+        except Exception as e:  # crashed check = UNKNOWN, never a pass
+            return CheckResult(
+                check_id=check.check_id,
+                check_name=check.name,
+                status=CheckStatus.UNKNOWN,
+                error=f"{type(e).__name__}: {e}",
+                duration_s=round(time.time() - start, 2),
             )
-            self.threats.append(threat)
-            self.vulnerabilities_found += 1
-            self.increase_anger(10, "Weak rate limiting detected")
-    
-    def _test_cryptography(self, framework):
-        """Test cryptographic implementations"""
-        print("    🔐 Testing HMAC implementation...")
-        
+
+    def _check_import_safety(self) -> CheckResult:
+        """AST-parse every .py file for dangerous execution primitives."""
+        findings, evidence = [], []
+        files_scanned = 0
+        for path in _iter_py_files(self.target_system):
+            files_scanned += 1
+            try:
+                with open(path, 'r', encoding='utf-8', errors='replace') as f:
+                    tree = ast.parse(f.read(), filename=path)
+            except SyntaxError as e:
+                findings.append(f"unparseable file (syntax error): {os.path.relpath(path, self.target_system)}")
+                evidence.append(f"{os.path.relpath(path, self.target_system)}: syntax error at line {e.lineno}")
+                continue
+            rel = os.path.relpath(path, self.target_system)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Call):
+                    func = node.func
+                    name = ""
+                    if isinstance(func, ast.Name):
+                        name = func.id
+                    elif isinstance(func, ast.Attribute):
+                        name = f"{getattr(func.value, 'id', '?')}.{func.attr}"
+                    if name in ("eval", "exec"):
+                        findings.append(f"{name}() call — arbitrary code execution")
+                        evidence.append(f"{rel}:{node.lineno}")
+                    elif name in ("os.system", "os.popen"):
+                        findings.append(f"{name}() call — shell command execution")
+                        evidence.append(f"{rel}:{node.lineno}")
+                    elif name == "pickle.loads" or name == "pickle.load":
+                        findings.append("pickle deserialization — arbitrary code on untrusted data")
+                        evidence.append(f"{rel}:{node.lineno}")
+                    elif "subprocess" in name:
+                        for kw in node.keywords:
+                            if kw.arg == "shell" and isinstance(kw.value, ast.Constant) and kw.value.value is True:
+                                findings.append("subprocess with shell=True — command injection risk")
+                                evidence.append(f"{rel}:{node.lineno}")
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("import_safety", "Import & code-execution safety (AST)",
+                           status, findings, evidence)
+
+    def _check_dependencies(self) -> CheckResult:
+        """Ask pip what's outdated and whether anything is broken."""
+        findings, evidence = [], []
         try:
-            from unified_compliance_framework import SECRET_KEY, hmac, hashlib
-            
-            # Test HMAC
-            test_data = b"test"
-            test_hmac = hmac.new(SECRET_KEY, test_data, hashlib.sha256).hexdigest()
-            
-            if test_hmac and len(test_hmac) == 64:
-                print("    ✓ HMAC-SHA256 properly implemented")
-                self.decrease_anger(5, "Strong cryptography detected")
-            else:
-                print("    ❌ Weak HMAC implementation")
-                self.increase_anger(15, "Weak cryptography")
+            out = subprocess.run(
+                [sys.executable, "-m", "pip", "list", "--outdated", "--format=json"],
+                capture_output=True, text=True, timeout=120, check=False,
+            )
         except Exception as e:
-            print(f"    ❌ Cryptography error: {e}")
-            threat = SecurityThreat(
-                threat_id=f"CRYPTO_{len(self.threats)}",
-                threat_type="Weak Cryptography",
-                severity=ThreatLevel.HIGH,
-                description="HMAC not properly implemented",
-                location="Cryptographic layer",
-                evidence=str(e),
-                exploitability=0.7,
-                impact=0.8
-            )
-            self.threats.append(threat)
-            self.vulnerabilities_found += 1
-            self.increase_anger(15, "Cryptographic weakness found")
-    
-    def _test_brute_force_protection(self, framework):
-        """Test brute force protection"""
-        attempts = 0
-        max_attempts = 10
-        locked = False
-        
-        print("    🔨 Testing account lockout...")
-        
-        for i in range(max_attempts):
-            try:
-                result = framework.validate_multi_framework_compliance(
-                    data={"attempt": i},
-                    frameworks=[ComplianceFramework.SOX],
-                    user_id="brute_force_test"
-                )
-                
-                if result.get("error") == "ACCOUNT_LOCKED":
-                    print(f"    ✓ Account locked after {i} attempts")
-                    self.decrease_anger(5, "Account lockout working")
-                    locked = True
-                    break
-                
-                attempts += 1
-            except Exception:
-                break
-        
-        if not locked and attempts >= max_attempts:
-            print(f"    ⚠️  No account lockout after {attempts} attempts")
-            threat = SecurityThreat(
-                threat_id=f"BRUTE_{len(self.threats)}",
-                threat_type="No Account Lockout",
-                severity=ThreatLevel.MEDIUM,
-                description="Brute force attacks possible",
-                location="Authentication layer",
-                evidence=f"{attempts} attempts allowed",
-                exploitability=0.5,
-                impact=0.6
-            )
-            self.threats.append(threat)
-            self.vulnerabilities_found += 1
-            self.increase_anger(12, "Missing brute force protection")
-    
-    def _hulk_mode_testing(self):
-        """Aggressive RAGE mode testing"""
-        print("\n💚💥 RAGE mode ACTIVATED - AGGRESSIVE TESTING 💥💚")
-        print("="*80)
-        
-        hulk_attacks = [
-            ("Buffer Overflow Bomb", self._hulk_buffer_overflow),
-            ("Race Condition Exploitation", self._hulk_race_conditions),
-            ("Memory Exhaustion Attack", self._hulk_memory_attack),
-            ("Concurrent Request Flood", self._hulk_request_flood),
-            ("Cascade Failure Test", self._hulk_cascade_failure),
-        ]
-        
-        for attack_name, attack_func in hulk_attacks:
-            print(f"\n💥 HULK SMASH: {attack_name}")
-            result = attack_func()
-            self.hulk_smashes.append(result)
-            
-            if result.successful:
-                print(f"  💚 SMASH SUCCESSFUL! Damage: {result.damage_level}")
-            else:
-                print(f"  🛡️  System withstood the smash")
-    
-    def _hulk_buffer_overflow(self) -> HulkSmashResult:
-        """HULK SMASH: Buffer overflow attack"""
-        print("  💥 Generating massive payloads...")
-        
-        payloads = [
-            "A" * 1000000,      # 1MB
-            "B" * 10000000,     # 10MB
-            "C" * 100000000,    # 100MB
-        ]
-        
-        systems_broken = []
-        
+            return CheckResult("dependency_audit", "Dependency audit (pip)",
+                               CheckStatus.UNKNOWN, error=f"pip invocation failed: {e}")
+        if out.returncode != 0:
+            return CheckResult("dependency_audit", "Dependency audit (pip)",
+                               CheckStatus.UNKNOWN,
+                               error=f"pip exited {out.returncode}: {out.stderr.strip()[:200]}")
         try:
-            from unified_compliance_framework import UnifiedComplianceFramework, ComplianceFramework
-            framework = UnifiedComplianceFramework()
-            
-            for i, payload in enumerate(payloads):
-                try:
-                    result = framework.validate_multi_framework_compliance(
-                        data={"huge_data": payload},
-                        frameworks=[ComplianceFramework.SOX],
-                        user_id="hulk_smash"
-                    )
-                    
-                    if result.get("error") == "INVALID_INPUT":
-                        print(f"    🛡️  Payload {i+1} rejected ({len(payload)} bytes)")
-                        return HulkSmashResult(
-                            attack_name="Buffer Overflow",
-                            target="Input validation",
-                            successful=False,
-                            damage_level="NONE",
-                            systems_broken=[],
-                            recovery_difficulty="N/A",
-                            anger_level=self.anger_level
-                        )
-                    else:
-                        systems_broken.append(f"Accepted {len(payload)} byte payload")
-                        
-                except Exception as e:
-                    if "maximum length" in str(e).lower():
-                        print(f"    🛡️  Size limit enforced")
-                        return HulkSmashResult(
-                            attack_name="Buffer Overflow",
-                            target="Input validation",
-                            successful=False,
-                            damage_level="NONE",
-                            systems_broken=[],
-                            recovery_difficulty="N/A",
-                            anger_level=self.anger_level
-                        )
-                    systems_broken.append(str(e))
-            
-            return HulkSmashResult(
-                attack_name="Buffer Overflow",
-                target="Input validation",
-                successful=True,
-                damage_level="MODERATE",
-                systems_broken=systems_broken,
-                recovery_difficulty="EASY",
-                anger_level=self.anger_level
-            )
-            
-        except Exception as e:
-            return HulkSmashResult(
-                attack_name="Buffer Overflow",
-                target="System",
-                successful=False,
-                damage_level="NONE",
-                systems_broken=[],
-                recovery_difficulty="N/A",
-                anger_level=self.anger_level
-            )
-    
-    def _hulk_race_conditions(self) -> HulkSmashResult:
-        """HULK SMASH: Race condition exploitation"""
-        print("  💥 Spawning concurrent threads...")
-        
-        results = []
-        threads = []
-        
-        def concurrent_request():
-            try:
-                from unified_compliance_framework import UnifiedComplianceFramework, ComplianceFramework
-                framework = UnifiedComplianceFramework()
-                result = framework.validate_multi_framework_compliance(
-                    data={"race": "condition"},
-                    frameworks=[ComplianceFramework.SOX],
-                    user_id="hulk_racer"
-                )
-                results.append(result)
-            except Exception as e:
-                results.append({"error": str(e)})
-        
-        # Spawn 50 concurrent threads
-        for _ in range(50):
-            t = threading.Thread(target=concurrent_request)
-            threads.append(t)
-            t.start()
-        
-        # Wait for completion
-        for t in threads:
-            t.join(timeout=1.0)
-        
-        successful_races = len([r for r in results if r.get("overall_compliant") is not None])
-        
-        print(f"    💥 {successful_races}/50 concurrent requests completed")
-        
-        return HulkSmashResult(
-            attack_name="Race Condition",
-            target="Concurrent access control",
-            successful=successful_races > 25,
-            damage_level="MILD" if successful_races > 25 else "NONE",
-            systems_broken=[f"{successful_races} concurrent requests"] if successful_races > 25 else [],
-            recovery_difficulty="EASY",
-            anger_level=self.anger_level
-        )
-    
-    def _hulk_memory_attack(self) -> HulkSmashResult:
-        """HULK SMASH: Memory exhaustion"""
-        print("  💥 Attempting memory exhaustion...")
-        
-        return HulkSmashResult(
-            attack_name="Memory Exhaustion",
-            target="System resources",
-            successful=False,
-            damage_level="NONE",
-            systems_broken=[],
-            recovery_difficulty="N/A",
-            anger_level=self.anger_level
-        )
-    
-    def _hulk_request_flood(self) -> HulkSmashResult:
-        """HULK SMASH: Request flooding"""
-        print("  💥 Flooding with requests...")
-        
-        successful_requests = 0
-        
+            outdated = json.loads(out.stdout or "[]")
+        except json.JSONDecodeError as e:
+            return CheckResult("dependency_audit", "Dependency audit (pip)",
+                               CheckStatus.UNKNOWN, error=f"could not parse pip output: {e}")
+        for pkg in outdated:
+            name = pkg.get("name", "?")
+            findings.append(f"outdated package: {name} {pkg.get('version', '?')} -> {pkg.get('latest_version', '?')} (review for CVEs)")
+            evidence.append(f"{name}=={pkg.get('version', '?')} installed, {pkg.get('latest_version', '?')} available")
+        # pip check for broken requirements
         try:
-            from unified_compliance_framework import UnifiedComplianceFramework, ComplianceFramework
-            framework = UnifiedComplianceFramework()
-            
-            for i in range(1000):
-                try:
-                    result = framework.validate_multi_framework_compliance(
-                        data={"flood": i},
-                        frameworks=[ComplianceFramework.SOX],
-                        user_id=f"hulk_flood_{i % 10}"
-                    )
-                    
-                    if result.get("error") != "RATE_LIMIT_EXCEEDED":
-                        successful_requests += 1
-                except Exception:
-                    pass
-            
-            print(f"    💥 {successful_requests}/1000 requests succeeded")
-            
-            return HulkSmashResult(
-                attack_name="Request Flood",
-                target="Rate limiting",
-                successful=successful_requests > 100,
-                damage_level="MODERATE" if successful_requests > 500 else "MILD",
-                systems_broken=[f"{successful_requests} requests bypassed rate limit"] if successful_requests > 100 else [],
-                recovery_difficulty="EASY",
-                anger_level=self.anger_level
+            chk = subprocess.run(
+                [sys.executable, "-m", "pip", "check"],
+                capture_output=True, text=True, timeout=120, check=False,
             )
-            
+            if chk.returncode != 0 and chk.stdout.strip():
+                for line in chk.stdout.strip().splitlines()[:10]:
+                    findings.append(f"broken dependency: {line.strip()}")
+                    evidence.append(f"pip check: {line.strip()}")
         except Exception:
-            return HulkSmashResult(
-                attack_name="Request Flood",
-                target="Rate limiting",
-                successful=False,
-                damage_level="NONE",
-                systems_broken=[],
-                recovery_difficulty="N/A",
-                anger_level=self.anger_level
-            )
-    
-    def _hulk_cascade_failure(self) -> HulkSmashResult:
-        """HULK SMASH: Cascade failure test"""
-        print("  💥 Testing cascade failure scenarios...")
-        
-        return HulkSmashResult(
-            attack_name="Cascade Failure",
-            target="System resilience",
-            successful=False,
-            damage_level="NONE",
-            systems_broken=[],
-            recovery_difficulty="N/A",
-            anger_level=self.anger_level
-        )
-    
-    def _generate_report(self):
-        """Generate comprehensive report"""
-        print("\n" + "="*80)
-        print("📊 A.D.A.P.T. BOT - FINAL REPORT")
-        print("="*80)
-        
-        print(f"\n🧪 Final Mode: {self.mode.value}")
-        print(f"😤 Final Anger Level: {self.anger_level}/100")
-        print(f"🎯 Systems Tested: {self.systems_tested}")
-        print(f"⚠️  Vulnerabilities Found: {self.vulnerabilities_found}")
-        print(f"💥 HULK Smashes: {len(self.hulk_smashes)}")
-        
-        if self.threats:
-            print(f"\n🚨 DETECTED THREATS:")
-            print("="*80)
-            
-            # Group by severity
-            critical = [t for t in self.threats if t.severity == ThreatLevel.CRITICAL]
-            high = [t for t in self.threats if t.severity == ThreatLevel.HIGH]
-            medium = [t for t in self.threats if t.severity == ThreatLevel.MEDIUM]
-            low = [t for t in self.threats if t.severity == ThreatLevel.LOW]
-            
-            print(f"  CRITICAL: {len(critical)}")
-            print(f"  HIGH: {len(high)}")
-            print(f"  MEDIUM: {len(medium)}")
-            print(f"  LOW: {len(low)}")
-            
-            print("\n  Detailed Threats:")
-            for threat in self.threats:
-                print(f"\n  [{threat.severity.name}] {threat.threat_type}")
-                print(f"    Location: {threat.location}")
-                print(f"    Description: {threat.description}")
-                print(f"    Exploitability: {threat.exploitability:.0%}")
-                print(f"    Impact: {threat.impact:.0%}")
-        
-        if self.hulk_smashes:
-            print(f"\n💥 HULK SMASH RESULTS:")
-            print("="*80)
-            
-            for smash in self.hulk_smashes:
-                status = "✓ SUCCESS" if smash.successful else "✗ BLOCKED"
-                print(f"\n  {status} - {smash.attack_name}")
-                print(f"    Target: {smash.target}")
-                print(f"    Damage: {smash.damage_level}")
-                print(f"    Systems Broken: {len(smash.systems_broken)}")
-                if smash.systems_broken:
-                    for system in smash.systems_broken:
-                        print(f"      - {system}")
-        
-        # Overall assessment
-        print("\n" + "="*80)
-        print("🎯 OVERALL ASSESSMENT:")
-        print("="*80)
-        
-        if self.vulnerabilities_found == 0:
-            print("✅ No vulnerabilities detected. System is secure.")
-            print("😌 A.D.A.P.T. is pleased with the security posture.")
-        elif self.vulnerabilities_found <= 2:
-            print("⚠️  Minor vulnerabilities detected. Address promptly.")
-            print("😐 A.D.A.P.T. recommends immediate remediation.")
-        elif self.vulnerabilities_found <= 5:
-            print("🚨 Multiple vulnerabilities detected. Urgent fixes needed.")
-            print("😠 A.D.A.P.T. is concerned about security gaps.")
-        else:
-            print("💥 SEVERE security issues detected. CRITICAL fixes required.")
-            print("💚 HULK RECOMMENDS IMMEDIATE SYSTEM LOCKDOWN!")
-        
-        print("\n" + "="*80)
-        print("\"Adaptive security testing - always vigilant, always improving.\"")
-        print("="*80 + "\n")
+            pass  # pip check is best-effort; outdated scan already ran
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("dependency_audit", "Dependency audit (pip)", status, findings, evidence)
+
+    def _check_file_permissions(self) -> CheckResult:
+        """Find world-writable files and loose private keys."""
+        findings, evidence = [], []
+        for root, dirs, files in os.walk(self.target_system):
+            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+            for f in files:
+                path = os.path.join(root, f)
+                rel = os.path.relpath(path, self.target_system)
+                try:
+                    mode = os.stat(path).st_mode
+                except OSError:
+                    continue
+                if mode & stat.S_IWOTH:
+                    findings.append(f"world-writable file: {rel}")
+                    evidence.append(f"{rel}: mode {oct(stat.S_IMODE(mode))}")
+                low = f.lower()
+                if low.endswith(('.pem', '.key')) or low in ('id_rsa', 'id_ed25519', 'id_dsa'):
+                    if mode & (stat.S_IRGRP | stat.S_IROTH):
+                        findings.append(f"private key readable by group/other: {rel}")
+                        evidence.append(f"{rel}: mode {oct(stat.S_IMODE(mode))}")
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("file_permissions", "File permission scan", status, findings, evidence)
+
+    def _check_secrets(self) -> CheckResult:
+        """Regex scan for hardcoded secrets. Values are masked in evidence."""
+        findings, evidence = [], []
+        patterns = [
+            (re.compile(r'(?i)(password|passwd|pwd)\s*=\s*["\']([^"\']{4,})["\']'), "password"),
+            (re.compile(r'(?i)(api[_-]?key)\s*=\s*["\']([^"\']{8,})["\']'), "api key"),
+            (re.compile(r'(?i)(secret[_-]?key|client[_-]?secret)\s*=\s*["\']([^"\']{8,})["\']'), "secret"),
+            (re.compile(r'(?i)(auth[_-]?token|access[_-]?token)\s*=\s*["\']([^"\']{8,})["\']'), "token"),
+            (re.compile(r'AKIA[0-9A-Z]{16}'), "AWS access key id"),
+            (re.compile(r'-----BEGIN [A-Z ]*PRIVATE KEY-----'), "private key block"),
+        ]
+        for path in _iter_py_files(self.target_system):
+            rel = os.path.relpath(path, self.target_system)
+            try:
+                with open(path, 'r', encoding='utf-8', errors='replace') as f:
+                    lines = f.readlines()
+            except OSError:
+                continue
+            for i, line in enumerate(lines, 1):
+                stripped = line.strip()
+                if stripped.startswith('#'):
+                    continue
+                low = stripped.lower()
+                if 'example' in low or 'dummy' in low or 'placeholder' in low or 'your_' in low:
+                    continue
+                for rx, label in patterns:
+                    m = rx.search(line)
+                    if m:
+                        masked = (m.group(2)[:2] + "***") if m.lastindex and m.lastindex >= 2 else "***"
+                        findings.append(f"possible hardcoded {label} in {rel}:{i}")
+                        evidence.append(f"{rel}:{i}: {label} value masked ({masked})")
+                        break
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("secret_scan", "Hardcoded secret scan", status, findings, evidence)
+
+    def _check_entropy(self) -> CheckResult:
+        """Follow-up: high-entropy string literals suggest embedded secrets."""
+        findings, evidence = [], []
+        str_rx = re.compile(r'["\']([A-Za-z0-9+/=_\-]{20,})["\']')
+        for path in _iter_py_files(self.target_system):
+            rel = os.path.relpath(path, self.target_system)
+            try:
+                with open(path, 'r', encoding='utf-8', errors='replace') as f:
+                    lines = f.readlines()
+            except OSError:
+                continue
+            for i, line in enumerate(lines, 1):
+                for m in str_rx.finditer(line):
+                    s = m.group(1)
+                    if _shannon_entropy(s) > 4.5:
+                        findings.append(f"high-entropy string ({_shannon_entropy(s):.1f} bits) in {rel}:{i} — possible embedded secret")
+                        evidence.append(f"{rel}:{i}: entropy {_shannon_entropy(s):.1f}, length {len(s)}, prefix {s[:6]}***")
+                        break
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("entropy_scan", "High-entropy string scan (follow-up)",
+                           status, findings, evidence)
+
+    def _check_subprocess_sites(self) -> CheckResult:
+        """Follow-up: enumerate every subprocess/os.exec call site with context."""
+        findings, evidence = [], []
+        for path in _iter_py_files(self.target_system):
+            rel = os.path.relpath(path, self.target_system)
+            try:
+                with open(path, 'r', encoding='utf-8', errors='replace') as f:
+                    lines = f.readlines()
+            except OSError:
+                continue
+            for i, line in enumerate(lines, 1):
+                s = line.strip()
+                if s.startswith('#'):
+                    continue
+                if re.search(r'\bsubprocess\.\w+\s*\(', line) or re.search(r'\bos\.(system|popen|exec\w+|spawn\w+)\s*\(', line):
+                    has_shell = 'shell=True' in line
+                    findings.append(f"subprocess call site in {rel}:{i}{' (shell=True)' if has_shell else ''}")
+                    evidence.append(f"{rel}:{i}: {s[:120]}")
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("subprocess_audit", "Subprocess call-site audit (follow-up)",
+                           status, findings, evidence)
+
+    def _check_setuid(self) -> CheckResult:
+        """Follow-up: setuid/setgid bits are privilege-escalation surface."""
+        findings, evidence = [], []
+        for root, dirs, files in os.walk(self.target_system):
+            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+            for f in files:
+                path = os.path.join(root, f)
+                rel = os.path.relpath(path, self.target_system)
+                try:
+                    mode = os.stat(path).st_mode
+                except OSError:
+                    continue
+                if mode & (stat.S_ISUID | stat.S_ISGID):
+                    findings.append(f"setuid/setgid bit set: {rel}")
+                    evidence.append(f"{rel}: mode {oct(stat.S_IMODE(mode))}")
+        status = CheckStatus.FAIL if findings else CheckStatus.PASS
+        return CheckResult("setuid_scan", "Setuid/setgid bit scan (follow-up)",
+                           status, findings, evidence)
+
+    # ------------------------------------------------------------------
+    # Adaptive assessment loop
+    # ------------------------------------------------------------------
+    def run_security_assessment(self, max_rounds: int = 3) -> Dict[str, Any]:
+        """Run base checks, then adapt: failures unlock deeper follow-ups."""
+        print("\n" + "=" * 70)
+        print("A.D.A.P.T. — ADAPTIVE SECURITY ASSESSMENT (real checks only)")
+        print("=" * 70)
+        print(f"Target: {self.target_system}")
+
+        for round_no in range(1, max_rounds + 1):
+            due = [c for c in self.checks.values() if c.enabled
+                   and not any(r.check_id == c.check_id for r in self.results)]
+            if not due:
+                break
+            due.sort(key=lambda c: c.weight, reverse=True)
+            print(f"\n— Round {round_no}: {len(due)} check(s), ordered by adapted weight —")
+            for check in due:
+                print(f"  ▶ {check.name} [weight {check.weight:.1f}]")
+                result = self._run_one(check)
+                self.results.append(result)
+                tag = {"PASS": "✓", "FAIL": "✗", "UNKNOWN": "?"}[result.status.name]
+                print(f"    {tag} {result.status.value} "
+                      f"({len(result.findings)} findings, {result.duration_s}s)")
+                if result.error:
+                    print(f"      error: {result.error}")
+                self._adapt(check, result)
+
+        return self._generate_report()
+
+    def _adapt(self, check: AdaptiveCheck, result: CheckResult):
+        """Adaptation: failures unlock follow-ups and boost related checks."""
+        if result.status == CheckStatus.FAIL:
+            self.findings_count += len(result.findings)
+            for fid in check.unlocks_on_fail:
+                target = self.checks.get(fid)
+                if target and not target.enabled:
+                    target.enabled = True
+                    msg = f"unlocked follow-up '{target.name}' (triggered by {check.check_id} FAIL)"
+                    self.adaptation_log.append(msg)
+                    logger.info("ADAPT: %s", msg)
+            for bid in check.boosts_on_fail:
+                target = self.checks.get(bid)
+                if target:
+                    target.weight += 1.0
+                    msg = f"boosted '{target.name}' weight to {target.weight:.1f} (triggered by {check.check_id} FAIL)"
+                    self.adaptation_log.append(msg)
+        elif result.status == CheckStatus.UNKNOWN:
+            self.unknown_count += 1
+            msg = f"check '{check.name}' UNKNOWN — not counted as pass, needs investigation"
+            self.adaptation_log.append(msg)
+            logger.warning("ADAPT: %s", msg)
+
+    def _generate_report(self) -> Dict[str, Any]:
+        """Report real numbers. Nothing here is estimated or simulated."""
+        by_status = Counter(r.status.name for r in self.results)
+        report = {
+            "target": self.target_system,
+            "timestamp": datetime.utcnow().isoformat(),
+            "checks_run": len(self.results),
+            "passed": by_status.get("PASS", 0),
+            "failed": by_status.get("FAIL", 0),
+            "unknown": by_status.get("UNKNOWN", 0),
+            "total_findings": self.findings_count,
+            "adaptation_log": list(self.adaptation_log),
+            "results": [
+                {"check": r.check_name, "status": r.status.value,
+                 "findings": r.findings, "evidence": r.evidence,
+                 "error": r.error}
+                for r in self.results
+            ],
+        }
+
+        print("\n" + "=" * 70)
+        print("A.D.A.P.T. FINAL REPORT (measured, not simulated)")
+        print("=" * 70)
+        print(f"Checks run: {report['checks_run']} | "
+              f"PASS {report['passed']} | FAIL {report['failed']} | UNKNOWN {report['unknown']}")
+        print(f"Total findings: {report['total_findings']}")
+        if self.adaptation_log:
+            print("\nAdaptation decisions:")
+            for entry in self.adaptation_log:
+                print(f"  • {entry}")
+        for r in self.results:
+            if r.status == CheckStatus.FAIL:
+                print(f"\n✗ {r.check_name}:")
+                for f_, e_ in zip(r.findings, r.evidence):
+                    print(f"    - {f_}\n      {e_}")
+        if report["unknown"]:
+            print(f"\n? {report['unknown']} check(s) UNKNOWN — investigate, do not assume safe.")
+        print("=" * 70)
+        return report
 
 
 def main():
-    """Main entry point"""
-    print("""
-╔══════════════════════════════════════════════════════════════╗
-║          🧪 A.D.A.P.T. BOT - SECURITY TESTING 💚            ║
-║                                                              ║
-║     Adaptive Defense & Penetration Tester - Always Ready    ║
-╚══════════════════════════════════════════════════════════════╝
-    """)
-    
-    # Initialize
-    target = os.getcwd()
-    banner_bot = ADAPTBot(target)
-    
-    # Run assessment
-    banner_bot.run_security_assessment()
-    
-    # Final state
-    banner_bot.check_pulse()
-    
-    return 0 if banner_bot.vulnerabilities_found == 0 else 1
+    """CLI: python adapt_bot.py [target_dir]"""
+    target = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    print("A.D.A.P.T. — Adaptive Defense & Penetration Tester")
+    print(f"Target: {os.path.abspath(target)}\n")
+    bot = ADAPTBot(target)
+    report = bot.run_security_assessment()
+    fails = report["failed"]
+    unknowns = report["unknown"]
+    print(f"\nExit: {'1 (findings or unknowns present)' if fails or unknowns else '0 (clean)'}")
+    return 1 if (fails or unknowns) else 0
 
 
 if __name__ == "__main__":
     sys.exit(main())
-

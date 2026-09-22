@@ -2,7 +2,12 @@
 
 """
 Runner script for Payment Monitor Bot.
-Checks Loyverse for new payments and alerts on transactions.
+Checks Loyverse for new receipts and prints alerts for notable ones.
+
+Honest contract: alerts PRINT HERE. No email/SMS is configured —
+send_alert() is print-only. The Loyverse read path is real
+(GET api.loyverse.com/v1.0/receipts); everything after the fetch is
+local analysis.
 """
 
 import sys
@@ -25,6 +30,10 @@ def main():
     print("="*60)
     print(result)
     print("="*60)
+    print("\nNOTE: alerts above are print-only — no email/SMS is configured.")
+    print("Loyverse token: read from LOYVERSE_ACCESS_TOKEN env var. "
+          "A hardcoded fallback exists in mythara_ai_team_free.py — "
+          "replace it before any production use.")
 
 if __name__ == "__main__":
     main()

@@ -21,7 +21,6 @@ from typing import Dict, List, Any, Optional, Set
 from datetime import datetime
 from dataclasses import dataclass, field
 from pathlib import Path
-import random
 import hashlib
 
 logging.basicConfig(
@@ -47,6 +46,7 @@ class DivineFire:
     stolen_from: str  # Which "gods" (existing systems) this was inspired by
     gift_to_humanity: str  # What problem this solves or enables
     code_snippet: Optional[str] = None
+    illustrative: bool = False  # True = sample output, NOT derived from analysis
     created_at: datetime = field(default_factory=datetime.now)
 
 
@@ -163,69 +163,74 @@ class PrometheusBot:
         
         return self.divine_fires
     
+    # Genuinely derived: keyword hits counted per file across the real tree.
+    # A pattern is only recorded when a keyword appears >= 3 times in a file,
+    # so passing mentions don't count as "discoveries".
+    PATTERN_KEYWORDS = {
+        "paradox": ("domain_model", "Paradox-based problem modeling"),
+        "witness": ("validation_protocol", "Witness-based validation"),
+        "clause": ("orchestration", "Clause invocation / orchestration"),
+        "assessor": ("scoring", "Assessor rubric scoring"),
+        "emotional": ("domain_model", "Emotional state tracking"),
+        "integrity": ("security", "Integrity hashing / sealing"),
+        "blessing": ("scoring", "Blessing / engagement scoring"),
+    }
+
     def _analyze_mythara_codebase(self):
-        """Analyze Mythara codebase for patterns and components"""
+        """Walk the actual repo tree and extract real code patterns."""
         logger.info("🔍 Scanning Mythara codebase...")
-        
-        # Find key Mythara files
-        key_files = [
-            "core/source_proprietary/soul_cradle_systems_framework.py",
-            "core/source_proprietary/main.py",
-            "core/source_proprietary/soul_engine_dashboard.py",
-            "emotional_extortion_detector.py",
-            "dual_framing_engine.py"
-        ]
-        
-        for file_path in key_files:
-            full_path = os.path.join(self.codebase_path, file_path)
-            if os.path.exists(full_path):
-                self._extract_patterns_from_file(full_path)
-        
-        logger.info(f"📝 Discovered {len(self.discovered_patterns)} code patterns")
+
+        skip_dirs = {".git", "__pycache__", "node_modules", ".venv", "venv"}
+        for root, dirs, files in os.walk(self.codebase_path):
+            dirs[:] = [d for d in dirs if d not in skip_dirs]
+            for fn in files:
+                if not fn.endswith(".py"):
+                    continue
+                full_path = os.path.join(root, fn)
+                try:
+                    self._extract_patterns_from_file(full_path)
+                except Exception as e:
+                    logger.debug(f"Could not analyze {full_path}: {e}")
+
+        logger.info(
+            f"📝 Discovered {len(self.discovered_patterns)} code patterns "
+            f"across {len(self.analyzed_files)} files"
+        )
     
     def _extract_patterns_from_file(self, file_path: str):
-        """Extract meaningful patterns from a file"""
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            self.analyzed_files.add(file_path)
-            
-            # Extract class definitions
-            class_pattern = r'class\s+(\w+).*?:'
-            classes = re.findall(class_pattern, content)
-            
-            # Extract function definitions
-            func_pattern = r'def\s+(\w+)\s*\('
-            functions = re.findall(func_pattern, content)
-            
-            # Look for interesting patterns
-            if "paradox" in content.lower():
+        """Extract genuinely-derived patterns from a real file."""
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+
+        self.analyzed_files.add(file_path)
+
+        classes = re.findall(r"class\s+(\w+)", content)
+        functions = re.findall(r"def\s+(\w+)\s*\(", content)
+        lowered = content.lower()
+
+        for keyword, (ptype, desc) in self.PATTERN_KEYWORDS.items():
+            count = lowered.count(keyword)
+            if count >= 3:
+                showcase = ", ".join(classes[:3]) if classes else "n/a"
                 self._record_pattern(
-                    pattern_type="domain_model",
-                    description="Paradox-based problem modeling",
+                    pattern_type=ptype,
+                    description=f"{desc} — {count} mentions",
+                    frequency=count,
                     files=[file_path],
-                    example_code="Paradox tracking with expression pairs and resolution states"
+                    example_code=(
+                        f"{len(classes)} classes, {len(functions)} functions "
+                        f"(e.g. {showcase})"
+                    ),
                 )
-            
-            if "witness" in content.lower() and "quantum" in content.lower():
-                self._record_pattern(
-                    pattern_type="validation_protocol",
-                    description="Quantum-inspired witness validation",
-                    files=[file_path],
-                    example_code="Quantum entanglement for distributed verification"
-                )
-            
-        except Exception as e:
-            logger.debug(f"Could not analyze {file_path}: {e}")
     
-    def _record_pattern(self, pattern_type: str, description: str, files: List[str], example_code: str):
+    def _record_pattern(self, pattern_type: str, description: str, files: List[str],
+                        example_code: str, frequency: int = 1):
         """Record a discovered code pattern"""
         pattern = CodePattern(
             pattern_id=hashlib.md5(f"{pattern_type}_{description}".encode()).hexdigest()[:12],
             pattern_type=pattern_type,
             description=description,
-            frequency=1,
+            frequency=frequency,
             files=files,
             example_code=example_code,
             potential_innovations=[
@@ -259,73 +264,71 @@ class PrometheusBot:
         
         logger.info(f"🎨 Created {len(self.concept_syntheses)} concept syntheses")
     
+    @staticmethod
+    def _heuristic_potential(num_components: int, base: float = 0.50, cap: float = 0.95) -> float:
+        """Documented heuristic for synthesis ranking.
+
+        score = base + 0.05 per unique combined component, capped.
+        This is a RANKING HEURISTIC, not a measurement — it says "richer
+        combinations rank higher", nothing about real-world viability.
+        """
+        return min(cap, base + 0.05 * num_components)
+
+    @staticmethod
+    def _deterministic_id(*parts: str) -> str:
+        return hashlib.md5("|".join(parts).encode()).hexdigest()[:12]
+
     def _combine_concepts(self, concept_a: str, concept_b: str) -> Optional[ConceptSynthesis]:
-        """Combine two Mythara concepts into something new"""
+        """Derive a pairwise synthesis from the actual component lists.
+
+        Generic rule (no hardcoded pairs): the outcome fuses the two
+        concepts' descriptions and unions their components; the potential
+        score comes from the documented heuristic above.
+        """
         a_data = self.mythara_concepts[concept_a]
         b_data = self.mythara_concepts[concept_b]
-        
-        # Generate novel outcome
-        if concept_a == "soul_cradle" and concept_b == "witness_protocol":
-            return ConceptSynthesis(
-                synthesis_id=f"{concept_a}_{concept_b}_{random.randint(1000,9999)}",
-                concept_a=concept_a,
-                concept_b=concept_b,
-                concept_c=None,
-                novel_outcome="Distributed Emotional Consensus Protocol",
-                reasoning="Combine emotional state tracking with quantum witness validation to create decentralized emotion verification networks",
-                innovation_potential=0.92
-            )
-        
-        elif concept_a == "clause_system" and concept_b == "emotional_intelligence":
-            return ConceptSynthesis(
-                synthesis_id=f"{concept_a}_{concept_b}_{random.randint(1000,9999)}",
-                concept_a=concept_a,
-                concept_b=concept_b,
-                concept_c=None,
-                novel_outcome="Emotion-Aware Symbolic Clauses",
-                reasoning="Clauses that adapt based on emotional state - symbolic logic with empathy",
-                innovation_potential=0.88
-            )
-        
-        elif concept_a == "dual_framing" and concept_b == "witness_protocol":
-            return ConceptSynthesis(
-                synthesis_id=f"{concept_a}_{concept_b}_{random.randint(1000,9999)}",
-                concept_a=concept_a,
-                concept_b=concept_b,
-                concept_c=None,
-                novel_outcome="Multi-Perspective Validation System",
-                reasoning="Validate truth across multiple frames of reference using quantum witness consensus",
-                innovation_potential=0.85
-            )
-        
-        return None
-    
+        components = sorted(set(a_data["components"]) | set(b_data["components"]))
+        potential = self._heuristic_potential(len(components))
+
+        title_a = concept_a.replace("_", " ").title()
+        title_b = concept_b.replace("_", " ").title()
+        return ConceptSynthesis(
+            synthesis_id=self._deterministic_id(concept_a, concept_b),
+            concept_a=concept_a,
+            concept_b=concept_b,
+            concept_c=None,
+            novel_outcome=f"{title_a} × {title_b} Fusion",
+            reasoning=(
+                f"Fuse '{a_data['description']}' with '{b_data['description']}'. "
+                f"Combined building blocks: {', '.join(components)}."
+            ),
+            innovation_potential=round(potential, 2),
+        )
+
     def _combine_three_concepts(self, concept_a: str, concept_b: str, concept_c: str) -> Optional[ConceptSynthesis]:
-        """Combine three Mythara concepts - highest innovation potential"""
-        if concept_a == "soul_cradle" and concept_b == "witness_protocol" and concept_c == "dual_framing":
-            return ConceptSynthesis(
-                synthesis_id=f"{concept_a}_{concept_b}_{concept_c}_{random.randint(1000,9999)}",
-                concept_a=concept_a,
-                concept_b=concept_b,
-                concept_c=concept_c,
-                novel_outcome="Quantum Emotional Reality Mesh (QERM)",
-                reasoning="A distributed network where emotional states are validated across multiple perspectives using quantum witness protocols. Creates shared emotional reality that resists manipulation.",
-                innovation_potential=0.98
-            )
-        
-        elif concept_a == "clause_system" and concept_b == "soul_cradle" and concept_c == "emotional_intelligence":
-            return ConceptSynthesis(
-                synthesis_id=f"{concept_a}_{concept_b}_{concept_c}_{random.randint(1000,9999)}",
-                concept_a=concept_a,
-                concept_b=concept_b,
-                concept_c=concept_c,
-                novel_outcome="Empathic Orchestration Engine",
-                reasoning="Symbolic clause system that orchestrates actions based on emotional paradox resolution and authenticity scoring. Creates emotionally intelligent automation.",
-                innovation_potential=0.95
-            )
-        
-        return None
-    
+        """Derive a three-way synthesis from the actual component lists."""
+        a_data = self.mythara_concepts[concept_a]
+        b_data = self.mythara_concepts[concept_b]
+        c_data = self.mythara_concepts[concept_c]
+        components = sorted(
+            set(a_data["components"]) | set(b_data["components"]) | set(c_data["components"])
+        )
+        potential = self._heuristic_potential(len(components), base=0.55, cap=0.98)
+
+        titles = [c.replace("_", " ").title() for c in (concept_a, concept_b, concept_c)]
+        return ConceptSynthesis(
+            synthesis_id=self._deterministic_id(concept_a, concept_b, concept_c),
+            concept_a=concept_a,
+            concept_b=concept_b,
+            concept_c=concept_c,
+            novel_outcome=f"{' × '.join(titles)} Mesh",
+            reasoning=(
+                f"Three-way fusion of: {a_data['description']}; {b_data['description']}; "
+                f"{c_data['description']}. Combined building blocks: {', '.join(components)}."
+            ),
+            innovation_potential=round(potential, 2),
+        )
+
     def _generate_innovations(self):
         """Generate revolutionary innovations from concept syntheses"""
         logger.info("💫 Generating revolutionary innovations...")
@@ -336,18 +339,21 @@ class PrometheusBot:
                 fire = self._synthesis_to_divine_fire(synthesis)
                 self.divine_fires.append(fire)
         
-        # Original innovations based on Mythara analysis
-        self._generate_original_innovations()
+        # Illustrative samples of the DivineFire schema (labeled as such)
+        self._generate_illustrative_examples()
     
     def _synthesis_to_divine_fire(self, synthesis: ConceptSynthesis) -> DivineFire:
         """Convert a concept synthesis into a Divine Fire innovation"""
+        n_sources = len([c for c in (synthesis.concept_a, synthesis.concept_b, synthesis.concept_c) if c])
+        # Heuristic, documented: more fused concepts -> higher novelty rank. Not measured.
+        originality = round(min(0.95, 0.70 + 0.08 * n_sources), 2)
         return DivineFire(
             fire_id=synthesis.synthesis_id,
             innovation_type="framework",
             name=synthesis.novel_outcome,
             description=synthesis.reasoning,
             breakthrough_potential=synthesis.innovation_potential,
-            originality_score=0.85,
+            originality_score=originality,
             source_concepts=[synthesis.concept_a, synthesis.concept_b] + ([synthesis.concept_c] if synthesis.concept_c else []),
             synthesis_method="Multi-concept fusion",
             implementation_complexity="HIGH",
@@ -356,12 +362,17 @@ class PrometheusBot:
             gift_to_humanity=f"Enables {synthesis.novel_outcome.lower()} capabilities never before possible"
         )
     
-    def _generate_original_innovations(self):
-        """Generate completely original innovations"""
+    def _generate_illustrative_examples(self):
+        """Sample outputs, clearly labeled.
+
+        These are ILLUSTRATIVE EXAMPLES of the DivineFire schema — hand-written
+        samples, not derived from analysis. Every fire created here carries
+        illustrative=True and must be presented as a sample, never as a
+        measured result. Their scores are placeholders."""
         
         # Innovation 1: Temporal Paradox Chains
         self.divine_fires.append(DivineFire(
-            fire_id=f"temporal_paradox_{random.randint(1000,9999)}",
+            fire_id=f"temporal_paradox_{self._deterministic_id('temporal_paradox')}",
             innovation_type="algorithm",
             name="Temporal Paradox Chains",
             description="Track paradoxes across time to predict future burnout cascades. Uses Soul Cradle's decay formula extended to forecast paradox accumulation patterns over months/years.",
@@ -373,6 +384,7 @@ class PrometheusBot:
             potential_impact="Industry-changing",
             stolen_from="Soul Cradle's exponential decay mathematics",
             gift_to_humanity="Predict burnout months in advance with actionable intervention points",
+            illustrative=True,
             code_snippet="""
 class TemporalParadoxChain:
     def predict_burnout_cascade(self, user_id: str, months_ahead: int = 6):
@@ -393,7 +405,7 @@ class TemporalParadoxChain:
         
         # Innovation 2: Emotional Blockchain
         self.divine_fires.append(DivineFire(
-            fire_id=f"emotional_blockchain_{random.randint(1000,9999)}",
+            fire_id=f"emotional_blockchain_{self._deterministic_id('emotional_blockchain')}",
             innovation_type="architecture",
             name="Emotional Blockchain",
             description="Immutable ledger of emotional states validated by quantum witnesses. Each emotional event is hashed with integrity verification, creating tamper-proof emotional history for authenticity scoring.",
@@ -405,6 +417,7 @@ class TemporalParadoxChain:
             potential_impact="Industry-changing",
             stolen_from="Quantum witness protocol + blockchain consensus",
             gift_to_humanity="Prevent emotional manipulation by creating verifiable emotional truth",
+            illustrative=True,
             code_snippet="""
 class EmotionalBlockchain:
     def add_emotional_event(self, user_id: str, emotion: str, authenticity: float):
@@ -429,7 +442,7 @@ class EmotionalBlockchain:
         
         # Innovation 3: Dual-Frame AI Negotiator
         self.divine_fires.append(DivineFire(
-            fire_id=f"dual_frame_negotiator_{random.randint(1000,9999)}",
+            fire_id=f"dual_frame_negotiator_{self._deterministic_id('dual_frame_negotiator')}",
             innovation_type="concept",
             name="Dual-Frame AI Negotiator",
             description="AI that simultaneously holds multiple frames of reference and negotiates between them to find optimal solutions. Goes beyond translation to active frame synthesis and conflict resolution.",
@@ -440,12 +453,13 @@ class EmotionalBlockchain:
             implementation_complexity="HIGH",
             potential_impact="Framework-shifting",
             stolen_from="Dual framing translation layer",
-            gift_to_humanity="Resolve conflicts between technical and business perspectives automatically"
+            gift_to_humanity="Resolve conflicts between technical and business perspectives automatically",
+            illustrative=True,
         ))
         
         # Innovation 4: Paradox Healing Protocols
         self.divine_fires.append(DivineFire(
-            fire_id=f"paradox_healing_{random.randint(1000,9999)}",
+            fire_id=f"paradox_healing_{self._deterministic_id('paradox_healing')}",
             innovation_type="framework",
             name="Paradox Healing Protocols",
             description="Systematic methods to resolve organizational paradoxes using Soul Cradle mathematics combined with clause-based intervention orchestration. Each paradox type has custom healing algorithm.",
@@ -456,12 +470,13 @@ class EmotionalBlockchain:
             implementation_complexity="MEDIUM",
             potential_impact="Framework-shifting",
             stolen_from="Soul Cradle resolution mathematics",
-            gift_to_humanity="Transform toxic workplaces into sustainable ecosystems"
+            gift_to_humanity="Transform toxic workplaces into sustainable ecosystems",
+            illustrative=True,
         ))
         
         # Innovation 5: Authenticity Oracle
         self.divine_fires.append(DivineFire(
-            fire_id=f"authenticity_oracle_{random.randint(1000,9999)}",
+            fire_id=f"authenticity_oracle_{self._deterministic_id('authenticity_oracle')}",
             innovation_type="algorithm",
             name="Authenticity Oracle",
             description="Real-time authenticity scoring that combines emotional extortion detection, witness validation, and historical pattern analysis to determine if communication is genuine or manipulative.",
@@ -472,7 +487,8 @@ class EmotionalBlockchain:
             implementation_complexity="HIGH",
             potential_impact="Industry-changing",
             stolen_from="Emotional extortion detector + quantum witnesses",
-            gift_to_humanity="Protect people from manipulation in real-time communication"
+            gift_to_humanity="Protect people from manipulation in real-time communication",
+            illustrative=True,
         ))
     
     def deliver_to_hephaestus(self) -> Dict[str, Any]:
@@ -484,9 +500,12 @@ class EmotionalBlockchain:
         """
         logger.info("🎁 DELIVERING DIVINE FIRE TO HEPHAESTUS...")
         
+        # Only derived fires are delivered for forging — illustrative samples
+        # are schema examples, never build targets.
+        derived_fires = [f for f in self.divine_fires if not f.illustrative]
         # Sort by breakthrough potential
         sorted_fires = sorted(
-            self.divine_fires,
+            derived_fires,
             key=lambda f: f.breakthrough_potential,
             reverse=True
         )
@@ -506,7 +525,7 @@ class EmotionalBlockchain:
         logger.info("🔥 TOP INNOVATIONS FOR FORGING:")
         logger.info(f"{'='*70}")
         for i, fire in enumerate(sorted_fires[:5], 1):
-            logger.info(f"\n{i}. {fire.name} (Breakthrough: {fire.breakthrough_potential*100:.0f}%)")
+            logger.info(f"\n{i}. {fire.name} (Heuristic: {fire.breakthrough_potential*100:.0f}%)")
             logger.info(f"   {fire.description}")
             logger.info(f"   Impact: {fire.potential_impact}")
             logger.info(f"   Gift: {fire.gift_to_humanity}")
@@ -515,36 +534,48 @@ class EmotionalBlockchain:
         return delivery
     
     def generate_report(self) -> str:
-        """Generate innovation report"""
+        """Generate innovation report — derived output and samples kept separate."""
         report = []
         report.append("="*70)
         report.append("🔥 PROMETHEUS - DIVINE FIRE THEFT REPORT")
         report.append("="*70)
         report.append(f"\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report.append(f"Codebase Analyzed: {self.codebase_path}")
-        
-        report.append(f"\n📊 DISCOVERY STATISTICS:")
+
+        report.append(f"\n📊 DISCOVERY STATISTICS (genuinely derived from the repo tree):")
         report.append(f"   Files Analyzed: {len(self.analyzed_files)}")
         report.append(f"   Patterns Discovered: {len(self.discovered_patterns)}")
         report.append(f"   Concept Syntheses: {len(self.concept_syntheses)}")
-        report.append(f"   Divine Fires Created: {len(self.divine_fires)}")
-        
-        # Top innovations
-        report.append(f"\n🔥 TOP INNOVATIONS (by breakthrough potential):")
-        sorted_fires = sorted(self.divine_fires, key=lambda f: f.breakthrough_potential, reverse=True)
-        for i, fire in enumerate(sorted_fires[:10], 1):
+        report.append(f"   Derived Divine Fires: {sum(1 for f in self.divine_fires if not f.illustrative)}")
+        report.append(f"   Illustrative Samples: {sum(1 for f in self.divine_fires if f.illustrative)}")
+
+        derived = sorted(
+            [f for f in self.divine_fires if not f.illustrative],
+            key=lambda f: f.breakthrough_potential, reverse=True,
+        )
+        report.append(f"\n🔥 DERIVED INNOVATIONS (from concept fusion of analyzed patterns):")
+        report.append("   Scores are a documented ranking heuristic (richer component")
+        report.append("   combinations rank higher) — NOT measurements of viability.")
+        for i, fire in enumerate(derived[:10], 1):
             report.append(f"\n{i}. {fire.name}")
             report.append(f"   Type: {fire.innovation_type}")
-            report.append(f"   Breakthrough: {fire.breakthrough_potential*100:.0f}%")
-            report.append(f"   Originality: {fire.originality_score*100:.0f}%")
-            report.append(f"   Impact: {fire.potential_impact}")
+            report.append(f"   Heuristic score: {fire.breakthrough_potential*100:.0f}% (ranking only)")
+            report.append(f"   Sources: {', '.join(fire.source_concepts)}")
             report.append(f"   Gift: {fire.gift_to_humanity}")
-        
+
+        samples = [f for f in self.divine_fires if f.illustrative]
+        if samples:
+            report.append(f"\n🎨 ILLUSTRATIVE EXAMPLES (hand-written samples, NOT derived):")
+            report.append("   Scores below are placeholders. Do not cite as analysis output.")
+            for i, fire in enumerate(samples, 1):
+                report.append(f"\n{i}. {fire.name} [SAMPLE]")
+                report.append(f"   {fire.description[:120]}...")
+
         report.append("\n" + "="*70)
         report.append("🔥 \"I steal the fire of the gods and gift it to builders.\"")
         report.append("   - Prometheus, Titan of Innovation")
         report.append("="*70)
-        
+
         return "\n".join(report)
 
 

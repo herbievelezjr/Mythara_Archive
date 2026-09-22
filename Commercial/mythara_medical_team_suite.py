@@ -67,6 +67,16 @@ HIPAA_SESSION_TIMEOUT_MINUTES = 15
 HIPAA_MAX_LOGIN_ATTEMPTS = 5
 HIPAA_PASSWORD_MIN_LENGTH = 12
 
+# Clinical honesty labeling — stamped on EVERY clinical output.
+# This suite is demo-grade workflow software, NOT a medical device,
+# NOT a diagnostic tool, and NOT a substitute for licensed clinicians.
+CLINICAL_DISCLAIMER = (
+    "DEMO-GRADE OUTPUT — NOT MEDICAL ADVICE. This software is not a medical "
+    "device and does not diagnose, treat, or prescribe. Clinical logic here is "
+    "simplified keyword/threshold rules for demonstration only. All clinical "
+    "decisions require a licensed healthcare professional."
+)
+
 
 class UrgencyLevel(Enum):
     """Patient urgency classification"""
@@ -257,6 +267,7 @@ class TriageCase:
     triage_time: str
     notes: str
     integrity_hash: str
+    disclaimer: str = ""
 
 
 @dataclass
@@ -271,6 +282,7 @@ class ClinicalNote:
     timestamp: str
     signed: bool
     integrity_hash: str
+    disclaimer: str = ""
 
 
 @dataclass
@@ -307,6 +319,7 @@ class Prescription:
     allergy_checked: bool
     notes: str
     integrity_hash: str
+    disclaimer: str = ""
 
 
 class MedicalTeamSuite:
@@ -319,6 +332,9 @@ class MedicalTeamSuite:
         self.db_path = db_path
         self.suite_id = "medical_team_suite_v1"
         
+        # Initialize database FIRST — bots seed reference tables on construction
+        self._init_database()
+
         # Initialize all bot modules
         self.triage_bot = TriageCoordinatorBot(self)
         self.clinical_doc_bot = ClinicalDocumentationBot(self)
@@ -332,10 +348,7 @@ class MedicalTeamSuite:
         self.admin_bot = AdministrativeAssistantBot(self)
         self.qa_bot = QualityAssuranceBot(self)
         self.education_bot = ContinuingEducationBot(self)
-        
-        # Initialize database
-        self._init_database()
-        
+
         logger.info(f"Medical Team Suite initialized: {self.suite_id}")
     
     def _init_database(self):
@@ -704,7 +717,7 @@ class MedicalTeamSuite:
     
     def compute_integrity_hash(self, data: Dict[str, Any]) -> str:
         """Compute SSIP integrity hash for medical data"""
-        data_str = json.dumps(data, sort_keys=True)
+        data_str = json.dumps(data, sort_keys=True, default=str)
         return hashlib.sha256(data_str.encode()).hexdigest()
     
     def generate_suite_report(self) -> Dict[str, Any]:
@@ -728,7 +741,8 @@ class MedicalTeamSuite:
                 "quality_assurance": self.qa_bot.get_status(),
                 "continuing_education": self.education_bot.get_status()
             },
-            "overall_health": self._compute_suite_health()
+            "overall_health": self._compute_suite_health(),
+            "disclaimer": CLINICAL_DISCLAIMER
         }
         
         report["integrity_hash"] = self.compute_integrity_hash(report)
@@ -806,7 +820,8 @@ class TriageCoordinatorBot:
             assigned_provider=None,
             triage_time=datetime.utcnow().isoformat(),
             notes="",
-            integrity_hash=""
+            integrity_hash="",
+            disclaimer=CLINICAL_DISCLAIMER
         )
         
         case.integrity_hash = self.suite.compute_integrity_hash(asdict(case))
@@ -914,7 +929,8 @@ class ClinicalDocumentationBot:
             content=content,
             timestamp=datetime.utcnow().isoformat(),
             signed=False,
-            integrity_hash=""
+            integrity_hash="",
+            disclaimer=CLINICAL_DISCLAIMER
         )
         
         note.integrity_hash = self.suite.compute_integrity_hash(asdict(note))
@@ -1143,7 +1159,8 @@ class CrisisResponseBot:
             "required_team": protocol.get("team", []),
             "required_equipment": protocol.get("equipment", []),
             "required_actions": protocol.get("actions", []),
-            "status": "activated"
+            "status": "activated",
+            "disclaimer": CLINICAL_DISCLAIMER
         }
         
         response["integrity_hash"] = self.suite.compute_integrity_hash(response)
@@ -1262,7 +1279,8 @@ class RxManagementBot:
             drug_interactions_checked=drug_interactions_checked,
             allergy_checked=allergy_checked,
             notes=notes,
-            integrity_hash=""
+            integrity_hash="",
+            disclaimer=CLINICAL_DISCLAIMER
         )
         
         # Add warnings to notes if issues found
@@ -1315,7 +1333,8 @@ class RxManagementBot:
                     "drug_a": row[1],
                     "drug_b": row[2],
                     "severity": row[3],
-                    "description": row[4]
+                    "description": row[4],
+                    "disclaimer": CLINICAL_DISCLAIMER
                 })
         
         conn.close()
@@ -1674,6 +1693,7 @@ class MentalHealthSupportBot:
         if risk_level in ["high", "imminent"]:
             logger.warning(f"HIGH RISK ASSESSMENT: {assessment_id} - Safety intervention required")
         
+        assessment["disclaimer"] = CLINICAL_DISCLAIMER
         return assessment
     
     def document_soul_cradle_paradox(
@@ -1742,6 +1762,7 @@ class MentalHealthSupportBot:
         conn.close()
         
         logger.info(f"Soul Cradle paradox documented: {paradox_id}")
+        paradox["disclaimer"] = CLINICAL_DISCLAIMER
         return paradox
     
     def create_safety_plan(
@@ -1797,6 +1818,7 @@ class MentalHealthSupportBot:
         conn.close()
         
         logger.info(f"Safety plan created: {plan_id}")
+        safety_plan["disclaimer"] = CLINICAL_DISCLAIMER
         return safety_plan
     
     def intervene_crisis(
@@ -1852,6 +1874,7 @@ class MentalHealthSupportBot:
         conn.close()
         
         logger.critical(f"CRISIS INTERVENTION DOCUMENTED: {intervention_id}, type: {crisis_type}, severity: {severity}")
+        intervention["disclaimer"] = CLINICAL_DISCLAIMER
         return intervention
     
     def get_crisis_resources(self) -> Dict[str, str]:

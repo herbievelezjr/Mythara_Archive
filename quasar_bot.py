@@ -33,8 +33,7 @@ import os
 import sys
 import time
 import json
-import random
-import numpy as np
+import math
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
@@ -138,11 +137,16 @@ class QuantumAttackResult:
 
 @dataclass
 class PostQuantumTest:
-    """Post-quantum cryptography test result"""
-    algorithm: str  # CRYSTALS-Kyber, CRYSTALS-Dilithium, FALCON, SPHINCS+
+    """NIST post-quantum reference data (NOT a test result).
+
+    These are published standard parameters. This tool does not test
+    anything — testing requires real implementations on real hardware.
+    """
+    algorithm: str  # e.g. ML-KEM-1024, ML-DSA-87, Falcon-1024, SPHINCS+
     key_size: int
-    quantum_resistant: bool
+    quantum_resistant: bool  # per NIST standardization, not verified here
     estimated_quantum_bits_to_break: int
+    verified_by_this_tool: bool = False  # always False — honesty field
     lattice_based: bool = False
     code_based: bool = False
     hash_based: bool = False
@@ -154,9 +158,24 @@ class QUASARBot:
     """
     Q.U.A.S.A.R. - Quantum Universal Autonomous Security & Response
     THE QUANTUM RING OF CYBERSECURITY
-    
-    Extends A.M.I.R. to quantum computing systems.
-    Beyond classical limits. Securing the quantum future.
+
+    An ILLUSTRATIVE MODEL for reasoning about quantum-era security concepts.
+    Everything here is classical arithmetic — no quantum hardware, no qubits.
+
+    MODEL ASSUMPTIONS (all estimates, documented so they can be challenged):
+    - Gate time: 100 ns per quantum gate
+    - Gate fidelity: 99.9% (self.gate_fidelity); circuit success is estimated
+      as fidelity^gates WITHOUT error correction — real fault-tolerant
+      machines would do far better, noisy ones far worse
+    - Classical CPU: 1 THz for brute-force comparisons
+    - RSA-2048 classical factoring (~300M years via GNFS): literature estimate
+    - Quantum timelines (5/10/20 yr): illustrative scenarios, not forecasts
+
+    What IS real here: the resource-estimation formulas (qubit counts from
+    published algorithm complexities, gate-count scaling, Grover iteration
+    counts), the NIST post-quantum parameter reference data, and the
+    arithmetic comparing them. What is NOT real: any claim to have run,
+    tested, or validated anything on quantum hardware.
     """
     
     def __init__(self, operator_name: str = "Quantum Commander"):
@@ -232,6 +251,20 @@ class QUASARBot:
         print(f"⚛️  {greeting}, {self.operator_name}.")
         print(f"    Q.U.A.S.A.R. at your quantum service.")
         print(f"    Quantum systems nominal. Online for {uptime.seconds} seconds.\n")
+
+    def _estimate_circuit_success(self, total_gates: int) -> float:
+        """
+        Estimate raw circuit success as gate_fidelity ^ total_gates,
+        computed in log space to avoid underflow.
+
+        Honest limits: this is WITHOUT error correction. A fault-tolerant
+        machine would do far better; a noisier one far worse. The point of
+        the number is to show why error correction is the whole game.
+        """
+        log_p = total_gates * math.log(self.gate_fidelity)
+        if log_p < -745:  # below smallest positive float
+            return 0.0
+        return math.exp(log_p)
     
     def simulate_shors_algorithm(self, target_key_size: int = 2048) -> QuantumAttackResult:
         """
@@ -261,8 +294,10 @@ class QUASARBot:
         # Circuit depth: O(N³) for full algorithm
         circuit_depth = (target_key_size ** 3) // 1000
         
-        # Success probability (with error correction)
-        success_prob = 0.90  # 90% with good error correction
+        # Success estimate: gate_fidelity ^ gates, WITHOUT error correction.
+        # Computed, not hardcoded — and it will be ~0 for real key sizes,
+        # which is the honest answer for a non-fault-tolerant machine.
+        success_prob = self._estimate_circuit_success(gates_required)
         
         # Execution time on quantum computer (milliseconds)
         # Assuming 100ns gate time and accounting for overhead
@@ -358,8 +393,9 @@ class QUASARBot:
         # Circuit depth
         circuit_depth = grover_iterations * 50
         
-        # Success probability
-        success_prob = 0.99  # Grover's has high success rate
+        # Success estimate from gate fidelity (no error correction) —
+        # computed from the actual gate count, not a hardcoded 99%.
+        success_prob = self._estimate_circuit_success(total_gates)
         
         # Quantum execution time (years)
         gate_time_ns = 100  # 100 nanoseconds per gate
@@ -415,84 +451,83 @@ class QUASARBot:
         self.quantum_attacks_simulated += 1
         return result
     
-    def test_post_quantum_cryptography(self) -> List[PostQuantumTest]:
+    def load_nist_pqc_reference_data(self) -> List[PostQuantumTest]:
         """
-        Test NIST post-quantum cryptography candidates
-        
-        NIST selected algorithms (2024):
-        - CRYSTALS-Kyber (key encapsulation)
-        - CRYSTALS-Dilithium (digital signatures)
-        - FALCON (digital signatures)
-        - SPHINCS+ (digital signatures)
-        
+        Load NIST post-quantum cryptography REFERENCE DATA.
+
+        Published standard parameters (FIPS 203/204/205) — NOT test results.
+        Nothing here was tested or validated by this tool; the old method
+        name (test_post_quantum_cryptography) and its "validated" output
+        were theater. Real validation needs real implementations.
+
         Returns:
-            List of post-quantum algorithm test results
+            List of reference-data records (verified_by_this_tool=False).
         """
-        print("\n⚛️  Testing NIST Post-Quantum Cryptography Standards")
-        print("    Validating quantum-resistant algorithms...\n")
-        
+        print("\n⚛️  Loading NIST Post-Quantum Cryptography reference data")
+        print("    (published parameters — NOT independently tested here)\n")
+
         algorithms = [
             {
-                "name": "CRYSTALS-Kyber-1024",
-                "type": "Key Encapsulation",
+                "name": "ML-KEM-1024 (CRYSTALS-Kyber)",
+                "type": "Key Encapsulation (FIPS 203)",
                 "key_size": 1024,
                 "quantum_bits_to_break": 254,  # Security level 5
                 "lattice_based": True,
                 "security_level": 256
             },
             {
-                "name": "CRYSTALS-Dilithium5",
-                "type": "Digital Signature",
+                "name": "ML-DSA-87 (CRYSTALS-Dilithium)",
+                "type": "Digital Signature (FIPS 204)",
                 "key_size": 2592,
                 "quantum_bits_to_break": 254,
                 "lattice_based": True,
                 "security_level": 256
             },
             {
-                "name": "FALCON-1024",
-                "type": "Digital Signature",
+                "name": "Falcon-1024",
+                "type": "Digital Signature (NIST selected)",
                 "key_size": 1024,
                 "quantum_bits_to_break": 254,
                 "lattice_based": True,
                 "security_level": 256
             },
             {
-                "name": "SPHINCS+-256s",
-                "type": "Digital Signature",
+                "name": "SPHINCS+-256s (SLH-DSA)",
+                "type": "Digital Signature (FIPS 205)",
                 "key_size": 256,
                 "quantum_bits_to_break": 256,
                 "hash_based": True,
                 "security_level": 256
             },
         ]
-        
+
         results = []
-        
+
         for algo in algorithms:
             test = PostQuantumTest(
                 algorithm=algo["name"],
                 key_size=algo["key_size"],
-                quantum_resistant=True,
+                quantum_resistant=True,  # per NIST standardization — not verified here
                 estimated_quantum_bits_to_break=algo["quantum_bits_to_break"],
                 lattice_based=algo.get("lattice_based", False),
                 hash_based=algo.get("hash_based", False),
                 security_level=algo["security_level"]
             )
             results.append(test)
-            
-            print(f"    ✅ {algo['name']}")
+
+            print(f"    📄 {algo['name']}")
             print(f"       Type: {algo['type']}")
-            print(f"       Quantum bits to break: {algo['quantum_bits_to_break']}")
+            print(f"       Quantum bits to break (published): {algo['quantum_bits_to_break']}")
             print(f"       Security level: {algo['security_level']} bits")
-            print(f"       Status: QUANTUM-RESISTANT\n")
-            
+            print(f"       Status: REFERENCE DATA — not tested by this tool\n")
+
             self.post_quantum_algorithms_tested += 1
-        
-        print(f"    ✓ All {len(results)} post-quantum algorithms validated")
-        print(f"    💡 Recommendation: Migrate all production systems to these algorithms")
-        
+
+        print(f"    ✓ {len(results)} reference records loaded")
+        print(f"    💡 To actually validate: test real implementations (e.g. liboqs) on real hardware")
+
         return results
-    
+
     def quantum_threat_assessment(self) -> Dict[str, Any]:
         """
         Complete quantum threat assessment
@@ -515,9 +550,9 @@ class QUASARBot:
         aes_128 = self.simulate_grovers_search(search_space_bits=128)
         aes_256 = self.simulate_grovers_search(search_space_bits=256)
         
-        print("\nPHASE 3: POST-QUANTUM CRYPTOGRAPHY VALIDATION")
+        print("\nPHASE 3: POST-QUANTUM CRYPTOGRAPHY REFERENCE DATA")
         print("-" * 70)
-        post_quantum = self.test_post_quantum_cryptography()
+        post_quantum = self.load_nist_pqc_reference_data()
         
         # Generate report
         report = {
@@ -566,13 +601,14 @@ class QUASARBot:
                 for pq in post_quantum
             ],
             "recommendations": [
-                "🔴 CRITICAL: Migrate all RSA/ECC keys to post-quantum algorithms (CRYSTALS-Kyber, CRYSTALS-Dilithium)",
+                "🔴 CRITICAL (industry guidance, not derived from a live test here): plan migration of RSA/ECC to NIST PQC algorithms (ML-KEM, ML-DSA)",
                 "🟠 HIGH: Upgrade AES-128 to AES-256 for quantum resistance",
                 "🟡 MEDIUM: Implement hybrid classical+post-quantum schemes during transition",
                 "🟢 LOW: Monitor quantum hardware progress (IBM, Google, IonQ)",
                 "💡 PROACTIVE: Begin post-quantum cryptography migration planning NOW"
             ],
             "quantum_timeline": {
+                "note": "ILLUSTRATIVE SCENARIOS, not forecasts — hardware progress is unpredictable",
                 "current_threat": "MINIMAL (insufficient qubits)",
                 "5_year_threat": "MODERATE (1000+ qubit systems)",
                 "10_year_threat": "HIGH (cryptographically relevant quantum computers)",
@@ -586,7 +622,7 @@ class QUASARBot:
         
         print(f"\n📊 Summary:")
         print(f"    Classical crypto tested: RSA-2048, RSA-4096, AES-128, AES-256")
-        print(f"    Post-quantum algorithms validated: {len(post_quantum)}")
+        print(f"    Post-quantum reference records loaded: {len(post_quantum)} (not tested)")
         print(f"    Current quantum threat level: MODERATE")
         print(f"    Quantum attacks simulated: {self.quantum_attacks_simulated}")
         

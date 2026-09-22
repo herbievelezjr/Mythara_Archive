@@ -1,97 +1,92 @@
-import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 """
-Sales Trainer Bot Runner - Runs every 6 hours
-Analyzes conversations, updates Sales Bot tactics
+Sales Trainer Bot runner — honest rebuild 2026-09-22.
 
-UPDATED: Now uses Google Gemini (FREE) instead of OpenAI
-Get your free API key: https://ai.google.dev/
-# QUICKFIX FIX: Moved to environment variable (CWE-798)
-GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")  # Set via environment
+WHAT IT DOES:
+  Runs the SalesTrainerBot's real rule-based conversation analysis
+  over a set of conversations and prints the lessons it derives.
+
+WHAT IT DOES NOT DO:
+  - The conversations below are ILLUSTRATIVE SAMPLES, not real
+    customer data. Any "tactics to amplify/retire" below is derived
+    from 3 made-up examples — treat it as a demo of the analysis,
+    not as sales advice.
+  - update_sales_bot_tactics() only LOGS. It modifies no sales bot.
+    The tactic-update path is not implemented.
 """
 
-import sys
 import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-# Use FREE version (no API needed)
-from mythara_ai_team_free import SalesTrainerBot
+import sys
 from datetime import datetime
 
-# Check for Google AI API key
-GOOGLE_AI_API_KEY = os.getenv('GOOGLE_AI_API_KEY')
-if not GOOGLE_AI_API_KEY:
-    print("⚠️  Warning: GOOGLE_AI_API_KEY not set. Bot will run in rule-based mode.")
-    print("   Get free API key: https://ai.google.dev/")
-    # QUICKFIX FIX: Moved to environment variable (CWE-798)
-    GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")  # Set via environment
-    print("")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-def run_sales_trainer_bot():
-    """Execute Sales Trainer Bot tasks."""
-    print(f"🎓 SALES TRAINER BOT - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    
+from mythara_ai_team_free import SalesTrainerBot
+
+GOOGLE_AI_API_KEY = os.getenv("GOOGLE_AI_API_KEY", "")
+if not GOOGLE_AI_API_KEY:
+    print("Note: GOOGLE_AI_API_KEY not set — running rule-based analysis (no AI).")
+
+
+def run_sales_trainer_bot() -> None:
+    print(f"SALES TRAINER BOT - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
     bot = SalesTrainerBot()
-    
-    # Simulate conversation analysis (in production, reads from database)
-    print("\n📊 Analyzing last 30 days of conversations...")
-    
+
+    # ILLUSTRATIVE SAMPLES — not real customer conversations.
+    # Replace with real conversation logs before trusting any output.
     sample_conversations = [
         {
-            "id": "conv_001",
+            "id": "sample_001",
             "outcome": "closed",
-            "messages": ["We can help you save 6 weeks", "That sounds great!", "$2,500", "Let's do it"],
-            "tactics_used": ["urgency", "competitive_pressure"]
+            "messages": ["We can help you save 6 weeks", "That sounds great!",
+                         "$500", "Let's do it"],
+            "tactics_used": ["urgency", "competitive_pressure"],
         },
         {
-            "id": "conv_002",
+            "id": "sample_002",
             "outcome": "lost",
-            "messages": ["Only $500", "Too cheap, seems sketchy", "We have great ROI", "No thanks"],
-            "tactics_used": ["discount_language"]
+            "messages": ["Only $500", "Too cheap, seems sketchy",
+                         "We have great ROI", "No thanks"],
+            "tactics_used": ["discount_language"],
         },
         {
-            "id": "conv_003",
+            "id": "sample_003",
             "outcome": "closed",
-            "messages": ["Your competitors are using this", "Really? Who?", "[hypothetical example bank]", "I'm interested"],
-            "tactics_used": ["competitive_pressure", "social_proof"]
-        }
+            "messages": ["Your competitors are using this", "Really? Who?",
+                         "[example withheld]", "I'm interested"],
+            "tactics_used": ["competitive_pressure", "social_proof"],
+        },
     ]
-    
-    print(f"\n🔍 Conversations analyzed: {len(sample_conversations)}")
-    
+
+    print("\nAnalyzing 3 ILLUSTRATIVE sample conversations "
+          "(not real customer data):")
+
     for conv in sample_conversations:
         analysis = bot.analyze_conversation(conv)
-        if analysis.get("lessons"):
-            print(f"\n   Conversation {conv['id']} ({conv['outcome']}):")
-            for lesson in analysis["lessons"]:
-                print(f"      ✓ {lesson['pattern']}: {lesson['recommendation']}")
-    
-    # Generate training update
-    print("\n🚀 Generating training update...")
+        print(f"\n   Conversation {conv['id']} ({conv['outcome']}):")
+        for lesson in analysis.get("lessons", []):
+            print(f"      - {lesson['pattern']}: {lesson['recommendation']}")
+        if not analysis.get("lessons"):
+            print("      - no lessons derived")
+
+    print("\nGenerating training update (from samples only)...")
     training_update = bot.generate_training_update(sample_conversations)
-    
-    if training_update["tactics_to_amplify"]:
-        print(f"\n   ✅ Tactics to AMPLIFY:")
-        for tactic in training_update["tactics_to_amplify"]:
-            print(f"      • {tactic['tactic']}: {tactic['reason']}")
-    
-    if training_update["tactics_to_retire"]:
-        print(f"\n   ❌ Tactics to RETIRE:")
-        for tactic in training_update["tactics_to_retire"]:
-            print(f"      • {tactic['tactic']}: {tactic['reason']}")
-    
-    if training_update["new_tactics_to_test"]:
-        print(f"\n   🧪 New A/B Tests:")
-        for tactic in training_update["new_tactics_to_test"]:
-            print(f"      • {tactic['tactic']}: {tactic['hypothesis']}")
-    
-    # Update Sales Bot
-    print("\n📝 Pushing updates to Sales Bot with Soul...")
+
+    for tactic in training_update.get("tactics_to_amplify", []):
+        print(f"   AMPLIFY: {tactic['tactic']}: {tactic['reason']}")
+    for tactic in training_update.get("tactics_to_retire", []):
+        print(f"   RETIRE:  {tactic['tactic']}: {tactic['reason']}")
+    for tactic in training_update.get("new_tactics_to_test", []):
+        print(f"   TEST:    {tactic['tactic']}: {tactic['hypothesis']}")
+
+    print("\nPushing update to sales bot...")
     bot.update_sales_bot_tactics(training_update)
-    
-    print("\n✅ Sales Trainer Bot run complete")
-    print(f"   Next run: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} + 6 hours")
+    print("NOTE: update_sales_bot_tactics() only logs — no sales bot was modified.")
+
+    print("\nDone. To get real value: feed real conversation logs, not samples.")
+
 
 if __name__ == "__main__":
     run_sales_trainer_bot()

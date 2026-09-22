@@ -12,6 +12,9 @@ import sqlite3
 import logging
 import sys
 import os
+import glob
+import subprocess
+import urllib.request
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
@@ -182,8 +185,7 @@ class MytharaArchitectTeam:
                 product_version="1.0.0",
                 database_name=self.db_path,
                 custom_clauses=["design_optimization", "structural_analysis", "fabrication_planning"],
-                branding={"tagline": "Design Intelligence Meets Manufacturing Reality"},
-                hipaa_mode=False
+                branding={"tagline": "Design Intelligence Meets Manufacturing Reality"}
             )
             self.engine = MytharaEngine(config, user_id=team_name)
         else:
@@ -234,8 +236,8 @@ class MytharaArchitectTeam:
             )
         """)
         
-        # Blueprints table
-        cursor.execute("""
+            # Blueprints table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS blueprints (
                 blueprint_id TEXT PRIMARY KEY,
                 project_id TEXT,
@@ -255,10 +257,10 @@ class MytharaArchitectTeam:
                 integrity_hash TEXT,
                 FOREIGN KEY (project_id) REFERENCES projects(project_id)
             )
-        """)
+            """)
         
-        # Design reviews table
-        cursor.execute("""
+            # Design reviews table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS design_reviews (
                 review_id TEXT PRIMARY KEY,
                 blueprint_id TEXT,
@@ -273,10 +275,10 @@ class MytharaArchitectTeam:
                 optimizations TEXT,  -- JSON array
                 FOREIGN KEY (blueprint_id) REFERENCES blueprints(blueprint_id)
             )
-        """)
+            """)
         
-        # Fabrication jobs table
-        cursor.execute("""
+            # Fabrication jobs table
+            cursor.execute("""
             CREATE TABLE IF NOT EXISTS fabrication_jobs (
                 job_id TEXT PRIMARY KEY,
                 blueprint_id TEXT,
@@ -293,7 +295,7 @@ class MytharaArchitectTeam:
                 quality_score REAL,
                 FOREIGN KEY (blueprint_id) REFERENCES blueprints(blueprint_id)
             )
-        """)
+            """)
         
             # Material inventory table
             cursor.execute("""
@@ -333,75 +335,127 @@ class MytharaArchitectTeam:
                 conn.close()
     
     def _detect_printers(self) -> List[Dict[str, Any]]:
-        """Detect available 3D printers and CNC machines"""
-        # In production, this would scan network/USB for actual machines
-        # For demo, return sample printers
-        printers = [
-            {
-                "machine_id": "PRINTER_FDM_001",
-                "name": "Prusa i3 MK3S+",
-                "type": FabricationMethod.FDM_3D_PRINT,
-                "build_volume": {"x": 250, "y": 210, "z": 210},
-                "materials": [MaterialType.PLA, MaterialType.PETG, MaterialType.ABS],
-                "status": "IDLE"
-            },
-            {
-                "machine_id": "PRINTER_SLA_001",
-                "name": "Formlabs Form 3",
-                "type": FabricationMethod.SLA_3D_PRINT,
-                "build_volume": {"x": 145, "y": 145, "z": 185},
-                "materials": [MaterialType.RESIN],
-                "status": "IDLE"
-            },
-            {
-                "machine_id": "CNC_MILL_001",
-                "name": "Haas VF-2",
-                "type": FabricationMethod.CNC_MILLING,
-                "work_envelope": {"x": 762, "y": 406, "z": 508},
-                "materials": [MaterialType.ALUMINUM, MaterialType.STEEL, MaterialType.WOOD],
-                "status": "IDLE"
-            },
-            {
-                "machine_id": "LASER_001",
-                "name": "Epilog Fusion Pro",
-                "type": FabricationMethod.LASER_CUTTING,
-                "work_area": {"x": 914, "y": 610},
-                "materials": [MaterialType.ACRYLIC, MaterialType.WOOD],
-                "status": "IDLE"
-            }
-        ]
-        
-        # Store in database
+        """
+        Detect locally visible devices that *might* be fabrication machines.
+
+        Honest contract: the OS can report print queues and serial devices,
+        but it cannot tell us build volumes, materials, or machine models.
+        Everything detected is returned as an UNPROFILED device — capability
+        profiles must be registered by a human via register_machine().
+        Returns [] when nothing is visible. Never invents machines.
+        """
+        devices: List[Dict[str, Any]] = []
+        seen = set()
+
+        def _add(machine_id: str, name: str, source: str, detail: str = ""):
+            if machine_id in seen:
+                return
+            seen.add(machine_id)
+            devices.append({
+                "machine_id": machine_id,
+                "name": name,
+                "type": None,  # fabrication profile unknown until registered
+                "source": source,
+                "detail": detail,
+                "status": "DETECTED_UNPROFILED",
+            })
+
+        # 1. CUPS print queues (Linux/macOS) — real OS-reported printers
+        try:
+            out = subprocess.run(["lpstat", "-p"], capture_output=True,
+                                 text=True, timeout=5)
+            if out.returncode == 0:
+                for line in out.stdout.splitlines():
+                    parts = line.split()
+                    # lpstat prints: "printer <name> is ..."/"printer <name> disabled ..."
+                    if len(parts) >= 2 and parts[0] == "printer":
+                        qname = parts[1]
+                        _add(f"CUPS_{qname}", qname, "cups", line.strip())
+        except Exception:
+            pass  # lpstat absent (e.g., Windows) — not an error
+
+        # 2. USB serial devices (where 3D printers / CNC controllers appear)
+        for pattern in ("/dev/ttyUSB*", "/dev/ttyACM*"):
+            for dev in glob.glob(pattern):
+                _add(f"SERIAL_{os.path.basename(dev)}", dev, "usb-serial",
+                     "serial device present; identity unknown")
+
+        # 3. OctoPrint on localhost (common 3D-printer server)
+        try:
+            req = urllib.request.Request(
+                "http://127.0.0.1:5000/api/version",
+                headers={"User-Agent": "mythara-architect"})
+            with urllib.request.urlopen(req, timeout=2) as resp:
+                if resp.status == 200:
+                    info = json.loads(resp.read().decode("utf-8", "replace"))
+                    _add("OCTOPRINT_LOCAL", "OctoPrint (localhost:5000)",
+                         "octoprint",
+                         f"server {info.get('server', '?')}, api {info.get('api', '?')}")
+        except Exception:
+            pass  # no local OctoPrint — not an error
+
+        # Persist only what was actually detected — never seed fabricated machines.
         conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        for printer in printers:
-            # Convert printer dict to JSON-serializable format
-            printer_json = {
-                "machine_id": printer["machine_id"],
-                "name": printer["name"],
-                "type": printer["type"].value,
-                "build_volume": printer.get("build_volume"),
-                "work_envelope": printer.get("work_envelope"),
-                "work_area": printer.get("work_area"),
-                "materials": [m.value for m in printer["materials"]],
-                "status": printer["status"]
-            }
-            
+        try:
+            cursor = conn.cursor()
+            for dev in devices:
+                cursor.execute("""
+                    INSERT OR REPLACE INTO fabrication_machines
+                    (machine_id, machine_name, machine_type, capabilities, status)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (
+                    dev["machine_id"],
+                    dev["name"],
+                    "UNPROFILED",
+                    json.dumps(dev),
+                    dev["status"],
+                ))
+            conn.commit()
+        finally:
+            conn.close()
+
+        return devices
+
+    def register_machine(self, machine_id: str, name: str,
+                         fabrication_method: "FabricationMethod",
+                         build_volume: Optional[Dict[str, float]] = None,
+                         materials: Optional[List["MaterialType"]] = None) -> Dict[str, Any]:
+        """
+        Register a real machine's capability profile (human-supplied facts).
+        This is how detected-but-unprofiled devices become usable: a person
+        who can see the machine tells the suite what it actually is.
+        """
+        profile = {
+            "machine_id": machine_id,
+            "name": name,
+            "type": fabrication_method.value,
+            "build_volume": build_volume or {},
+            "materials": [m.value for m in (materials or [])],
+            "status": "IDLE",
+            "registered_by": "human",
+            "registered_at": datetime.now().isoformat(),
+        }
+        conn = sqlite3.connect(self.db_path)
+        try:
+            cursor = conn.cursor()
             cursor.execute("""
                 INSERT OR REPLACE INTO fabrication_machines
                 (machine_id, machine_name, machine_type, capabilities, status)
                 VALUES (?, ?, ?, ?, ?)
-            """, (
-                printer["machine_id"],
-                printer["name"],
-                printer["type"].value,
-                json.dumps(printer_json),
-                printer["status"]
-            ))
-        conn.commit()
-        conn.close()
-        
-        return printers
+            """, (machine_id, name, fabrication_method.value,
+                  json.dumps(profile), "IDLE"))
+            conn.commit()
+        finally:
+            conn.close()
+        # Refresh the in-memory list
+        self.available_printers = [p for p in self.available_printers
+                                   if p.get("machine_id") != machine_id]
+        self.available_printers.append({
+            "machine_id": machine_id, "name": name,
+            "type": fabrication_method, "build_volume": build_volume or {},
+            "materials": materials or [], "status": "IDLE",
+        })
+        return profile
     
     def _load_material_inventory(self) -> Dict[str, float]:
         """Load material inventory"""
@@ -897,12 +951,29 @@ class MytharaArchitectTeam:
         
         if not row:
             return {"error": "Job not found"}
-        
+
+        status = row[6]
+        if status == "PRINTING":
+            # Honest progress: elapsed time vs. estimated window. This is an
+            # estimate from the plan, not a sensor reading — labeled as such.
+            try:
+                started = datetime.fromisoformat(row[7])
+                eta = datetime.fromisoformat(row[9])
+                total = (eta - started).total_seconds()
+                elapsed = (datetime.utcnow() - started).total_seconds()
+                progress = int(max(0, min(99, (elapsed / total) * 100))) if total > 0 else 0
+                progress_source = "estimated_from_plan"
+            except Exception:
+                progress, progress_source = 0, "unknown"
+        else:
+            progress, progress_source = 100, "terminal_state"
+
         return {
             "job_id": row[0],
             "blueprint_id": row[1],
-            "status": row[6],
-            "progress": random.randint(10, 95) if row[6] == "PRINTING" else 100,  # Simulate progress
+            "status": status,
+            "progress": progress,
+            "progress_source": progress_source,
             "estimated_completion": row[9]
         }
 

@@ -89,6 +89,34 @@ PANTHEON = {
         "organ": False,
         "module": None,
     },
+    # -- wired organs: the nervous system --------------------------------------
+    # Consequential actions witnessed by the assessor panel
+    # (soul_cradle.bot_witness) and chained into the action log; every
+    # witnessed action feeds the Benevolence Reservoir (soul_cradle.benevolence).
+    "outreach_queue": {
+        "core_function": "outbound chokepoint — every draft witnessed by the panel before queueing; no send capability",
+        "faces_user": False,
+        "organ": True,
+        "module": "Commercial.outreach_queue",
+    },
+    "sales_bot": {
+        "core_function": "canonical sales bot — persistence, clause-attributed engagement, epsilon-greedy learning; drafts only, never sends",
+        "faces_user": False,
+        "organ": True,
+        "module": "Commercial.mythara_autonomous_sales",
+    },
+    "support_bot": {
+        "core_function": "support intake — localhost ticket store; witnessed record-only",
+        "faces_user": True,
+        "organ": True,
+        "module": "Commercial.mythara_support_bot",
+    },
+    "schrodinger": {
+        "core_function": "deterministic criteria-driven decision analysis; quantum language is metaphorical",
+        "faces_user": False,
+        "organ": True,
+        "module": None,
+    },
     # -- utility launchers ----------------------------------------------------
     # Thin launchers with no independent reasoning. Counted, not named:
     # naming them would invent structure that was never verified.

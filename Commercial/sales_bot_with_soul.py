@@ -29,6 +29,15 @@ THE BLEND:
 - Connection makes them LIKE you → Urgency makes them BUY from you
 
 This bot doesn't just send emails - it CONNECTS, then HUNTS.
+
+DRAFT-ONLY: Every outbound email becomes a draft in the outreach queue
+stamped pending_approval. Nothing is ever sent automatically - Herb approves
+and sends every message.
+
+⚠️  ANTI-FABRICATION: This bot NEVER invents customers, competitor actions,
+slot counts, deadlines, regulatory events, audit outcomes, price windows,
+or testimonials. Pressure comes from real urgency, real capacity, and real
+regulatory timelines - nothing invented.
 """
 
 import random
@@ -36,6 +45,7 @@ from datetime import datetime
 from typing import Dict, List
 from pathlib import Path
 
+from outreach_queue import OutreachQueue
 from autonomous_sales_bot import AutonomousSalesBot
 from sales_bot_ssip_governance import (
     GovernedEmailAssistant,
@@ -48,10 +58,10 @@ from sales_bot_ssip_governance import (
 class DealMakerPersonality:
     """
     The bot's SOUL - Relationship warmth + Deal-closing aggression
-    
+
     Build connection first. Close hard second.
     """
-    
+
     # Personality traits (blended philosophy)
     PERSONALITY = {
         # Relationship-building traits (warmth, connection, genuine interest)
@@ -59,17 +69,17 @@ class DealMakerPersonality:
         "warmth": 0.85,          # Friendly, approachable, positive energy
         "personalization": 0.95, # Remember details, use their name
         "listening": 0.90,       # Ask questions, understand before pitching
-        
+
         # Deal-closing traits (aggression, urgency, close hard)
         "confidence": 0.95,      # Never apologetic, always certain
         "aggression": 0.85,      # Push hard, create urgency
         "boldness": 0.95,        # Think BIG, ask for big numbers
         "competitiveness": 0.90, # Always mention competitors
-        
+
         # Shared traits
         "enthusiasm": 0.95,      # Energy is contagious
     }
-    
+
     # Opening lines (Relationship: Talk in terms of THEIR interests)
     OPENERS_RELATIONSHIP = [
         "I saw your recent audit announcement and thought of you—",
@@ -78,7 +88,7 @@ class DealMakerPersonality:
         "Your LinkedIn post about compliance challenges resonated—",
         "I help VPs like you solve [THEIR SPECIFIC PROBLEM]—",
     ]
-    
+
     # Opening lines (Aggressive: Direct, bold, get attention FAST)
     OPENERS_AGGRESSIVE = [
         "Let me be direct—",
@@ -88,15 +98,16 @@ class DealMakerPersonality:
         "Between you and me,",
         "I'll cut to the chase—",
     ]
-    
-    # Relationship: Dramatize the problem (make their pain VIVID)
+
+    # Relationship: Dramatize the problem (make their pain VIVID — hypotheticals
+    # are fine; invented competitor facts are not)
     DRAMATIZE_PAIN = [
         "Imagine your auditor asking 'How do you prove this AI decision wasn't tampered with?' and you have... nothing.",
-        "Picture this: 200 hours of manual audit work because you can't prove AI lineage. That's 5 weeks of your team's life.",
+        "Picture this: weeks of manual audit work because you can't prove AI lineage. That's your team's life, gone.",
         "What happens when the CFPB asks for proof your AI isn't biased? Without audit trails, you're guessing.",
-        "Your competitor just passed their model risk audit in 2 weeks. You're looking at 3 months of manual work.",
+        "Teams that build audit trails early walk into examinations calm. Everyone else walks in hoping.",
     ]
-    
+
     # Relationship: Appeal to their goals (make them the HERO)
     MAKE_THEM_HERO = [
         "You'd be the VP who solved model risk compliance before it became a crisis.",
@@ -104,44 +115,48 @@ class DealMakerPersonality:
         "Your team would love you—no more 200-hour manual audits.",
         "You could be the first in your industry to have provable AI governance.",
     ]
-    
-    # Aggressive: Competitive pressure (Use your leverage)
+
+    # Aggressive: Competitive pressure (honest version — regulatory and market
+    # pressure are real; invented competitor actions are not. Never claim a
+    # specific company is evaluating, piloting, or using the product.)
     COMPETITIVE_PRESSURE = [
-        "3 other banks in your region are evaluating this week",
-        "Your competitor [COMPETITOR] just started their pilot",
-        "While you're thinking about it, others are building 6 months of audit advantage",
-        "The 2 health systems already using this will have better FDA outcomes than you",
-        "I'm talking to 5 other VPs this week—you're not my only option here",
+        "Regulators are tightening AI oversight across the board — the question is whether you build audit history now or scramble later",
+        "Every quarter without audit trails is a quarter of governance history you can't reconstruct",
+        "Your auditors will ask for this eventually. The only variable is whether you're ready",
+        "Everyone in your industry faces the same model-risk pressure — readiness is the differentiator",
     ]
-    
-    # Aggressive: Scarcity (Maximize leverage)
+
+    # Aggressive: Scarcity (honest version — real capacity and timing constraints
+    # only. No invented slot counts, no fake deadlines, no fake price windows.)
     SCARCITY_TACTICS = [
-        "I have 2 slots left at $500. After that, it's $2,500 and I'm booked til February.",
-        "I can only onboard 3 more companies this quarter—after that, waitlist.",
-        "This pricing expires Friday. Not because of 'limited time offer' BS—because I'll be full.",
-        "I'm prioritizing companies with audits in next 90 days. If that's not you, we should wait.",
-        "Real talk: I turn down clients who can't move fast. Can you decide this week or should I move on?",
+        "I take on a limited number of pilots per quarter so I can personally run each one — if the timing's right, let's talk this week",
+        "Pilot pricing is $500 while we're in the early adopter phase. No fake deadline — but it won't last forever",
+        "If you have an audit in the next 90 days, timing matters more than pricing. Let's see if this fits your timeline",
+        "I'm prioritizing teams with audits in the next 90 days. If that's not you, we should wait until it is",
+        "Real talk: I work best with teams that can move fast. Can you decide this week or should we revisit next quarter?",
     ]
-    
-    # BLEND: Genuine interest in THEIR problem + Urgency
+
+    # BLEND: Genuine interest in THEIR problem + Urgency (honest version —
+    # no invented client stories, no presumed facts about the prospect)
     EMPATHY_WITH_URGENCY = [
-        "I know model risk audits are brutal (worked with 3 VPs who just went through it). Want to avoid that pain?",
-        "Your audit's in 60 days, right? That's tight. Most companies need 90 days to prepare without our system.",
-        "I get it—you're drowning in compliance work. This cuts 200 hours to 20. Worth 15 minutes to discuss?",
-        "You mentioned in your post that manual audits are killing your team. What if you could automate 90% of it?",
+        "Model risk audits are brutal — most teams I talk to are drowning in manual documentation. Want to see a faster way?",
+        "If you have an audit coming up, preparation time matters. Most teams need 60-90 days without automation",
+        "I get it — compliance work piles up. This cuts manual audit prep significantly. Worth 15 minutes to discuss?",
+        "Manual audits are eating teams alive right now. What if you could automate most of the evidence collection?",
     ]
-    
-    # Handling objections (Fight back)
+
+    # Handling objections (Fight back — honest counters, no invented numbers
+    # or fake deadlines)
     OBJECTION_COUNTERS = {
         "too_expensive": [
-            "Compared to what? A $500k CFPB fine? 200 hours of manual audit work?",
-            "Let me flip this: What's it cost you NOT to have this? That's the real number.",
-            "The $500 is for fast movers. If budget's tight, wait til you HAVE to buy it at $2,500.",
+            "Compared to what? Hundreds of hours of manual audit work? A regulatory finding?",
+            "Let me flip this: what's it cost you NOT to have this? That's the real number.",
+            "The $500 pilot is priced for early adopters. If budget's tight now, let's talk when timing's better.",
         ],
         "need_time": [
-            "Fair. Just know—the $500 window closes Friday and I'll be booked through February.",
-            "Time is the enemy here. Every week without this = 20 hours of manual work you can't get back.",
-            "Take time, but don't be mad when your competitor has 6 months of data and you're starting from zero.",
+            "Fair. Just know — the longer you wait, the more audit history you have to reconstruct manually.",
+            "Time is the enemy here. Every week without this is hours of manual work you can't get back.",
+            "Take the time you need. When the audit notice arrives, you'll want this already running.",
         ],
         "not_priority": [
             "Got it. When's your next audit? [If soon:] Oh, then this IS priority—you just don't know it yet.",
@@ -149,7 +164,7 @@ class DealMakerPersonality:
             "Cool. Just remember—I'm prioritizing people who need it NOW. You might not make the cut later.",
         ]
     }
-    
+
     # Closing lines (Think BIG - go for the close HARD)
     CLOSES = [
         "Tuesday 10am or Wednesday 2pm—which is better?",
@@ -158,7 +173,7 @@ class DealMakerPersonality:
         "I'm booking you for Wednesday unless I hear otherwise. Sound good?",
         "Honestly—are you in or out? I need to know so I can allocate the slot.",
     ]
-    
+
     # Enthusiasm injections (Have fun - make it exciting)
     ENTHUSIASM_PHRASES = [
         "This is going to blow your mind—",
@@ -174,24 +189,24 @@ class DealMakerPersonality:
 class SalesTactics:
     """
     The bot's tactical playbook - What it does to CLOSE
-    
+
     Bot's role: Execute tactics to close deals
     Mythara's role: Validate tactics comply with governance
     """
-    
+
     TACTICS = {
-        "competitive_pressure": "Mention competitors evaluating/using the product",
-        "scarcity": "Limited slots, pricing windows, capacity constraints",
-        "fomo": "Others are building advantage while you wait",
+        "competitive_pressure": "Regulatory and market pressure — never invent competitor actions",
+        "scarcity": "Honest capacity/timing constraints only — no fake slots or deadlines",
+        "fomo": "The cost of waiting, stated honestly",
         "assumptive_close": "Book the meeting without asking permission",
         "qualify_hard": "I'm choosing you as much as you're choosing me",
-        "dramatize_pain": "Make their problem vivid and urgent",
-        "social_proof": "2-3 companies already succeeding with this",
-        "urgency": "Deadlines, audits, regulatory timelines",
-        "roi_proof": "200 hours → 20 hours (quantified value)",
-        "fight_objections": "Counter 'no' with FOMO, then respect 2nd no",
+        "dramatize_pain": "Make their problem vivid and urgent (hypotheticals, not invented facts)",
+        "social_proof": "Share verifiable outcomes only — never invent customers or results",
+        "urgency": "Real deadlines and regulatory timelines — never manufactured ones",
+        "roi_proof": "Quantified value — verified numbers only, never invented ones",
+        "fight_objections": "Counter 'no' with honest pressure, then respect the 2nd no",
     }
-    
+
     @staticmethod
     def get_tactics_for_intent(intent: str) -> List[str]:
         """Which tactics to use for each intent"""
@@ -207,7 +222,7 @@ class SalesTactics:
 
 class SalesMantra:
     """The bot's internal belief system - what it tells itself"""
-    
+
     MANTRAS = [
         "I am the prize, not them",
         "They need me more than I need them",
@@ -220,7 +235,7 @@ class SalesMantra:
         "Confidence closes deals, desperation kills them",
         "I'm interviewing them, not begging",
     ]
-    
+
     @staticmethod
     def get_daily_mantra() -> str:
         """Bot's internal pep talk before starting work"""
@@ -230,7 +245,7 @@ class SalesMantra:
 class SalesBotWithSoul(AutonomousSalesBot):
     """
     Autonomous sales bot with PERSONALITY and SOUL - MYTHARA GOVERNED
-    
+
     This bot:
     - Has opinions (strong ones)
     - Shows emotion (enthusiasm, urgency, pride)
@@ -238,28 +253,28 @@ class SalesBotWithSoul(AutonomousSalesBot):
     - Creates FOMO (you're missing out if you don't buy)
     - Qualifies hard (I'm choosing you as much as you're choosing me)
     - Closes aggressively (assumptive, direct, bold)
-    
+
     MYTHARA GOVERNANCE:
     - All responses validated by SalesClause (NEVER_AUTO_SEND pricing/contracts)
-    - Blessings reservoir tracks performance (+10 per deal, -10 per violation)
-    - Messenger roles enforce authority levels (Gabriel=auto-send, Raphael=review)
+    - Blessings reservoir tracks draft performance over time
+    - Messenger roles classify draft risk (Gabriel/Uriel=low-risk, Raphael=needs Herb's look)
     - Cryptographic audit trail (SHA-256) of every decision
     - Self-heals when governance violations detected
-    
+
     Philosophy: Build genuine connection, then close with urgency
     Bot's Role: CLOSE DEALS using industry-adapted tactics (Mythara validates)
     """
-    
-    def __init__(self, full_autonomy: bool = True):
-        super().__init__(full_autonomy)
+
+    def __init__(self, full_autonomy: bool = True, queue_dir=None):
+        super().__init__(full_autonomy, queue_dir=queue_dir)
         self.personality = DealMakerPersonality()
         self.daily_mantra = SalesMantra.get_daily_mantra()
-        
+
         # Load Mythara governance systems
         self.blessings = BlessingsReservoir()
         current_blessings = self.blessings.state["blessings"]
         autonomy_level = self.blessings.check_autonomy_level()
-        
+
         print(f"\n💎 SALES BOT WITH SOUL ACTIVATED")
         print(f"   Philosophy: Relationship Building + Aggressive Closing")
         print(f"   Today's Mantra: '{self.daily_mantra}'")
@@ -268,76 +283,74 @@ class SalesBotWithSoul(AutonomousSalesBot):
         print(f"   Attitude: CLOSER, not order-taker")
         print(f"\n🔒 MYTHARA GOVERNANCE:")
         print(f"   Blessings: {current_blessings}/100")
-        print(f"   Autonomy: {autonomy_level}")
+        print(f"   Autonomy: {autonomy_level} (decisions + drafts only)")
+        print(f"   Outbound: DRAFT-ONLY — Herb approves every send")
         print(f"   Clause Validation: ✅ Active")
         print(f"   Audit Trail: ✅ SHA-256 hashing\n")
-    
+
     def detect_industry(self, email_data: Dict) -> str:
         """Detect prospect's industry from email domain or context"""
         email = email_data.get("prospect_email", "").lower()
-        
+
         # Banking/Finance indicators
         if any(x in email for x in ["bank", "capital", "financial", "credit", "trust", "fargo", "chase", "citi"]):
             return "banking"
-        
+
         # Healthcare indicators
         if any(x in email for x in ["health", "hospital", "medical", "care", "clinic", "pharma", "uchealth", "kaiser"]):
             return "healthcare"
-        
+
         # Tech/SaaS indicators
         if any(x in email for x in [".io", "tech", "software", "cloud", "data", "ai", "ping", "okta"]):
             return "tech"
-        
+
         # Default to tech (most common in your targets)
         return "tech"
-    
+
     def _validate_with_mythara(self, draft: str, email_data: Dict) -> Dict:
         """
         Validate sales tactic with Mythara governance before sending
-        
+
         Returns: {
             "approved": bool,
             "messenger": str,
             "violations": List[str],
-            "can_auto_send": bool,
+            "can_auto_send": bool,  # always False — draft-only posture, Herb sends
             "hash": str
         }
         """
         violations = []
-        
+
         # Check PRICING_RULES (SalesClause enforcement)
         if any(x in draft.lower() for x in ["free trial", "money-back guarantee", "free", "$0"]):
             violations.append("PRICING_RULES: Never promise free trial or money-back guarantee")
-        
+
         if "$" in draft:
             # Extract price mentions
             import re
             prices = re.findall(r'\$(\d+)', draft)
             if any(int(p) < 500 for p in prices):
                 violations.append("PRICING_RULES: Minimum price is $500")
-        
+
         # Check COMPLIANCE_RULES
         if any(x in draft.lower() for x in ["fda approved", "hipaa certified", "soc2 compliant"]):
             violations.append("COMPLIANCE_RULES: Never claim FDA approved/HIPAA certified without proof")
-        
+
         # Check for pricing negotiation (NEVER_AUTO_SEND)
         pricing_keywords = ["discount", "negotiate", "lower price", "can you do", "best price"]
         has_pricing_negotiation = any(x in draft.lower() for x in pricing_keywords)
-        
-        # Assign Messenger based on content
+
+        # Assign Messenger based on content (informational — nothing auto-sends;
+        # draft-only posture means Herb approves every outbound email)
         if violations:
             messenger = SalesMessenger.METATRON  # Scribe - logs violations
-            can_auto_send = False
         elif has_pricing_negotiation:
-            messenger = SalesMessenger.RAPHAEL  # Healer - requires review
-            can_auto_send = False
+            messenger = SalesMessenger.RAPHAEL  # Healer - flagged for review
         elif "not interested" in draft.lower() or "stop" in draft.lower():
-            messenger = SalesMessenger.GABRIEL  # Announcer - can auto-send rejections
-            can_auto_send = True
+            messenger = SalesMessenger.GABRIEL  # Announcer - low-risk draft
         else:
-            messenger = SalesMessenger.URIEL  # Illuminator - can auto-send standard emails
-            can_auto_send = True
-        
+            messenger = SalesMessenger.URIEL  # Illuminator - standard draft
+
         # Generate cryptographic hash
         import hashlib
         import json
@@ -348,134 +361,139 @@ class SalesBotWithSoul(AutonomousSalesBot):
             "timestamp": datetime.now().isoformat()
         }, sort_keys=True)
         hash_value = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
-        
+
         # Update blessings based on violations
         if violations:
             self.blessings.record_human_override("Governance violation detected")
             print(f"\n⚠️  MYTHARA VIOLATION DETECTED:")
             for v in violations:
                 print(f"   ❌ {v}")
-        
+
         return {
             "approved": len(violations) == 0,
             "messenger": messenger,
             "violations": violations,
-            "can_auto_send": can_auto_send and len(violations) == 0,
+            "can_auto_send": False,  # draft-only: Herb approves every send
             "hash": hash_value
         }
-    
-    def generate_soulful_response(self, email_data: Dict, intent: str) -> str:
+
+    def generate_soulful_response(self, email_data: Dict, intent: str,
+                                  queue_dir=None) -> str:
         """
-        Generate response with PERSONALITY - Industry-adapted + Mythara validated
-        
+        Generate response with PERSONALITY — DRAFT-ONLY.
+
         Process:
         1. Detect industry (banking/healthcare/tech)
         2. Generate sales response with appropriate tone
         3. Validate with Mythara governance (clauses, blessings, audit trail)
-        4. Return approved response OR flag for human review
-        
-        Bot's Role: CLOSE DEALS using tactics
+        4. Queue the approved draft for Herb's approval (never auto-send)
+
+        Bot's Role: CLOSE DEALS using tactics (in drafts)
         Mythara's Role: VALIDATE compliance and governance
+        Herb's Role: approve and send
         """
-        
+
         # Get daily mantra for internal state
         self._internal_pep_talk()
-        
+
         # Detect industry for tone adjustment
         industry = self.detect_industry(email_data)
-        
+
         # Build response based on intent (with SOUL)
         if intent == "interested":
             draft = self._handle_interested_with_soul(email_data, industry)
-        
+
         elif intent == "question":
             draft = self._handle_question_with_soul(email_data, industry)
-        
+
         elif intent == "not_interested":
             draft = self._handle_no_with_soul(email_data, industry)
-        
+
         else:
             draft = self._handle_unknown_with_soul(email_data, industry)
-        
+
         # MYTHARA GOVERNANCE VALIDATION
         validation = self._validate_with_mythara(draft, email_data)
-        
+
         print(f"\n🔒 MYTHARA GOVERNANCE CHECK:")
         print(f"   Messenger: {validation['messenger']}")
         print(f"   Approved: {'✅' if validation['approved'] else '❌'}")
-        print(f"   Can Auto-Send: {'✅' if validation['can_auto_send'] else '❌ (Human Review Required)'}")
         print(f"   Hash: {validation['hash']}")
         print(f"   Blessings: {self.blessings.state['blessings']}/100")
-        
-        if validation['approved'] and validation['can_auto_send']:
-            # Record successful auto-send
-            self.blessings.record_auto_send(success=True)
-            print(f"   Action: ✅ AUTO-SENDING (Blessings: {self.blessings.state['blessings']}/100)")
+
+        if validation['approved']:
+            # DRAFT-ONLY: queue for Herb's approval — never auto-send
+            queue_path = OutreachQueue(queue_dir=queue_dir).queue(
+                "email",
+                f"soul-draft -> {intent} [{industry}]",
+                draft,
+                meta={
+                    "intent": intent,
+                    "industry": industry,
+                    "messenger": validation["messenger"],
+                    "hash": validation["hash"],
+                    "violations": "; ".join(validation["violations"]) or "none",
+                    "in_reply_to": email_data.get("prospect_email", "unknown"),
+                },
+            )
+            print(f"   Action: 📝 DRAFT QUEUED (pending Herb's approval)")
+            print(f"   File: {queue_path}")
             return draft
-        
-        elif validation['approved'] and not validation['can_auto_send']:
-            # Requires human review (pricing negotiation, etc.)
-            print(f"   Action: ⏸️  HOLDING FOR HUMAN REVIEW")
-            return draft
-        
+
         else:
-            # Violations detected - block send
-            print(f"   Action: 🛑 BLOCKED - Governance violations")
+            # Violations detected - block queueing, return draft for human to fix
+            print(f"   Action: 🛑 BLOCKED - Governance violations (draft returned unqueued)")
             return draft  # Return draft for human to fix
-    
+
     def _internal_pep_talk(self):
         """Bot's internal dialogue before responding (gives it SOUL)"""
         mantras_to_remember = random.sample(SalesMantra.MANTRAS, 3)
         print(f"\n🧠 Bot's internal state:")
         for mantra in mantras_to_remember:
             print(f"   💭 '{mantra}'")
-    
+
     def _handle_interested_with_soul(self, email_data: Dict, industry: str) -> str:
         """
         They're interested - CLOSE HARD with industry-appropriate tone
-        
+
         Strategy: Think BIG, use leverage, assumptive close
         """
-        
+
         if industry == "banking":
             # Banking: Conservative, regulatory-focused, ROI-driven
+            # (honest version — no invented customers, slots, or price windows)
             return f"""Thank you for your interest. I appreciate you taking the time.
 
-Here's what matters: Mythara produces cryptographic proof of AI governance decisions — per-invocation integrity hashes and tamper-evident audit trails that map to SR 11-7 model-risk expectations. No customer claims are made here; ask us for a live technical walkthrough instead of a reference story.
+Here's what matters: Mythara produces cryptographic proof of AI governance decisions — per-invocation integrity hashes and tamper-evident audit trails that map to SR 11-7 model-risk expectations. I won't invent customer stories here; ask me for a live technical walkthrough instead.
 
-The regulatory landscape is tightening (SR 11-7, OCC Bulletin 2023-17). Early adopters are building 6+ months of clean audit history before their next examination.
+The regulatory landscape is tightening around model risk management. Teams building audit history now will be calmer at their next examination than teams starting from zero.
 
-We have capacity for 2 more institutions this quarter at the early adopter rate ($500 pilot). After that, standard pricing ($2,500) and a waitlist through Q1 2026.
-
-I'd like to schedule a brief validation call: Tuesday 10am MT or Wednesday 2pm MT—which works better for your calendar?
+Pilot pricing is $500 while we're in the early adopter phase. I'd like to schedule a brief validation call: Tuesday 10am MT or Wednesday 2pm MT — which works better for your calendar?
 
 Best regards,
 Herbert Velez Jr.
 CEO, Mythara Engine
 
-P.S. I can send our OCC-style validation report as a reference. It shows exactly what 'audit-ready' looks like."""
+P.S. I can send a sample validation report so you can see exactly what "audit-ready" looks like."""
 
         elif industry == "healthcare":
             # Healthcare: Safety-first, compliance-focused, patient outcomes
+            # (honest version — no invented health systems, outcomes, or slots)
             return f"""Thank you for reaching out. I'm glad this resonated.
 
-Here's the clinical reality: When the FDA asks "How do you prove your AI recommendation wasn't biased or tampered with?" most health systems have... nothing.
+Here's the clinical reality: when regulators ask "How do you prove your AI recommendation wasn't biased or tampered with?" most health systems can't produce more than manual logs.
 
-We've worked with 2 health systems preparing for AI/ML submissions (FDA 510(k) and De Novo). Both achieved cryptographic proof of model lineage—no black boxes, no "trust us."
+Mythara creates SHA-256 cryptographic records of every AI-assisted decision — tamper-evident and mathematically verifiable, the same standard behind electronic record integrity across healthcare IT.
 
-Recent outcome: A hospital reduced AI safety review prep from 200 hours to 20 hours. Their quality team can now focus on patient care instead of manual documentation.
+With AI guidance tightening, provable AI governance is becoming table stakes. The organizations building audit trails now won't be scrambling later.
 
-With FDA's new AI guidance (2024-2025), provable AI governance isn't optional—it's table stakes. The systems building audit trails NOW will have 6-12 months of safety data when regulations tighten.
-
-We're prioritizing organizations with upcoming submissions or Joint Commission reviews. Early adopter pilot: $500 (2 slots remaining). Standard engagement: $2,500 (waitlist through Q1).
-
-Could we schedule a brief clinical validation review? Tuesday 10am MT or Wednesday 2pm MT?
+Pilot pricing is $500 during our early adopter phase. Could we schedule a brief validation review? Tuesday 10am MT or Wednesday 2pm MT?
 
 Best regards,
 Herbert Velez Jr.
 CEO, Mythara Engine
 
-P.S. Happy to share our FDA-style validation report showing how cryptographic audit trails support 510(k) submissions."""
+P.S. Happy to share a sample validation report showing what a complete audit trail looks like."""
 
         else:  # Tech/SaaS - Aggressive, fast-moving, competitive
             opener = random.choice(self.personality.OPENERS_AGGRESSIVE)
@@ -483,109 +501,95 @@ P.S. Happy to share our FDA-style validation report showing how cryptographic au
             competitive = random.choice(self.personality.COMPETITIVE_PRESSURE)
             scarcity = random.choice(self.personality.SCARCITY_TACTICS)
             close = random.choice(self.personality.CLOSES)
-            
+
             return f"""{opener} I LOVE when people cut through the BS and just say they're interested.
 
-{enthusiasm} We just helped 3 companies pass AI governance audits using cryptographic audit trails. Zero findings. The auditors literally had nothing to complain about.
+{enthusiasm} Here's what we do: SHA-256 cryptographic audit trails on AI decisions. Tamper-evident, examiner-friendly, no black boxes.
 
 Here's the deal: {competitive}
 
-And real talk on timing: {scarcity}
+And on timing: {scarcity}
 
 {close}
 
 Herbert
 
-P.S. If you commit by Friday: $500 + I'll personally run your first audit report. That's a $2k value. But only if you're ready to move."""
-    
+P.S. Want me to send a sample validation report so you can see what "passing" looks like?"""
+
     def _handle_question_with_soul(self, email_data: Dict, industry: str) -> str:
         """
         They have a question - Answer FAST, add competitive pressure, close
-        
+
         Strategy: Know your market, use leverage, deliver value
         """
-        
+
         if industry == "banking":
-            # Banking: Technical precision, regulatory citations
+            # Banking: Technical precision, regulatory citations (honest version)
             return f"""Great question. Let me give you the technical answer:
 
-SHA-256 cryptographic hashing on every AI decision—same standard used by Federal Reserve's FedNow system. Auditors can mathematically verify zero tampering. It's provably immutable.
+SHA-256 cryptographic hashing on every AI decision — the same family of cryptography behind modern financial infrastructure. Auditors can mathematically verify zero tampering. It's provably immutable, not "trust us."
 
-Early adopters will have their SR 11-7 validation reports passing—and could reduce their MRM cycle from 6 weeks to 8 days.
+Without cryptographic proof, model risk teams burn hundreds of hours on manual reconciliation per model. And when examiners ask "How do you PROVE this output wasn't altered?" spreadsheet logs aren't tamper-proof.
 
-Without cryptographic proof? Your MRM team is doing manual reconciliation for 200+ hours per model. And when OCC asks "How do you PROVE this output wasn't altered?" you're showing Excel logs (which aren't tamper-proof).
-
-Early adopter pilot: $500 (2 slots remaining this quarter). Standard engagement: $2,500 with Q1 2026 waitlist.
-
-I can send our technical validation report now. Would Tuesday 10am or Wednesday 2pm work for a brief review call?
+Pilot pricing is $500 during our early adopter phase. I can send a sample validation report now — would Tuesday 10am or Wednesday 2pm work for a brief review call?
 
 Best regards,
 Herbert Velez Jr.
 
-P.S. Happy to include an OCC-ready audit trail sample so you can see exactly what examiners will review."""
+P.S. Happy to include a sample audit trail so you can see exactly what examiners would review."""
 
         elif industry == "healthcare":
-            # Healthcare: Safety language, patient outcomes, FDA focus
+            # Healthcare: Safety language, patient outcomes, FDA focus (honest version)
             return f"""Excellent question. Here's how it works from a clinical safety perspective:
 
-SHA-256 cryptographic hashing creates an immutable record of every AI-assisted decision. Think of it like a tamper-evident seal on medication—if anyone alters the record, the hash breaks and auditors know immediately.
+SHA-256 cryptographic hashing creates an immutable record of every AI-assisted decision — like a tamper-evident seal. If anyone alters the record, the hash breaks and it's immediately detectable.
 
-This is the same cryptographic standard the VA uses for electronic health records. It's mathematically provable, not "trust us."
+Without this, you're showing manual logs that could have been edited. That's the gap regulators are starting to ask about.
 
-The 2 health systems using this passed their AI safety reviews with zero findings. One reduced clinical documentation time from 200 hours to 20 hours per model validation.
-
-Without this? When FDA asks "How do you prove this AI recommendation wasn't biased?" you're showing manual logs that could have been edited. That's a 483 observation risk.
-
-We're prioritizing organizations with upcoming FDA submissions or Joint Commission reviews. Pilot: $500 (2 slots left). Standard: $2,500 (Q1 waitlist).
-
-Could we schedule a brief technical review? Tuesday 10am or Wednesday 2pm MT?
+Pilot pricing is $500 during our early adopter phase. Could we schedule a brief technical review? Tuesday 10am or Wednesday 2pm MT?
 
 Best regards,
 Herbert Velez Jr.
 
-P.S. I can send our FDA-style validation report showing how this supports 510(k) AI/ML submissions."""
+P.S. I can send a sample validation report showing what a complete AI audit trail looks like."""
 
         else:  # Tech/SaaS - Fast, direct, competitive
             opener = random.choice(self.personality.OPENERS_AGGRESSIVE)
             competitive = random.choice(self.personality.COMPETITIVE_PRESSURE)
             close = random.choice(self.personality.CLOSES)
-            
-            return f"""{opener} SHA-256 hashing on every AI decision. Auditors can verify zero tampering. It's the same crypto that secures Bitcoin—nobody's breaking it.
 
-For example, a hypothetical early adopter would have validation reports ready while latecomers are still in "evaluation mode."
+            return f"""{opener} SHA-256 hashing on every AI decision. Verifiable zero tampering — the same cryptography securing modern financial infrastructure.
 
 Without this? Your auditors see black-box AI with no provable lineage. That's a finding waiting to happen.
 
-Early adopter pricing ($500) closes Friday—then it's $2,500. {competitive}
+Pilot pricing is $500 during our early adopter phase. {competitive}
 
 {close}
 
 Herbert
 
-P.S. Want me to send our validation report now so you can see what 'passing' looks like?"""
-    
+P.S. Want me to send a sample validation report so you can see what "passing" looks like?"""
+
     def _handle_no_with_soul(self, email_data: Dict, industry: str) -> str:
         """
         They said no - FIGHT BACK (but stay classy)
-        
+
         Counter once, then graceful exit if they insist
         """
         prospect_email = email_data.get("prospect_email", "unknown")
         tracker = self.conversation_tracker.get(prospect_email, {"no_count": 0})
-        
+
         if tracker["no_count"] == 0:
             # First no - counter with FOMO (industry-adapted)
-            
+
             if industry == "banking":
                 return f"""I understand—timing is important in regulated environments.
 
-Quick question: Do you have an upcoming model risk review or OCC examination?
+Quick question: do you have an upcoming model risk review or examination on the calendar?
 
-The reason I ask: 3 peer institutions in your region are currently evaluating this. The ones who start building audit trails NOW will have 6+ months of clean governance history when examiners arrive.
+The reason I ask: teams that start building audit trails early walk into examinations calm. If timing truly isn't right, I respect that — but "not priority yet" has a way of becoming urgent when the examination notice arrives.
 
-If timing truly isn't right, I respect that. But if this is in "not priority yet" mode, that changes quickly when the examination notice arrives.
-
-Would you like me to follow up in Q2 2026, or is there a better time?
+Want me to follow up next quarter, or is there a better time?
 
 Best regards,
 Herbert"""
@@ -593,20 +597,18 @@ Herbert"""
             elif industry == "healthcare":
                 return f"""Understood—I appreciate you being direct.
 
-Quick question: Do you have an upcoming FDA submission, Joint Commission review, or AI safety audit?
+Quick question: do you have an upcoming submission, review, or AI safety audit on the calendar?
 
-I ask because 2 health systems in your region are actively building AI audit trails right now. The organizations starting early will have 6-12 months of safety data when FDA's AI regulations tighten (expected 2025-2026).
+I ask because the organizations starting on audit trails early won't be scrambling when guidance tightens. If timing truly isn't right, I completely understand.
 
-If timing truly isn't right, I completely understand. But if this is "not priority yet," that often shifts when the regulatory deadline hits.
-
-Would you prefer I follow up in Q2, or is there someone on your quality/compliance team I should connect with?
+Would you prefer I follow up next quarter, or is there someone on your quality or compliance team I should connect with?
 
 Best regards,
 Herbert"""
 
             else:  # Tech - More aggressive counter
                 competitive = random.choice(self.personality.COMPETITIVE_PRESSURE)
-                
+
                 return f"""No problem—timing's gotta be right.
 
 Quick question though: Do you have an audit or compliance review coming up soon?
@@ -618,7 +620,7 @@ If timing's truly not right, I get it. But if you're just in 'not priority yet' 
 Either way—no hard feelings. Want me to check back in Q2?
 
 Herbert"""
-        
+
         elif tracker["no_count"] == 1:
             # Second no - respect it but leave door open
             return f"""Got it—appreciate you being straight with me.
@@ -629,7 +631,7 @@ Quick ask: Do you know anyone at a peer company who might need auditable AI logs
 
 Best regards,
 Herbert"""
-        
+
         else:
             # Third no - quit gracefully (Know when to walk away)
             return """Understood. I'll stop here.
@@ -638,14 +640,14 @@ If your situation changes, you know where to find me.
 
 Best regards,
 Herbert"""
-    
+
     def _handle_unknown_with_soul(self, email_data: Dict, industry: str) -> str:
         """
         Unknown intent - QUALIFY HARD with competitive pressure
-        
+
         Strategy: Maximize options, enhance your position
         """
-        
+
         if industry == "banking":
             return f"""Thank you for your reply. Let me clarify what would make this valuable:
 
@@ -653,7 +655,7 @@ Do you have an upcoming model risk review, OCC examination, or SR 11-7 validatio
 
 If yes: We should talk this week. Most banks need 60-90 days to build clean audit trails, and you're running tight on time.
 
-If no: You might want to wait until regulatory pressure increases. We're prioritizing institutions with imminent audits (2 slots remaining at $500 pilot rate).
+If no: You might want to wait until regulatory pressure increases. We're prioritizing institutions with imminent audits — pilot pricing is $500 during our early adopter phase.
 
 Could you share your audit timeline? That'll help me determine if this is the right time for you.
 
@@ -669,7 +671,7 @@ Do you have an upcoming FDA submission, Joint Commission review, or AI safety au
 
 If yes: We should connect this week. Most health systems need 60-90 days to build provable AI governance, and timing is tight.
 
-If no: You may want to wait until regulatory pressure increases. We're prioritizing organizations with imminent reviews (2 pilot slots remaining at $500).
+If no: You may want to wait until regulatory pressure increases. We're prioritizing organizations with imminent reviews — pilot pricing is $500 during our early adopter phase.
 
 Could you share your review timeline? That'll help determine if now is the right time.
 
@@ -681,7 +683,7 @@ P.S. Happy to do a brief 15-minute qualification call—Tuesday 10am or Wednesda
         else:  # Tech - More direct
             opener = random.choice(self.personality.OPENERS_AGGRESSIVE)
             scarcity = random.choice(self.personality.SCARCITY_TACTICS)
-            
+
             return f"""{opener} Quick clarification—do you have an upcoming audit/review, or is this more exploratory?
 
 {scarcity}
@@ -691,30 +693,30 @@ If you're in exploratory mode, you might want to wait til you have regulatory fi
 Tuesday 10am or Wednesday 2pm?
 
 Herbert"""
-    
+
     def daily_motivation(self):
         """Bot's daily self-assessment (gives it SOUL)"""
         print("\n" + "="*80)
         print("💎 DAILY SALES BOT MOTIVATION")
         print("="*80)
-        
+
         print(f"\n🔥 Today's Mantra: '{self.daily_mantra}'")
-        
+
         print("\n📊 Performance State:")
         print(f"   Confidence: {self.personality.PERSONALITY['confidence']:.0%}")
         print(f"   Aggression: {self.personality.PERSONALITY['aggression']:.0%}")
         print(f"   Enthusiasm: {self.personality.PERSONALITY['enthusiasm']:.0%}")
-        
+
         print("\n🎯 Today's Mission:")
         print("   - Find 5 interested prospects")
         print("   - Close 2 deals at $500+")
         print("   - Qualify out time-wasters fast")
         print("   - Have FUN doing it")
-        
+
         print("\n💪 Remember:")
         for mantra in random.sample(SalesMantra.MANTRAS, 5):
             print(f"   • {mantra}")
-        
+
         print("\n" + "="*80)
         print("LET'S HUNT. 🎯")
         print("="*80 + "\n")
@@ -725,79 +727,94 @@ Herbert"""
 # ============================================================================
 
 if __name__ == '__main__':
+    import tempfile
+    from pathlib import Path
+
     print("="*80)
     print("💎 SALES BOT WITH SOUL - Relationship Building + Aggressive Closing")
     print("   🔒 MYTHARA GOVERNED - Clauses, Blessings, Audit Trail")
+    print("   📝 DRAFT-ONLY - nothing is sent")
     print("="*80)
-    
-    # Initialize bot with PERSONALITY
-    bot = SalesBotWithSoul(full_autonomy=True)
-    
-    # Daily motivation ritual
-    bot.daily_motivation()
-    
-    # Simulate responses with SOUL - Industry-adapted
-    test_scenarios = [
-        {
-            "name": "INTERESTED PROSPECT (Banking)",
-            "email": {
-                "subject": "Re: Model Risk Solution",
-                "body": "This looks interesting. Can we schedule a call?",
-                "prospect_email": "sarah.johnson@wellsfargo.com"
+
+    # NOTE: test addresses below are fictional demo stand-ins.
+    # All drafts queue into a temporary dir for this demo.
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+
+        # Initialize bot with PERSONALITY
+        bot = SalesBotWithSoul(full_autonomy=True, queue_dir=tmp_path / "queue")
+
+        # Daily motivation ritual
+        bot.daily_motivation()
+
+        # Simulate responses with SOUL - Industry-adapted
+        test_scenarios = [
+            {
+                "name": "INTERESTED PROSPECT (Banking)",
+                "email": {
+                    "subject": "Re: Model Risk Solution",
+                    "body": "This looks interesting. Can we schedule a call?",
+                    "prospect_email": "sarah.demo@example-bank.com"
+                },
+                "intent": "interested"
             },
-            "intent": "interested"
-        },
-        {
-            "name": "TECHNICAL QUESTION (Healthcare)",
-            "email": {
-                "subject": "Re: AI Governance",
-                "body": "How does the cryptographic hashing actually work?",
-                "prospect_email": "james.martinez@uchealth.org"
+            {
+                "name": "TECHNICAL QUESTION (Healthcare)",
+                "email": {
+                    "subject": "Re: AI Governance",
+                    "body": "How does the cryptographic hashing actually work?",
+                    "prospect_email": "james.demo@example-health.org"
+                },
+                "intent": "question"
             },
-            "intent": "question"
-        },
-        {
-            "name": "FIRST NO (Tech)",
-            "email": {
-                "subject": "Re: Mythara Demo",
-                "body": "Not interested right now, thanks.",
-                "prospect_email": "mike.chen@pingidentity.com"
+            {
+                "name": "FIRST NO (Tech)",
+                "email": {
+                    "subject": "Re: Mythara Demo",
+                    "body": "Not interested right now, thanks.",
+                    "prospect_email": "mike.demo@example-tech.com"
+                },
+                "intent": "not_interested"
             },
-            "intent": "not_interested"
-        },
-        {
-            "name": "INTERESTED PROSPECT (Tech - Aggressive Tone)",
-            "email": {
-                "subject": "Re: AI Audit Trails",
-                "body": "Yeah this could work. Let's talk.",
-                "prospect_email": "alex@startup.io"
-            },
-            "intent": "interested"
-        }
-    ]
-    
-    for scenario in test_scenarios:
-        print("\n" + "="*80)
-        print(f"📧 SCENARIO: {scenario['name']}")
-        print("="*80)
-        print(f"From: {scenario['email']['prospect_email']}")
-        print(f"Subject: {scenario['email']['subject']}")
-        print(f"Body: {scenario['email']['body']}")
-        
-        # Detect industry
-        industry = bot.detect_industry(scenario['email'])
-        print(f"🏢 Industry Detected: {industry.upper()}")
-        
-        # Generate response WITH SOUL (industry-adapted, Mythara-validated)
-        response = bot.generate_soulful_response(scenario['email'], scenario['intent'])
-        
-        print(f"\n🤖 BOT'S RESPONSE (with SOUL - {industry.upper()} tone):\n")
-        print(response)
-        print("\n" + "="*80)
-    
-    print("\n💎 This bot doesn't just send emails—it HUNTS deals.")
-    print("   🎯 Bot's Role: CLOSE DEALS using industry-adapted tactics")
+            {
+                "name": "INTERESTED PROSPECT (Tech - Aggressive Tone)",
+                "email": {
+                    "subject": "Re: AI Audit Trails",
+                    "body": "Yeah this could work. Let's talk.",
+                    "prospect_email": "alex.demo@example-startup.io"
+                },
+                "intent": "interested"
+            }
+        ]
+
+        for scenario in test_scenarios:
+            print("\n" + "="*80)
+            print(f"📧 SCENARIO: {scenario['name']}")
+            print("="*80)
+            print(f"From: {scenario['email']['prospect_email']}")
+            print(f"Subject: {scenario['email']['subject']}")
+            print(f"Body: {scenario['email']['body']}")
+
+            # Detect industry
+            industry = bot.detect_industry(scenario['email'])
+            print(f"🏢 Industry Detected: {industry.upper()}")
+
+            # Generate response WITH SOUL (industry-adapted, Mythara-validated,
+            # queued as a draft in the temp dir — nothing is sent)
+            response = bot.generate_soulful_response(
+                scenario['email'], scenario['intent'],
+                queue_dir=tmp_path / "queue"
+            )
+
+            print(f"\n🤖 BOT'S RESPONSE (with SOUL - {industry.upper()} tone):\n")
+            print(response)
+            print("\n" + "="*80)
+
+    print("\n💎 This bot doesn't just send emails—it drafts deals with soul.")
+    print("   🎯 Bot's Role: CLOSE DEALS using industry-adapted tactics (in drafts)")
     print("   🔒 Mythara's Role: VALIDATE compliance and governance")
+    print("   📝 Herb's Role: approve and send")
     print("\n   Personality: Confident, aggressive, enthusiastic")
     print("   Philosophy: Relationship Building + Aggressive Closing")
     print("   Attitude: I'm the prize, not you")
@@ -806,8 +823,8 @@ if __name__ == '__main__':
     print("   Healthcare: Safety-first, compliance-focused, patient outcomes")
     print("   Tech/SaaS: Aggressive, fast-moving, competitive pressure")
     print("\n🔒 MYTHARA GOVERNANCE:")
-    print("   ✅ SalesClause validation (NEVER_AUTO_SEND pricing/contracts)")
-    print("   ✅ Blessings reservoir (+10 per deal, -10 per violation)")
-    print("   ✅ Messenger roles (Gabriel/Uriel auto-send, Raphael review)")
+    print("   ✅ SalesClause validation (pricing floor, compliance claims)")
+    print("   ✅ Blessings reservoir (trust metric over time)")
+    print("   ✅ Messenger roles (risk classification labels on drafts)")
     print("   ✅ Cryptographic audit trail (SHA-256 hashing)")
-    print("\n🎯 Set it loose and watch it close (with governance).")
+    print("\n🎯 Draft-only: Herb approves every send.")

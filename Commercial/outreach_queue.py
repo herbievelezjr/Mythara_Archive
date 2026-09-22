@@ -18,6 +18,24 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+try:
+    from soul_cradle.bot_witness import (
+        witness_action,
+        outreach_evidence,
+        WitnessBlocked,
+        WitnessUnavailable,
+    )
+except ImportError:  # pragma: no cover — direct-script fallback
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from soul_cradle.bot_witness import (
+        witness_action,
+        outreach_evidence,
+        WitnessBlocked,
+        WitnessUnavailable,
+    )
+
 QUEUE_DIR = Path(__file__).resolve().parent / "outreach_queue"
 
 VALID_KINDS = ("proposal", "email", "message", "followup")
@@ -42,9 +60,38 @@ class OutreachQueue:
         body: str,
         meta: Optional[Dict[str, Any]] = None,
     ) -> str:
-        """Write a draft file. Returns the file path. Status: pending_approval."""
+        """Write a draft file. Returns the file path. Status: pending_approval.
+
+        The draft is witnessed by the Soul Cradle panel BEFORE it is
+        written. A BLOCKED verdict stops the queue write entirely; a
+        witnessing outage warns loudly but proceeds — Herb's explicit
+        approval remains the primary safety for every draft.
+        """
         if kind not in VALID_KINDS:
             raise ValueError(f"kind must be one of {VALID_KINDS}, got {kind!r}")
+        # --- Soul Cradle witnessing: the outbound chokepoint ----------------
+        meta = meta or {}
+        evidence, bases = outreach_evidence(
+            draft_text=body,
+            recipient_kind=str(meta.get("recipient_kind", "prospect")),
+            declared_intent=meta.get("declared_intent"),
+        )
+        try:
+            witness_action(
+                bot_id="outreach_queue",
+                action=f"queue {kind} draft: {title[:60]}",
+                evidence=evidence,
+                evidence_bases=bases,
+                assessor_ids=["hermes", "eros", "nemesis", "janus"],
+                enforce=True,
+            )
+        except WitnessBlocked:
+            raise  # do NOT write the file; the block is already chained
+        except WitnessUnavailable as exc:
+            print(f"[OUTREACH-QUEUE] WITNESS UNAVAILABLE — {exc}")
+            print("[OUTREACH-QUEUE] Proceeding with queueing; Herb's approval "
+                  "remains the primary safety.")
+        # --- end witnessing --------------------------------------------------
         stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         filename = f"{stamp}-{kind}-{_slug(title)}.md"
         path = self.queue_dir / filename

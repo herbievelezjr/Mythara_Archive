@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-Mythara VOIP Bot - AI Phone Support Agent
-Real-time sentiment analysis, call routing, supervisor escalation with Soul Cradle distress detection
+Mythara VOIP Bot - Call-Logging CRM
+Records call metadata, transcripts, keyword-based sentiment flags, and
+supervisor escalations in SQLite. It places NO phone calls: an earlier
+version constructed a Twilio client that was never used, and that
+integration has been removed entirely. Nothing in this module dials out.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 """
@@ -22,15 +25,6 @@ try:
 except ImportError:
     SDK_AVAILABLE = False
     print("⚠️  Mythara Engine SDK not available - running in standalone mode")
-
-# Twilio integration (optional)
-try:
-    from twilio.rest import Client
-    from twilio.twiml.voice_response import VoiceResponse, Gather
-    TWILIO_AVAILABLE = True
-except ImportError:
-    TWILIO_AVAILABLE = False
-    print("⚠️  Twilio SDK not available - install with: pip install twilio")
 
 
 class CallSentiment(Enum):
@@ -83,20 +77,14 @@ class Agent:
 
 class VOIPBot:
     """
-    Mythara VOIP Bot - AI Phone Support Agent
-    
-    Features:
-    - Real-time sentiment analysis (detect frustration/anger)
-    - Intelligent call routing (skill-based)
-    - Supervisor escalation (distress detection)
-    - Call recording & transcription
-    - Performance analytics
+    Mythara VOIP Bot - Call-Logging CRM.
+
+    Records call metadata, transcripts, keyword-based sentiment flags, and
+    supervisor escalations in SQLite. Places no phone calls — start_call()
+    opens a call *record* (logging), it does not dial anyone.
     """
-    
-    def __init__(self, agent_id: str, database_path: Optional[str] = None,
-                 twilio_account_sid: Optional[str] = None,
-                 twilio_auth_token: Optional[str] = None,
-                 twilio_phone_number: Optional[str] = None):
+
+    def __init__(self, agent_id: str, database_path: Optional[str] = None):
         self.agent_id = agent_id
         
         # Database setup
@@ -109,14 +97,7 @@ class VOIPBot:
             self.db_path = os.path.join(mythara_dir, "voip_bot.db")
         
         self._init_database()
-        
-        # Twilio setup (optional)
-        self.twilio_client = None
-        self.twilio_phone = twilio_phone_number
-        if TWILIO_AVAILABLE and twilio_account_sid and twilio_auth_token:
-            self.twilio_client = Client(twilio_account_sid, twilio_auth_token)
-            print(f"📞 Twilio integration: ACTIVE")
-        
+
         # Mythara Engine integration
         if SDK_AVAILABLE:
             config = ProductConfig(
@@ -124,7 +105,7 @@ class VOIPBot:
                 product_version="1.0.0",
                 database_name=self.db_path,
                 custom_clauses=["sentiment_check", "distress_escalation"],
-                branding={"tagline": "AI-Powered Phone Support"}
+                branding={"tagline": "Call-Logging CRM"}
             )
             self.engine = MytharaEngine(config, user_id=agent_id)
         else:
@@ -273,9 +254,10 @@ class VOIPBot:
     
     def start_call(self, customer_phone: str) -> str:
         """
-        Start new call
-        
-        Returns call_id
+        Open a new call *record* in the log (metadata only).
+
+        This does NOT place a phone call — this module has no dialing
+        capability at all. Returns call_id.
         """
         call_id = f"CALL_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{customer_phone[-4:]}"
         
@@ -559,9 +541,9 @@ class VOIPBot:
 
 
 def main():
-    """Demo: VOIP Bot usage"""
+    """Demo: VOIP Bot call-logging usage (records only — places no calls)"""
     print("="*70)
-    print("    MYTHARA VOIP BOT - AI PHONE SUPPORT AGENT")
+    print("    MYTHARA VOIP BOT - CALL-LOGGING CRM (places no calls)")
     print("="*70)
     
     # Initialize bot

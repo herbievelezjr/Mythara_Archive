@@ -50,6 +50,7 @@ class QuickFix:
     backup_created: bool
     backup_path: Optional[str] = None
     timestamp: datetime = field(default_factory=datetime.utcnow)
+    dry_run: bool = False  # True = preview only, no files touched
 
 
 class QuickFixBot:
@@ -323,183 +324,266 @@ class QuickFixBot:
                         cwe_id="CWE-22"
                     ))
     
-    def fix_all_vulnerabilities(self, severity_threshold: str = "MEDIUM") -> List[QuickFix]:
+    def fix_all_vulnerabilities(self, severity_threshold: str = "MEDIUM",
+                                dry_run: bool = True) -> List[QuickFix]:
         """
-        Fix all vulnerabilities QUICKFIX style
-        
+        Fix all vulnerabilities QUICKFIX style.
+
         Args:
             severity_threshold: Only fix vulnerabilities at this level or higher
+            dry_run: When True (default), compute fixes but write NOTHING.
+                Set dry_run=False to apply for real. Real applies always
+                create a verified backup first — a write without a backup
+                is refused.
         """
         logger.info("🔧 QUICKFIX is getting to work...")
         
         severity_order = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
         threshold_level = severity_order.get(severity_threshold, 1)
-        
-        # Sort by severity (highest first)
+
+        # Group by file; within a file sort bottom-up so inserted lines never
+        # invalidate the line numbers of fixes above them.
         sorted_vulns = sorted(
             [v for v in self.vulnerabilities if severity_order.get(v.severity, 0) >= threshold_level],
-            key=lambda x: severity_order.get(x.severity, 0),
-            reverse=True
+            key=lambda v: (v.file_path, -v.line_number)
         )
-        
-        for vuln in sorted_vulns:
-            fix = self._apply_quickfix(vuln)
-            self.fixes.append(fix)
-        
-        logger.info(f"✅ QUICKFIX fixed {len([f for f in self.fixes if f.fix_applied])} vulnerabilities")
+
+        self.fixes = []
+        current_file = None
+        file_group: List[Vulnerability] = []
+        for vuln in sorted_vulns + [None]:  # sentinel flushes the last group
+            path = vuln.file_path if vuln else None
+            if path != current_file:
+                if file_group:
+                    self.fixes.extend(
+                        self._apply_file_fixes(current_file, file_group, dry_run=dry_run))
+                file_group = []
+                current_file = path
+            if vuln:
+                file_group.append(vuln)
+
+        applied = len([f for f in self.fixes if f.fix_applied])
+        if dry_run:
+            logger.info(f"🔍 DRY RUN: {len(self.fixes)} fixes previewed, 0 files written")
+        else:
+            logger.info(f"✅ QUICKFIX fixed {applied} vulnerabilities")
         return self.fixes
-    
-    def _apply_quickfix(self, vuln: Vulnerability) -> QuickFix:
-        """Apply a QUICKFIX-style fix to a vulnerability"""
-        logger.info(f"🔧 Fixing {vuln.vulnerability_type} in {os.path.basename(vuln.file_path)}:{vuln.line_number}")
-        
+
+    def _apply_file_fixes(self, file_path: str, vulns: List[Vulnerability],
+                           dry_run: bool = True) -> List[QuickFix]:
+        """Apply every fix for one file.
+
+        One backup per file (verified byte-identical before any write), fixes
+        applied bottom-up so inserted lines never invalidate the line numbers
+        of fixes above them, then a single write. A transform that cannot be
+        done safely degrades to a warning comment and fix_applied=False —
+        never a silently broken rewrite.
+        """
+        results: List[QuickFix] = []
+
+        def refused(method: str, backup_path: Optional[str],
+                    backup_ok: bool) -> List[QuickFix]:
+            return [QuickFix(v, False, method, backup_ok, backup_path,
+                             dry_run=dry_run) for v in vulns]
+
         try:
-            # Create backup
-            backup_path = self._create_backup(vuln.file_path)
-            
-            # Read file
-            with open(vuln.file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-                lines = content.split('\n')
-            
-            # Apply fix based on vulnerability type
-            if vuln.vulnerability_type == "SQL Injection":
-                fixed_lines = self._fix_sql_injection(lines, vuln)
-            elif vuln.vulnerability_type == "Hardcoded Secret":
-                fixed_lines = self._fix_hardcoded_secret(lines, vuln)
-            elif vuln.vulnerability_type == "Weak Cryptography":
-                fixed_lines = self._fix_weak_crypto(lines, vuln)
-            elif vuln.vulnerability_type == "Command Injection":
-                fixed_lines = self._fix_command_injection(lines, vuln)
-            else:
-                # Generic fix: Add a comment warning
-                fixed_lines = self._add_security_warning(lines, vuln)
-            
-            # Write fixed content
-            with open(vuln.file_path, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(fixed_lines))
-            
-            return QuickFix(
-                vulnerability=vuln,
-                fix_applied=True,
-                fix_method="Q.U.I.C.K.F.I.X. automatic patch",
-                backup_created=True,
-                backup_path=backup_path
-            )
-        
-        except Exception as e:
-            logger.error(f"❌ Could not fix vulnerability: {e}")
-            return QuickFix(
-                vulnerability=vuln,
-                fix_applied=False,
-                fix_method="Failed",
-                backup_created=False
-            )
+            with open(file_path, 'r', encoding='utf-8') as f:
+                original_text = f.read()
+        except OSError as e:
+            logger.error(f"❌ Could not read {file_path}: {e}")
+            return refused(f"Failed: could not read file: {e}", None, False)
+
+        lines = original_text.split('\n')
+
+        # Pre-pass: a single `import os` at the top if any secret fix needs
+        # it. Done once, before line fixes, so line numbers stay valid.
+        shift = 0
+        if (any(v.vulnerability_type == "Hardcoded Secret" for v in vulns)
+                and not re.search(r'^\s*import\s+os\b', original_text, re.M)):
+            lines.insert(0, 'import os')
+            shift = 1
+
+        # Bottom-up: vulns arrive sorted by descending line number.
+        ok_by_vuln = {}
+        for vuln in vulns:
+            line_idx = vuln.line_number - 1 + shift
+            if not (0 <= line_idx < len(lines)):
+                ok_by_vuln[id(vuln)] = False
+                continue
+            try:
+                ok_by_vuln[id(vuln)] = self._fix_one(lines, vuln, line_idx)
+            except Exception as e:
+                logger.error(f"❌ Transform failed for {vuln.vulnerability_type} "
+                             f"at {file_path}:{vuln.line_number}: {e}")
+                self._add_security_warning(lines, vuln, line_idx)
+                ok_by_vuln[id(vuln)] = False
+
+        if dry_run:
+            for v in vulns:
+                ok = ok_by_vuln.get(id(v), False)
+                results.append(QuickFix(
+                    v, False,
+                    "dry-run preview: transform applies cleanly; no files written"
+                    if ok else
+                    "dry-run preview: pattern needs manual review; no files written",
+                    False, dry_run=True))
+            return results
+
+        # REAL apply: exactly one backup, verified byte-identical, then write.
+        backup_path = self._create_backup(file_path)
+        try:
+            with open(backup_path, 'r', encoding='utf-8') as f:
+                backup_text = f.read()
+        except OSError as e:
+            logger.error(f"🛑 REFUSED: backup unreadable for {file_path}: {e}")
+            return refused("REFUSED: backup unreadable", backup_path, False)
+        if backup_text != original_text:
+            logger.error(f"🛑 REFUSED: backup mismatch for {file_path} — not writing")
+            return refused("REFUSED: backup could not be verified byte-identical",
+                           backup_path, True)
+
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(lines))
+
+        for v in vulns:
+            ok = ok_by_vuln.get(id(v), False)
+            results.append(QuickFix(
+                v, ok,
+                "Q.U.I.C.K.F.I.X. automatic patch (backup verified)" if ok else
+                "warning comment only — pattern needs manual review",
+                True, backup_path))
+        return results
+
+    def _fix_one(self, lines: List[str], vuln: Vulnerability, line_idx: int) -> bool:
+        """Dispatch one transform. Returns True only if the code was really fixed."""
+        t = vuln.vulnerability_type
+        if t == "SQL Injection":
+            return self._fix_sql_injection(lines, vuln, line_idx)
+        elif t == "Hardcoded Secret":
+            return self._fix_hardcoded_secret(lines, vuln, line_idx)
+        elif t == "Weak Cryptography":
+            return self._fix_weak_crypto(lines, vuln, line_idx)
+        elif t == "Command Injection":
+            return self._fix_command_injection(lines, vuln, line_idx)
+        else:
+            self._add_security_warning(lines, vuln, line_idx)
+            return False
     
     def _create_backup(self, file_path: str) -> str:
-        """Create a backup of the file"""
+        """Create a backup of the file.
+
+        The filename carries microsecond timestamps so multiple fixes to the
+        same file never collide. The file is created with exclusive ('x')
+        mode: if a backup somehow already exists at that path, this raises
+        instead of silently overwriting a prior backup.
+        """
         backup_dir = os.path.join(self.target_directory, '.QUICKFIX_backups')
         os.makedirs(backup_dir, exist_ok=True)
-        
-        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+
+        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')
         file_hash = hashlib.md5(file_path.encode()).hexdigest()[:8]
         backup_filename = f"{os.path.basename(file_path)}.{timestamp}.{file_hash}.backup"
         backup_path = os.path.join(backup_dir, backup_filename)
-        
+
         with open(file_path, 'r', encoding='utf-8') as src:
-            with open(backup_path, 'w', encoding='utf-8') as dst:
+            with open(backup_path, 'x', encoding='utf-8') as dst:
                 dst.write(src.read())
-        
+
         return backup_path
     
-    def _fix_sql_injection(self, lines: List[str], vuln: Vulnerability) -> List[str]:
-        """Fix SQL injection by converting to parameterized query"""
-        line_idx = vuln.line_number - 1
+    def _fix_sql_injection(self, lines: List[str], vuln: Vulnerability, line_idx: int) -> bool:
+        """Convert .format()-built SQL to a real parameterized query.
+
+        cursor.execute("... '{}'".format(name))
+          -> cursor.execute("... ?", (name))
+        Anything that isn't this exact shape gets a warning comment and
+        returns False — a wrong "fix" is worse than no fix.
+        """
         line = lines[line_idx]
-        
-        # Add comment above the line
         indent = len(line) - len(line.lstrip())
-        comment = ' ' * indent + '# QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)'
-        
-        # Try to convert to parameterized query
-        if '.format(' in line:
-            # Replace .format() with ? placeholders
-            fixed_line = re.sub(r'\.format\([^)]+\)', '', line)
-            fixed_line = fixed_line.replace('{}', '?')
-        elif ' + ' in line:
-            # Replace concatenation with ? placeholders
-            fixed_line = re.sub(r'\s*\+\s*[^,)]+', ', ?', line)
-        else:
-            # Just add the comment
-            fixed_line = line
-        
-        lines[line_idx] = comment + '\n' + fixed_line
-        return lines
-    
-    def _fix_hardcoded_secret(self, lines: List[str], vuln: Vulnerability) -> List[str]:
-        """Fix hardcoded secret by replacing with environment variable"""
-        line_idx = vuln.line_number - 1
+
+        m = re.search(r'\.format\(([^()]*)\)', line)
+        if m:
+            args = m.group(1).strip()
+            if args:
+                fixed = line[:m.start()] + line[m.end():]
+                fixed = re.sub(r'\{\w*\}', '?', fixed)
+                fixed = fixed.replace("'?'", "?").replace('"?"', '?')
+                stripped = fixed.rstrip()
+                if stripped.endswith(')'):
+                    fixed = stripped[:-1].rstrip() + ", (%s))" % args
+                    comment = (' ' * indent +
+                               '# QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)')
+                    lines[line_idx] = comment + '\n' + fixed
+                    return True
+
+        self._add_security_warning(lines, vuln, line_idx)
+        return False
+
+    def _fix_hardcoded_secret(self, lines: List[str], vuln: Vulnerability, line_idx: int) -> bool:
+        """Replace a hardcoded secret with an environment-variable lookup.
+
+        (`import os` is handled once per file by the caller pre-pass.)
+        """
         line = lines[line_idx]
-        
-        # Extract variable name
+
         match = re.search(r'(\w+)\s*=\s*["\']', line)
         if match:
             var_name = match.group(1)
             indent = len(line) - len(line.lstrip())
-            
-            # Add import if needed
-            if 'import os' not in '\n'.join(lines[:line_idx]):
-                lines.insert(0, 'import os')
-                line_idx += 1
-            
-            # Replace with os.getenv()
-            comment = ' ' * indent + f'# QUICKFIX FIX: Moved to environment variable (CWE-798)'
-            fixed_line = ' ' * indent + f'{var_name} = os.getenv("{var_name.upper()}", "")  # Set via environment'
-            
+
+            comment = ' ' * indent + '# QUICKFIX FIX: Moved to environment variable (CWE-798)'
+            fixed_line = (' ' * indent +
+                          f'{var_name} = os.getenv("{var_name.upper()}", "")  # Set via environment')
+
             lines[line_idx] = comment + '\n' + fixed_line
-        
-        return lines
-    
-    def _fix_weak_crypto(self, lines: List[str], vuln: Vulnerability) -> List[str]:
-        """Fix weak cryptography by upgrading to stronger algorithm"""
-        line_idx = vuln.line_number - 1
+            return True
+
+        self._add_security_warning(lines, vuln, line_idx)
+        return False
+
+    def _fix_weak_crypto(self, lines: List[str], vuln: Vulnerability, line_idx: int) -> bool:
+        """Upgrade MD5/SHA1 to SHA256."""
         line = lines[line_idx]
-        
-        # Replace MD5/SHA1 with SHA256
+
         fixed_line = line.replace('hashlib.md5(', 'hashlib.sha256(')
         fixed_line = fixed_line.replace('hashlib.sha1(', 'hashlib.sha256(')
-        
-        # Add comment
+
+        if fixed_line == line:
+            self._add_security_warning(lines, vuln, line_idx)
+            return False
+
         indent = len(line) - len(line.lstrip())
         comment = ' ' * indent + '# QUICKFIX FIX: Upgraded to SHA256 for security (CWE-327)'
-        
+
         lines[line_idx] = comment + '\n' + fixed_line
-        return lines
-    
-    def _fix_command_injection(self, lines: List[str], vuln: Vulnerability) -> List[str]:
-        """Fix command injection"""
-        line_idx = vuln.line_number - 1
+        return True
+
+    def _fix_command_injection(self, lines: List[str], vuln: Vulnerability, line_idx: int) -> bool:
+        """Flip shell=True to shell=False only when the command is already a
+        list (e.g. subprocess.run(["ls", d], shell=True)) — there the flip is
+        behavior-preserving. A string command would break, so it gets a
+        warning comment and manual review instead."""
         line = lines[line_idx]
-        
         indent = len(line) - len(line.lstrip())
         comment = ' ' * indent + '# QUICKFIX FIX: Removed shell=True to prevent command injection (CWE-78)'
-        
-        # Remove shell=True
-        fixed_line = line.replace('shell=True', 'shell=False')
-        
-        lines[line_idx] = comment + '\n' + fixed_line
-        return lines
-    
-    def _add_security_warning(self, lines: List[str], vuln: Vulnerability) -> List[str]:
-        """Add a security warning comment"""
-        line_idx = vuln.line_number - 1
+
+        if 'shell=True' in line and re.search(r'\(\s*\[', line):
+            fixed_line = line.replace('shell=True', 'shell=False')
+            lines[line_idx] = comment + '\n' + fixed_line
+            return True
+
+        self._add_security_warning(lines, vuln, line_idx)
+        return False
+
+    def _add_security_warning(self, lines: List[str], vuln: Vulnerability, line_idx: int):
+        """Add a security warning comment (no code change)."""
         line = lines[line_idx]
-        
+
         indent = len(line) - len(line.lstrip())
         comment = ' ' * indent + f'# QUICKFIX WARNING: {vuln.description} ({vuln.cwe_id})'
-        
+
         lines.insert(line_idx, comment)
-        return lines
     
     def generate_report(self) -> str:
         """Generate a comprehensive QUICKFIX report"""
@@ -599,13 +683,22 @@ def main():
     if len(vulnerabilities) > 10:
         print(f"  ... and {len(vulnerabilities) - 10} more")
     
-    # Ask to fix
-    print("\n🔧 Phase 2: Apply Fixes")
-    response = input("Apply QUICKFIX fixes? (y/n): ").lower()
-    
+    # Ask to fix — dry run first, always
+    print("\n🔧 Phase 2: Preview Fixes (DRY RUN — nothing will be written)")
+    fixes = QUICKFIX.fix_all_vulnerabilities(severity_threshold="MEDIUM", dry_run=True)
+    previewed = len([f for f in fixes if f.dry_run])
+    print(f"🔍 {previewed} fixes previewed, 0 files written.")
+
+    print("\nApply fixes for real? (backups are created and verified first) (y/n)")
+    response = input("> ").strip().lower()
+
     if response == 'y':
-        fixes = QUICKFIX.fix_all_vulnerabilities(severity_threshold="MEDIUM")
-        print(f"✅ Applied {len([f for f in fixes if f.fix_applied])} fixes")
+        fixes = QUICKFIX.fix_all_vulnerabilities(severity_threshold="MEDIUM", dry_run=False)
+        applied = len([f for f in fixes if f.fix_applied])
+        refused = len([f for f in fixes if not f.fix_applied and not f.dry_run])
+        print(f"✅ Applied {applied} fixes ({refused} refused/failed)")
+    else:
+        print("⏭️  Skipped — no files were modified.")
     
     # Generate report
     print("\n📄 Phase 3: Documentation")

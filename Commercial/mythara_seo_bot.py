@@ -2,20 +2,24 @@ import os
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 """
-Mythara SEO Master Bot - Search Engine Optimization Automation
-- Keyword ranking tracking
-- Content optimization recommendations
-- Backlink monitoring
-- Technical SEO audits
-- Competitor analysis
-- On-page SEO scoring
-- Local SEO tracking
+Mythara SEO Tracker — manual SEO tracking ledger (honest rebuild 2026-09-22).
+
+WHAT IT IS:
+  A SQLite ledger where YOU record keyword rankings, backlinks, page
+  audits, technical issues, content plans, and competitor positions.
+  It stores them with integrity hashes, aggregates them, and prints
+  reports. That is all it does.
+
+WHAT IT IS NOT:
+  It does not crawl. It does not call any SERP or SEO API. It does not
+  measure anything by itself. Every number in here was typed in by a
+  human (or pasted from a real tool like Search Console). The old name
+  "SEO Master Bot" and words like "automation" overstated this — hence
+  "Tracker".
 
 Uses Mythara SSIP:
-- Sanctification: SEO best practices locked (immutable)
 - Integrity Hashing: All SEO data cryptographically verified
-- Blessings Reservoir: Domain authority scores
-- Shadow_Resolver: Auto-fix critical SEO issues
+- (Rankings/backlinks/audits below are human-supplied inputs, not bot discoveries)
 """
 
 import json
@@ -32,12 +36,16 @@ ORCHESTRATOR_URL = "http://localhost:5000"
 VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "")  # Set via environment
 
 class MytharaSEOMasterBot:
-    """SEO Master Bot - Search engine optimization automation."""
-    
-    def __init__(self):
+    """SEO Tracker — manual-entry ledger. Measures nothing by itself.
+
+    (Class keeps its historical name for import compatibility;
+    user-facing strings call it what it is: a tracker.)
+    """
+
+    def __init__(self, db_path: str = "mythara_seo.db"):
         self.bot_id = "seo_master_bot"
         self.bot_token = None
-        self.db_path = "mythara_seo.db"
+        self.db_path = db_path
         
         # Initialize database
         self._init_db()
@@ -161,7 +169,7 @@ class MytharaSEOMasterBot:
         
         conn.commit()
         conn.close()
-        print(f"[OK] SEO Master Bot database initialized: {self.db_path}")
+        print(f"[OK] SEO Tracker database initialized: {self.db_path}")
     
     def _register(self):
         """Register with orchestrator."""
@@ -249,7 +257,10 @@ class MytharaSEOMasterBot:
     
     def add_backlink(self, source_url: str, target_url: str, anchor_text: str,
                     domain_authority: int = 0) -> Dict[str, Any]:
-        """Add discovered backlink."""
+        """Record a backlink YOU found (via Search Console, Ahrefs, etc.).
+
+        This method stores what you report. It discovers nothing.
+        """
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
@@ -279,7 +290,7 @@ class MytharaSEOMasterBot:
         self._audit("backlink", "discovered", record)
         
         da_emoji = "💎" if domain_authority >= 80 else "🔷" if domain_authority >= 50 else "🔹"
-        print(f"[SEO] {da_emoji} Backlink discovered")
+        print(f"[SEO] {da_emoji} Backlink recorded (you supplied this)")
         print(f"      From: {source_url} (DA {domain_authority})")
         print(f"      Anchor: '{anchor_text}'")
         
@@ -288,7 +299,12 @@ class MytharaSEOMasterBot:
     def audit_page_seo(self, url: str, title_score: int, meta_score: int, header_score: int,
                       content_score: int, image_score: int, mobile_score: int,
                       speed_score: int, recommendations: List[str]) -> Dict[str, Any]:
-        """Audit page SEO."""
+        """Record a MANUALLY-SUPPLIED page SEO audit.
+
+        The scores come from you (or a real audit tool you ran) — this
+        method computes the weighted overall score and stores it. It does
+        not fetch the page or evaluate anything itself.
+        """
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
@@ -524,8 +540,10 @@ class MytharaSEOMasterBot:
         
         report = f"""
 ================================================================
-    MYTHARA SEO MASTER BOT - SEO PERFORMANCE REPORT
+    MYTHARA SEO TRACKER - SEO PERFORMANCE REPORT
                      {datetime.now().strftime("%Y-%m-%d %H:%M")}
+    Data source: manually supplied. This tracker measures
+    nothing by itself — every number below was entered by a human.
 ================================================================
 
 KEYWORD RANKINGS:
@@ -560,10 +578,15 @@ TOP PERFORMING KEYWORDS:
         return report
 
 if __name__ == "__main__":
-    print("Mythara SEO Master Bot - Search Engine Optimization")
+    print("Mythara SEO Tracker - manual SEO tracking ledger")
     print("=" * 60)
-    
-    seo = MytharaSEOMasterBot()
+    print()
+    print("*** DEMO MODE: every entry below is SYNTHETIC sample data ***")
+    print("*** It is stored in a throwaway demo database, not the real one. ***")
+    print("*** Nothing here represents real rankings or backlinks. ***")
+    print()
+
+    seo = MytharaSEOMasterBot(db_path="mythara_seo_demo.db")
     
     # Track keyword rankings
     print("\n[1] Keyword Ranking Tracking:")
@@ -572,8 +595,8 @@ if __name__ == "__main__":
     seo.track_keyword_ranking("SSIP protocol", "https://mythara.com/ssip", 1, 2400, 45)
     seo.track_keyword_ranking("mythara engine", "https://mythara.com/engine", 2, 1800, 35)
     
-    # Add backlinks
-    print("\n[2] Backlink Discovery:")
+    # Record backlinks (synthetic demo entries)
+    print("\n[2] Backlink Recording (synthetic):")
     seo.add_backlink("https://techcrunch.com/ai-platforms", "https://mythara.com", "Mythara AI Platform", 95)
     seo.add_backlink("https://medium.com/tech-reviews", "https://mythara.com", "automation solution", 72)
     seo.add_backlink("https://dev.to/best-tools", "https://mythara.com/docs", "check out Mythara", 68)

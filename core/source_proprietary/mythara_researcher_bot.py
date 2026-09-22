@@ -2,8 +2,23 @@
 
 """
 Mythara Researcher Bot
-Validates Points of Contact (POCs) at enterprises and SMBs
-Enriches prospect data with accurate decision-maker information
+Records Points of Contact (POCs) at enterprises and SMBs, queues research
+tasks for verification/enrichment, and keeps an audit trail.
+
+HONESTY CONTRACT:
+  * verify_email() and lookup_linkedin() have NO verification provider
+    configured, so they perform NO verification and return NO profile
+    data. Their result is explicitly UNVERIFIED (status
+    "not_implemented"). They never return a fabricated person, company,
+    or credential — the old fabricated outputs were removed entirely.
+  * research_company() likewise performs no enrichment without a data
+    provider configured.
+  * validate_poc() records caller-supplied contact data as "pending" with
+    a data-completeness score (fields present, NOT verification). Only a
+    human operator or a configured provider may move a record to
+    "verified" via update_poc_validation().
+  * Queued research tasks wait for a provider or human researcher; they
+    are never auto-completed with made-up results.
 """
 
 import sqlite3
@@ -241,37 +256,30 @@ class MytharaResearcherBot:
         }
 
     def verify_email(self, email: str) -> dict:
-        """Verify email deliverability (simulated - would use real API in production)"""
+        """Attempt to verify email deliverability.
+
+        NO verification provider is configured (would require API
+        credentials for a service such as ZeroBounce, NeverBounce, or
+        Hunter.io), so NO deliverability check is performed. The result is
+        explicitly UNVERIFIED — never treat it as fact. The attempt is
+        recorded in the email_verifications table for audit purposes only.
+        """
         c = self.conn.cursor()
-
-        # Simulated email verification logic
-        # In production, integrate with ZeroBounce, NeverBounce, or Hunter.io API
-
-        is_valid = "@" in email and "." in email.split("@")[1]
-        is_disposable = email.endswith(
-            ("tempmail.com", "guerrillamail.com", "mailinator.com")
-        )
-        is_role_account = email.split("@")[0] in [
-            "info",
-            "admin",
-            "support",
-            "sales",
-            "contact",
-            "hello",
-        ]
-
-        verification_status = "valid" if is_valid and not is_disposable else "invalid"
-        if is_role_account:
-            verification_status = "risky"
 
         data = {
             "email": email,
-            "verification_status": verification_status,
-            "is_deliverable": is_valid,
-            "is_disposable": is_disposable,
-            "is_role_account": is_role_account,
-            "mx_records_valid": is_valid,
-            "smtp_check_passed": is_valid,
+            "verification_status": "unknown",
+            "verified": False,
+            "status": "not_implemented",
+            "detail": (
+                "no verification provider configured — result is UNVERIFIED, "
+                "do not treat as fact"
+            ),
+            "is_deliverable": None,
+            "is_disposable": None,
+            "is_role_account": None,
+            "mx_records_valid": None,
+            "smtp_check_passed": None,
         }
 
         integrity_hash = self._calculate_integrity_hash(data)
@@ -285,139 +293,83 @@ class MytharaResearcherBot:
         """,
             (
                 email,
-                verification_status,
-                is_valid,
-                is_disposable,
-                is_role_account,
-                is_valid,
-                is_valid,
+                data["verification_status"],
+                data["is_deliverable"],
+                data["is_disposable"],
+                data["is_role_account"],
+                data["mx_records_valid"],
+                data["smtp_check_passed"],
                 integrity_hash,
             ),
         )
 
         self.conn.commit()
-        self._log_action(f"Email verified: {email} - {verification_status}")
+        self._log_action(f"Email verification attempted (no provider): {email} - UNVERIFIED")
 
         return data
 
     def lookup_linkedin(self, linkedin_url: str, expected_name: str = None) -> dict:
-        """Lookup LinkedIn profile (simulated - would use real API in production)"""
-        c = self.conn.cursor()
+        """Attempt a LinkedIn profile lookup.
 
-        # Simulated LinkedIn lookup
-        # In production, integrate with LinkedIn Sales Navigator API or Phantombuster
-
-        data = {
+        NO lookup provider is configured, so NO profile data is returned.
+        This function previously returned a fabricated profile (a made-up
+        "John Doe / Example Corp" person); that output has been removed
+        entirely. The result is explicitly UNVERIFIED — never a confident
+        fake person. The attempt is logged to the audit trail.
+        """
+        result = {
             "linkedin_url": linkedin_url,
-            "full_name": expected_name or "John Doe",
-            "current_company": "Example Corp",
-            "current_title": "VP of Technology",
-            "previous_companies": json.dumps(["Previous Corp", "Startup Inc"]),
-            "education": json.dumps(["Stanford University", "MIT"]),
-            "skills": json.dumps(["Cloud Computing", "Enterprise Sales", "SaaS"]),
-            "mutual_connections": 5,
-            "profile_last_active": "within 1 week",
+            "expected_name": expected_name,
+            "verified": False,
+            "status": "not_implemented",
+            "detail": (
+                "no LinkedIn lookup provider configured — result is UNVERIFIED, "
+                "do not treat as fact"
+            ),
+            "full_name": None,
+            "current_company": None,
+            "current_title": None,
+            "previous_companies": None,
+            "education": None,
+            "skills": None,
+            "mutual_connections": None,
+            "profile_last_active": None,
         }
 
-        integrity_hash = self._calculate_integrity_hash(data)
-
-        c.execute(
-            """
-            INSERT INTO linkedin_validations (
-                linkedin_url, full_name, current_company, current_title,
-                previous_companies, education, skills, mutual_connections,
-                profile_last_active, integrity_hash
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-            (
-                linkedin_url,
-                data["full_name"],
-                data["current_company"],
-                data["current_title"],
-                data["previous_companies"],
-                data["education"],
-                data["skills"],
-                data["mutual_connections"],
-                data["profile_last_active"],
-                integrity_hash,
-            ),
+        self._log_action(
+            f"LinkedIn lookup attempted (no provider): {linkedin_url} - UNVERIFIED"
         )
 
-        self.conn.commit()
-        self._log_action(f"LinkedIn profile validated: {linkedin_url}")
-
-        return data
+        return result
 
     def research_company(self, company: str, industry: str = None) -> dict:
-        """Deep research on a company"""
-        c = self.conn.cursor()
+        """Attempt company enrichment.
 
-        # Simulated company research
-        # In production, integrate with Clearbit, ZoomInfo, Crunchbase, BuiltWith APIs
-
-        data = {
+        NO data provider is configured (would require e.g. Clearbit,
+        ZoomInfo, Crunchbase, or BuiltWith API credentials), so NO
+        enrichment is performed. This function previously returned
+        fabricated company data (made-up employee counts, revenue, tech
+        stack, and fictional decision-makers); that output has been
+        removed entirely. The result is explicitly UNVERIFIED. The request
+        is logged to the audit trail; use queue_research_task() to hand it
+        to a human researcher or a future provider.
+        """
+        result = {
             "company": company,
-            "industry": industry or "Technology",
-            "employee_count": "1,000-5,000",
-            "revenue_range": "$100M-$500M",
-            "headquarters": "San Francisco, CA",
-            "tech_stack": json.dumps(["AWS", "Salesforce", "Workday", "Slack"]),
-            "recent_funding": "Series C - $50M (6 months ago)",
-            "decision_makers": json.dumps(
-                [
-                    {"name": "Jane Smith", "title": "CTO"},
-                    {"name": "Bob Johnson", "title": "VP Engineering"},
-                ]
-            ),
-            "pain_points": json.dumps(
-                [
-                    "Contract management complexity",
-                    "Compliance automation",
-                    "Vendor risk management",
-                ]
-            ),
-            "buying_signals": json.dumps(
-                [
-                    "Recently posted job for 'Contract Manager'",
-                    "Mentioned 'digital transformation' in earnings call",
-                    "CFO spoke at SaaS conference about efficiency",
-                ]
-            ),
-            "data_sources": json.dumps(
-                ["LinkedIn", "Clearbit", "Company Website", "Crunchbase"]
+            "industry": industry,
+            "verified": False,
+            "status": "not_implemented",
+            "detail": (
+                "no company-research provider configured — no enrichment "
+                "performed, result is UNVERIFIED, do not treat as fact"
             ),
         }
 
-        integrity_hash = self._calculate_integrity_hash(data)
-
-        c.execute(
-            """
-            INSERT INTO company_research (
-                company, industry, employee_count, revenue_range, headquarters,
-                tech_stack, recent_funding, decision_makers, pain_points,
-                buying_signals, data_sources, integrity_hash
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-            (
-                company,
-                data["industry"],
-                data["employee_count"],
-                data["revenue_range"],
-                data["headquarters"],
-                data["tech_stack"],
-                data["recent_funding"],
-                data["decision_makers"],
-                data["pain_points"],
-                data["buying_signals"],
-                data["data_sources"],
-                integrity_hash,
-            ),
+        self._log_action(
+            f"Company research requested (no provider): {company} - UNVERIFIED"
         )
 
-        self.conn.commit()
-        self._log_action(f"Company research completed: {company}")
-
-        return data
+        return result
 
     def queue_research_task(
         self,
@@ -628,9 +580,9 @@ if __name__ == "__main__":
     bot = MytharaResearcherBot()
 
     # Demo workflow
-    print("\n[DEMO] Validating POCs for target companies\n")
+    print("\n[DEMO] Recording POCs supplied by the operator (status: pending)\n")
 
-    # Validate POC #1 - High confidence
+    # Validate POC #1 - High data completeness (NOT verified)
     result1 = bot.validate_poc(
         company="Microsoft",
         contact_name="Satya Nadella",
@@ -639,14 +591,20 @@ if __name__ == "__main__":
         linkedin_url="linkedin.com/in/satyanadella",
         validation_method="linkedin",
     )
-    print(f"[OK] Validated: {result1['contact']} at {result1['company']}")
-    print(f"     Confidence: {result1['confidence_score']}/100")
+    print(f"[OK] Recorded: {result1['contact']} at {result1['company']}")
+    print(f"     Status: {result1['status']} | Data-completeness score: {result1['confidence_score']}/100 (not a verification)")
 
-    # Verify email
+    # Email check - no provider configured: explicitly UNVERIFIED
     email_result = bot.verify_email("satya@microsoft.com")
-    print(f"[OK] Email verified: {email_result['verification_status']}")
+    print(f"[OK] Email check: verified={email_result['verified']}, status={email_result['status']}")
+    print(f"     {email_result['detail']}")
 
-    # Validate POC #2 - Medium confidence
+    # LinkedIn lookup - no provider configured: explicitly UNVERIFIED
+    li_result = bot.lookup_linkedin("linkedin.com/in/satyanadella")
+    print(f"[OK] LinkedIn lookup: verified={li_result['verified']}, status={li_result['status']}")
+    print(f"     {li_result['detail']}")
+
+    # Validate POC #2 - Medium data completeness (NOT verified)
     result2 = bot.validate_poc(
         company="JPMorgan Chase",
         contact_name="Jamie Dimon",
@@ -654,16 +612,14 @@ if __name__ == "__main__":
         email="jamie.dimon@jpmorgan.com",
         validation_method="manual",
     )
-    print(f"\n[OK] Validated: {result2['contact']} at {result2['company']}")
-    print(f"     Confidence: {result2['confidence_score']}/100")
+    print(f"\n[OK] Recorded: {result2['contact']} at {result2['company']}")
+    print(f"     Status: {result2['status']} | Data-completeness score: {result2['confidence_score']}/100 (not a verification)")
 
-    # Research company
-    print("\n[DEMO] Researching target company\n")
+    # Company research - no provider configured: explicitly UNVERIFIED
+    print("\n[DEMO] Requesting company research\n")
     research = bot.research_company("Salesforce", "Technology")
-    print(f"[OK] Company research completed: {research['company']}")
-    print(f"     Employee Count: {research['employee_count']}")
-    print(f"     Revenue Range: {research['revenue_range']}")
-    print("     Tech Stack: AWS, Salesforce, Workday, Slack")
+    print(f"[OK] Company research: verified={research['verified']}, status={research['status']}")
+    print(f"     {research['detail']}")
 
     # Queue research tasks
     print("\n[DEMO] Queueing research tasks\n")
@@ -673,16 +629,16 @@ if __name__ == "__main__":
     task2 = bot.queue_research_task(
         "enrich_company", "Kaiser Permanente", priority="high"
     )
-    print(f"[OK] Queued {2} research tasks")
+    print(f"[OK] Queued {2} research tasks (awaiting a provider or human researcher)")
 
-    # Update validation
+    # Operator records their own manual review outcome
     bot.update_poc_validation(
         result1["validation_id"],
         "verified",
         confidence_score=95,
-        notes="Confirmed via LinkedIn Sales Navigator",
+        notes="Operator manual review (demo) - no automated provider involved",
     )
-    print("\n[OK] Updated POC validation to 'verified'")
+    print("\n[OK] Updated POC validation to 'verified' via operator manual review")
 
     # Generate report
     print("\n" + bot.generate_research_report())

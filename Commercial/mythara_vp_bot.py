@@ -386,9 +386,12 @@ class MytharaVPBot:
 
 ## What it does:
 {spec['purpose']}
+(Generated as HONEST STARTER CODE — see the TODOs in {filename}; nothing external is wired up yet.)
 
 ## Expected impact:
 {self._format_expected_impact(spec)}
+
+(Note: impact figures are VP planning estimates, not measured results.)
 
 ## To deploy:
 
@@ -443,51 +446,70 @@ Date: {datetime.now().isoformat()}
         return templates.get(bot_type, self._generic_bot_template(bot_type, spec))
     
     def _linkedin_bot_template(self) -> str:
-        """Template for LinkedIn automation bot."""
+        """Honest starter template for the LinkedIn automation bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 '''
-LinkedIn Automation Bot
-Auto-sends connection requests and messages to prospects.
+LinkedIn Automation Bot — HONEST STARTER CODE.
+
+WHAT IS IMPLEMENTED:
+- Class skeleton, daily-limit bookkeeping, CLI entry point.
+
+WHAT IS NOT IMPLEMENTED:
+- Everything that touches LinkedIn. find_prospects() returns [] and
+  send_connection_request() is a no-op that returns False until you wire
+  it up. THIS STARTER SENDS NOTHING.
+
+TO GET IT WORKING:
+- Implement find_prospects() with the LinkedIn API or Selenium.
+- Implement send_connection_request() the same way.
+- Respect LinkedIn's terms of service and rate limits.
 '''
 
 from datetime import datetime
 
+
 class LinkedInAutomationBot:
+    \"\"\"Starter for LinkedIn outreach. Sends nothing until the TODOs are filled in.\"\"\"
+
     def __init__(self):
-        self.daily_limit = 20  # LinkedIn safe limit
+        self.daily_limit = 20  # LinkedIn safe limit (matters only once sending is implemented)
         self.sent_today = 0
-    
+
     def find_prospects(self, keywords: str):
-        '''Search LinkedIn for prospects.'''
-        # In production: Use LinkedIn API or Selenium
-        print(f"🔍 Searching LinkedIn for: {keywords}")
+        \"\"\"Search LinkedIn for prospects.
+
+        TODO: implement with LinkedIn API or Selenium — currently returns [].
+        \"\"\"
+        print(f"[NOT IMPLEMENTED] find_prospects({keywords!r}): no LinkedIn integration — returning []")
         return []
-    
+
     def send_connection_request(self, prospect_url: str, message: str):
-        '''Send personalized connection request.'''
-        if self.sent_today >= self.daily_limit:
-            print("⚠️ Daily limit reached")
-            return False
-        
-        # In production: Automate via Selenium/API
-        print(f"📨 Sending connection to: {prospect_url}")
-        self.sent_today += 1
-        return True
-    
+        \"\"\"Send a personalized connection request.
+
+        TODO: implement with LinkedIn API or Selenium — currently a no-op.
+        Returns False because nothing was sent.
+        \"\"\"
+        print(f"[NOT IMPLEMENTED] send_connection_request({prospect_url!r}): no LinkedIn integration — nothing sent")
+        return False
+
     def run(self):
-        '''Main execution.'''
-        print("🤖 LinkedIn Automation Bot running...")
-        
-        # Find prospects
+        \"\"\"Main execution. Safe to run: does nothing until the TODOs are implemented.\"\"\"
+        print("LinkedIn Automation Bot (starter) running...")
+
         keywords = "Chief Risk Officer AI Banking"
         prospects = self.find_prospects(keywords)
-        
-        # Send connections
+
+        if not prospects:
+            print("No prospects (find_prospects not implemented). Nothing to do.")
+            return
+
         for prospect in prospects[:self.daily_limit]:
-            self.send_connection_request(prospect, "Personalized message")
-        
-        print(f"✅ Sent {self.sent_today} connection requests")
+            if self.send_connection_request(prospect, "Personalized message"):
+                self.sent_today += 1
+
+        print(f"Done. Connection requests actually sent: {self.sent_today}")
+
 
 if __name__ == "__main__":
     bot = LinkedInAutomationBot()
@@ -495,50 +517,87 @@ if __name__ == "__main__":
 """
     
     def _email_nurture_template(self) -> str:
-        """Template for email nurture bot."""
+        """Honest starter template for the email nurture bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 '''
-Email Nurture Sequence Bot
-Multi-touch email campaigns for warm leads.
+Email Nurture Sequence Bot — HONEST STARTER CODE.
+
+WHAT IS IMPLEMENTED:
+- Sequence definitions (day offsets, subjects, template names), CLI entry point.
+
+WHAT IS NOT IMPLEMENTED:
+- Lead sourcing: get_leads_for_nurture() returns [].
+- Email bodies: get_template_body() raises NotImplementedError.
+- Email delivery: send_email() is a no-op returning False. No email
+  provider is wired up. THIS STARTER SENDS NOTHING.
+
+TO GET IT WORKING:
+- Implement get_leads_for_nurture() against your real lead store/CRM.
+- Write the real email bodies in get_template_body().
+- Implement send_email() with your email provider (SendGrid, SES, ...).
 '''
 
 from datetime import datetime, timedelta
 
+
 class EmailNurtureBot:
+    \"\"\"Starter for multi-touch nurture campaigns. Sends nothing until the TODOs are filled in.\"\"\"
+
     def __init__(self):
         self.sequences = {
             'audit_prospect': [
-                {'day': 0, 'subject': 'SSIP Audit - Early Adopter Pricing', 'template': 'audit_intro'},
-                {'day': 3, 'subject': 'Re: SSIP Audit - Case Study', 'template': 'audit_social_proof'},
-                {'day': 7, 'subject': 'Last Chance - $500 Audit Expires Soon', 'template': 'audit_urgency'}
+                {'day': 0, 'subject': 'SSIP Audit - intro', 'template': 'audit_intro'},
+                {'day': 3, 'subject': 'Re: SSIP Audit - case study', 'template': 'audit_social_proof'},
+                {'day': 7, 'subject': 'Following up: SSIP audit info', 'template': 'audit_followup'},
             ]
         }
-    
+
     def get_leads_for_nurture(self):
-        '''Get leads who need nurture emails.'''
-        # In production: Query database
+        \"\"\"Get leads who need nurture emails.
+
+        TODO: query your real lead database/CRM — currently returns [].
+        \"\"\"
+        print("[NOT IMPLEMENTED] get_leads_for_nurture(): no lead source wired up — returning []")
         return []
-    
+
+    def get_template_body(self, template_name: str) -> str:
+        \"\"\"Return the email body for a template name.
+
+        TODO: write the real email bodies — currently raises NotImplementedError.
+        \"\"\"
+        raise NotImplementedError(
+            f"email body for template {template_name!r} not written yet"
+        )
+
     def send_email(self, lead_email: str, subject: str, body: str):
-        '''Send nurture email.'''
-        print(f"📧 Sending to {lead_email}: {subject}")
-        # In production: Use email API
-        return True
-    
+        \"\"\"Send a nurture email.
+
+        TODO: send via a real email API (SendGrid/SES/...) — currently a
+        no-op that returns False because nothing was sent.
+        \"\"\"
+        print(f"[NOT IMPLEMENTED] send_email(to={lead_email!r}): no email provider wired up — nothing sent")
+        return False
+
     def run(self):
-        '''Main execution.'''
-        print("🤖 Email Nurture Bot running...")
-        
+        \"\"\"Main execution. Safe to run: does nothing until the TODOs are implemented.\"\"\"
+        print("Email Nurture Bot (starter) running...")
+
         leads = self.get_leads_for_nurture()
+        if not leads:
+            print("No leads (lead source not implemented). Nothing to do.")
+            return
+
         emails_sent = 0
-        
         for lead in leads:
-            # Determine which sequence and email
-            # Send appropriate email
-            emails_sent += 1
-        
-        print(f"✅ Sent {emails_sent} nurture emails")
+            # TODO: pick the right sequence + email for this lead, then:
+            #   body = self.get_template_body('audit_intro')
+            #   if self.send_email(lead['email'], subject, body):
+            #       emails_sent += 1
+            pass
+
+        print(f"Done. Emails actually sent: {emails_sent}")
+
 
 if __name__ == "__main__":
     bot = EmailNurtureBot()
@@ -546,58 +605,86 @@ if __name__ == "__main__":
 """
     
     def _affiliate_recruiter_template(self) -> str:
-        """Template for affiliate recruiter bot."""
+        """Honest starter template for the affiliate recruiter bot."""
         return """# Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 '''
-Affiliate Recruiter Bot
-Auto-recruits affiliates from LinkedIn and Twitter.
+Affiliate Recruiter Bot — HONEST STARTER CODE.
+
+WHAT IS IMPLEMENTED:
+- Class skeleton, daily-target bookkeeping, a DRAFT recruitment message,
+  CLI entry point.
+
+WHAT IS NOT IMPLEMENTED:
+- Prospect discovery: find_potential_affiliates() returns [].
+- Outreach: send_recruitment_message() is a no-op returning False.
+  THIS STARTER SENDS NOTHING.
+
+TO GET IT WORKING:
+- Implement find_potential_affiliates() (LinkedIn/Twitter search or a list).
+- Implement send_recruitment_message() with a real email provider.
+- Fill in the real commission terms in RECRUITMENT_MESSAGE_DRAFT before use.
 '''
 
 from datetime import datetime
 
+
+RECRUITMENT_MESSAGE_DRAFT = '''
+Hi {name},
+
+I run Mythara Engine (AI compliance platform). We're putting together an
+affiliate program:
+
+- Commission on referred sales (terms TBD — fill in before sending)
+- Your unique referral link
+- Real-time dashboard
+- Payout schedule (TBD — fill in before sending)
+
+Interested in promoting to your audience?
+'''
+
+
 class AffiliateRecruiterBot:
+    \"\"\"Starter for affiliate recruiting. Sends nothing until the TODOs are filled in.\"\"\"
+
     def __init__(self):
         self.target_affiliates_per_day = 5
         self.recruited_today = 0
-    
+
     def find_potential_affiliates(self, platform: str):
-        '''Find influencers/creators to recruit.'''
-        # Search for: Tech influencers, AI consultants, etc.
-        print(f"🔍 Searching {platform} for potential affiliates...")
+        \"\"\"Find influencers/creators to recruit.
+
+        TODO: implement real discovery (platform search/API or a curated
+        list) — currently returns [].
+        \"\"\"
+        print(f"[NOT IMPLEMENTED] find_potential_affiliates({platform!r}): no discovery wired up — returning []")
         return []
-    
+
     def send_recruitment_message(self, contact: dict):
-        '''Send affiliate program invitation.'''
-        message = f'''
-Hi {contact['name']},
+        \"\"\"Send an affiliate program invitation.
 
-I run Mythara Engine (AI compliance platform). We're offering affiliates:
+        TODO: send via a real email provider — currently a no-op that
+        returns False because nothing was sent.
+        \"\"\"
+        name = contact.get('name', 'there')
+        print(f"[NOT IMPLEMENTED] send_recruitment_message(to={contact.get('email')!r}): no email provider wired up — nothing sent")
+        return False
 
-💰 20-30% commission on all sales
-🔗 Your unique referral link
-📊 Real-time dashboard
-💳 Weekly PayPal payouts
-
-Interested in promoting to your audience?
-
-Mythara.Engine@yahoo.com
-'''
-        print(f"📨 Recruiting: {contact['email']}")
-        # In production: Send via email API
-        self.recruited_today += 1
-        return True
-    
     def run(self):
-        '''Main execution.'''
-        print("🤖 Affiliate Recruiter Bot running...")
-        
+        \"\"\"Main execution. Safe to run: does nothing until the TODOs are implemented.\"\"\"
+        print("Affiliate Recruiter Bot (starter) running...")
+
         prospects = self.find_potential_affiliates('LinkedIn')
-        
+        if not prospects:
+            print("No prospects (discovery not implemented). Nothing to do.")
+            return
+
         for prospect in prospects[:self.target_affiliates_per_day]:
-            self.send_recruitment_message(prospect)
-        
-        print(f"✅ Recruited {self.recruited_today} potential affiliates")
+            if self.send_recruitment_message(prospect):
+                self.recruited_today += 1
+
+        print(f"Done. Recruitment messages actually sent: {self.recruited_today}")
+
 
 if __name__ == "__main__":
     bot = AffiliateRecruiterBot()
@@ -605,26 +692,43 @@ if __name__ == "__main__":
 """
     
     def _generic_bot_template(self, bot_type: str, spec: Dict[str, Any]) -> str:
-        """Generic bot template."""
+        """Honest generic starter template."""
         return f"""# Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 '''
-{spec['name']}
-{spec['purpose']}
+{spec['name']} — HONEST STARTER CODE.
+
+Intended purpose: {spec['purpose']}
+
+WHAT IS IMPLEMENTED:
+- Class skeleton and CLI entry point.
+
+WHAT IS NOT IMPLEMENTED:
+- The actual behavior described above. run() raises NotImplementedError
+  until you implement it. THIS STARTER DOES NOTHING ON ITS OWN.
+
+TO GET IT WORKING:
+- Fill in the TODO in run() below with real logic.
 '''
 
 from datetime import datetime
 
+
 class {bot_type.title().replace('_', '')}:
+    \"\"\"Starter for: {spec['purpose']}\"\"\"
+
     def __init__(self):
         self.name = "{spec['name']}"
-        print(f"🤖 Initializing {{self.name}}...")
-    
+        print(f"Initializing {{self.name}} (starter — not yet implemented)...")
+
     def run(self):
-        '''Main execution.'''
-        print(f"🤖 {{self.name}} running...")
-        # TODO: Implement {spec['purpose']}
-        print("✅ Execution complete")
+        \"\"\"Main execution.\"\"\"
+        print(f"{{self.name}} (starter) running...")
+        # TODO: implement the real behavior: {spec['purpose']}
+        raise NotImplementedError(
+            "{spec['name']} is starter code only — implement run() before use."
+        )
+
 
 if __name__ == "__main__":
     bot = {bot_type.title().replace('_', '')}()
@@ -632,19 +736,33 @@ if __name__ == "__main__":
 """
     
     def _generate_runner(self, bot_type: str) -> str:
-        """Generate runner script for bot."""
+        """Generate runner script for bot.
+
+        Finds the bot class defined in the generated module instead of
+        guessing its name, and fails loudly if there isn't one.
+        """
         return f"""# Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
-import sys
-import os
+\"\"\"Runner for the generated mythara_{bot_type} starter.\"\"\"
 
-sys.path.insert(0, os.path.dirname(__file__))
+import importlib
 
-from mythara_{bot_type} import *
+module = importlib.import_module("mythara_{bot_type}")
+
+bot_cls = next(
+    (
+        obj
+        for name, obj in vars(module).items()
+        if name.endswith("Bot") and isinstance(obj, type) and obj.__module__ == module.__name__
+    ),
+    None,
+)
+
+if bot_cls is None:
+    raise SystemExit("No bot class found in mythara_{bot_type} — nothing to run.")
 
 if __name__ == "__main__":
-    bot = {bot_type.title().replace('_', '')}()
-    bot.run()
+    bot_cls().run()
 """
     
     def _format_expected_impact(self, spec: Dict[str, Any]) -> str:

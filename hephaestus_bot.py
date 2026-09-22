@@ -6,15 +6,26 @@ The God of the Forge - Master Builder & System Architect
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 Hephaestus is the GODBOT that:
-- Architects complete systems from high-level requirements
-- Forges production-ready code with perfect craftsmanship
-- Integrates all AMIR suite tools (ADAPT, QuickFix, Big Meanie)
-- Builds robust APIs, databases, and infrastructure
-- Creates deployment pipelines and monitoring systems
-- Ensures security, performance, and scalability
-- Documents everything with divine precision
+- Drafts system blueprints from high-level requirements using keyword heuristics
+- Forges starter project scaffolds: template code, configs, tests, docs
+- Calls AMIR suite tools (ADAPT, QuickFix, Big Meanie) when they are present
+- Generates template API servers, database models, and deployment configs
+- Emits static checklists for security and performance (placeholders, not analysis)
+- Writes starter documentation
 
-"From raw requirements to production perfection - I forge the future."
+HONEST CONTRACT:
+- There is no AI reasoning here. _analyze_requirements, _recommend_tech_stack,
+  _recommend_databases, _design_api_structure, _extract_security_requirements
+  and _extract_performance_requirements are plain keyword-matching heuristics
+  over the requirements text. _extract_performance_requirements returns the
+  same hard-coded placeholder numbers every time.
+- The forged code is a starting template, NOT a production-ready system.
+  It contains placeholder secrets (e.g. SECRET_KEY = "change-me-in-production"),
+  stub endpoints, and unchecked assumptions. Review and harden before real use.
+- "Security scan passed" in forge output means a scan tool ran if installed,
+  not that the scaffold is secure. No scan runs when the AMIR tools are absent.
+
+"From raw requirements to starter scaffolds - I forge the template."
 """
 
 import os
@@ -27,6 +38,22 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from pathlib import Path
 import shutil
+
+try:
+    from soul_cradle.bot_witness import (
+        witness_action,
+        forge_evidence,
+        WitnessBlocked,
+        WitnessUnavailable,
+    )
+except ImportError:  # pragma: no cover — direct-script fallback
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from soul_cradle.bot_witness import (
+        witness_action,
+        forge_evidence,
+        WitnessBlocked,
+        WitnessUnavailable,
+    )
 
 logging.basicConfig(
     level=logging.INFO,
@@ -70,12 +97,15 @@ class HephaestusBot:
     """
     The God of the Forge - Master System Builder
     
-    Hephaestus orchestrates all AMIR tools to build complete production systems:
-    - ADAPT: Security testing and penetration testing
-    - QuickFix: Automated vulnerability patching
-    - Big Meanie: Comprehensive security auditing
-    - Soul Cradle: Emotional intelligence integration
-    - Mythara Engine: Core API and business logic
+    Hephaestus orchestrates AMIR tools to scaffold starter systems:
+    - ADAPT: Security testing and penetration testing (called if present)
+    - QuickFix: Automated vulnerability patching (called if present)
+    - Big Meanie: Comprehensive security auditing (called if present)
+    - Soul Cradle: Emotional intelligence integration (naming only)
+    - Mythara Engine: Core API and business logic (naming only)
+    
+    Requirement "analysis" is keyword matching, not intelligent reasoning.
+    Forged output is a template scaffold, not a production-ready system.
     """
     
     def __init__(self, project_root: str = None):
@@ -159,7 +189,7 @@ class HephaestusBot:
         """
         Create a system blueprint from a Prometheus innovation.
         
-        Translates revolutionary concepts into concrete technical requirements.
+        Translates innovation concepts into concrete technical requirements.
         """
         print(f"🧬 Translating innovation into blueprint...")
         print(f"💡 Innovation: {innovation['name']}")
@@ -206,7 +236,8 @@ class HephaestusBot:
         )
     
     def _analyze_requirements(self, requirements: List[str]) -> List[str]:
-        """Analyze requirements and identify needed components"""
+        """Keyword-matching heuristic: scan requirements text for component keywords.
+        Not AI analysis — components are picked by simple substring matches."""
         components = []
         
         req_text = " ".join(requirements).lower()
@@ -246,7 +277,8 @@ class HephaestusBot:
         return list(set(components))
     
     def _recommend_tech_stack(self, components: List[str], architecture: str) -> Dict[str, str]:
-        """Recommend optimal technology stack"""
+        """Return a fixed default tech stack with minor keyword-based variations.
+        Heuristic, not an intelligent recommendation."""
         stack = {
             "language": "Python 3.11+",
             "framework": "FastAPI",
@@ -274,7 +306,7 @@ class HephaestusBot:
         return stack
     
     def _recommend_databases(self, requirements: List[str]) -> List[str]:
-        """Recommend database solutions"""
+        """Keyword heuristic for database defaults (PostgreSQL unless keywords match)."""
         databases = []
         req_text = " ".join(requirements).lower()
         
@@ -293,7 +325,7 @@ class HephaestusBot:
         return databases
     
     def _design_api_structure(self, requirements: List[str]) -> List[str]:
-        """Design API endpoint structure"""
+        """Keyword heuristic for API endpoint templates."""
         apis = []
         req_text = " ".join(requirements).lower()
         
@@ -314,7 +346,8 @@ class HephaestusBot:
         return apis
     
     def _extract_security_requirements(self, requirements: List[str]) -> List[str]:
-        """Extract security requirements"""
+        """Return a static security checklist. Not extracted from the input —
+        the same list is returned regardless of requirements."""
         return [
             "JWT Authentication",
             "Rate Limiting",
@@ -329,7 +362,8 @@ class HephaestusBot:
         ]
     
     def _extract_performance_requirements(self, requirements: List[str]) -> Dict[str, Any]:
-        """Extract performance requirements"""
+        """Return static placeholder performance targets. Not derived from the
+        input — identical numbers are returned for every project."""
         return {
             "response_time_p95": "< 200ms",
             "throughput": "> 1000 req/sec",
@@ -378,6 +412,15 @@ class HephaestusBot:
         # 3. Run comprehensive security scan
         logger.info("🛡️  Running security scans...")
         self._run_security_suite(project_dir)
+
+        # Honest flag: True only if at least one scan tool actually ran
+        scan_ran = bool(self.adapt_path or self.big_meanie_path)
+        if scan_ran:
+            for result in results:
+                result.security_scan_passed = True
+        else:
+            for result in results:
+                result.warnings.append("No security scan ran: ADAPT/Big Meanie not installed")
         
         # 4. Auto-fix vulnerabilities
         logger.info("🔧 Auto-fixing vulnerabilities...")
@@ -393,7 +436,30 @@ class HephaestusBot:
         
         logger.info("✅ System forge complete!")
         self._print_forge_summary(results)
-        
+
+        # --- Soul Cradle witnessing: every forge heard by the panel --------
+        evidence, bases = forge_evidence(
+            components=[r.component for r in results],
+            declared_intent="scaffold the requested system honestly",
+        )
+        try:
+            witness_action(
+                bot_id="hephaestus",
+                action=f"forge system: {blueprint.name}",
+                evidence=evidence,
+                evidence_bases=bases,
+                assessor_ids=["dionysus", "persephone", "demeter"],
+                enforce=True,
+            )
+        except WitnessBlocked as exc:
+            for result in results:
+                result.success = False
+                result.warnings.append(f"WITNESS BLOCKED: {exc}")
+            logger.warning(f"🛑 Forge witnessed BLOCKED: {exc}")
+        except WitnessUnavailable as exc:
+            logger.warning(f"⚠️ Witness unavailable — {exc}; proceeding.")
+        # --- end witnessing --------------------------------------------------
+
         return results
     
     def _create_project_structure(self, blueprint: SystemBlueprint) -> str:
@@ -466,7 +532,7 @@ class HephaestusBot:
                 files_created=files_created,
                 tests_created=tests_created,
                 documentation=f"{component} documentation",
-                security_scan_passed=True,
+                security_scan_passed=False,  # Set to True by forge_system if a scan tool actually ran
                 performance_metrics={},
                 warnings=warnings,
                 errors=errors
@@ -537,9 +603,17 @@ async def metrics():
         for api in blueprint.apis:
             if api not in ["/health", "/metrics", "/api/docs"]:
                 method = "get" if "{id}" not in api else "get"
+                # Sanitize path into a valid Python identifier
+                func_name = (
+                    api.replace("/", "_")
+                    .replace("{", "")
+                    .replace("}", "")
+                    .strip("_")
+                    .replace("-", "_")
+                )
                 api_code += f'''
 @app.{method}("{api}")
-async def {api.replace("/", "_").replace("{{", "").replace("}}", "").strip("_")}():
+async def {func_name}():
     """Auto-generated endpoint"""
     return {{"endpoint": "{api}", "status": "implemented"}}
 '''
@@ -862,7 +936,7 @@ Failed: {sum(1 for r in results if not r.success)}
 - **Status**: {"✅ Success" if result.success else "❌ Failed"}
 - **Files Created**: {len(result.files_created)}
 - **Tests Created**: {len(result.tests_created)}
-- **Security Scan**: {"✅ Passed" if result.security_scan_passed else "⚠️ Review Required"}
+- **Security Scan**: {"✅ Ran (tool executed; not a security guarantee)" if result.security_scan_passed else "⚠️ Not run — no security tools installed"}
 '''
             if result.warnings:
                 content += f"\n**Warnings**:\n" + "\n".join(f"- {w}" for w in result.warnings)
@@ -967,7 +1041,7 @@ jobs:
             print(f"   {status} {result.component}")
         
         print("\n" + "="*70)
-        print("🔥 \"From the forge, perfection emerges.\" - Hephaestus")
+        print("🔥 \"From the forge, a starting scaffold emerges.\" - Hephaestus")
         print("="*70 + "\n")
 
 

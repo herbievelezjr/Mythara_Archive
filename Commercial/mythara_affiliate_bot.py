@@ -1,14 +1,18 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 """
-Mythara Autonomous Affiliate Marketing Bot
-Recruits affiliates, tracks referrals, pays commissions - zero human contact.
+Mythara Affiliate Tracker (honest rebuild 2026-09-22)
 
-Uses Mythara SSIP:
-- Messenger Pairing: Affiliate-Customer matching
-- Blessings Reservoir: Affiliate performance tracking
-- Sanctification: Commission rules enforcement
-- Clause Invocation: Automated affiliate onboarding/payouts
+WHAT IT DOES:
+  Registers affiliates, tracks referral clicks/sales, calculates
+  commissions under fixed ("sanctified") rules, and APPROVES payouts
+  once the $50 threshold is hit. State persists in affiliate_state.json.
+
+WHAT IT DOES NOT DO:
+  It does not move money. There is no PayPal/Stripe payout API here.
+  An "approved" payout is a ledger entry saying Herb owes the affiliate;
+  Herb sends the money himself via PayPal. Anything that used to say
+  "sent" now says "approved_for_payout".
 """
 
 import json
@@ -138,27 +142,64 @@ class CommissionSanctification:
 
 class AutonomousAffiliateBot:
     """
-    Fully autonomous affiliate marketing system.
-    Recruits affiliates, tracks referrals, pays commissions - zero human contact.
+    Affiliate tracking system: recruits (registers) affiliates, tracks
+    referrals, calculates commissions, approves payouts. Money movement
+    is manual — Herb pays via PayPal; this is the ledger, not the wallet.
     """
-    
-    def __init__(self):
+
+    def __init__(self, state_path: str = None):
         self.messenger_pairing = MessengerPairing()
         self.commission_rules = CommissionSanctification()
         self.affiliates = {}
         self.pending_payouts = []
         self.paid_commissions = []
+        # Rebuild pairings from persisted affiliates is out of scope;
+        # pairings live for the session, money math persists.
+        self.state_path = state_path or os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "affiliate_state.json")
+        self._load_state()
+
+    def _save_state(self):
+        """Persist affiliate ledger so it survives restarts."""
+        try:
+            with open(self.state_path, "w") as f:
+                json.dump({
+                    "affiliates": self.affiliates,
+                    "pending_payouts": self.pending_payouts,
+                    "paid_commissions": self.paid_commissions,
+                    "saved_at": datetime.now().isoformat(),
+                }, f, indent=2)
+        except Exception:
+            pass  # persistence must never break tracking
+
+    def _load_state(self):
+        """Restore affiliate ledger from disk."""
+        try:
+            if not os.path.exists(self.state_path):
+                return
+            with open(self.state_path) as f:
+                state = json.load(f)
+            self.affiliates = state.get("affiliates", {})
+            self.pending_payouts = state.get("pending_payouts", [])
+            self.paid_commissions = state.get("paid_commissions", [])
+        except Exception:
+            pass
     
-    def recruit_affiliate(self, email: str, name: str, platform: str) -> Dict[str, Any]:
+    def recruit_affiliate(self, email: str, name: str, platform: str,
+                          queue_draft: bool = True) -> Dict[str, Any]:
         """
-        Auto-recruit new affiliate.
-        Sends welcome email with referral link.
+        Register a new affiliate and draft their welcome email.
+
+        Honest contract: this WRITES a welcome-email draft to the
+        outreach queue for Herb's approval — it does not send email.
+        Returns the affiliate record, the draft text, and the draft path
+        (or None when queue_draft=False, e.g. in demos).
         """
-        
+
         # Generate unique affiliate ID and referral code
         affiliate_id = hashlib.sha256(email.encode()).hexdigest()[:12]
         referral_code = f"MYTH-{affiliate_id[:8].upper()}"
-        
+
         affiliate = {
             'affiliate_id': affiliate_id,
             'email': email,
@@ -173,16 +214,28 @@ class AutonomousAffiliateBot:
             'total_commissions_paid': 0.0,
             'status': 'active'
         }
-        
+
         self.affiliates[affiliate_id] = affiliate
-        
-        # Generate welcome email
+        self._save_state()
+
+        # Draft (never send) the welcome email via the outreach queue.
         welcome_email = self._generate_welcome_email(affiliate)
-        
+        draft_path = None
+        if queue_draft:
+            from outreach_queue import OutreachQueue
+            draft_path = OutreachQueue().queue(
+                kind="email",
+                title=f"Affiliate welcome: {name}",
+                body=(f"To: {email}\n\n{welcome_email}"),
+                meta={"affiliate_id": affiliate_id,
+                      "referral_code": referral_code},
+            )
+
         return {
             'affiliate': affiliate,
             'welcome_email': welcome_email,
-            'action': 'send_email'
+            'welcome_draft_path': draft_path,
+            'action': 'draft_queued_for_approval',
         }
     
     def _generate_welcome_email(self, affiliate: Dict[str, Any]) -> str:
@@ -213,8 +266,8 @@ Track real-time:
 - Payment status
 
 PAYMENT:
-- Automatic PayPal payout when you hit $50
-- Paid weekly (every Friday)
+- Payouts approved automatically when you hit $50
+- Herb sends payment manually via PayPal (usually weekly, Fridays)
 - No minimums after first payout
 
 MARKETING ASSETS:
@@ -222,14 +275,12 @@ MARKETING ASSETS:
 - Email templates: Included in dashboard
 - Social media posts: Auto-generated
 
-Start sharing your link now. First commission usually within 7 days.
+Start sharing your link whenever you're ready.
 
-Questions? This email address is monitored by AI - reply anytime.
+Questions? Just reply to this email.
 
 Mythara Affiliate Program
 Mythara.Engine@yahoo.com
-
-P.S. Top affiliates earn $5k-20k/month. Our top performer made $47k last quarter.
 """
     
     def track_referral_click(self, referral_code: str, visitor_email: str = None) -> Dict[str, Any]:
@@ -312,8 +363,9 @@ P.S. Top affiliates earn $5k-20k/month. Our top performer made $47k last quarter
         affiliate['total_referrals'] += 1
         affiliate['total_sales'] += sale_amount
         affiliate['total_commissions_earned'] += commission
-        
-        # Send notification email to affiliate
+        self._save_state()
+
+        # Draft (not send) the commission notification for the queue
         notification = self._generate_commission_notification(affiliate, commission_record)
         
         return {
@@ -361,10 +413,14 @@ Mythara Affiliate Program
     
     def process_weekly_payouts(self) -> List[Dict[str, Any]]:
         """
-        Process all pending payouts.
-        Runs automatically every Friday.
+        Approve all pending payouts that cleared the $50 minimum.
+
+        Honest contract: this APPROVES payouts in the ledger. It moves no
+        money — there is no PayPal/Stripe API here. Herb sends each
+        approved payout manually. Status is 'approved_for_payout',
+        never 'sent'.
         """
-        
+
         payouts_processed = []
         
         # Group by affiliate
@@ -385,55 +441,60 @@ Mythara Affiliate Program
                 continue
             
             affiliate = self.affiliates[affiliate_id]
-            
-            # Generate PayPal payout
+
+            # Approve the payout in the ledger. Money movement is manual:
+            # Herb sends this via PayPal himself.
             payout_record = {
                 'payout_id': hashlib.sha256(f"{affiliate_id}{datetime.now().isoformat()}".encode()).hexdigest()[:16],
                 'affiliate_id': affiliate_id,
                 'affiliate_email': affiliate['email'],
                 'amount': total_amount,
                 'commissions_included': [p['commission_id'] for p in payouts],
-                'method': 'paypal',
-                'status': 'sent',
-                'sent_at': datetime.now().isoformat()
+                'method': 'paypal_manual',
+                'status': 'approved_for_payout',
+                'approved_at': datetime.now().isoformat(),
+                'payout_note': 'MANUAL STEP REQUIRED: Herb sends this via PayPal.',
             }
-            
-            # Mark commissions as paid
+
+            # Mark commissions as approved (not paid — paid happens manually)
             for payout in payouts:
-                payout['status'] = 'paid'
-                payout['paid_at'] = datetime.now().isoformat()
+                payout['status'] = 'approved_for_payout'
+                payout['approved_at'] = datetime.now().isoformat()
                 payout['payout_id'] = payout_record['payout_id']
                 self.paid_commissions.append(payout)
-            
+
             # Update affiliate stats
             affiliate['total_commissions_paid'] += total_amount
-            
+
             # Remove from pending
             self.pending_payouts = [p for p in self.pending_payouts if p['affiliate_id'] != affiliate_id]
-            
-            # Generate payout confirmation email
+            self._save_state()
+
+            # Draft the payout notification (queued for approval, not sent)
             confirmation = self._generate_payout_confirmation(affiliate, payout_record)
-            
+
             payouts_processed.append({
                 'payout': payout_record,
                 'email': confirmation
             })
-        
+
         return payouts_processed
     
     def _generate_payout_confirmation(self, affiliate: Dict[str, Any], payout: Dict[str, Any]) -> str:
-        """Generate payout confirmation email."""
-        
-        return f"""Subject: Commission Paid: ${payout['amount']:.2f}
+        """Draft payout notification (queued for approval, not sent)."""
+
+        return f"""Subject: Commission Approved: ${payout['amount']:.2f}
 
 {affiliate['name']},
 
-Your commission has been sent via PayPal!
+Your commission has been approved for payout:
 
 💰 Amount: ${payout['amount']:.2f}
-📧 Sent to: {affiliate['email']}
-📅 Date: {datetime.now().strftime('%B %d, %Y')}
+📧 PayPal account: {affiliate['email']}
+📅 Approved: {datetime.now().strftime('%B %d, %Y')}
 🆔 Payout ID: {payout['payout_id']}
+
+NOTE: Herb sends payouts manually via PayPal — allow a few days.
 
 Commissions included: {len(payout['commissions_included'])}
 
@@ -476,17 +537,22 @@ Mythara Affiliate Program
 # ============================================================================
 
 if __name__ == "__main__":
-    print("🤖 Mythara Autonomous Affiliate Marketing Bot")
+    import tempfile
+    print("🤖 Mythara Affiliate Tracker (demo — synthetic data)")
     print("="*60)
-    
-    bot = AutonomousAffiliateBot()
-    
+
+    # Demo uses throwaway state and queues no drafts.
+    bot = AutonomousAffiliateBot(
+        state_path=os.path.join(tempfile.gettempdir(), "affiliate_demo_state.json"))
+
     # 1. Recruit affiliate
-    print("\n1. Recruiting affiliate...")
-    result = bot.recruit_affiliate('influencer@example.com', 'Tech Influencer', 'LinkedIn')
+    print("\n1. Registering affiliate...")
+    result = bot.recruit_affiliate('influencer@example.com', 'Tech Influencer',
+                                   'LinkedIn', queue_draft=False)
     print(f"   Affiliate ID: {result['affiliate']['affiliate_id']}")
     print(f"   Referral Code: {result['affiliate']['referral_code']}")
     print(f"   Referral Link: {result['affiliate']['referral_link']}")
+    print(f"   Welcome draft queued: {result['welcome_draft_path'] is not None} (demo: no)")
     
     # 2. Track referral click
     print("\n2. Tracking referral click...")
@@ -508,9 +574,9 @@ if __name__ == "__main__":
     print(f"   Total Commissions: ${report['total_commissions_earned']:,.2f}")
     print(f"   Pending Payouts: ${report['pending_payouts']:,.2f}")
     
-    print("\n✅ Autonomous affiliate system operational")
-    print("💡 Recruits affiliates automatically")
+    print("\n✅ Affiliate tracker demo complete")
+    print("💡 Registers affiliates; welcome emails are DRAFTS for Herb's approval")
     print("💡 Tracks referrals via Messenger Pairing")
-    print("💡 Calculates commissions via Sanctified Rules")
-    print("💡 Pays out automatically every Friday")
-    print("🔐 Zero human contact required")
+    print("💡 Calculates commissions via fixed rules")
+    print("💡 APPROVES payouts at $50 — Herb sends the money manually via PayPal")
+    print("💡 State persists in affiliate_state.json")

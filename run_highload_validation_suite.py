@@ -7,6 +7,7 @@ Copyright © 2025 Herbert Velez Jr. All rights reserved.
 """
 
 import sys
+import shlex
 import subprocess
 from pathlib import Path
 from datetime import datetime
@@ -17,8 +18,13 @@ def run_command(cmd, description):
     print(f"[HIGH-LOAD TEST] {description}")
     print(f"{'=' * 60}\n")
     try:
-        # QUICKFIX FIX: Removed shell=True to prevent command injection (CWE-78)
-        result = subprocess.run(cmd, shell=False, check=False)
+        # No shell (CWE-78): split into argv list instead of shell=True.
+        # A leading "python" is resolved to this interpreter so the
+        # launcher works where only python3 exists.
+        args = shlex.split(cmd) if isinstance(cmd, str) else list(cmd)
+        if args and args[0] == "python":
+            args[0] = sys.executable
+        result = subprocess.run(args, shell=False, check=False)
         return result.returncode
     except Exception as e:
         print(f"[ERROR] running {description}: {e}")

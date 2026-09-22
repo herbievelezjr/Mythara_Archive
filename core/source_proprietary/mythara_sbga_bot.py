@@ -2,16 +2,56 @@
 
 """
 Mythara SBGA (Small Business Growth Alliance) Integration Bot
-Manages participation in SBGA network, finds partnership opportunities,
-coordinates with grant writing team for small business grants
+Tracks participation in the SBGA network, finds partnership opportunities,
+and coordinates with the grant writing team for small business grants.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ILLUSTRATIVE SAMPLE DATA NOTICE
+  Most grant / program / perk records in this module are ILLUSTRATIVE
+  SAMPLES for demo and schema purposes — they are NOT real offerings and
+  NOT real Grants.gov listings. Every sample carries "is_sample": True
+  and source "ILLUSTRATIVE SAMPLE". Real SBA programs (e.g. SBA 7(a),
+  SBA Community Advantage) are referenced by name only; amounts,
+  deadlines, fit scores, and "SBGA advantage" claims attached to them
+  here are illustrative, not official terms. The seeded "Mythara Labs
+  SBGA membership" record is a demo placeholder, not evidence of a real
+  membership. Verify any real program at https://www.sba.gov and
+  https://www.grants.gov before acting on it.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 """
 
+import os
 import sqlite3
 import hashlib
 import json
 import requests
 from datetime import datetime
 from typing import List
+
+
+# Illustrative sample listings. These are NOT real Grants.gov data — they
+# exist so the schema, discovery flow, and reports can be exercised offline.
+# Each record is stamped is_sample=True by fetch_grants_gov_opportunities().
+_SAMPLE_GRANTS_GOV_LISTINGS = [
+    {
+        "title": "SBIR Phase I - AI/ML Technology Development",
+        "agencyName": "National Science Foundation",
+        "awardCeiling": "$275,000",
+        "closeDate": "2025-12-15",
+    },
+    {
+        "title": "STTR Phase II - Cybersecurity Innovation",
+        "agencyName": "Department of Defense",
+        "awardCeiling": "$1,100,000",
+        "closeDate": "2026-01-30",
+    },
+    {
+        "title": "Small Business Innovation Research - Healthcare AI",
+        "agencyName": "Department of Health and Human Services",
+        "awardCeiling": "$400,000",
+        "closeDate": "2025-11-25",
+    },
+]
 
 
 class MytharaSBGABot:
@@ -148,7 +188,11 @@ class MytharaSBGABot:
         self._initialize_sbga_membership()
 
     def _initialize_sbga_membership(self):
-        """Initialize Mythara Labs SBGA membership"""
+        """Seed a placeholder SBGA membership record.
+
+        This is DEMO data, not evidence of a real SBGA membership.
+        Replace with real membership details before relying on it.
+        """
         c = self.conn.cursor()
 
         # Check if membership exists
@@ -191,7 +235,8 @@ class MytharaSBGABot:
         )
 
         self.conn.commit()
-        print("[OK] Initialized SBGA membership for Mythara Labs")
+        print("[OK] Initialized demo SBGA membership record for Mythara Labs")
+        print("     (placeholder — replace with real membership details before relying on it)")
 
     def _calculate_integrity_hash(self, data: dict) -> str:
         """Calculate SHA-256 integrity hash"""
@@ -222,7 +267,18 @@ class MytharaSBGABot:
             print(f"[!] Could not connect to orchestrator: {e}")
 
     def fetch_grants_gov_opportunities(self, keywords: List[str] = None) -> List[dict]:
-        """Fetch real grant opportunities from Grants.gov (simulated - requires API key for live access)"""
+        """Fetch federal grant opportunities.
+
+        LIVE ACCESS: set the GRANTS_GOV_API_KEY environment variable
+        (register at https://www.grants.gov/web/grants/xml-extract.html)
+        for a best-effort call to the Grants.gov search API. Any failure
+        falls back to samples gracefully.
+
+        WITHOUT a key — the normal case — this returns ILLUSTRATIVE
+        SAMPLE listings, each stamped "is_sample": True with source
+        "ILLUSTRATIVE SAMPLE". Never present samples as live Grants.gov
+        data.
+        """
         if keywords is None:
             keywords = [
                 "SBIR",
@@ -234,45 +290,79 @@ class MytharaSBGABot:
                 "cybersecurity",
             ]
 
-        # Note: Grants.gov requires API key registration at https://www.grants.gov/web/grants/xml-extract.html
-        # For now, returning curated federal grant opportunities relevant to Mythara
-        print(
-            f"[INFO] Grants.gov integration ready - register at {self.grants_gov_xml} for API key"
-        )
-        print(f"[INFO] Searching for: {', '.join(keywords[:3])}")
+        api_key = os.environ.get("GRANTS_GOV_API_KEY", "")
+        if api_key:
+            live = self._fetch_grants_gov_live(api_key, keywords)
+            if live:
+                return live
+            print(
+                "[WARN] Live Grants.gov lookup failed; "
+                "falling back to ILLUSTRATIVE SAMPLES"
+            )
 
-        # Curated federal opportunities based on Grants.gov listings
-        federal_opportunities = [
-            {
-                "title": "SBIR Phase I - AI/ML Technology Development",
-                "agencyName": "National Science Foundation",
-                "awardCeiling": "$275,000",
-                "closeDate": "2025-12-15",
-            },
-            {
-                "title": "STTR Phase II - Cybersecurity Innovation",
-                "agencyName": "Department of Defense",
-                "awardCeiling": "$1,100,000",
-                "closeDate": "2026-01-30",
-            },
-            {
-                "title": "Small Business Innovation Research - Healthcare AI",
-                "agencyName": "Department of Health and Human Services",
-                "awardCeiling": "$400,000",
-                "closeDate": "2025-11-25",
-            },
+        # Sample mode: the previously "curated" listings were invented, so
+        # they are returned explicitly labeled as samples.
+        print(
+            "[INFO] Grants.gov sample mode (no API key): returning "
+            "ILLUSTRATIVE SAMPLE listings, not real Grants.gov data."
+        )
+        print(f"[INFO] Sample keywords: {', '.join(keywords[:3])}")
+        return [
+            dict(
+                listing,
+                is_sample=True,
+                source="ILLUSTRATIVE SAMPLE — not a real Grants.gov listing",
+            )
+            for listing in _SAMPLE_GRANTS_GOV_LISTINGS
         ]
 
-        return federal_opportunities
+    def _fetch_grants_gov_live(self, api_key: str, keywords: List[str]) -> List[dict]:
+        """Best-effort live Grants.gov search. Returns [] on any failure."""
+        try:
+            resp = requests.post(
+                "https://api.grants.gov/v1/api/search2",
+                headers={"X-Api-Key": api_key, "Content-Type": "application/json"},
+                json={
+                    "keyword": " ".join(keywords[:3]),
+                    "oppStatuses": "posted",
+                    "rows": 5,
+                },
+                timeout=10,
+            )
+            resp.raise_for_status()
+            hits = resp.json().get("oppHits", [])
+            return [
+                {
+                    "title": h.get("title", "Unknown Grant"),
+                    "agencyName": h.get("agencyName", "Federal Agency"),
+                    "awardCeiling": h.get("awardCeiling", "Varies"),
+                    "closeDate": h.get("closeDate", "See listing"),
+                    "is_sample": False,
+                    "source": "Grants.gov API (live)",
+                }
+                for h in hits
+            ]
+        except Exception as e:
+            print(f"[WARN] Grants.gov live lookup failed: {e}")
+            return []
 
     def discover_sbga_grants(self) -> List[dict]:
-        """Discover SBGA-exclusive small business grants + Grants.gov opportunities"""
+        """Discover small business grant records.
+
+        EVERY record returned is an ILLUSTRATIVE SAMPLE (is_sample=True),
+        including the Grants.gov-shaped ones when no API key is configured.
+        Real SBA programs (SBA 7(a), SBA Community Advantage) are
+        referenced by their real names only — amounts shown are the real
+        program maximums; deadlines, fit scores, and "SBGA advantage" perk
+        claims are illustrative, not official terms. The "SBGA Technology
+        Innovation Fund" is an invented sample program, not a real fund.
+        """
         c = self.conn.cursor()
 
-        # Fetch real grants from Grants.gov API
+        # Fetch opportunities (live only with GRANTS_GOV_API_KEY; samples otherwise)
         live_grants = self.fetch_grants_gov_opportunities()
 
-        # Parse Grants.gov data into our format
+        # Parse into our format, propagating the sample/live labeling
         grants_gov_parsed = []
         for opp in live_grants[:5]:  # Top 5 opportunities
             grants_gov_parsed.append(
@@ -282,21 +372,26 @@ class MytharaSBGABot:
                     "type": "sba",  # Federal opportunities
                     "amount": opp.get("awardCeiling", "Varies"),
                     "deadline": opp.get("closeDate", "See listing"),
-                    "sbga_advantage": "Federal opportunity - SBGA provides application support",
+                    "sbga_advantage": "ILLUSTRATIVE sample note — not a real program term",
                     "fit_score": 85,
+                    "is_sample": opp.get("is_sample", True),
+                    "source": opp.get("source", "ILLUSTRATIVE SAMPLE"),
                 }
             )
 
-        # Combine with SBGA-exclusive grants
+        # Sample program records. Real SBA programs keep their real names;
+        # everything else about each record is illustrative.
         sbga_grants = grants_gov_parsed + [
             {
                 "name": "SBA Community Advantage Loan Program",
                 "grantor": "Small Business Administration",
                 "type": "sba",
-                "amount": "$250,000",
-                "deadline": "2025-12-31",
-                "sbga_advantage": "SBGA members get priority review and lower rates",
+                "amount": "$350,000",
+                "deadline": "Rolling",
+                "sbga_advantage": "ILLUSTRATIVE: sample perk text — verify real terms at sba.gov",
                 "fit_score": 90,
+                "is_sample": True,
+                "source": "ILLUSTRATIVE SAMPLE — real SBA program name; other fields are illustrative, not official terms",
             },
             {
                 "name": "SBGA Technology Innovation Fund",
@@ -304,8 +399,10 @@ class MytharaSBGABot:
                 "type": "sbga_exclusive",
                 "amount": "$50,000",
                 "deadline": "2026-01-15",
-                "sbga_advantage": "Only available to SBGA members, fast-track approval",
+                "sbga_advantage": "ILLUSTRATIVE: invented sample perk — no such fund exists",
                 "fit_score": 95,
+                "is_sample": True,
+                "source": "ILLUSTRATIVE SAMPLE — invented program, not a real fund",
             },
             {
                 "name": "Regional Small Business Infrastructure Grant",
@@ -313,8 +410,10 @@ class MytharaSBGABot:
                 "type": "regional",
                 "amount": "$100,000",
                 "deadline": "2025-11-30",
-                "sbga_advantage": "SBGA provides application support and letters of recommendation",
+                "sbga_advantage": "ILLUSTRATIVE: sample perk text — not a real program",
                 "fit_score": 85,
+                "is_sample": True,
+                "source": "ILLUSTRATIVE SAMPLE — invented program, not a real grant",
             },
             {
                 "name": "Minority-Owned Business Technology Grant",
@@ -322,8 +421,10 @@ class MytharaSBGABot:
                 "type": "minority_owned",
                 "amount": "$75,000",
                 "deadline": "2026-02-28",
-                "sbga_advantage": "SBGA diversity certification expedites eligibility",
+                "sbga_advantage": "ILLUSTRATIVE: sample perk text — not a real program",
                 "fit_score": 80,
+                "is_sample": True,
+                "source": "ILLUSTRATIVE SAMPLE — invented program (NMSDC is a real org; this grant is not)",
             },
             {
                 "name": "SBA 7(a) Loan Guarantee Program",
@@ -331,8 +432,10 @@ class MytharaSBGABot:
                 "type": "sba",
                 "amount": "$5,000,000",
                 "deadline": "Rolling",
-                "sbga_advantage": "SBGA members qualify for reduced fees and faster processing",
+                "sbga_advantage": "ILLUSTRATIVE: sample perk text — verify real terms at sba.gov",
                 "fit_score": 88,
+                "is_sample": True,
+                "source": "ILLUSTRATIVE SAMPLE — real SBA program name; other fields are illustrative, not official terms",
             },
         ]
 
@@ -375,7 +478,7 @@ class MytharaSBGABot:
                 pass  # Already exists
 
         self.conn.commit()
-        self._log_action(f"Discovered {discovered_count} SBGA-exclusive grants")
+        self._log_action(f"Recorded {discovered_count} ILLUSTRATIVE SAMPLE grant records")
 
         return sbga_grants
 
@@ -639,11 +742,18 @@ class MytharaSBGABot:
 ================================================================================
 MYTHARA SBGA INTEGRATION BOT - ACTIVITY REPORT
 ================================================================================
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ILLUSTRATIVE SAMPLE DATA: grant / program / perk records in this report are
+SAMPLES for demo purposes — not real Grants.gov listings and not real
+offerings. Verify any real program at https://www.sba.gov or
+https://www.grants.gov before acting on it.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 SBGA MEMBERSHIP:
    Status: Active Partner Member
    Member Since: {membership[1] if membership else 'N/A'}
    Membership Type: {membership[0] if membership else 'N/A'}
+   (demo placeholder record — replace with real membership details)
 
 NETWORK CONNECTIONS:
    Total SBGA Connections: {total_connections}
@@ -662,7 +772,7 @@ EVENT PARTICIPATION:
 RESOURCE UTILIZATION:
    SBGA Resources Utilized: {resources_utilized}
 
-TOP 5 SBGA GRANT OPPORTUNITIES:
+TOP 5 GRANT RECORDS (ILLUSTRATIVE SAMPLES — NOT REAL LISTINGS):
 """
 
         c.execute("""
@@ -738,9 +848,11 @@ if __name__ == "__main__":
     bot = MytharaSBGABot()
 
     # Demo workflow
-    print("\n[DEMO] Discovering SBGA-exclusive grants\n")
+    print("\n[DEMO] Recording illustrative sample grant records\n")
     grants = bot.discover_sbga_grants()
-    print(f"[OK] Discovered {len(grants)} SBGA-exclusive grants")
+    samples = sum(1 for g in grants if g.get("is_sample"))
+    print(f"[OK] Recorded {len(grants)} grant records ({samples} labeled ILLUSTRATIVE SAMPLES)")
+    print("     (live Grants.gov data requires GRANTS_GOV_API_KEY; samples are not real listings)")
 
     print("\n[DEMO] Adding SBGA network connections\n")
     conn1 = bot.add_sbga_connection(
