@@ -47,8 +47,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-
-
 class UsageTracking(Base):
     """
     API call usage tracking per API key.
@@ -89,9 +87,7 @@ class AuditLog(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     api_key = Column(String, index=True, nullable=True)
-    action = Column(
-        String, nullable=False
-    )  # e.g., "api_call", "strike_issued"
+    action = Column(String, nullable=False)  # e.g., "api_call", "strike_issued"
     details = Column(JSON, nullable=True)
     ip_address = Column(String, nullable=True)
     user_agent = Column(String, nullable=True)
@@ -150,13 +146,9 @@ def init_db():
         raise
 
 
-
-
 def get_usage_tracking(db: Session, api_key: str) -> Optional[UsageTracking]:
     """Get usage tracking for API key."""
     return db.query(UsageTracking).filter(UsageTracking.api_key == api_key).first()
-
-
 
 
 def issue_strike(db: Session, api_key: str, reason: str) -> int:

@@ -1137,7 +1137,6 @@ def track_api_usage(api_key: str, employee_count: int) -> Dict[str, Any]:
     }
 
 
-
 # ===================== STATE MANAGEMENT =====================
 # Initialize BR_STATE in Redis if available, otherwise use in-memory
 if REDIS_ENABLED and redis_cache:
@@ -1224,8 +1223,6 @@ CONVERSATION_HISTORY: Dict[str, Any] = {}
 unified_compliance = UnifiedComplianceFramework()
 
 
-
-
 # ===================== STARTUP TASKS =====================
 @app.on_event("startup")
 async def startup_tasks():
@@ -1237,8 +1234,6 @@ async def startup_tasks():
 
         asyncio.create_task(monitor_db_pool_periodically())
         logger.info("✅ Database pool monitoring started")
-
-
 
 
 async def monitor_db_pool_periodically():
@@ -2082,8 +2077,6 @@ async def dual_framing_dashboard(
     dashboard = format_for_manager_dashboard(metrics, mode, include_kpis=True)
 
     return dashboard
-
-
 
 
 @app.get("/v1/admin/regulation-status")
