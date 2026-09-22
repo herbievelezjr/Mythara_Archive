@@ -10,7 +10,7 @@ Proprietary and Confidential.
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
 from typing import Optional, Dict, Any
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 import logging
 
@@ -24,10 +24,7 @@ SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL", "Mythara.Engine@yahoo.com")
 
 
 def send_email(
-    to_email: str,
-    subject: str,
-    body_html: str,
-    body_text: str
+    to_email: str, subject: str, body_html: str, body_text: str
 ) -> Dict[str, Any]:
     """
     Send email via SendGrid.
@@ -36,22 +33,24 @@ def send_email(
     if not SENDGRID_API_KEY:
         logger.error("SENDGRID_API_KEY not configured - email not sent")
         return {"success": False, "error": "SendGrid not configured"}
-    
+
     try:
         message = Mail(
             from_email=Email(FROM_EMAIL, FROM_NAME),
             to_emails=To(to_email),
             subject=subject,
             plain_text_content=Content("text/plain", body_text),
-            html_content=Content("text/html", body_html)
+            html_content=Content("text/html", body_html),
         )
-        
+
         sg = SendGridAPIClient(SENDGRID_API_KEY)
         response = sg.send(message)
-        
-        logger.info(f"Email sent to {to_email}: {subject} (status {response.status_code})")
+
+        logger.info(
+            f"Email sent to {to_email}: {subject} (status {response.status_code})"
+        )
         return {"success": True, "status_code": response.status_code}
-    
+
     except Exception as e:
         logger.error(f"Email send failed to {to_email}: {e}")
         return {"success": False, "error": str(e)}
@@ -63,14 +62,14 @@ def send_api_key_delivery(
     company_name: str,
     employee_count: int,
     total_limit: int,
-    pilot_expires: str
+    pilot_expires: str,
 ) -> Dict[str, Any]:
     """
     Send API key delivery email post-payment.
     Includes quick start guide and expiration info.
     """
     subject = f"🌱 Your Mythara Pilot API Key - {company_name}"
-    
+
     body_html = f"""
     <html>
     <head>
@@ -152,7 +151,7 @@ curl -X GET https://mythara-engine.railway.app/v1/pilot/status \\
     </body>
     </html>
     """
-    
+
     body_text = f"""
 🌱 Welcome to Mythara Engine Pilot - {company_name}
 
@@ -197,7 +196,7 @@ Mythara Engine
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
     """
-    
+
     return send_email(to_email, subject, body_html, body_text)
 
 
@@ -207,7 +206,7 @@ def send_usage_alert_80_percent(
     company_name: str,
     calls_used: int,
     total_limit: int,
-    pilot_expires: str
+    pilot_expires: str,
 ) -> Dict[str, Any]:
     """
     Send alert when pilot hits 80% of call limit.
@@ -215,9 +214,9 @@ def send_usage_alert_80_percent(
     """
     percent_used = (calls_used / total_limit) * 100
     calls_remaining = total_limit - calls_used
-    
+
     subject = f"⚠️ 80% Usage Alert - {company_name} Pilot"
-    
+
     body_html = f"""
     <html>
     <head>
@@ -275,7 +274,7 @@ def send_usage_alert_80_percent(
     </body>
     </html>
     """
-    
+
     body_text = f"""
 ⚠️ USAGE ALERT: 80% of Pilot Limit Reached
 
@@ -308,7 +307,7 @@ To upgrade, email: {SUPPORT_EMAIL}
 Refund Policy: ALL SALES FINAL - Exchanges to equal or lesser value only.
 Support: {SUPPORT_EMAIL}
     """
-    
+
     return send_email(to_email, subject, body_html, body_text)
 
 
@@ -318,7 +317,7 @@ def send_expiration_alert_24hr(
     company_name: str,
     calls_used: int,
     total_limit: int,
-    pilot_expires: str
+    pilot_expires: str,
 ) -> Dict[str, Any]:
     """
     Send alert 24 hours before pilot expiration.
@@ -326,9 +325,9 @@ def send_expiration_alert_24hr(
     """
     calls_remaining = total_limit - calls_used
     percent_used = (calls_used / total_limit) * 100
-    
+
     subject = f"⏰ 24 Hour Warning - {company_name} Pilot Expires Tomorrow"
-    
+
     body_html = f"""
     <html>
     <head>
@@ -395,7 +394,7 @@ def send_expiration_alert_24hr(
     </body>
     </html>
     """
-    
+
     body_text = f"""
 ⏰ FINAL WARNING: Pilot Expires in 24 Hours
 
@@ -435,7 +434,7 @@ Refund Policy: ALL SALES FINAL - Exchanges to equal or lesser value only.
 No refunds, no extensions, no exceptions.
 Support: {SUPPORT_EMAIL}
     """
-    
+
     return send_email(to_email, subject, body_html, body_text)
 
 
@@ -445,7 +444,7 @@ def send_strike_warning(
     company_name: str,
     strike_count: int,
     reason: str,
-    suspended_until: Optional[datetime] = None
+    suspended_until: Optional[datetime] = None,
 ) -> Dict[str, Any]:
     """
     Send strike notification to pilot for self-regulation violation.
@@ -459,7 +458,7 @@ def send_strike_warning(
     else:
         subject = f"❌ Strike #3: Account Terminated - {company_name}"
         action = "Your account has been permanently terminated. Contact support if you believe this is an error."
-    
+
     body_html = f"""
     <html>
     <body style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -486,7 +485,7 @@ def send_strike_warning(
     </body>
     </html>
     """
-    
+
     body_text = f"""
 Self-Regulation Strike #{strike_count}
 
@@ -506,5 +505,5 @@ GRADUATED ENFORCEMENT
 
 Support: {SUPPORT_EMAIL}
     """
-    
+
     return send_email(to_email, subject, body_html, body_text)

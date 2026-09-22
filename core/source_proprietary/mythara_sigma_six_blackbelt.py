@@ -33,7 +33,6 @@ import hashlib
 import json
 import os
 import sqlite3
-import sys
 import traceback
 import uuid
 from dataclasses import dataclass
@@ -41,8 +40,10 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
+
 try:
-    from pydantic import BaseModel, Field, PositiveInt, validator  # type: ignore
+    from pydantic import BaseModel, Field, PositiveInt  # type: ignore
+
     USING_PYDANTIC = True
 except Exception:  # pragma: no cover - fallback when pydantic not installed
     BaseModel = object  # type: ignore
@@ -52,7 +53,6 @@ except Exception:  # pragma: no cover - fallback when pydantic not installed
 
 from typing import Annotated
 import math
-
 
 # -----------------------------
 # Configuration
@@ -65,13 +65,13 @@ VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "DEMO_ONLY_DO_NOT_USE_IN_PROD")
 # Pydantic Models (Validation)
 # -----------------------------
 if USING_PYDANTIC:
+
     class DefectEvent(BaseModel):
         process_id: str
         defect_type: Annotated[str, Field(min_length=1, max_length=128)]
         severity: Annotated[str, Field(pattern=r"^(low|medium|high|critical)$")]
         description: Optional[str] = None
         occurred_at: Annotated[datetime, Field(default_factory=datetime.now)]
-
 
     class ProcessMetric(BaseModel):
         process_id: str
@@ -82,7 +82,6 @@ if USING_PYDANTIC:
         sample_mean: Optional[float] = None
         sample_std: Optional[Annotated[float, Field(gt=0.0)]] = None
 
-
     class FMEAItem(BaseModel):
         process_id: str
         function: str
@@ -92,11 +91,11 @@ if USING_PYDANTIC:
         occurrence: Annotated[int, Field(ge=1, le=10)]
         detection: Annotated[int, Field(ge=1, le=10)]
 
-
     class StakeholderFeedback(BaseModel):
         process_id: str
         stakeholder: str
         feedback: str
+
 else:
     # Fallback dataclass models with basic validation
     from dataclasses import dataclass, asdict
@@ -181,10 +180,35 @@ def _norm_ppf(p: float) -> float:
         raise ValueError("p must be in (0,1)")
 
     # Coefficients
-    a = [-3.969683028665376e01, 2.209460984245205e02, -2.759285104469687e02, 1.383577518672690e02, -3.066479806614716e01, 2.506628277459239e00]
-    b = [-5.447609879822406e01, 1.615858368580409e02, -1.556989798598866e02, 6.680131188771972e01, -1.328068155288572e01]
-    c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e00, -2.549732539343734e00, 4.374664141464968e00, 2.938163982698783e00]
-    d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e00, 3.754408661907416e00]
+    a = [
+        -3.969683028665376e01,
+        2.209460984245205e02,
+        -2.759285104469687e02,
+        1.383577518672690e02,
+        -3.066479806614716e01,
+        2.506628277459239e00,
+    ]
+    b = [
+        -5.447609879822406e01,
+        1.615858368580409e02,
+        -1.556989798598866e02,
+        6.680131188771972e01,
+        -1.328068155288572e01,
+    ]
+    c = [
+        -7.784894002430293e-03,
+        -3.223964580411365e-01,
+        -2.400758277161838e00,
+        -2.549732539343734e00,
+        4.374664141464968e00,
+        2.938163982698783e00,
+    ]
+    d = [
+        7.784695709041462e-03,
+        3.224671290700398e-01,
+        2.445134137142996e00,
+        3.754408661907416e00,
+    ]
 
     plow = 0.02425
     phigh = 1 - plow
@@ -196,17 +220,16 @@ def _norm_ppf(p: float) -> float:
         )
     if phigh < p:
         q = math.sqrt(-2 * math.log(1 - p))
-        return -((((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / (
-            ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
-        ))
+        return -(
+            (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5])
+            / (((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1))
+        )
 
     q = p - 0.5
     r = q * q
     return (
         (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q
-    ) / (
-        (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
-    )
+    ) / ((((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1))
 
 
 def sigma_from_dpmo(dpmo: float) -> float:
@@ -239,8 +262,7 @@ class MytharaSigmaSixBlackbelt:
         conn = sqlite3.connect(self.db_path)
         cur = conn.cursor()
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS processes (
                 process_id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
@@ -250,11 +272,9 @@ class MytharaSigmaSixBlackbelt:
                 baseline_defects INTEGER DEFAULT 0,
                 created_at TEXT NOT NULL
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS defects (
                 defect_id TEXT PRIMARY KEY,
                 process_id TEXT NOT NULL,
@@ -264,11 +284,9 @@ class MytharaSigmaSixBlackbelt:
                 occurred_at TEXT NOT NULL,
                 FOREIGN KEY(process_id) REFERENCES processes(process_id)
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS metrics (
                 metric_id TEXT PRIMARY KEY,
                 process_id TEXT NOT NULL,
@@ -280,11 +298,9 @@ class MytharaSigmaSixBlackbelt:
                 updated_at TEXT NOT NULL,
                 FOREIGN KEY(process_id) REFERENCES processes(process_id)
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS fmea (
                 fmea_id TEXT PRIMARY KEY,
                 process_id TEXT NOT NULL,
@@ -298,11 +314,9 @@ class MytharaSigmaSixBlackbelt:
                 created_at TEXT NOT NULL,
                 FOREIGN KEY(process_id) REFERENCES processes(process_id)
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS feedback (
                 feedback_id TEXT PRIMARY KEY,
                 process_id TEXT NOT NULL,
@@ -312,11 +326,9 @@ class MytharaSigmaSixBlackbelt:
                 created_at TEXT NOT NULL,
                 FOREIGN KEY(process_id) REFERENCES processes(process_id)
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS invocations (
                 invocation_id TEXT PRIMARY KEY,
                 action TEXT NOT NULL,
@@ -325,19 +337,16 @@ class MytharaSigmaSixBlackbelt:
                 integrity_hash TEXT NOT NULL,
                 created_at TEXT NOT NULL
             )
-            """
-        )
+            """)
 
-        cur.execute(
-            """
+        cur.execute("""
             CREATE TABLE IF NOT EXISTS shadow_events (
                 event_id TEXT PRIMARY KEY,
                 action TEXT NOT NULL,
                 reason TEXT NOT NULL,
                 created_at TEXT NOT NULL
             )
-            """
-        )
+            """)
 
         conn.commit()
         conn.close()
@@ -350,7 +359,11 @@ class MytharaSigmaSixBlackbelt:
         try:
             resp = requests.post(
                 f"{ORCHESTRATOR_URL}/register_bot",
-                json={"vp_token": VP_MASTER_TOKEN, "bot_id": self.bot_id, "bot_name": "Sigma Six Blackbelt"},
+                json={
+                    "vp_token": VP_MASTER_TOKEN,
+                    "bot_id": self.bot_id,
+                    "bot_name": "Sigma Six Blackbelt",
+                },
                 timeout=4,
             )
             if resp.status_code == 200:
@@ -367,7 +380,9 @@ class MytharaSigmaSixBlackbelt:
         """Compute Blessings Reservoir delta from improvements and sentiment.
         Scale: 0..100; improvements in sigma (delta) weighted 70%, sentiment 30%.
         """
-        imp_score = max(0.0, min(100.0, improvements * 20.0))  # +0.5 sigma -> +10 points
+        imp_score = max(
+            0.0, min(100.0, improvements * 20.0)
+        )  # +0.5 sigma -> +10 points
         sent_score = max(-50, min(50, sentiment)) + 50  # map [-50,50] -> [0,100]
         return round(0.7 * imp_score + 0.3 * sent_score, 1)
 
@@ -383,14 +398,26 @@ class MytharaSigmaSixBlackbelt:
         conn.close()
         print(f"[SHADOW] Fallback recorded for action '{action}': {reason}")
 
-    def _log_invocation(self, action: str, blessings: float, success: bool, payload: Dict[str, Any]) -> str:
+    def _log_invocation(
+        self, action: str, blessings: float, success: bool, payload: Dict[str, Any]
+    ) -> str:
         invocation_id = uuid.uuid4().hex
         # Ensure JSON-serializable payload (convert datetimes, etc.)
         safe_payload = json.loads(
-            json.dumps(payload, default=lambda o: o.isoformat() if isinstance(o, datetime) else str(o))
+            json.dumps(
+                payload,
+                default=lambda o: o.isoformat() if isinstance(o, datetime) else str(o),
+            )
         )
         integrity_hash = hashlib.sha256(
-            json.dumps({"action": action, "payload": safe_payload, "ts": datetime.now().isoformat()}, sort_keys=True).encode()
+            json.dumps(
+                {
+                    "action": action,
+                    "payload": safe_payload,
+                    "ts": datetime.now().isoformat(),
+                },
+                sort_keys=True,
+            ).encode()
         ).hexdigest()[:16]
         conn = sqlite3.connect(self.db_path)
         cur = conn.cursor()
@@ -410,16 +437,33 @@ class MytharaSigmaSixBlackbelt:
         return invocation_id
 
     # ---------- Process Management ----------
-    def upsert_process(self, name: str, owner: str, opportunities_per_unit: int, baseline_units: int = 0, baseline_defects: int = 0) -> str:
-        process_id = hashlib.sha256(f"{name}|{owner}|{opportunities_per_unit}".encode()).hexdigest()[:16]
+    def upsert_process(
+        self,
+        name: str,
+        owner: str,
+        opportunities_per_unit: int,
+        baseline_units: int = 0,
+        baseline_defects: int = 0,
+    ) -> str:
+        process_id = hashlib.sha256(
+            f"{name}|{owner}|{opportunities_per_unit}".encode()
+        ).hexdigest()[:16]
         conn = sqlite3.connect(self.db_path)
         cur = conn.cursor()
-        cur.execute("SELECT process_id FROM processes WHERE process_id = ?", (process_id,))
+        cur.execute(
+            "SELECT process_id FROM processes WHERE process_id = ?", (process_id,)
+        )
         exists = cur.fetchone()
         if exists:
             cur.execute(
                 "UPDATE processes SET owner=?, opportunities_per_unit=?, baseline_units=?, baseline_defects=? WHERE process_id=?",
-                (owner, opportunities_per_unit, baseline_units, baseline_defects, process_id),
+                (
+                    owner,
+                    opportunities_per_unit,
+                    baseline_units,
+                    baseline_defects,
+                    process_id,
+                ),
             )
         else:
             cur.execute(
@@ -463,7 +507,9 @@ class MytharaSigmaSixBlackbelt:
     # ---------- Metrics ----------
     def update_metrics(self, metric: ProcessMetric) -> Tuple[float, float]:
         try:
-            dpmo = (metric.defects / (metric.opportunities_per_unit * metric.units)) * 1_000_000.0
+            dpmo = (
+                metric.defects / (metric.opportunities_per_unit * metric.units)
+            ) * 1_000_000.0
         except ZeroDivisionError:
             dpmo = float("inf")
         sigma = sigma_from_dpmo(dpmo if dpmo != float("inf") else 1_000_000.0)
@@ -541,7 +587,14 @@ class MytharaSigmaSixBlackbelt:
         rec_id = uuid.uuid4().hex[:16]
         cur.execute(
             "INSERT INTO feedback VALUES (?, ?, ?, ?, ?, ?)",
-            (rec_id, feedback.process_id, feedback.stakeholder, feedback.feedback[:2000], score, datetime.now().isoformat()),
+            (
+                rec_id,
+                feedback.process_id,
+                feedback.stakeholder,
+                feedback.feedback[:2000],
+                score,
+                datetime.now().isoformat(),
+            ),
         )
         conn.commit()
         conn.close()
@@ -560,8 +613,7 @@ class MytharaSigmaSixBlackbelt:
             process_count = cur.fetchone()[0]
 
             # Latest metrics by process
-            cur.execute(
-                """
+            cur.execute("""
                 SELECT p.process_id, p.name, p.owner,
                        m.dpmo, m.sigma_level, m.updated_at
                 FROM processes p
@@ -571,8 +623,7 @@ class MytharaSigmaSixBlackbelt:
                     FROM metrics
                 ) m ON p.process_id = m.process_id AND m.rn = 1
                 ORDER BY p.name ASC
-                """
-            )
+                """)
             rows = cur.fetchall()
 
             # Aggregates
@@ -589,10 +640,11 @@ class MytharaSigmaSixBlackbelt:
             avg_sent = 0 if avg_sent is None else int(avg_sent)
 
             # Blessings - last invocation
-            cur.execute("SELECT blessings_score, integrity_hash, created_at FROM invocations ORDER BY created_at DESC LIMIT 1")
+            cur.execute(
+                "SELECT blessings_score, integrity_hash, created_at FROM invocations ORDER BY created_at DESC LIMIT 1"
+            )
             inv = cur.fetchone()
             last_bless = inv[0] if inv else 0.0
-            last_hash = inv[1] if inv else "N/A"
 
             conn.close()
 
@@ -604,7 +656,9 @@ class MytharaSigmaSixBlackbelt:
                 "avg_sentiment": avg_sent,
                 "last_blessings": last_bless,
             }
-            integrity = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
+            integrity = hashlib.sha256(
+                json.dumps(payload, sort_keys=True).encode()
+            ).hexdigest()[:16]
 
             lines = []
             lines.append("=" * 60)
@@ -625,7 +679,9 @@ class MytharaSigmaSixBlackbelt:
             for pid, name, owner, dpmo, sigma, updated in rows:
                 dpmo_str = f"{dpmo:.1f}" if dpmo is not None else "n/a"
                 sigma_str = f"{sigma:.3f}" if sigma is not None else "n/a"
-                lines.append(f"  - {name} (owner: {owner or 'n/a'}) — Sigma: {sigma_str} | DPMO: {dpmo_str}")
+                lines.append(
+                    f"  - {name} (owner: {owner or 'n/a'}) — Sigma: {sigma_str} | DPMO: {dpmo_str}"
+                )
 
             lines.append("")
             lines.append("SSIP COMPLIANCE:")
@@ -635,8 +691,12 @@ class MytharaSigmaSixBlackbelt:
             lines.append("  - Invocation IDs: Logged with integrity hashes")
             lines.append("=" * 60)
 
-            blessings = self._bless(improvements=max(0.0, avg_sigma - 3.0), sentiment=avg_sent)
-            self._log_invocation("generate_enterprise_quality_report", blessings, True, payload)
+            blessings = self._bless(
+                improvements=max(0.0, avg_sigma - 3.0), sentiment=avg_sent
+            )
+            self._log_invocation(
+                "generate_enterprise_quality_report", blessings, True, payload
+            )
             return "\n".join(lines)
 
         except Exception as e:
@@ -661,22 +721,62 @@ if __name__ == "__main__":
     )
 
     # Record a couple of defects
-    bot.record_defect(DefectEvent(process_id=pid, defect_type="LateDelivery", severity="medium", description="Missed 1h SLA"))
-    bot.record_defect(DefectEvent(process_id=pid, defect_type="WrongSKU", severity="high", description="Incorrect SKU sent"))
+    bot.record_defect(
+        DefectEvent(
+            process_id=pid,
+            defect_type="LateDelivery",
+            severity="medium",
+            description="Missed 1h SLA",
+        )
+    )
+    bot.record_defect(
+        DefectEvent(
+            process_id=pid,
+            defect_type="WrongSKU",
+            severity="high",
+            description="Incorrect SKU sent",
+        )
+    )
 
     # Update metrics
-    bot.update_metrics(ProcessMetric(process_id=pid, defects=12, opportunities_per_unit=10, units=2000, cpk=1.4))
+    bot.update_metrics(
+        ProcessMetric(
+            process_id=pid, defects=12, opportunities_per_unit=10, units=2000, cpk=1.4
+        )
+    )
 
     # FMEA quick pass
     bot.run_fmea(
         [
-            FMEAItem(process_id=pid, function="Pick&Pack", failure_mode="Mis-pick", effects="Wrong item shipped", severity=7, occurrence=4, detection=5),
-            FMEAItem(process_id=pid, function="Labeling", failure_mode="Wrong label", effects="Customer returns", severity=6, occurrence=3, detection=6),
+            FMEAItem(
+                process_id=pid,
+                function="Pick&Pack",
+                failure_mode="Mis-pick",
+                effects="Wrong item shipped",
+                severity=7,
+                occurrence=4,
+                detection=5,
+            ),
+            FMEAItem(
+                process_id=pid,
+                function="Labeling",
+                failure_mode="Wrong label",
+                effects="Customer returns",
+                severity=6,
+                occurrence=3,
+                detection=6,
+            ),
         ]
     )
 
     # Emotional fidelity
-    bot.add_feedback(StakeholderFeedback(process_id=pid, stakeholder="VP Operations", feedback="Great improvement, faster resolution, fewer defects."))
+    bot.add_feedback(
+        StakeholderFeedback(
+            process_id=pid,
+            stakeholder="VP Operations",
+            feedback="Great improvement, faster resolution, fewer defects.",
+        )
+    )
 
     # Report
     print(bot.generate_enterprise_quality_report())

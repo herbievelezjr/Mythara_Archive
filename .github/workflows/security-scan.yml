@@ -45,14 +45,14 @@ jobs:
           pip-audit --desc
         continue-on-error: true
       
-      # Blocking: the exposed sk_pilot_ key has been purged from history.
+      # Blocking filesystem scan: catches any secret committed to the tree.
+      # (History was purged separately; base/head SHAs are unreliable across
+      # push, PR, and scheduled triggers, so scan the working tree instead.)
       - name: Scan for secrets
         uses: trufflesecurity/trufflehog@main
         continue-on-error: false
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
       
       - name: Upload security reports
         uses: actions/upload-artifact@v4
