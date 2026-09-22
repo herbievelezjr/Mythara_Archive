@@ -33,7 +33,10 @@ import os
 import sys
 import time
 import json
-import psutil
+try:
+    import psutil
+except ImportError:  # optional: system-health metrics degrade gracefully
+    psutil = None
 import logging
 import re
 import shutil
@@ -43,6 +46,20 @@ from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+
+try:
+    from soul_cradle.bot_witness import (
+        witness_action,
+        finding_evidence,
+        WitnessUnavailable,
+    )
+except ImportError:  # pragma: no cover — direct-script fallback
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from soul_cradle.bot_witness import (
+        witness_action,
+        finding_evidence,
+        WitnessUnavailable,
+    )
 
 # Add core to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core', 'source_proprietary'))
@@ -192,6 +209,7 @@ class AMIRBot:
         self.threat_predictions: List[ThreatPrediction] = []
         self.strategic_insights: List[StrategicInsight] = []
         self.attack_pattern_history = []
+        self.last_quickfix_summary = None  # cached severity counts from quickfix_scan()
         self.business_impact_score = 0.0  # Real-time risk quantification
         self.autonomous_decisions = 0  # Self-directed actions taken
         self.zero_day_responses = 0
@@ -312,6 +330,13 @@ class AMIRBot:
     
     def _get_system_health(self) -> SystemHealth:
         """Get current system health metrics"""
+        if psutil is None:
+            return SystemHealth(
+                cpu_usage=0.0, memory_usage=0.0, disk_usage=0.0,
+                network_status="unknown: psutil not installed",
+                active_processes=0, uptime_hours=0.0,
+                status=SystemStatus.OFFLINE,
+            )
         cpu = psutil.cpu_percent(interval=0.1)
         memory = psutil.virtual_memory().percent
         disk = psutil.disk_usage('/').percent
@@ -569,71 +594,42 @@ class AMIRBot:
         print("\n✓ System optimization complete")
         print("  All systems running at peak efficiency")
     
+    def record_attack_pattern(self, pattern: Dict[str, Any]) -> None:
+        """
+        Record a real observed attack pattern (e.g. from S.E.R.E. quarantine
+        log or ADAPT findings). This is what predict_threats() learns from —
+        nothing is learned from patterns that were never recorded.
+        """
+        entry = {
+            "recorded_at": datetime.utcnow().isoformat(),
+            "pattern": pattern,
+        }
+        self.attack_pattern_history.append(entry)
+
     def predict_threats(self) -> List[ThreatPrediction]:
-        """ONE RING: Static illustrative threat scenarios (reference baseline, not live predictions)"""
-        print("\n🔮 THE ONE RING: Illustrative threat baseline (static reference scenarios)...")
-        print("    Processing attack pattern history...")
-        
+        """ONE RING: Threat pressure derived from live local signals.
+
+        Each scenario's score (0.0-1.0) is computed deterministically from
+        real inputs: Q.U.I.C.K.F.I.X. scan findings, current system health,
+        and recorded attack patterns. These are heuristic pressure indexes,
+        NOT probabilities — they measure how much local evidence supports
+        each scenario, nothing more. When no live signals exist, the method
+        says so plainly instead of inventing numbers.
+        """
+        print("\n🔮 THE ONE RING: Threat pressure from live local signals...")
+        signals = self._collect_threat_signals()
+        print(f"    Live signals: {signals['coverage']} of 3 sources "
+              f"(quickfix_scan={signals['has_quickfix']}, "
+              f"system_health={signals['has_health']}, "
+              f"attack_history={signals['history_count']} patterns)")
+
+        if signals["coverage"] == 0:
+            print("    ⚠ No live signals available — cannot score threats.")
+            print("    Run quickfix_scan() or record_attack_pattern() first.")
+            return []
+
+        threat_scenarios = self._score_threat_scenarios(signals)
         predictions = []
-        
-        # Analyze historical patterns
-        if len(self.attack_pattern_history) > 0:
-            print(f"    Analyzing {len(self.attack_pattern_history)} historical attacks...")
-        else:
-            print("    Building baseline threat model...")
-        
-        # Predictive intelligence based on current trends (2025+)
-        threat_scenarios = [
-            {
-                "type": "AI-Powered Social Engineering",
-                "probability": 0.78,
-                "impact": "HIGH",
-                "horizon": "IMMINENT",
-                "actions": [
-                    "Implement AI-generated content detection",
-                    "Enhanced multi-factor authentication",
-                    "Employee training on deepfake recognition"
-                ],
-                "confidence": 0.92
-            },
-            {
-                "type": "Supply Chain Compromise",
-                "probability": 0.65,
-                "impact": "CRITICAL",
-                "horizon": "SHORT_TERM",
-                "actions": [
-                    "Third-party vendor security audits",
-                    "Software composition analysis",
-                    "Zero-trust architecture implementation"
-                ],
-                "confidence": 0.88
-            },
-            {
-                "type": "Quantum-Resistant Cryptography Attacks",
-                "probability": 0.42,
-                "impact": "CRITICAL",
-                "horizon": "MEDIUM_TERM",
-                "actions": [
-                    "Begin post-quantum cryptography migration",
-                    "Audit current encryption standards",
-                    "Implement crypto-agility framework"
-                ],
-                "confidence": 0.75
-            },
-            {
-                "type": "Ransomware-as-a-Service Evolution",
-                "probability": 0.85,
-                "impact": "HIGH",
-                "actions": [
-                    "Immutable backup strategies",
-                    "Network segmentation enhancements",
-                    "Incident response automation"
-                ],
-                "horizon": "IMMINENT",
-                "confidence": 0.94
-            }
-        ]
-        
         for scenario in threat_scenarios:
             prediction = ThreatPrediction(
                 prediction_id=f"PRED_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{len(predictions)}",
@@ -647,15 +643,185 @@ class AMIRBot:
             predictions.append(prediction)
             self.threat_predictions.append(prediction)
         
-        # Display predictions
-        print(f"\n🔮 Generated {len(predictions)} threat predictions:")
-        for pred in predictions:
+        # Display pressure readings (heuristic, local evidence only)
+        print(f"\n🔮 Generated {len(predictions)} threat pressure readings:")
+        for pred, scenario in zip(predictions, threat_scenarios):
             print(f"\n  ├─ {pred.threat_type}")
-            print(f"  │  Probability: {pred.probability*100:.1f}% | Impact: {pred.estimated_impact}")
-            print(f"  │  Time Horizon: {pred.time_horizon} | Reference weight: {pred.confidence_score*100:.1f}% (static)")
+            print(f"  │  Pressure: {pred.probability*100:.0f}/100 (heuristic, not a probability) | Impact: {pred.estimated_impact}")
+            print(f"  │  Horizon: {pred.time_horizon} | Signal coverage: {pred.confidence_score*100:.0f}%")
+            for ev in scenario.get("evidence", []):
+                print(f"  │  Evidence: {ev}")
             print(f"  └─ Top Action: {pred.recommended_preemptive_actions[0]}")
-        
+
+        # --- Soul Cradle witnessing: record-only, findings are observations -
+        for pred, scenario in zip(predictions, threat_scenarios):
+            try:
+                evidence, bases = finding_evidence(
+                    source="amir",
+                    summary=(f"{pred.threat_type}: pressure "
+                             f"{pred.probability*100:.0f}/100 (heuristic), "
+                             f"impact {pred.estimated_impact}, "
+                             f"horizon {pred.time_horizon}; "
+                             f"evidence: {'; '.join(scenario.get('evidence', []))}"),
+                    severity="info",
+                    declared_intent="report threat pressure from live local signals honestly",
+                )
+                witness_action(
+                    bot_id="amir",
+                    action=f"record threat pressure reading: {pred.threat_type}",
+                    evidence=evidence,
+                    evidence_bases=bases,
+                    enforce=False,
+                )
+            except WitnessUnavailable as exc:
+                print(f"  [AMIR] WITNESS UNAVAILABLE — {exc}; proceeding.")
+        # --- end witnessing --------------------------------------------------
+
         return predictions
+
+    def _collect_threat_signals(self) -> Dict[str, Any]:
+        """Gather the real local inputs that threat pressure is derived from."""
+        signals: Dict[str, Any] = {
+            "has_quickfix": False,
+            "quickfix": None,
+            "has_health": False,
+            "health": None,
+            "history_count": len(self.attack_pattern_history),
+            "history": list(self.attack_pattern_history),
+        }
+        if self.last_quickfix_summary:
+            signals["has_quickfix"] = True
+            signals["quickfix"] = self.last_quickfix_summary
+        try:
+            h = self._get_system_health()
+            signals["has_health"] = True
+            signals["health"] = {
+                "cpu": float(h.cpu_usage or 0),
+                "memory": float(h.memory_usage or 0),
+                "disk": float(h.disk_usage or 0),
+            }
+        except Exception:
+            pass  # no health signal; coverage drops, nothing invented
+        signals["coverage"] = int(sum([
+            signals["has_quickfix"],
+            signals["has_health"],
+            signals["history_count"] > 0,
+        ]))
+        return signals
+
+    def _score_threat_scenarios(self, signals: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Deterministically score scenarios from live signals.
+
+        pressure = min(1.0, sum of evidence weights). Every weight traces to
+        a counted local fact. No signal contributes pressure it did not earn.
+        """
+        qf = signals["quickfix"] or {}
+        sev = qf.get("by_severity", {}) or {}
+        typ = qf.get("by_type", {}) or {}
+        health = signals["health"] or {}
+        hist = signals["history"] or []
+
+        critical = int(sev.get("CRITICAL", 0))
+        high = int(sev.get("HIGH", 0))
+        secrets = int(typ.get("Hardcoded Secret", 0))
+        injection = int(typ.get("Command Injection", 0)) + int(typ.get("SQL Injection", 0))
+        weakcrypto = int(typ.get("Weak Cryptography", 0)) + int(typ.get("Insecure Deserialization", 0))
+        resource = max(float(health.get("cpu", 0)), float(health.get("memory", 0)),
+                       float(health.get("disk", 0))) / 100.0
+
+        def pressure(*weights: float) -> float:
+            return round(min(1.0, sum(weights)), 2)
+
+        coverage = round(signals["coverage"] / 3.0, 2)
+        stamp = (qf.get("scanned_at", "n/a") if isinstance(qf, dict) else "n/a")
+
+        scenarios = [
+            {
+                "type": "Exploitable code flaws (local scan findings)",
+                "probability": pressure(0.30 * critical, 0.10 * high, 0.15 * injection),
+                "impact": "CRITICAL" if critical else "HIGH",
+                "horizon": "IMMINENT" if critical else "SHORT_TERM",
+                "actions": [
+                    "Run quickfix_fix() to patch findings",
+                    "Re-scan after patching and confirm counts drop",
+                    "Prioritize CRITICAL findings first",
+                ],
+                "confidence": coverage,
+                "evidence": [
+                    f"{critical} CRITICAL + {high} HIGH findings in last quickfix scan ({stamp})",
+                    f"{injection} injection-class findings (SQL/command)",
+                ],
+            },
+            {
+                "type": "Credential / secret exposure",
+                "probability": pressure(0.25 * secrets),
+                "impact": "HIGH",
+                "horizon": "SHORT_TERM" if secrets else "LONG_TERM",
+                "actions": [
+                    "Rotate any exposed secrets immediately",
+                    "Move secrets to environment variables or a vault",
+                    "Purge secrets from git history if committed",
+                ],
+                "confidence": coverage,
+                "evidence": [f"{secrets} hardcoded-secret findings in last scan"],
+            },
+            {
+                "type": "Weak cryptography / unsafe deserialization",
+                "probability": pressure(0.20 * weakcrypto),
+                "impact": "HIGH",
+                "horizon": "MEDIUM_TERM",
+                "actions": [
+                    "Upgrade MD5/SHA1 to SHA-256+",
+                    "Replace pickle.loads on untrusted data with json",
+                ],
+                "confidence": coverage,
+                "evidence": [f"{weakcrypto} weak-crypto/deserialization findings in last scan"],
+            },
+            {
+                "type": "Resource exhaustion / availability strain",
+                "probability": pressure(0.9 * max(0.0, resource - 0.7) / 0.3 if resource > 0.7 else 0.0),
+                "impact": "MEDIUM",
+                "horizon": "SHORT_TERM" if resource > 0.85 else "LONG_TERM",
+                "actions": [
+                    "Identify top CPU/memory consumers and cap them",
+                    "Add disk-space alerts before the disk fills",
+                ],
+                "confidence": coverage,
+                "evidence": [f"peak resource use: {resource*100:.0f}% (cpu/mem/disk max)"],
+            },
+        ]
+
+        if hist:
+            repeat: Dict[str, int] = {}
+            for entry in hist:
+                t = str(entry.get("pattern", {}).get("type", "unknown"))
+                repeat[t] = repeat.get(t, 0) + 1
+            top = sorted(repeat.items(), key=lambda kv: kv[1], reverse=True)[:3]
+            scenarios.append({
+                "type": "Repeat of previously observed attack patterns",
+                "probability": pressure(0.25 * len(hist)),
+                "impact": "HIGH",
+                "horizon": "SHORT_TERM",
+                "actions": [
+                    "Harden against the most frequent observed pattern first",
+                    "Keep recording patterns via record_attack_pattern()",
+                ],
+                "confidence": coverage,
+                "evidence": [f"{len(hist)} recorded patterns; most frequent: "
+                             + ", ".join(f"{k} x{v}" for k, v in top)],
+            })
+        else:
+            scenarios.append({
+                "type": "Repeat of previously observed attack patterns",
+                "probability": 0.0,
+                "impact": "UNKNOWN",
+                "horizon": "UNKNOWN",
+                "actions": ["Record real patterns via record_attack_pattern() so this scenario has data"],
+                "confidence": coverage,
+                "evidence": ["no attack patterns recorded yet — nothing to project from"],
+            })
+
+        return scenarios
     
     def generate_strategic_insights(self) -> List[StrategicInsight]:
         """ONE RING: Strategic security insights with business impact analysis"""
@@ -663,50 +829,49 @@ class AMIRBot:
         
         insights = []
         
+        # Strategic observations, not measured statistics. AMIR has no
+        # telemetry source for breach rates, costs, or ROI figures, so none
+        # are stated here. roi_estimate is left unset for every insight.
         insight_data = [
             {
                 "category": "TREND",
-                "description": "Shift from perimeter-based to identity-based security",
-                "business_impact": "Reduces breach impact by 60%, enables remote work scalability",
+                "description": "Industry shift from perimeter-based to identity-based security",
+                "business_impact": "Identity-first controls reduce reliance on network perimeter; supports remote work",
                 "recommendations": [
                     "Implement Zero Trust Architecture",
                     "Deploy identity-first security controls",
                     "Continuous authentication mechanisms"
                 ],
-                "roi": 2.8  # 280% ROI
             },
             {
                 "category": "VULNERABILITY_PATTERN",
-                "description": "Configuration errors account for 73% of cloud breaches",
-                "business_impact": "Average cost per misconfiguration breach: $4.1M",
+                "description": "Cloud misconfiguration is a widely reported breach vector — verify against your own posture scans",
+                "business_impact": "Misconfigurations can expose data publicly; cost depends on your environment",
                 "recommendations": [
                     "Automate cloud security posture management (CSPM)",
                     "Infrastructure-as-code security scanning",
                     "Real-time configuration drift detection"
                 ],
-                "roi": 4.2
             },
             {
                 "category": "ATTACK_VECTOR",
-                "description": "API vulnerabilities growing 400% year-over-year",
-                "business_impact": "Direct revenue loss, customer data exposure, compliance fines",
+                "description": "APIs are an expanding attack surface as API estates grow",
+                "business_impact": "Exposed APIs risk revenue loss, customer data exposure, and compliance fines",
                 "recommendations": [
                     "API security gateway implementation",
                     "Runtime API protection (RASP)",
                     "Automated API discovery and inventory"
                 ],
-                "roi": 3.5
             },
             {
                 "category": "COMPLIANCE_GAP",
-                "description": "Multi-framework compliance automation gap costing 2000+ manual hours/year",
-                "business_impact": "Annual cost: $380K in labor, delays product launches by 6 weeks",
+                "description": "Manual multi-framework compliance work is labor-intensive — measure your own hours before automating",
+                "business_impact": "Automation reduces labor and shortens audit preparation; quantify locally",
                 "recommendations": [
                     "Deploy unified compliance automation (your Mythara Engine!)",
                     "Continuous compliance monitoring",
                     "Automated evidence collection"
                 ],
-                "roi": 5.1  # Your product!
             }
         ]
         
@@ -933,7 +1098,23 @@ class AMIRBot:
             "vulnerabilities_found": len(vulnerabilities),
             "vulnerabilities": vulnerabilities
         }
-        
+
+        # Cache severity/type counts so predict_threats() can derive
+        # pressure scores from real findings instead of inventing them.
+        sev_counts: Dict[str, int] = {}
+        type_counts: Dict[str, int] = {}
+        for vuln in vulnerabilities:
+            sev = getattr(vuln, 'severity', 'UNKNOWN')
+            typ = getattr(vuln, 'vulnerability_type', 'UNKNOWN')
+            sev_counts[sev] = sev_counts.get(sev, 0) + 1
+            type_counts[typ] = type_counts.get(typ, 0) + 1
+        self.last_quickfix_summary = {
+            "scanned_at": datetime.utcnow().isoformat(),
+            "total": len(vulnerabilities),
+            "by_severity": sev_counts,
+            "by_type": type_counts,
+        }
+
         # Complete mission
         mission.status = "COMPLETED"
         mission.completed_at = datetime.utcnow()
@@ -1085,28 +1266,22 @@ class AMIRBot:
             print("  No issues detected")
     
     def threat_analysis(self):
-        """Analyze potential security threats"""
-        print("\n🛡️  Conducting threat analysis...")
-        
-        print("  → Analyzing network traffic...")
-        time.sleep(0.3)
-        print("    ✓ No anomalies detected")
-        
-        print("  → Scanning for intrusion attempts...")
-        time.sleep(0.3)
-        print("    ✓ No unauthorized access attempts")
-        
-        print("  → Checking compliance status...")
-        time.sleep(0.3)
-        print("    ✓ All frameworks compliant")
-        
-        print("  → Verifying encryption integrity...")
-        time.sleep(0.3)
-        print("    ✓ Encryption protocols secure")
-        
-        print("\n✓ Threat analysis complete")
-        print("  Current threat level: LOW")
-        print("  Perimeter secure. All systems nominal.")
+        """Summarize threats from recorded evidence — never invents a clean bill of health.
+
+        A.M.I.R. has no live network sensor in this build, so this method reports
+        only what is actually recorded: explicitly logged attack patterns.
+        Anything else is UNKNOWN, never "secure".
+        """
+        print("\n🛡️  Threat summary (evidence only — no live sensor in this build)")
+        recorded = list(getattr(self, "attack_pattern_history", []) or [])
+        if not recorded:
+            print("  No attack patterns recorded by the operator.")
+            print("  Threat level: UNKNOWN (no live sensor — cannot claim 'secure')")
+            return
+        print(f"  {len(recorded)} recorded attack pattern(s):")
+        for pattern in recorded:
+            print(f"  - {pattern.get('recorded_at', '?')}: {pattern.get('pattern', pattern)}")
+        print("  Note: coverage is limited to what was explicitly recorded above.")
     
     def mission_briefing(self):
         """Provide mission briefing"""

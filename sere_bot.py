@@ -1,673 +1,385 @@
 #!/usr/bin/env python3
 """
-S.E.R.E. Bot - Survive, Evade, Resist, and Escape
+S.E.R.E. - Survive, Evade, Resist, Escape
 Part of the A.M.I.R. Cybersecurity Suite
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
-S.E.R.E. (Survive, Evade, Resist, and Escape) provides structured
-survival protocols for cybersecurity defense. This console module is a
-conceptual model; the real system is described in the SERE architecture spec.
-- SURVIVE: System resilience under attack
-- EVADE: Threat detection and avoidance
-- RESIST: Active defense mechanisms
-- ESCAPE: Emergency protocols and failsafes
+S.E.R.E. doctrine (enforced in code):
+  - Sandbox-only. The specimen is NEVER executed on the host.
+  - Detect: the operator names an explicit specimen path. SERE invents
+    nothing — no random threats, no fake source IPs.
+  - Pull the specimen into an isolated sandbox directory and analyze the
+    contained COPY only.
+  - Quarantine: move the original into a quarantine directory, verify it is
+    gone from its original location, keep chain of custody.
+  - Produce a forensic profile: hashes, sizes, timestamps, permissions,
+    type indicators, embedded indicators.
+  - No hack-back, ever. No firewall changes, no IP blocking, no remote
+    retaliation. Egress stays sealed by design: SERE makes zero network
+    calls and takes zero network actions.
+  - No fabricated numbers. Integrity is verified by hash comparison, not
+    asserted. A failed step is reported FAILED, never "100%".
 
-"Adaptive survival and evasion for cybersecurity."
+Every action is appended to a tamper-evident hash-chained JSONL event log.
 """
 
-import os
-import sys
-import time
+import hashlib
 import json
 import logging
-import hashlib
-import random
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple
+import math
+import os
+import re
+import shutil
+import stat
+import sys
+import zipfile
+from collections import Counter
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
-from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - S.E.R.E. - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-
-class SEREPhase(Enum):
-    """S.E.R.E. operational phases"""
-    SURVIVE = "SURVIVE"  # System under attack, maintaining functionality
-    EVADE = "EVADE"  # Detecting and avoiding threats
-    RESIST = "RESIST"  # Active defense and countermeasures
-    ESCAPE = "ESCAPE"  # Emergency shutdown and data preservation
+# Indicators extracted from a specimen are just that — indicators found in
+# the bytes. They are never presented as attribution.
+URL_RE = re.compile(rb'https?://[^\s\'"<>]{4,120}')
+IPV4_RE = re.compile(rb'\b(?:\d{1,3}\.){3}\d{1,3}\b')
 
 
-class ThreatLevel(Enum):
-    """Threat severity levels"""
-    NONE = 0
-    MINIMAL = 1
-    MODERATE = 2
-    SUBSTANTIAL = 3
-    SEVERE = 4
-    CRITICAL = 5
-
-
-class AttackType(Enum):
-    """Types of cyber attacks"""
-    DDOS = "Distributed Denial of Service"
-    SQL_INJECTION = "SQL Injection"
-    XSS = "Cross-Site Scripting"
-    BRUTE_FORCE = "Brute Force"
-    MALWARE = "Malware Infection"
-    PHISHING = "Phishing Attack"
-    MITM = "Man-in-the-Middle"
-    ZERO_DAY = "Zero-Day Exploit"
-    RANSOMWARE = "Ransomware"
-    DATA_BREACH = "Data Breach Attempt"
+class SpecimenStatus(Enum):
+    DETECTED = "DETECTED"
+    CONTAINED = "CONTAINED"
+    QUARANTINED = "QUARANTINED"
+    FAILED = "FAILED"
 
 
 @dataclass
-class ThreatDetection:
-    """Detected threat information"""
-    threat_id: str
-    attack_type: AttackType
-    severity: ThreatLevel
-    source_ip: str
-    timestamp: datetime
-    indicators: List[str]
-    recommended_action: str
+class ForensicProfile:
+    """Measured facts about a specimen. Every field is observed, none inferred."""
+    path: str
+    sha256: str
+    md5: str
+    size_bytes: int
+    mode: str
+    mtime: str
+    file_type: str
+    entropy: float
+    indicators: Dict[str, List[str]] = field(default_factory=dict)
+    archive_members: Optional[List[str]] = None
 
 
 @dataclass
-class SurvivalMetrics:
-    """System survival metrics"""
-    uptime_percentage: float
-    requests_blocked: int
-    attacks_mitigated: int
-    data_integrity: float
-    system_health: float
-    failsafe_triggers: int
+class Event:
+    seq: int
+    timestamp: str
+    action: str
+    detail: str
+    prev_hash: str
+    event_hash: str = ""
 
 
-@dataclass
-class EvasionManeuver:
-    """Evasion action taken"""
-    maneuver_id: str
-    maneuver_type: str
-    success: bool
-    threats_evaded: int
-    description: str
-    timestamp: datetime
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(65536), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
 
-@dataclass
-class ResistanceAction:
-    """Active defense action"""
-    action_id: str
-    action_type: str
-    target_threat: str
-    effectiveness: float
-    description: str
-    timestamp: datetime
+def _md5_file(path: str) -> str:
+    h = hashlib.md5()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(65536), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
 
-@dataclass
-class EscapeProtocol:
-    """Emergency escape protocol"""
-    protocol_id: str
-    trigger_reason: str
-    data_preserved: bool
-    failsafes_activated: List[str]
-    recovery_time_estimate: int  # minutes
-    timestamp: datetime
+def _entropy(data: bytes) -> float:
+    if not data:
+        return 0.0
+    counts = Counter(data)
+    n = len(data)
+    return -sum((c / n) * math.log2(c / n) for c in counts.values())
+
+
+def _file_type(path: str) -> str:
+    """Magic-byte identification. Unknown is reported as unknown."""
+    with open(path, 'rb') as f:
+        magic = f.read(8)
+    if magic.startswith(b'\x7fELF'):
+        return "ELF executable"
+    if magic.startswith(b'MZ'):
+        return "PE executable (MZ)"
+    if magic.startswith(b'PK\x03\x04'):
+        return "ZIP archive"
+    if magic.startswith(b'\x1f\x8b'):
+        return "gzip archive"
+    if magic.startswith(b'#!'):
+        return "script (shebang)"
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            f.read(1024)
+        return "text"
+    except (UnicodeDecodeError, OSError):
+        return "unknown binary"
 
 
 class SEREBot:
     """
-    S.E.R.E. Bot - Survive, Evade, Resist, and Escape
+    S.E.R.E. — sandbox-only specimen handling.
 
-    Survival and evasion framework for cybersecurity (console simulation)
+    Usage:
+        bot = SEREBot(workdir="/path/to/case")
+        specimen = bot.detect("/path/to/suspicious/file")
+        bot.contain(specimen)      # copy into sandbox
+        profile = bot.analyze(specimen)   # static forensics on the COPY
+        bot.quarantine(specimen)   # move the original into quarantine
     """
-    
-    def __init__(self):
-        self.online_since = datetime.utcnow()
-        self.current_phase = SEREPhase.EVADE
-        self.threat_level = ThreatLevel.NONE
-        self.threats_detected = []
-        self.evasion_maneuvers = []
-        self.resistance_actions = []
-        self.escape_protocols = []
-        self.survival_mode_active = False
-        
-        # Metrics
-        self.total_threats_detected = 0
-        self.total_attacks_blocked = 0
-        self.total_evasions = 0
-        self.total_resistances = 0
-        self.total_escapes = 0
-        
-        # Initialize
-        self._initialize_sere()
-    
-    def _initialize_sere(self):
-        """Initialize S.E.R.E. systems"""
-        print("\n╔════════════════════════════════════════════════════════════╗")
-        print("║         S.E.R.E. BOT - SURVIVAL & EVASION SYSTEM          ║")
-        print("║       Survive • Evade • Resist • Escape v1.0              ║")
-        print("╚════════════════════════════════════════════════════════════╝\n")
-        
-        print("🎖️  Initializing S.E.R.E. training protocols...")
-        
-        modules = [
-            ("Survival Systems", True),
-            ("Evasion Detection Grid", True),
-            ("Resistance Mechanisms", True),
-            ("Escape Protocols", True),
-            ("Threat Intelligence", True),
-            ("Failsafe Controllers", True),
-            ("Emergency Beacon", True),
-        ]
-        
-        for module, status in modules:
-            time.sleep(0.2)
-            status_icon = "✓" if status else "✗"
-            status_text = "READY" if status else "OFFLINE"
-            print(f"  {status_icon} {module:<30} [{status_text}]")
-        
-        print("\n✓ S.E.R.E. systems operational")
-        print("  Current Phase: EVADE")
-        print("  Threat Level: NONE")
-        print("  Status: READY FOR DEPLOYMENT\n")
-        
-        logger.info("S.E.R.E. Bot initialized successfully")
-    
-    def display_status(self):
-        """Display current S.E.R.E. status"""
-        print("\n" + "="*70)
-        print("    S.E.R.E. STATUS REPORT")
-        print("="*70)
-        
-        # Current state
-        print(f"\n🎖️  OPERATIONAL PHASE: {self.current_phase.value}")
-        print(f"⚠️  THREAT LEVEL: {self.threat_level.name}")
-        print(f"🛡️  SURVIVAL MODE: {'ACTIVE' if self.survival_mode_active else 'STANDBY'}")
-        
-        # Uptime
-        uptime = datetime.utcnow() - self.online_since
-        print(f"\n⏱️  MISSION DURATION: {uptime.seconds // 3600}h {(uptime.seconds % 3600) // 60}m")
-        
-        # Statistics
-        print(f"\n📊 OPERATIONS:")
-        print(f"├─ Threats Detected:    {self.total_threats_detected}")
-        print(f"├─ Attacks Blocked:     {self.total_attacks_blocked}")
-        print(f"├─ Evasions Executed:   {self.total_evasions}")
-        print(f"├─ Resistance Actions:  {self.total_resistances}")
-        print(f"└─ Escape Protocols:    {self.total_escapes}")
-        
-        # Active threats
-        if self.threats_detected:
-            print(f"\n⚠️  ACTIVE THREATS: {len(self.threats_detected)}")
-            for threat in self.threats_detected[-3:]:  # Last 3
-                print(f"├─ [{threat.threat_id}] {threat.attack_type.value}")
-                print(f"│  Severity: {threat.severity.name}, Source: {threat.source_ip}")
-        
-        print("\n" + "="*70 + "\n")
-    
-    def detect_threats(self) -> List[ThreatDetection]:
-        """Phase 1: EVADE - Detect and identify threats"""
-        print("\n🔍 PHASE 1: EVADE - Threat Detection Scan")
-        print("="*70)
-        
-        self.current_phase = SEREPhase.EVADE
-        
-        print("\n  → Scanning network perimeter...")
-        time.sleep(0.3)
-        print("  → Analyzing traffic patterns...")
-        time.sleep(0.3)
-        print("  → Checking intrusion detection systems...")
-        time.sleep(0.3)
-        print("  → Monitoring authentication logs...")
-        time.sleep(0.3)
-        
-        # Simulate threat detection
-        threats_found = []
-        
-        # Common attack patterns
-        attack_patterns = [
-            (AttackType.SQL_INJECTION, ThreatLevel.MODERATE, ["' OR '1'='1", "UNION SELECT", "DROP TABLE"]),
-            (AttackType.BRUTE_FORCE, ThreatLevel.SUBSTANTIAL, ["Multiple failed logins", "Password spray", "Credential stuffing"]),
-            (AttackType.XSS, ThreatLevel.MODERATE, ["<script>", "javascript:", "onerror="]),
-            (AttackType.DDOS, ThreatLevel.SEVERE, ["Traffic spike", "SYN flood", "Amplification attack"]),
-        ]
-        
-        # Random threat generation for demo
-        num_threats = random.randint(0, 3)
-        
-        for i in range(num_threats):
-            attack_type, severity, indicators = random.choice(attack_patterns)
-            
-            threat = ThreatDetection(
-                threat_id=f"THREAT_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{i}",
-                attack_type=attack_type,
-                severity=severity,
-                source_ip=f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}",
-                timestamp=datetime.utcnow(),
-                indicators=indicators,
-                recommended_action=self._get_recommended_action(attack_type, severity)
-            )
-            threats_found.append(threat)
-            self.threats_detected.append(threat)
-            self.total_threats_detected += 1
-        
-        # Update threat level
-        if threats_found:
-            max_severity = max(t.severity.value for t in threats_found)
-            self.threat_level = ThreatLevel(max_severity)
-        else:
-            self.threat_level = ThreatLevel.NONE
-        
-        # Report
-        if threats_found:
-            print(f"\n⚠️  THREATS DETECTED: {len(threats_found)}")
-            for threat in threats_found:
-                print(f"\n  ├─ [{threat.threat_id}]")
-                print(f"  │  Type: {threat.attack_type.value}")
-                print(f"  │  Severity: {threat.severity.name}")
-                print(f"  │  Source: {threat.source_ip}")
-                print(f"  │  Indicators: {', '.join(threat.indicators[:2])}")
-                print(f"  └─ Recommended: {threat.recommended_action}")
-        else:
-            print("\n✓ No active threats detected")
-            print("  Perimeter secure. All systems nominal.")
-        
-        print(f"\n  Threat Level: {self.threat_level.name}")
-        
-        return threats_found
-    
-    def _get_recommended_action(self, attack_type: AttackType, severity: ThreatLevel) -> str:
-        """Get recommended action for threat"""
-        actions = {
-            AttackType.SQL_INJECTION: "Enable parameterized queries, sanitize inputs",
-            AttackType.BRUTE_FORCE: "Enable account lockout, implement rate limiting",
-            AttackType.XSS: "Enable content security policy, escape outputs",
-            AttackType.DDOS: "Activate traffic filtering, enable rate limiting",
-            AttackType.MALWARE: "Isolate system, run antivirus scan",
-            AttackType.PHISHING: "Block sender, alert users, review email filters",
-            AttackType.MITM: "Verify certificates, enable encryption",
-            AttackType.ZERO_DAY: "Apply emergency patch, isolate affected systems",
-            AttackType.RANSOMWARE: "Disconnect network, restore from backup",
-            AttackType.DATA_BREACH: "Enable encryption, audit access logs",
-        }
-        
-        action = actions.get(attack_type, "Investigate and monitor")
-        
-        if severity.value >= ThreatLevel.SEVERE.value:
-            action = f"URGENT: {action} + Activate emergency protocols"
-        
-        return action
-    
-    def execute_evasion(self, threats: List[ThreatDetection]) -> List[EvasionManeuver]:
-        """Phase 2: EVADE - Execute evasion maneuvers"""
-        if not threats:
-            return []
-        
-        print("\n🏃 PHASE 2: EVADE - Executing Evasion Maneuvers")
-        print("="*70)
-        
-        self.current_phase = SEREPhase.EVADE
-        maneuvers = []
-        
-        for threat in threats:
-            maneuver_type = self._select_evasion_maneuver(threat.attack_type)
-            
-            print(f"\n  → Evading {threat.attack_type.value}...")
-            print(f"    Maneuver: {maneuver_type}")
-            time.sleep(0.4)
-            
-            success = random.random() > 0.2  # 80% success rate
-            
-            maneuver = EvasionManeuver(
-                maneuver_id=f"EVADE_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
-                maneuver_type=maneuver_type,
-                success=success,
-                threats_evaded=1 if success else 0,
-                description=f"Evasion maneuver against {threat.attack_type.value}",
-                timestamp=datetime.utcnow()
-            )
-            
-            maneuvers.append(maneuver)
-            self.evasion_maneuvers.append(maneuver)
-            
-            if success:
-                print(f"    ✓ Evasion successful")
-                self.total_evasions += 1
-            else:
-                print(f"    ✗ Evasion failed - escalating to RESIST phase")
-        
-        print(f"\n  Evasion Summary: {sum(m.success for m in maneuvers)}/{len(maneuvers)} successful")
-        
-        return maneuvers
-    
-    def _select_evasion_maneuver(self, attack_type: AttackType) -> str:
-        """Select appropriate evasion maneuver"""
-        maneuvers = {
-            AttackType.SQL_INJECTION: "Input sanitization shield",
-            AttackType.BRUTE_FORCE: "Rate limiting barrier",
-            AttackType.XSS: "Content security policy activation",
-            AttackType.DDOS: "Traffic dispersal protocol",
-            AttackType.MALWARE: "System isolation",
-            AttackType.PHISHING: "Email filtering enhancement",
-            AttackType.MITM: "Encryption tunnel establishment",
-            AttackType.ZERO_DAY: "Emergency patching sequence",
-            AttackType.RANSOMWARE: "Backup restoration protocol",
-            AttackType.DATA_BREACH: "Access control lockdown",
-        }
-        return maneuvers.get(attack_type, "Generic defensive posture")
-    
-    def activate_resistance(self, failed_evasions: List[EvasionManeuver]) -> List[ResistanceAction]:
-        """Phase 3: RESIST - Active defense and countermeasures"""
-        if not failed_evasions:
-            print("\n✓ All evasions successful - RESIST phase not required")
-            return []
-        
-        print("\n🛡️ PHASE 3: RESIST - Active Defense Engaged")
-        print("="*70)
-        
-        self.current_phase = SEREPhase.RESIST
-        actions = []
-        
-        print("\n  ⚔️  Activating countermeasures...")
-        
-        for evasion in failed_evasions:
-            action_type = self._select_resistance_action(evasion.maneuver_type)
-            
-            print(f"\n  → Resisting threat: {evasion.maneuver_type}")
-            print(f"    Action: {action_type}")
-            time.sleep(0.4)
-            
-            effectiveness = random.uniform(0.7, 0.99)
-            
-            action = ResistanceAction(
-                action_id=f"RESIST_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
-                action_type=action_type,
-                target_threat=evasion.maneuver_type,
-                effectiveness=effectiveness,
-                description=f"Active resistance against {evasion.maneuver_type}",
-                timestamp=datetime.utcnow()
-            )
-            
-            actions.append(action)
-            self.resistance_actions.append(action)
-            self.total_resistances += 1
-            self.total_attacks_blocked += 1
-            
-            print(f"    ✓ Resistance effectiveness: {effectiveness*100:.1f}%")
-        
-        print(f"\n  Resistance Summary: {len(actions)} countermeasures deployed")
-        
-        return actions
-    
-    def _select_resistance_action(self, threat_context: str) -> str:
-        """Select appropriate resistance action"""
-        actions = [
-            "Firewall rule injection",
-            "IP blacklist update",
-            "Traffic throttling",
-            "Connection termination",
-            "Port closure",
-            "Certificate revocation",
-            "Session invalidation",
-            "Access token expiration",
-            "Account suspension",
-            "Network segmentation",
-        ]
-        return random.choice(actions)
-    
-    def initiate_escape(self, reason: str, critical: bool = False) -> EscapeProtocol:
-        """Phase 4: ESCAPE - Emergency protocols and failsafes"""
-        print("\n🚨 PHASE 4: ESCAPE - Emergency Protocol Initiated")
-        print("="*70)
-        
-        self.current_phase = SEREPhase.ESCAPE
-        
-        print(f"\n  🚨 ESCAPE TRIGGER: {reason}")
-        
-        if critical:
-            print("\n  ⚠️  CRITICAL SITUATION DETECTED")
-            print("  → Activating emergency failsafes...")
-        
-        # Failsafes
-        failsafes = [
-            "Data encryption and backup",
-            "System state snapshot",
-            "Graceful service shutdown",
-            "Network isolation",
-            "Log preservation",
-            "Alert notification system",
-            "Recovery point creation",
-        ]
-        
-        activated_failsafes = []
-        
-        for failsafe in failsafes:
-            print(f"\n  → {failsafe}...")
-            time.sleep(0.3)
-            activated_failsafes.append(failsafe)
-            print(f"    ✓ Complete")
-        
-        # Data preservation
-        print("\n  → Preserving critical data...")
-        time.sleep(0.5)
-        data_preserved = True
-        print(f"    ✓ Data integrity: 100%")
-        
-        # Recovery estimate
-        recovery_time = random.randint(15, 120)
-        
-        protocol = EscapeProtocol(
-            protocol_id=f"ESCAPE_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
-            trigger_reason=reason,
-            data_preserved=data_preserved,
-            failsafes_activated=activated_failsafes,
-            recovery_time_estimate=recovery_time,
-            timestamp=datetime.utcnow()
-        )
-        
-        self.escape_protocols.append(protocol)
-        self.total_escapes += 1
-        
-        print(f"\n✓ Escape protocol complete")
-        print(f"  Recovery time estimate: {recovery_time} minutes")
-        print(f"  Data preserved: {'YES' if data_preserved else 'NO'}")
-        print(f"  Failsafes activated: {len(activated_failsafes)}")
-        
-        return protocol
-    
-    def survival_mode(self, duration_seconds: int = 60):
-        """Enter survival mode - maximum resilience"""
-        print("\n💪 SURVIVAL MODE ACTIVATED")
-        print("="*70)
-        
-        self.survival_mode_active = True
-        self.current_phase = SEREPhase.SURVIVE
-        
-        print(f"\n  🎖️  Engaging maximum resilience protocols")
-        print(f"  Duration: {duration_seconds} seconds")
-        
-        print("\n  Survival measures:")
-        print("  ✓ Redundant systems online")
-        print("  ✓ Auto-healing enabled")
-        print("  ✓ Resource conservation active")
-        print("  ✓ Fail-over ready")
-        print("  ✓ Emergency power reserves")
-        
-        # Simulate survival period
-        start_time = time.time()
-        attacks_survived = 0
-        
-        while time.time() - start_time < duration_seconds:
-            # Simulate random attacks
-            if random.random() < 0.3:  # 30% chance of attack per cycle
-                attack = random.choice(list(AttackType))
-                print(f"\n  ⚠️  Incoming: {attack.value}")
-                print(f"     → Surviving attack...")
-                time.sleep(0.5)
-                print(f"     ✓ System maintained")
-                attacks_survived += 1
-            
-            time.sleep(2)
-        
-        self.survival_mode_active = False
-        
-        print("\n✓ Survival mode complete")
-        print(f"  Attacks survived: {attacks_survived}")
-        print(f"  System integrity: 100%")
-        
-        return attacks_survived
-    
-    def full_sere_drill(self):
-        """Execute complete S.E.R.E. training drill"""
-        print("\n" + "="*70)
-        print("    FULL S.E.R.E. TRAINING DRILL")
-        print("="*70)
-        
-        print("\n🎖️  Commencing comprehensive survival training...")
-        print("    All phases will be tested sequentially\n")
-        
-        # Phase 1: Detect threats
-        print("\n" + "-"*70)
-        threats = self.detect_threats()
-        
-        if threats:
-            # Phase 2: Evade
-            print("\n" + "-"*70)
-            evasions = self.execute_evasion(threats)
-            
-            # Phase 3: Resist (if needed)
-            failed_evasions = [e for e in evasions if not e.success]
-            if failed_evasions:
-                print("\n" + "-"*70)
-                self.activate_resistance(failed_evasions)
-            
-            # Phase 4: Escape (if critical)
-            if self.threat_level.value >= ThreatLevel.SEVERE.value:
-                print("\n" + "-"*70)
-                self.initiate_escape(
-                    reason="Critical threat level detected",
-                    critical=True
-                )
-        else:
-            print("\n✓ No threats detected during drill")
-        
-        # Final report
-        print("\n" + "="*70)
-        print("    DRILL COMPLETE")
-        print("="*70)
-        
-        self.display_status()
-        
-        print("\n🎖️  Training assessment:")
-        print(f"    • Threat detection: {'PASS' if self.total_threats_detected >= 0 else 'FAIL'}")
-        print(f"    • Evasion skills: {'PASS' if self.total_evasions >= 0 else 'FAIL'}")
-        print(f"    • Resistance capability: {'PASS' if self.total_resistances >= 0 else 'FAIL'}")
-        print(f"    • Escape readiness: {'PASS' if self.total_escapes >= 0 else 'FAIL'}")
-        print(f"\n    Overall: MISSION READY")
-    
-    def interactive_mode(self):
-        """Interactive command interface"""
-        print("\n🎖️  S.E.R.E. interactive mode activated")
-        print("    Type 'help' for commands, 'exit' to quit\n")
-        
-        while True:
+
+    def __init__(self, workdir: str = ".sere_case"):
+        self.workdir = os.path.abspath(workdir)
+        self.sandbox_dir = os.path.join(self.workdir, "sandbox")
+        self.quarantine_dir = os.path.join(self.workdir, "quarantine")
+        self.log_path = os.path.join(self.workdir, "sere_events.jsonl")
+        for d in (self.sandbox_dir, self.quarantine_dir):
+            os.makedirs(d, exist_ok=True)
+            os.chmod(d, 0o700)
+        self._seq = self._load_seq()
+        logger.info("S.E.R.E. initialized | workdir=%s (sandbox-only, no network actions)",
+                    self.workdir)
+
+    # ------------------------------------------------------------------
+    # Tamper-evident event log (hash chain)
+    # ------------------------------------------------------------------
+    def _load_seq(self) -> int:
+        if not os.path.exists(self.log_path):
+            return 0
+        seq = 0
+        with open(self.log_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    seq = max(seq, json.loads(line).get("seq", 0))
+        return seq
+
+    def _last_hash(self) -> str:
+        if not os.path.exists(self.log_path):
+            return "GENESIS"
+        last = "GENESIS"
+        with open(self.log_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    last = json.loads(line).get("event_hash", last)
+        return last
+
+    def _log(self, action: str, detail: str) -> Event:
+        self._seq += 1
+        prev = self._last_hash()
+        body = {"seq": self._seq,
+                "timestamp": datetime.utcnow().isoformat(),
+                "action": action, "detail": detail, "prev_hash": prev}
+        event_hash = hashlib.sha256(
+            json.dumps(body, sort_keys=True).encode()).hexdigest()
+        body["event_hash"] = event_hash
+        with open(self.log_path, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(body) + "\n")
+        return Event(**body)
+
+    def verify_log(self) -> bool:
+        """Verify the hash chain. Returns True only if every link checks out."""
+        prev = "GENESIS"
+        try:
+            with open(self.log_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    e = json.loads(line)
+                    if e.get("prev_hash") != prev:
+                        return False
+                    check = {k: e[k] for k in ("seq", "timestamp", "action", "detail", "prev_hash")}
+                    if hashlib.sha256(json.dumps(check, sort_keys=True).encode()).hexdigest() != e.get("event_hash"):
+                        return False
+                    prev = e["event_hash"]
+        except (OSError, json.JSONDecodeError, KeyError):
+            return False
+        return True
+
+    # ------------------------------------------------------------------
+    # SURVIVE: detect — the operator names the specimen; SERE verifies it
+    # ------------------------------------------------------------------
+    def detect(self, specimen_path: str) -> Dict[str, Any]:
+        """Register a specimen for handling. The path must be explicit and real."""
+        self._log("DETECT_ATTEMPT", f"operator named specimen: {specimen_path}")
+        if not specimen_path or not os.path.isfile(specimen_path):
+            self._log("DETECT_FAILED", f"not a real file: {specimen_path}")
+            return {"status": SpecimenStatus.FAILED.value,
+                    "reason": f"specimen is not a real file: {specimen_path}"}
+        real = os.path.realpath(specimen_path)
+        self._log("DETECTED", f"specimen confirmed at {real}")
+        return {"status": SpecimenStatus.DETECTED.value, "path": real}
+
+    # ------------------------------------------------------------------
+    # EVADE (the specimen's evasion ends here): contain into the sandbox
+    # ------------------------------------------------------------------
+    def contain(self, specimen: Dict[str, Any]) -> Dict[str, Any]:
+        """Copy the specimen into the isolated sandbox directory."""
+        src = specimen.get("path")
+        if not src or not os.path.isfile(src):
+            self._log("CONTAIN_FAILED", f"no valid specimen path: {src}")
+            return {"status": SpecimenStatus.FAILED.value,
+                    "reason": "no valid specimen to contain"}
+        digest = _sha256_file(src)[:16]
+        dest = os.path.join(self.sandbox_dir, f"specimen_{digest}.bin")
+        shutil.copy2(src, dest)
+        os.chmod(dest, 0o400)  # read-only inside the sandbox
+        if _sha256_file(dest) != _sha256_file(src):
+            self._log("CONTAIN_FAILED", "sandbox copy hash mismatch")
+            return {"status": SpecimenStatus.FAILED.value,
+                    "reason": "sandbox copy failed hash verification"}
+        self._log("CONTAINED",
+                  f"{src} -> {dest} (sha256 {_sha256_file(dest)[:16]}..., verified)")
+        specimen["sandbox_copy"] = dest
+        return {"status": SpecimenStatus.CONTAINED.value, "sandbox_copy": dest}
+
+    # ------------------------------------------------------------------
+    # RESIST: static forensics on the SANDBOX COPY only — never executed
+    # ------------------------------------------------------------------
+    def analyze(self, specimen: Dict[str, Any]) -> Dict[str, Any]:
+        """Build the forensic profile from the contained copy. No execution."""
+        target = specimen.get("sandbox_copy") or specimen.get("path")
+        if not target or not os.path.isfile(target):
+            self._log("ANALYZE_FAILED", f"no contained copy: {target}")
+            return {"status": SpecimenStatus.FAILED.value,
+                    "reason": "no contained copy to analyze"}
+        self._log("ANALYZE_START", f"static forensics on contained copy {target} (no execution)")
+        st = os.stat(target)
+        with open(target, 'rb') as f:
+            head = f.read(1048576)  # first MB is enough for indicators/entropy
+
+        indicators: Dict[str, List[str]] = {}
+        urls = sorted(set(m.decode('utf-8', 'replace') for m in URL_RE.findall(head)))[:20]
+        ips = sorted(set(m.decode('utf-8', 'replace') for m in IPV4_RE.findall(head)))[:20]
+        if urls:
+            indicators["embedded_urls"] = urls
+        if ips:
+            indicators["embedded_ipv4"] = ips
+
+        ftype = _file_type(target)
+        members = None
+        if ftype == "ZIP archive":
             try:
-                command = input("S.E.R.E.> ").strip().lower()
-                
-                if not command:
-                    continue
-                
-                if command in ['exit', 'quit']:
-                    print("\n🎖️  S.E.R.E. standing down. Stay vigilant.")
-                    break
-                
-                elif command == 'help':
-                    self._show_help()
-                
-                elif command in ['status', 'sitrep']:
-                    self.display_status()
-                
-                elif command in ['detect', 'scan', 'evade']:
-                    self.detect_threats()
-                
-                elif command == 'resist':
-                    print("\n⚠️  RESIST phase requires active threats")
-                    print("    Run 'detect' first to identify threats")
-                
-                elif command in ['escape', 'emergency']:
-                    self.initiate_escape(
-                        reason="Manual escape protocol triggered",
-                        critical=False
-                    )
-                
-                elif command in ['survive', 'survival']:
-                    duration = 30  # 30 seconds for demo
-                    self.survival_mode(duration)
-                
-                elif command in ['drill', 'full']:
-                    self.full_sere_drill()
-                
-                else:
-                    print(f"\n⚠️  Unknown command: '{command}'")
-                    print("    Type 'help' for available commands")
-            
-            except KeyboardInterrupt:
-                print("\n\n🎖️  Emergency shutdown. S.E.R.E. systems offline.")
-                break
-            except Exception as e:
-                print(f"\n⚠️  Error: {e}")
-                logger.error(f"Command error: {e}")
-    
-    def _show_help(self):
-        """Show available commands"""
-        print("\n📖 S.E.R.E. COMMAND REFERENCE")
-        print("="*70)
-        print("\nPHASE COMMANDS:")
-        print("  detect, scan, evade  - Phase 1: Detect and evade threats")
-        print("  resist               - Phase 3: Active defense")
-        print("  escape, emergency    - Phase 4: Emergency protocols")
-        print("  survive, survival    - Enter survival mode")
-        
-        print("\nOPERATIONAL COMMANDS:")
-        print("  status, sitrep       - Display current status")
-        print("  drill, full          - Execute full S.E.R.E. drill")
-        
-        print("\nGENERAL COMMANDS:")
-        print("  help                 - Show this help")
-        print("  exit, quit           - Exit S.E.R.E. mode")
-        
-        print("\n" + "="*70)
+                with zipfile.ZipFile(target) as z:
+                    members = z.namelist()[:50]  # listed, never extracted
+            except zipfile.BadZipFile:
+                members = []
+
+        profile = ForensicProfile(
+            path=target,
+            sha256=_sha256_file(target),
+            md5=_md5_file(target),
+            size_bytes=st.st_size,
+            mode=oct(stat.S_IMODE(st.st_mode)),
+            mtime=datetime.utcfromtimestamp(st.st_mtime).isoformat(),
+            file_type=ftype,
+            entropy=round(_entropy(head), 2),
+            indicators=indicators,
+            archive_members=members,
+        )
+        self._log("ANALYZED",
+                  f"profile: {profile.file_type}, {profile.size_bytes} bytes, "
+                  f"sha256 {profile.sha256[:16]}..., entropy {profile.entropy}")
+        return {"status": "PROFILED", "profile": profile}
+
+    # ------------------------------------------------------------------
+    # ESCAPE (sealed): quarantine the original, verify removal
+    # ------------------------------------------------------------------
+    def quarantine(self, specimen: Dict[str, Any]) -> Dict[str, Any]:
+        """Move the original into quarantine and verify it is gone."""
+        src = specimen.get("path")
+        if not src or not os.path.isfile(src):
+            self._log("QUARANTINE_FAILED", f"original not present (already moved?): {src}")
+            return {"status": SpecimenStatus.FAILED.value,
+                    "reason": "original specimen not present at quarantine time"}
+        pre_hash = _sha256_file(src)
+        dest = os.path.join(self.quarantine_dir, os.path.basename(src) + ".quarantined")
+        shutil.move(src, dest)
+        os.chmod(dest, 0o400)
+        removed = not os.path.exists(src)
+        intact = _sha256_file(dest) == pre_hash
+        if removed and intact:
+            self._log("QUARANTINED",
+                      f"{src} -> {dest}; original location verified empty; hash intact")
+            return {"status": SpecimenStatus.QUARANTINED.value,
+                    "quarantine_path": dest, "hash_intact": True}
+        self._log("QUARANTINE_FAILED",
+                  f"removed={removed} intact={intact} for {src}")
+        return {"status": SpecimenStatus.FAILED.value,
+                "reason": f"quarantine incomplete (removed={removed}, intact={intact})"}
+
+    # ------------------------------------------------------------------
+    # Doctrine enforcement: egress stays sealed by design
+    # ------------------------------------------------------------------
+    def seal_egress(self) -> Dict[str, Any]:
+        """SERE takes no network actions — no firewall edits, no IP blocks,
+        no callbacks, no retaliation. This records that posture per case."""
+        self._log("EGRESS_SEALED",
+                  "no network actions taken or authorized: no firewall changes, "
+                  "no IP blocking, no C2 callbacks, no hack-back")
+        return {"egress": "sealed", "network_actions_taken": 0,
+                "note": "SERE makes zero network calls by design"}
+
+    def case_report(self) -> Dict[str, Any]:
+        report = {
+            "workdir": self.workdir,
+            "events": self._seq,
+            "log_intact": self.verify_log(),
+            "log_path": self.log_path,
+        }
+        self._log("CASE_REPORT", f"log_intact={report['log_intact']}")
+        return report
 
 
 def main():
-    """Main entry point"""
-    # Initialize S.E.R.E.
-    sere = SEREBot()
-    
-    # Run full drill
-    sere.full_sere_drill()
-    
-    # Interactive mode
-    print("\n" + "="*70)
-    print("Enter interactive mode? (y/n)")
-    response = input("> ").strip().lower()
-    
-    if response in ['y', 'yes']:
-        sere.interactive_mode()
-    else:
-        print("\n🎖️  S.E.R.E. standing by. Stay vigilant.")
-    
-    return 0
+    """CLI: python sere_bot.py <specimen_path> [workdir]"""
+    if len(sys.argv) < 2:
+        print("Usage: python sere_bot.py <specimen_path> [workdir]")
+        print("SERE doctrine: sandbox-only. The specimen is never executed.")
+        return 2
+    workdir = sys.argv[2] if len(sys.argv) > 2 else ".sere_case"
+    bot = SEREBot(workdir)
+
+    specimen = bot.detect(sys.argv[1])
+    if specimen["status"] != SpecimenStatus.DETECTED.value:
+        print(f"DETECT FAILED: {specimen['reason']}")
+        return 1
+    contained = bot.contain(specimen)
+    if contained["status"] != SpecimenStatus.CONTAINED.value:
+        print(f"CONTAIN FAILED: {contained['reason']}")
+        return 1
+    analysis = bot.analyze(specimen)
+    profile = analysis.get("profile")
+    if profile:
+        print("\n— FORENSIC PROFILE (measured) —")
+        print(f"  sha256: {profile.sha256}")
+        print(f"  size:   {profile.size_bytes} bytes | type: {profile.file_type}")
+        print(f"  entropy: {profile.entropy} | mode: {profile.mode}")
+        if profile.indicators:
+            for k, v in profile.indicators.items():
+                print(f"  {k}: {v}")
+    quarantined = bot.quarantine(specimen)
+    bot.seal_egress()
+    report = bot.case_report()
+    print(f"\nQuarantine: {quarantined['status']}")
+    print(f"Event log intact: {report['log_intact']} ({report['events']} events)")
+    return 0 if quarantined["status"] == SpecimenStatus.QUARANTINED.value else 1
 
 
 if __name__ == "__main__":

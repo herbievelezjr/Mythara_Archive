@@ -54,3 +54,9 @@ soul_cradle/audit.jsonl
 soul_cradle/standing_audit.jsonl
 soul_cradle/forge_audit.jsonl
 aries_out/
+
+# Soul Cradle runtime ledgers (regenerated at runtime; never committed)
+soul_cradle/*.jsonl
+
+# Bot runtime state (regenerated at runtime; never committed)
+Commercial/bot_blessings.json

@@ -1,21 +1,49 @@
 # Copyright © 2025 Herbert Velez Jr. All rights reserved.
 
 """
-LinkedIn Sales Bot - Automated Outreach
-Finds prospects, sends connection requests, and follows up automatically.
+LinkedIn Sales Bot — QUARANTINED Selenium attempt (2026-09-22).
+
+⚠️  READ BEFORE RUNNING:
+  - WINDOWS ONLY. It drives Microsoft Edge through Herb's own logged-in
+    Windows user profile (hardcoded path below). It cannot run on Linux,
+    macOS, or any server.
+  - REQUIRES THE USER'S OWN SESSION. It automates Herb's personal LinkedIn
+    login. Never point it at anyone else's account.
+  - ACCOUNT RISK IS REAL. Automated connection requests and messaging
+    violate LinkedIn's Terms of Service. LinkedIn detects automation and
+    restricts or permanently bans accounts. "Safe limits" and random
+    delays reduce but do not remove this risk.
+  - NEVER RUN FROM A DATACENTER / VPN / SERVER IP. Automation from a
+    datacenter IP is one of the strongest bot signals. Only run from
+    Herb's own home machine on his normal residential IP.
+  - XPaths are brittle and WILL rot as LinkedIn changes its markup.
+
+Kept because the Connect-clicking flow is a genuine attempt worth
+preserving — but it is not a production tool. The honest LinkedIn path
+is Commercial/mythara_linkedin_automation_bot.py (planner: drafts only,
+human sends).
 """
 
+import sys
 import time
 import random
 from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+try:
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    SELENIUM_AVAILABLE = True
+except ImportError:
+    SELENIUM_AVAILABLE = False
 
 class LinkedInSalesBot:
-    """Automates LinkedIn prospecting and outreach."""
+    """QUARANTINED experiment. Drives Edge through Herb's own logged-in
+    session to open LinkedIn pages for manual review. It does not
+    reliably automate outreach — accept-detection and messaging are
+    unimplemented; login/state checks only verify reachability.
+    WINDOWS ONLY. Risks account restriction or permanent ban."""
     
     def __init__(self):
         self.driver = None
@@ -98,7 +126,7 @@ class LinkedInSalesBot:
                         send_button.click()
                         
                         sent_count += 1
-                        print(f"   ✅ Sent to {full_name}")
+                        print(f"   ➡️ Connect click attempted: {full_name} (delivery unconfirmed)")
                         
                         # Random delay (human-like behavior)
                         time.sleep(random.randint(5, 10))
@@ -109,7 +137,7 @@ class LinkedInSalesBot:
                             send_button = self.driver.find_element(By.XPATH, "//button[contains(@aria-label, 'Send now')]")
                             send_button.click()
                             sent_count += 1
-                            print(f"   ✅ Sent to {full_name} (no note)")
+                            print(f"   ➡️ Connect click attempted: {full_name} (no note, delivery unconfirmed)")
                             time.sleep(random.randint(5, 10))
                         except:
                             print(f"   ⚠️ Skipped {full_name}")
@@ -122,37 +150,48 @@ class LinkedInSalesBot:
         except Exception as e:
             print(f"❌ Error finding prospects: {e}")
         
-        print(f"\n✅ Sent {sent_count} connection requests")
+        print(f"\n➡️ Connect clicks attempted: {sent_count} (delivery unconfirmed)")
         return sent_count
     
     def check_pending_connections(self):
-        """Check who accepted your connection requests."""
+        """UNIMPLEMENTED: programmatic accept-detection was never built.
+
+        Opens the sent-invitations page so Herb can review manually.
+        Anything claiming to know who accepted is not implemented here.
+        """
         print("\n📬 Checking for new connections...")
-        
+        print("   ⚠️  Accept-detection is NOT implemented — manual review required.")
+
         self.driver.get("https://www.linkedin.com/mynetwork/invitation-manager/sent/")
         time.sleep(3)
-        
-        # This would check for accepted connections
-        # For now, just navigate there
-        print("✅ Navigate to My Network to see who accepted")
+
+        print("✅ Opened sent invitations. Review in the browser who accepted.")
         
     def send_follow_up_messages(self, message_template: str):
-        """Send follow-up messages to new connections."""
-        print("\n💬 Sending follow-up messages...")
-        
+        """UNIMPLEMENTED: automated follow-up messaging was never built.
+
+        Opens the connections page for manual follow-up. This method
+        sends nothing.
+        """
+        print("\n💬 Follow-up messages are MANUAL ONLY — nothing is sent by this bot.")
+
         # Go to recent connections
         self.driver.get("https://www.linkedin.com/mynetwork/invite-connect/connections/")
         time.sleep(3)
-        
-        # This would iterate through recent connections and message them
-        # For now, manual step
-        print("✅ Navigate to connections to send follow-ups")
+
+        print("✅ Opened connections. Write follow-ups yourself.")
         
     def daily_outreach(self):
-        """Run daily automated outreach."""
+        """QUARANTINED outreach experiment. Clicks Connect in YOUR Edge
+        session after explicit consent. Counts below are attempted clicks,
+        not confirmed deliveries — LinkedIn can silently drop them, and
+        selectors rot. Projections are not made; past acceptance rates
+        are unknown."""
         print("="*60)
-        print("🚀 LINKEDIN SALES BOT - DAILY OUTREACH")
+        print("🚀 LINKEDIN SALES BOT - DAILY OUTREACH (QUARANTINED EXPERIMENT)")
         print("="*60)
+        print("   ⚠️  Attempted clicks are reported; LinkedIn delivery is")
+        print("       not verifiable from here. No outcome is projected.")
         
         self.start_browser()
         
@@ -180,10 +219,11 @@ class LinkedInSalesBot:
         sent += self.send_connection_requests(message, target_count=5)
         
         print("\n" + "="*60)
-        print(f"✅ DAILY OUTREACH COMPLETE")
-        print(f"   • Total requests sent: {sent}")
-        print(f"   • Expected accepts tomorrow: {int(sent * 0.4)}")
-        print(f"   • Next run: Tomorrow same time")
+        print(f"✅ DAILY OUTREACH ATTEMPT COMPLETE (quarantined experiment)")
+        print(f"   • Connect clicks attempted: {sent}")
+        print(f"   • Confirmed deliveries: unknown — LinkedIn does not confirm")
+        print(f"   • Expected accepts: not projected (no data)")
+        print(f"   • Next run: manual, at your discretion")
         print("="*60)
         
         # Keep browser open for manual review
@@ -199,37 +239,48 @@ class LinkedInSalesBot:
 
 
 def main():
-    """Run the LinkedIn sales bot."""
-    
+    """Run the LinkedIn sales bot — quarantined, explicit consent required."""
+
+    if not SELENIUM_AVAILABLE:
+        print("❌ Selenium is not installed in this environment.")
+        print("   This quarantined script also requires Windows + your own Edge profile.")
+        return
+
+    if sys.platform != "win32":
+        print("❌ REFUSED: this script is Windows-only (it drives your Edge profile).")
+        print(f"   Current platform: {sys.platform}")
+        print("   Run it on your own Windows machine, on your home network —")
+        print("   never from a server or datacenter IP.")
+        return
+
     print("""
 ╔════════════════════════════════════════════════════════════╗
-║        MYTHARA LINKEDIN SALES BOT - AUTOMATED              ║
+║   ⚠️  QUARANTINED: LINKEDIN SELENIUM AUTOMATION  ⚠️         ║
 ║                                                            ║
 ║  This bot will:                                           ║
-║  1. Search for qualified prospects (CROs, CTOs, AI leads) ║
-║  2. Send 15 connection requests with personalized notes   ║
-║  3. Run daily automatically                               ║
+║  1. Drive YOUR logged-in Edge/LinkedIn session            ║
+║  2. Click Connect buttons automatically                  ║
 ║                                                            ║
-║  SAFETY:                                                  ║
-║  - Max 15 requests/day (safe limit)                       ║
-║  - Random delays (human-like)                             ║
-║  - Uses your existing LinkedIn session                    ║
+║  RISKS YOU ARE ACCEPTING:                                 ║
+║  • LinkedIn may restrict or PERMANENTLY BAN your account ║
+║  • "Safe limits" and random delays do NOT make this safe ║
+║  • Run ONLY from your home PC on your residential IP     ║
+║  • Never run from a server, VPS, or datacenter IP        ║
+║  • Selectors rot — expect breakage, verify every run     ║
 ║                                                            ║
+║  The honest alternative: the Outreach Planner drafts      ║
+║  connection notes and YOU send them by hand.              ║
 ╚════════════════════════════════════════════════════════════╝
 
-⚠️  IMPORTANT: Don't use LinkedIn while bot is running
-⚠️  LinkedIn must be logged in before starting
-⚠️  First time: Install Selenium with: pip install selenium
+Type I ACCEPT THE RISK to continue, anything else to cancel: """)
 
-Ready to start? (yes/no): """)
-    
-    response = input().strip().lower()
-    
-    if response == 'yes':
+    response = input().strip()
+
+    if response == 'I ACCEPT THE RISK':
         bot = LinkedInSalesBot()
         bot.daily_outreach()
     else:
-        print("❌ Cancelled. Run again when ready!")
+        print("❌ Cancelled. No browser was started, nothing was sent.")
 
 
 if __name__ == "__main__":

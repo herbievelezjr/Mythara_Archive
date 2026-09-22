@@ -348,7 +348,7 @@ class MytharaGopherbot:
         # Gather all relevant materials
         research_results = {
             "maxims": [],
-            "cases": [],
+            "landmark_cases": [],
             "restatements": [],
             "federal_rules": []
         }

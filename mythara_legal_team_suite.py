@@ -662,37 +662,473 @@ class PrivacySentinelBot:
         return assessment
 
 
-# ===================== Additional Bots (Stubs) =====================
+# ===================== Additional Bots =====================
+# NOTE: Every method below returns deterministic rule/keyword analysis over
+# caller-supplied facts. Nothing here is legal advice. Outputs carry the
+# not-a-lawyer disclaimer; consult a licensed attorney for real matters.
 
 class LitigationStrategistBot:
-    """Litigation strategy and case management"""
+    """
+    Litigation strategy and case management.
+    Scores case strength from observable case factors; generates phase timelines.
+    """
     def __init__(self, torts_index, legal_research):
+        self.torts_index = torts_index
+        self.legal_research = legal_research
         self.name = "Litigation Strategist Bot"
 
+    def assess_case_strength(self, case_facts: Dict[str, any]) -> Dict[str, any]:
+        """
+        Score case strength from caller-supplied factors (0-100 per factor).
+        Factors: evidence_strength, witness_support, damages_documented,
+                 defendant_resources, applicable_law_favorable, defenses_known.
+        """
+        assessment = {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "overall_score": 0,
+            "strength_level": "WEAK",
+            "factor_scores": {},
+            "risks": [],
+            "recommended_next_steps": [],
+            "disclaimer": "Informational only — not legal advice. Consult a licensed litigator."
+        }
+
+        weights = {
+            "evidence_strength": 0.30,
+            "witness_support": 0.15,
+            "damages_documented": 0.20,
+            "defendant_resources": 0.10,
+            "applicable_law_favorable": 0.15,
+            "defenses_known": 0.10,
+        }
+        total = 0.0
+        for factor, weight in weights.items():
+            score = max(0, min(100, int(case_facts.get(factor, 0))))
+            assessment["factor_scores"][factor] = score
+            total += score * weight
+        assessment["overall_score"] = round(total, 1)
+
+        if total >= 75:
+            assessment["strength_level"] = "STRONG"
+        elif total >= 50:
+            assessment["strength_level"] = "MODERATE"
+        elif total >= 30:
+            assessment["strength_level"] = "WEAK"
+
+        if case_facts.get("evidence_strength", 0) < 40:
+            assessment["risks"].append("Weak evidence base — discovery burden will be high")
+        if case_facts.get("defenses_known", 0) > 60:
+            assessment["risks"].append("Strong known defenses — expect dispositive motions")
+        if case_facts.get("defendant_resources", 0) > 70:
+            assessment["risks"].append("Well-resourced opponent — litigation will be expensive and long")
+        if case_facts.get("damages_documented", 0) < 40:
+            assessment["risks"].append("Damages poorly documented — recovery may not justify cost")
+
+        assessment["recommended_next_steps"] = [
+            "Preserve all evidence (litigation hold letter)",
+            "Engage licensed litigation counsel for case evaluation",
+            "Send demand letter before filing where appropriate",
+            "Evaluate ADR (mediation/arbitration) vs. trial economics",
+            "Calendar statute of limitations immediately",
+        ]
+        return assessment
+
+    def generate_litigation_timeline(self, case_type: str = "civil") -> List[Dict[str, str]]:
+        """Deterministic phase timeline for a civil litigation matter."""
+        phases = [
+            {"phase": "Pre-suit", "duration": "1-3 months",
+             "actions": "Demand letter, evidence preservation, counsel engagement"},
+            {"phase": "Pleadings", "duration": "2-4 months",
+             "actions": "Complaint filed, answer/motion to dismiss, counterclaims"},
+            {"phase": "Discovery", "duration": "6-12 months",
+             "actions": "Document requests, depositions, interrogatories, experts retained"},
+            {"phase": "Dispositive motions", "duration": "2-4 months",
+             "actions": "Summary judgment briefing and argument"},
+            {"phase": "ADR / settlement", "duration": "1-3 months",
+             "actions": "Mediation, settlement conferences"},
+            {"phase": "Trial", "duration": "1-4 weeks",
+             "actions": "Jury/bench trial, verdict"},
+            {"phase": "Post-trial / appeal", "duration": "6-18 months",
+             "actions": "Post-trial motions, notice of appeal"},
+        ]
+        return [{"case_type": case_type, **p} for p in phases]
+
+
 class HealthcareComplianceBot:
-    """HIPAA, FDA, and healthcare-specific compliance"""
+    """
+    HIPAA, FDA, and healthcare-specific compliance.
+    Checklist-based safeguard analysis over caller-supplied practices.
+    """
     def __init__(self, torts_index):
+        self.torts_index = torts_index
         self.name = "Healthcare Compliance Bot"
+        self.phi_categories = [
+            "names", "addresses", "dates", "phone_numbers", "fax_numbers",
+            "email_addresses", "ssn", "medical_record_numbers", "health_plan_ids",
+            "account_numbers", "certificate_numbers", "vehicle_ids", "device_ids",
+            "web_urls", "ip_addresses", "biometric_ids", "photos", "other_ids",
+        ]
+        self.safeguards = {
+            "administrative": ["risk_analysis", "workforce_training", "access_management",
+                               "incident_response_plan", "business_associate_agreements"],
+            "physical": ["facility_access_controls", "workstation_security",
+                         "device_media_controls"],
+            "technical": ["access_controls", "audit_controls", "integrity_controls",
+                          "transmission_security", "encryption"],
+        }
+
+    def assess_hipaa_risk(self, practices: Dict[str, any]) -> Dict[str, any]:
+        """
+        Score HIPAA posture from caller-supplied practice flags.
+        practices: {"implemented_safeguards": [...], "phi_categories_handled": [...],
+                    "has_baa": bool, "breach_history": int}
+        """
+        implemented = set(practices.get("implemented_safeguards", []))
+        all_safeguards = [s for group in self.safeguards.values() for s in group]
+        missing = [s for s in all_safeguards if s not in implemented]
+
+        assessment = {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "safeguards_implemented": len(implemented),
+            "safeguards_total": len(all_safeguards),
+            "missing_safeguards": missing,
+            "phi_categories_handled": practices.get("phi_categories_handled", []),
+            "overall_risk": "LOW",
+            "findings": [],
+            "recommended_steps": [],
+            "disclaimer": "Informational only — not legal advice. HIPAA compliance requires "
+                          "qualified counsel and a formal risk analysis.",
+        }
+
+        coverage = len(implemented) / len(all_safeguards) if all_safeguards else 0
+        if coverage < 0.5:
+            assessment["overall_risk"] = "HIGH"
+        elif coverage < 0.8:
+            assessment["overall_risk"] = "MEDIUM"
+
+        if not practices.get("has_baa"):
+            assessment["findings"].append("No Business Associate Agreements in place")
+            assessment["overall_risk"] = "HIGH"
+        if practices.get("breach_history", 0) > 0:
+            assessment["findings"].append(
+                f"{practices['breach_history']} prior breach(es) — breach notification rule review required")
+        if "encryption" not in implemented:
+            assessment["findings"].append("Encryption not implemented (addressable but expected)")
+        if "risk_analysis" not in implemented:
+            assessment["findings"].append("No documented risk analysis — required by the Security Rule")
+
+        assessment["recommended_steps"] = [
+            "Complete a formal HIPAA risk analysis with documentation",
+            "Execute BAAs with every business associate",
+            "Implement missing safeguards, starting with encryption and access controls",
+            "Train workforce and document training",
+            "Establish breach notification procedures",
+            "Engage healthcare compliance counsel",
+        ]
+        return assessment
+
+    def generate_hipaa_checklist(self) -> List[str]:
+        """Safeguard checklist grouped by HIPAA Security Rule categories."""
+        checklist = []
+        for group, items in self.safeguards.items():
+            checklist.append(f"[{group.upper()}]")
+            checklist.extend(f"  - {item}" for item in items)
+        checklist.append("18 PHI identifier categories inventoried: " + ", ".join(self.phi_categories))
+        return checklist
+
 
 class CorporateGovernanceBot:
-    """Corporate formation, governance, M&A"""
+    """
+    Corporate formation, governance, M&A.
+    Rule-based entity comparison and formation checklists.
+    """
     def __init__(self, legal_research):
+        self.legal_research = legal_research
         self.name = "Corporate Governance Bot"
+        self.entity_profiles = {
+            "LLC": {"liability": "limited", "tax": "pass-through (default)",
+                    "formality": "low", "investors": "members (VC-unfriendly)",
+                    "best_for": ["small business", "real estate", "family business"]},
+            "C-Corp": {"liability": "limited", "tax": "double taxation",
+                       "formality": "high", "investors": "shares (VC-standard)",
+                       "best_for": ["startups seeking VC", "going public", "employee stock options"]},
+            "S-Corp": {"liability": "limited", "tax": "pass-through (restrictions)",
+                       "formality": "medium", "investors": "100 US individuals max",
+                       "best_for": ["profitable small business", "owner-operators"]},
+            "Sole Proprietorship": {"liability": "unlimited", "tax": "personal",
+                                    "formality": "none", "investors": "n/a",
+                                    "best_for": ["testing an idea", "freelancers"]},
+        }
+
+    def recommend_entity(self, factors: Dict[str, any]) -> Dict[str, any]:
+        """
+        Score entity fit from caller-supplied factors.
+        factors: {"seeking_vc": bool, "owners": int, "profitable": bool,
+                  "wants_low_formality": bool, "non_us_owners": bool}
+        """
+        scores = {entity: 0 for entity in self.entity_profiles}
+        if factors.get("seeking_vc"):
+            scores["C-Corp"] += 3
+        if factors.get("owners", 1) > 1:
+            scores["LLC"] += 1
+            scores["C-Corp"] += 1
+        if factors.get("profitable") and not factors.get("seeking_vc"):
+            scores["S-Corp"] += 2
+            scores["LLC"] += 1
+        if factors.get("wants_low_formality"):
+            scores["LLC"] += 2
+            scores["Sole Proprietorship"] += 1
+        if factors.get("non_us_owners"):
+            scores["S-Corp"] -= 3  # S-corp bars nonresident alien owners
+            scores["C-Corp"] += 1
+            scores["LLC"] += 1
+        if factors.get("owners", 1) == 1 and not factors.get("seeking_vc"):
+            scores["LLC"] += 1
+
+        ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "ranked_entities": [
+                {"entity": e, "score": s, "profile": self.entity_profiles[e]}
+                for e, s in ranked
+            ],
+            "top_recommendation": ranked[0][0],
+            "disclaimer": "Informational only — not legal or tax advice. Entity choice has "
+                          "tax consequences; consult licensed attorney and CPA.",
+        }
+
+    def generate_formation_checklist(self, entity_type: str = "LLC") -> List[str]:
+        """Deterministic formation checklist."""
+        return [
+            f"Choose and clear the {entity_type} name (state business registry search)",
+            "Designate a registered agent with in-state address",
+            f"File formation documents (Articles of Organization/Incorporation) with the state",
+            "Obtain EIN from the IRS",
+            "Draft governing document (Operating Agreement / Bylaws + shareholder agreement)",
+            "Issue ownership interests and record in ledger",
+            "Open business bank account",
+            "File beneficial ownership reports as required",
+            "Obtain business licenses and permits",
+            "Set up accounting, tax calendar, and annual report reminders",
+            "Consult attorney and CPA before operating",
+        ]
+
 
 class RealEstateAdvisorBot:
-    """Real estate transactions and property law"""
+    """
+    Real estate transactions and property law.
+    Keyword-based risk flagging over caller-supplied transaction terms.
+    """
     def __init__(self, torts_index):
+        self.torts_index = torts_index
         self.name = "Real Estate Advisor Bot"
+        self.risk_keywords = {
+            "no inspection contingency": ("Missing inspection contingency", "HIGH"),
+            "as-is": ("As-is sale — limited recourse for defects", "MEDIUM"),
+            "no title insurance": ("No title insurance commitment", "HIGH"),
+            "balloon payment": ("Balloon payment structure", "MEDIUM"),
+            "adjustable rate": ("Adjustable/variable rate exposure", "MEDIUM"),
+            "prepayment penalty": ("Prepayment penalty clause", "LOW"),
+            "no financing contingency": ("No financing contingency — deposit at risk", "HIGH"),
+            "hoa": ("HOA restrictions, dues, and special assessments", "MEDIUM"),
+            "flood zone": ("Flood zone — insurance and disclosure issues", "MEDIUM"),
+            "easement": ("Easement burdening the property", "LOW"),
+            "lien": ("Existing lien on title", "HIGH"),
+        }
+
+    def assess_transaction_risk(self, transaction: Dict[str, any]) -> Dict[str, any]:
+        """
+        Flag risks from caller-supplied transaction text.
+        transaction: {"description": str, "property_type": str, "price": number}
+        """
+        description = transaction.get("description", "").lower()
+        flags = []
+        for keyword, (label, severity) in self.risk_keywords.items():
+            if keyword in description:
+                flags.append({"trigger": keyword, "issue": label, "severity": severity})
+
+        high = sum(1 for f in flags if f["severity"] == "HIGH")
+        overall = "HIGH" if high >= 2 else ("MEDIUM" if flags else "LOW")
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "property_type": transaction.get("property_type", "unknown"),
+            "overall_risk": overall,
+            "flags": flags,
+            "recommended_steps": [
+                "Obtain title commitment and title insurance",
+                "Complete professional inspection within contingency period",
+                "Review HOA docs, CC&Rs, and special assessments",
+                "Verify zoning, permits, and floodplain status",
+                "Have a licensed real estate attorney review the purchase agreement",
+            ],
+            "disclaimer": "Informational only — not legal advice. Real estate law is "
+                          "state-specific; consult a licensed attorney.",
+        }
+
+    def generate_closing_checklist(self) -> List[str]:
+        """Deterministic closing checklist."""
+        return [
+            "Executed purchase agreement with all addenda",
+            "Earnest money deposited with escrow",
+            "Title search completed; title commitment reviewed",
+            "Inspection completed; repair addendum negotiated",
+            "Appraisal completed (if financed)",
+            "Loan commitment / proof of funds verified",
+            "HOA/condo resale package reviewed",
+            "Closing disclosure reviewed 3 days before closing",
+            "Final walkthrough completed",
+            "Funds wired to verified escrow account (verify wiring instructions by phone)",
+            "Deed recorded; title policy issued",
+        ]
+
 
 class TechnologyCounselBot:
-    """Technology transactions, licensing, SaaS"""
+    """
+    Technology transactions, licensing, SaaS.
+    Keyword-based review of SaaS/license terms in the ContractReviewBot style.
+    """
     def __init__(self, torts_index):
+        self.torts_index = torts_index
         self.name = "Technology Counsel Bot"
+        self.risk_keywords = {
+            "perpetual license": ("Perpetual license grant — scope creep risk", "MEDIUM"),
+            "irrevocable": ("Irrevocable rights grant", "MEDIUM"),
+            "assign": ("Broad assignment of IP to vendor", "HIGH"),
+            "own all data": ("Vendor claims ownership of customer data", "HIGH"),
+            "no sla": ("No service-level commitments", "MEDIUM"),
+            "no uptime": ("No uptime guarantee", "MEDIUM"),
+            "unilateral modification": ("Vendor may change terms unilaterally", "HIGH"),
+            "auto-renew": ("Automatic renewal without notice", "MEDIUM"),
+            "no termination for convenience": ("No termination-for-convenience right", "MEDIUM"),
+            "indemnify vendor": ("One-sided indemnification of vendor", "MEDIUM"),
+            "limitation of liability": ("Check liability caps and carve-outs", "LOW"),
+            "no audit right": ("No audit rights over vendor security/usage", "LOW"),
+            "subprocessors": ("Subprocessor usage — review DPA obligations", "MEDIUM"),
+            "data residency": ("Data residency / cross-border transfer terms", "MEDIUM"),
+        }
+
+    def review_saas_terms(self, terms: List[str]) -> Dict[str, any]:
+        """Flag risky SaaS/license terms via keyword matching."""
+        findings = []
+        for term in terms:
+            lowered = term.lower()
+            for keyword, (label, severity) in self.risk_keywords.items():
+                if keyword in lowered:
+                    findings.append({
+                        "term": term, "trigger": keyword,
+                        "issue": label, "severity": severity,
+                    })
+        high = sum(1 for f in findings if f["severity"] == "HIGH")
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "terms_reviewed": len(terms),
+            "findings": findings,
+            "overall_risk": "HIGH" if high >= 2 else ("MEDIUM" if findings else "LOW"),
+            "recommended_steps": [
+                "Negotiate data ownership and return/deletion on termination",
+                "Require SLA with credits and uptime commitment",
+                "Add mutual indemnification and balanced liability caps",
+                "Require DPA covering subprocessors and breach notification",
+                "Secure termination-for-convenience and renewal notice rights",
+                "Have technology counsel review before signing",
+            ],
+            "disclaimer": "Informational only — not legal advice. Consult licensed technology counsel.",
+        }
+
+    def generate_licensing_checklist(self) -> List[str]:
+        """Deterministic software licensing checklist."""
+        return [
+            "License scope defined (users, seats, territory, term)",
+            "IP ownership and assignment terms reviewed",
+            "Open-source components inventoried and license-compatible",
+            "SLA / uptime / support tiers specified",
+            "Data protection addendum (DPA) executed",
+            "Security requirements and audit rights included",
+            "Termination, wind-down, and data-return provisions",
+            "Fee structure, renewal caps, and price protections",
+            "Indemnification (IP infringement) and insurance",
+            "Limitation of liability with appropriate carve-outs",
+        ]
+
 
 class RegulatoryNavigatorBot:
-    """Regulatory compliance and government relations"""
+    """
+    Regulatory compliance and government relations.
+    Maps industry + activities to likely regulators via deterministic tables.
+    """
     def __init__(self, legal_research):
+        self.legal_research = legal_research
         self.name = "Regulatory Navigator Bot"
+        self.industry_regulators = {
+            "banking": ["OCC / FDIC / Federal Reserve (federal)", "State banking department",
+                        "CFPB (consumer finance)", "FinCEN (BSA/AML)"],
+            "healthcare": ["HHS / OCR (HIPAA)", "FDA (drugs/devices)", "CMS (Medicare/Medicaid)",
+                           "State medical board"],
+            "fintech": ["State money-transmitter licensing (state-by-state)", "FinCEN (MSB)",
+                        "CFPB", "SEC (if securities involved)"],
+            "telecom": ["FCC", "State PUC"],
+            "energy": ["FERC", "State PUC", "EPA"],
+            "food": ["FDA", "USDA", "State health department"],
+            "transportation": ["DOT / FMCSA", "FAA (aviation)"],
+            "education": ["Dept. of Education", "State education agency"],
+            "ai": ["FTC (unfair/deceptive practices)", "NIST AI RMF (voluntary framework)",
+                   "EU AI Act (if operating in EU)", "State AI laws (evolving)"],
+            "crypto": ["SEC", "CFTC", "FinCEN", "State money-transmitter regimes"],
+        }
+        self.activity_triggers = {
+            "consumer data": "State privacy laws (e.g., CCPA/CPRA) + FTC",
+            "employees": "DOL, OSHA, EEOC, state labor agencies",
+            "public company": "SEC reporting obligations",
+            "government contracts": "FAR compliance, agency-specific rules",
+            "environmental impact": "EPA, state environmental agencies",
+            "import": "CBP, tariffs, trade compliance (BIS/OFAC)",
+        }
+
+    def identify_regulators(self, industry: str, activities: List[str]) -> Dict[str, any]:
+        """Map industry and activities to likely regulators."""
+        industry_key = industry.lower()
+        regulators = list(self.industry_regulators.get(industry_key, []))
+        activity_hits = []
+        for activity in activities:
+            for trigger, reg in self.activity_triggers.items():
+                if trigger in activity.lower():
+                    activity_hits.append({"activity": activity, "regulator": reg})
+                    if reg not in regulators:
+                        regulators.append(reg)
+        if not regulators:
+            regulators = ["Industry regulator not in table — research required"]
+        return {
+            "timestamp": datetime.now().isoformat(),
+            "bot": self.name,
+            "industry": industry,
+            "likely_regulators": regulators,
+            "activity_triggers": activity_hits,
+            "recommended_steps": [
+                "Confirm regulator list with licensed regulatory counsel",
+                "Inventory required licenses, registrations, and filings",
+                "Build a compliance calendar with renewal deadlines",
+                "Designate a compliance owner and escalation path",
+                "Monitor rulemaking in each regulator's docket",
+            ],
+            "disclaimer": "Informational only — not legal advice. Regulatory scope is "
+                          "fact- and jurisdiction-specific.",
+        }
+
+    def generate_compliance_calendar(self) -> List[Dict[str, str]]:
+        """Generic annual compliance calendar template."""
+        return [
+            {"period": "Q1", "task": "Annual reports / franchise tax filings (state)"},
+            {"period": "Q1", "task": "Review and renew business licenses"},
+            {"period": "Q2", "task": "Mid-year policy review (privacy, security, HR)"},
+            {"period": "Q3", "task": "License renewal check; training refresh"},
+            {"period": "Q4", "task": "Year-end compliance audit and calendar build for next year"},
+            {"period": "Ongoing", "task": "Track regulator dockets for rule changes"},
+        ]
 
 
 # ===================== USAGE EXAMPLE =====================

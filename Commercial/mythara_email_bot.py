@@ -9,11 +9,6 @@ Copyright © 2025 Herbert Velez Jr. All rights reserved.
 import sqlite3
 import hashlib
 import json
-import imaplib
-import smtplib
-import email
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
@@ -84,21 +79,21 @@ class AutoResponse:
 class EmailBot:
     """
     Mythara Email Bot - AI Email Assistant
-    
+
+    Analyzes email text you supply (it has no inbox connection and no
+    send capability — drafts/suggestions only, by design).
+
     Features:
-    - Smart inbox triage (priority + category classification)
+    - Email triage (priority + category classification)
     - Phishing detection (URL analysis, sender verification)
     - Manipulation detection (emotional extortion, urgency tactics)
-    - Auto-responses (template-based replies)
+    - Auto-responses (template-based reply suggestions)
     - Email summarization
     """
-    
-    def __init__(self, user_email: str, database_path: Optional[str] = None,
-                 imap_server: Optional[str] = None, imap_port: int = 993,
-                 smtp_server: Optional[str] = None, smtp_port: int = 587,
-                 email_password: Optional[str] = None):
+
+    def __init__(self, user_email: str, database_path: Optional[str] = None):
         self.user_email = user_email
-        
+
         # Database setup
         if database_path:
             self.db_path = database_path
@@ -107,16 +102,9 @@ class EmailBot:
             mythara_dir = os.path.join(home_dir, ".mythara_engine", "EmailBot")
             os.makedirs(mythara_dir, exist_ok=True)
             self.db_path = os.path.join(mythara_dir, "email_bot.db")
-        
+
         self._init_database()
-        
-        # Email server setup (optional)
-        self.imap_server = imap_server
-        self.imap_port = imap_port
-        self.smtp_server = smtp_server
-        self.smtp_port = smtp_port
-        self.email_password = email_password
-        
+
         # Mythara Engine integration
         if SDK_AVAILABLE:
             config = ProductConfig(
@@ -151,12 +139,9 @@ class EmailBot:
         
         print(f"\n📧 Mythara Email Bot initialized for: {user_email}")
         print(f"📊 Database: {self.db_path}")
+        print("📝 Mode: analyze supplied text only — no inbox, no sending (draft-only)")
         if self.engine:
             print(f"✅ Mythara Engine SDK: ACTIVE")
-        if imap_server:
-            print(f"📥 IMAP: {imap_server}:{imap_port}")
-        if smtp_server:
-            print(f"📤 SMTP: {smtp_server}:{smtp_port}")
         print()
     
     def _init_database(self):
@@ -490,7 +475,9 @@ class EmailBot:
             "period": f"{days} days",
             "priority_breakdown": priority_counts,
             "category_breakdown": category_counts,
-            "phishing_blocked": phishing_count,
+            # Detected, not blocked: this bot analyzes supplied text and has
+            # no inbox connection, so it cannot block anything.
+            "phishing_detected": phishing_count,
             "manipulation_detected": manipulation_count
         }
     
@@ -522,16 +509,19 @@ class EmailBot:
 
 
 def main():
-    """Demo: Email Bot usage"""
+    """Demo: Email Bot usage (all examples below are synthetic, not real emails)"""
     print("="*70)
     print("    MYTHARA EMAIL BOT - AI EMAIL ASSISTANT")
+    print("="*70)
+    print("  NOTE: every demo email below is a SYNTHETIC example,")
+    print("  written for this demo. None of them are real messages.")
     print("="*70)
     
     # Initialize bot
     bot = EmailBot(user_email="user@example.com")
     
-    # Demo 1: Normal work email
-    print("\n📧 DEMO 1: Normal Work Email")
+    # Demo 1: Normal work email (SYNTHETIC example)
+    print("\n📧 DEMO 1: Normal Work Email [synthetic]")
     print("-"*70)
     analysis1 = bot.analyze_email(
         from_address="colleague@company.com",
@@ -548,8 +538,8 @@ def main():
         print(f"\n💡 Suggested Response:")
         print(f"   {analysis1.suggested_response}")
     
-    # Demo 2: Phishing email
-    print("\n📧 DEMO 2: Phishing Email")
+    # Demo 2: Phishing email (SYNTHETIC example)
+    print("\n📧 DEMO 2: Phishing Email [synthetic]")
     print("-"*70)
     analysis2 = bot.analyze_email(
         from_address="security@paypal-security.com",
@@ -564,8 +554,8 @@ def main():
     for indicator in analysis2.phishing_indicators:
         print(f"      • {indicator}")
     
-    # Demo 3: Manipulation tactics
-    print("\n📧 DEMO 3: Marketing Email with Manipulation")
+    # Demo 3: Manipulation tactics (SYNTHETIC example)
+    print("\n📧 DEMO 3: Marketing Email with Manipulation [synthetic]")
     print("-"*70)
     analysis3 = bot.analyze_email(
         from_address="marketing@deals.com",
@@ -593,7 +583,7 @@ def main():
     for category, count in summary['category_breakdown'].items():
         print(f"      {category}: {count}")
     print(f"\n   🛡️ Security:")
-    print(f"      Phishing Blocked: {summary['phishing_blocked']}")
+    print(f"      Phishing Detected: {summary['phishing_detected']}")
     print(f"      Manipulation Detected: {summary['manipulation_detected']}")
     
     # Demo 5: Create custom auto-response

@@ -1,23 +1,20 @@
 #!/usr/bin/env python3
 """
-Mythara Email Bot - Automated Draft Generator (OAuth Version)
-Monitors mythara.engine@yahoo.com and generates email drafts using Mythara Engine.
+Mythara Email Bot - Automated Draft Generator
+Monitors mythara.engine@yahoo.com via Yahoo IMAP and generates email drafts
+using local keyword classification. Draft-only: it never sends email.
+Previously this file claimed an "OAuth Version" and a Mythara Engine
+integration; neither was ever implemented, so both claims were removed.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 """
 
 import imaplib
 import email
-import requests
 import os
-import json
-import webbrowser
 from datetime import datetime
 from email.header import decode_header
 from pathlib import Path
-from urllib.parse import urlencode, parse_qs
-from http.server import HTTPServer, BaseHTTPRequestHandler
-import threading
 
 # ============================================================================
 # CONFIGURATION
@@ -28,15 +25,6 @@ YAHOO_EMAIL = "mythara.engine@yahoo.com"
 YAHOO_APP_PASSWORD = os.getenv("YAHOO_APP_PASSWORD", "")  # Set via environment variable
 IMAP_SERVER = "imap.mail.yahoo.com"
 IMAP_PORT = 993
-
-# OAuth Settings (Yahoo OAuth 2.0)
-# Note: For production, you'd register an app at developer.yahoo.com
-# For now, we'll use a simplified approach with manual token entry
-OAUTH_TOKEN_FILE = Path("yahoo_oauth_token.json")
-
-# Mythara Engine Settings
-MYTHARA_API = os.getenv("MYTHARA_API_URL", "http://localhost:8000")
-MYTHARA_API_KEY = os.getenv("MYTHARA_API_KEY", "ent_prod_key_001")
 
 # Drafts Directory
 DRAFTS_DIR = Path("email_drafts")
@@ -87,31 +75,8 @@ def get_email_body(msg):
             pass
     return ""
 
-def invoke_mythara_clause(clause_id, payload):
-    """Call Mythara Engine to invoke a clause"""
-    try:
-        response = requests.post(
-            f"{MYTHARA_API}/v1/clauses/invoke",
-            headers={
-                "Authorization": f"Bearer {MYTHARA_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "clause_id": clause_id,
-                "messenger": "EmailBot-001",
-                "payload": payload,
-                "consent_token": "bot_automation_consent"
-            },
-            timeout=30
-        )
-        response.raise_for_status()
-        return response.json()
-    except Exception as e:
-        log(f"ERROR invoking clause {clause_id}: {str(e)}")
-        return None
-
 def classify_email(sender, subject, body):
-    """Classify email intent using Mythara Engine"""
+    """Classify email intent using local keyword heuristics (no network, no LLM)"""
     # For now, use simple heuristics (you can add Email_Classifier clause later)
     body_lower = body.lower()
     subject_lower = subject.lower()
@@ -141,7 +106,7 @@ We help {industry} organizations deliver cryptographic integrity proofs and SSIP
 
 Quick overview:
 - **PGP-signed manifests** with SHA-256 integrity hashes
-- **99.92% determinism** across reproducibility runs
+- **High determinism** across reproducibility runs
 - **Container-based deployment** (air-gap compatible)
 
 Would a 30-day pilot be valuable? I can send the pilot package and credentials today.
@@ -184,7 +149,7 @@ I understand budget considerations. Here's the value perspective:
 
 **What $60K/year covers:**
 - Cryptographic integrity proofs (PGP signatures, SHA-256 hashes)
-- 99.92% determinism, 0 critical leaks
+- high determinism across reproducibility runs, 0 critical leaks
 - SSIP audit metrics (drift suppression, emotional fidelity)
 - Priority support and compliance artifacts
 

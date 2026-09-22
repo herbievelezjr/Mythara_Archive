@@ -131,6 +131,18 @@ VULNERABILITIES FOUND:
             report += "\n✅ NO VULNERABILITIES FOUND - System passed all adversarial tests\n"
         
         report += f"\n{'='*80}\n"
+        report += """
+METHODOLOGY CAVEAT (read before trusting the score above):
+- "Blocked" includes attacks that raised an unhandled exception.
+  An exception is NOT proof of a deliberate security control — it may
+  be a crash, a missing dependency, or an import failure, not a block.
+- test_privilege_escalation records "blocked" by assumption ("Assume
+  blocked unless proven otherwise") without verifying any control.
+- Several input-validation tests only run when the optional framework
+  imports succeed; when it is unavailable those attacks are skipped,
+  not blocked. Skipped != blocked.
+Treat the security score as a harness self-report, not an audit.
+"""
         return report
 
 

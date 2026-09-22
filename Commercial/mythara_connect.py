@@ -121,28 +121,25 @@ class ConnectPersonality:
     
     # Aggressive: Competitive pressure (Use your leverage)
     COMPETITIVE_PRESSURE = [
-        "3 other banks in your region are evaluating this week",
-        "Your competitor [COMPETITOR] just started their pilot",
-        "While you're thinking about it, others are building 6 months of audit advantage",
-        "The 2 health systems already using this will have better FDA outcomes than you",
-        "I'm talking to 5 other VPs this week—you're not my only option here",
+        # Honest: market framing only — never fabricated rival or customer claims.
+        "Regulators are tightening AI audit requirements across every industry",
+        "The firms that build audit trails now will have clean history when enforcement accelerates",
+        "Early movers on AI governance hold the advantage when auditors arrive",
     ]
     
     # Aggressive: Scarcity (Maximize leverage)
     SCARCITY_TACTICS = [
-        "I have 2 slots left at $500. After that, it's $2,500 and I'm booked til February.",
-        "I can only onboard 3 more companies this quarter—after that, waitlist.",
-        "This pricing expires Friday. Not because of 'limited time offer' BS—because I'll be full.",
+        # Honest: qualification only — never fabricated slots, deadlines, or waitlists.
         "I'm prioritizing companies with audits in next 90 days. If that's not you, we should wait.",
-        "Real talk: I turn down clients who can't move fast. Can you decide this week or should I move on?",
+        "I take on a limited number of engagements so I can do the work properly.",
     ]
     
     # BLEND: Genuine interest in THEIR problem + Urgency
     EMPATHY_WITH_URGENCY = [
-        "I know model risk audits are brutal (worked with 3 VPs who just went through it). Want to avoid that pain?",
+        "I know model risk audits are brutal. Want to talk about avoiding that pain?",
         "Your audit's in 60 days, right? That's tight. Most companies need 90 days to prepare without our system.",
-        "I get it—you're drowning in compliance work. This cuts 200 hours to 20. Worth 15 minutes to discuss?",
-        "You mentioned in your post that manual audits are killing your team. What if you could automate 90% of it?",
+        "I get it—you're drowning in compliance work. The goal is cutting that manual burden dramatically. Worth 15 minutes to discuss?",
+        "If manual audits are eating your team's time — what if most of that work could be automated?",
     ]
     
     # Handling objections (Fight back)
@@ -226,8 +223,8 @@ class IndustryIntelligence:
             ],
             "tone": "conservative",  # Risk-averse, compliance-focused
             "decision_speed": "slow",  # 3-6 month sales cycles typical
-            "social_proof": "3 regulated financial institutions",
-            "roi_metric": "200 hours → 20 hours per audit cycle",
+            "social_proof": "[hypothetical] regulated financial institutions",
+            "roi_metric": "[illustrative estimate] 200 hours → 20 hours per audit cycle",
         },
         
         "healthcare": {
@@ -256,8 +253,8 @@ class IndustryIntelligence:
             ],
             "tone": "safety-first",  # Patient outcomes, clinical validation
             "decision_speed": "medium",  # 2-4 month cycles
-            "social_proof": "2 health systems with FDA submissions",
-            "roi_metric": "200 hours → 20 hours for safety reviews",
+            "social_proof": "[hypothetical] health systems pursuing FDA submissions",
+            "roi_metric": "[illustrative estimate] 200 hours → 20 hours for safety reviews",
         },
         
         "insurance": {
@@ -283,8 +280,8 @@ class IndustryIntelligence:
             ],
             "tone": "risk-focused",
             "decision_speed": "medium",
-            "social_proof": "2 carriers with NAIC compliance",
-            "roi_metric": "3 months → 3 weeks for model validation",
+            "social_proof": "[hypothetical] carriers pursuing NAIC compliance",
+            "roi_metric": "[illustrative estimate] 3 months → 3 weeks for model validation",
         },
         
         "education": {
@@ -310,8 +307,8 @@ class IndustryIntelligence:
             ],
             "tone": "mission-driven",  # Equity, access, outcomes
             "decision_speed": "slow",  # Academic cycles, committee approvals
-            "social_proof": "1 R1 university with ED compliance",
-            "roi_metric": "Accreditation review prep: 100 hours → 10 hours",
+            "social_proof": "[hypothetical] R1 universities pursuing ED compliance",
+            "roi_metric": "[illustrative estimate] accreditation prep: 100 hours → 10 hours",
         },
         
         "tech_saas": {
@@ -338,7 +335,7 @@ class IndustryIntelligence:
             "tone": "aggressive",  # Fast-moving, competitive
             "decision_speed": "fast",  # Days to weeks
             "social_proof": "[hypothetical] SaaS companies implementing SOC 2 AI controls",
-            "roi_metric": "Win 30% more enterprise deals with AI transparency",
+            "roi_metric": "[illustrative estimate] win more enterprise deals with AI transparency",
         },
         
         "retail": {
@@ -362,8 +359,8 @@ class IndustryIntelligence:
             ],
             "tone": "results-driven",
             "decision_speed": "fast",
-            "social_proof": "2 retailers with FTC compliance",
-            "roi_metric": "Avoid FTC litigation risk (avg settlement: $2M+)",
+            "social_proof": "[hypothetical] retailers pursuing FTC compliance",
+            "roi_metric": "[illustrative] reduced FTC litigation exposure",
         },
         
         "government": {
@@ -389,8 +386,8 @@ class IndustryIntelligence:
             ],
             "tone": "compliance-first",
             "decision_speed": "very_slow",  # 6-18 month procurement cycles
-            "social_proof": "1 federal agency with OMB compliance",
-            "roi_metric": "Pass GAO audits with zero AI governance findings",
+            "social_proof": "[hypothetical] federal agencies pursuing OMB compliance",
+            "roi_metric": "[illustrative estimate] clean GAO audits",
         },
     }
     
@@ -464,14 +461,14 @@ class SalesTactics:
     
     TACTICS = {
         "competitive_pressure": "Mention competitors evaluating/using the product",
-        "scarcity": "Limited slots, pricing windows, capacity constraints",
+        "scarcity": "honest capacity qualification only — never fabricated deadlines",
         "fomo": "Others are building advantage while you wait",
         "assumptive_close": "Book the meeting without asking permission",
         "qualify_hard": "I'm choosing you as much as you're choosing me",
         "dramatize_pain": "Make their problem vivid and urgent",
-        "social_proof": "2-3 companies already succeeding with this",
+        "social_proof": "[illustrative] hypothetical scenarios only — no live deployments to cite yet",
         "urgency": "Deadlines, audits, regulatory timelines",
-        "roi_proof": "200 hours → 20 hours (quantified value)",
+        "roi_proof": "[illustrative estimate] 200 hours → 20 hours — not measured",
         "fight_objections": "Counter 'no' with FOMO, then respect 2nd no",
     }
     
@@ -531,7 +528,8 @@ class MytharaConnect(AutonomousSalesBot):
     MYTHARA GOVERNANCE:
     - All responses validated by SalesClause (NEVER_AUTO_SEND pricing/contracts)
     - Blessings reservoir tracks performance (+10 per deal, -10 per violation)
-    - Messenger roles enforce authority levels (Gabriel=auto-send, Raphael=review)
+    - Messenger roles are risk labels only (Gabriel=low-risk draft, Raphael=high-risk review)
+    - Draft-only: no message is ever transmitted; every output returns to the operator for approval
     - Cryptographic audit trail (SHA-256) of every decision
     - Drift suppression ensures consistent brand voice
     
@@ -704,15 +702,15 @@ class MytharaConnect(AutonomousSalesBot):
             can_auto_send = False
             requires_human_review = True
         elif risk_score >= 40:
-            messenger = SalesMessenger.URIEL  # Illuminator - medium risk, can send with warnings
+            messenger = SalesMessenger.URIEL  # Illuminator - medium risk (low-risk label; nothing transmitted)
             can_auto_send = True
-            requires_human_review = False  # Auto-send but log warnings
+            requires_human_review = False  # risk label only — nothing is ever transmitted
         elif "not interested" in draft.lower() or "stop" in draft.lower():
-            messenger = SalesMessenger.GABRIEL  # Announcer - can auto-send rejections
+            messenger = SalesMessenger.GABRIEL  # Announcer - low-risk label (nothing transmitted)
             can_auto_send = True
             requires_human_review = False
         else:
-            messenger = SalesMessenger.URIEL  # Illuminator - low risk, auto-send
+            messenger = SalesMessenger.URIEL  # Illuminator - low risk label (nothing transmitted)
             can_auto_send = True
             requires_human_review = False
         
@@ -793,7 +791,7 @@ class MytharaConnect(AutonomousSalesBot):
         print(f"   Approved: {'✅' if validation['approved'] else '❌'}")
         print(f"   Violations: {len(validation['violations'])}")
         print(f"   Warnings: {len(validation['warnings'])}")
-        print(f"   Can Auto-Send: {'✅' if validation['can_auto_send'] else '❌'}")
+        print(f"   Auto-Send Label (risk only — nothing is ever transmitted): {'✅' if validation['can_auto_send'] else '❌'}")
         print(f"   Human Review Required: {'🔴 YES' if validation['requires_human_review'] else '✅ NO'}")
         print(f"   Hash: {validation['hash']}")
         print(f"   Blessings: {self.blessings.state['blessings']}/100")
@@ -806,15 +804,15 @@ class MytharaConnect(AutonomousSalesBot):
                 self.voice.announce_validation_status(validation['approved'], validation['risk_score'])
         
         if validation['approved'] and validation['can_auto_send'] and not validation['requires_human_review']:
-            # Low risk - auto-send approved
+            # Low risk - auto-send theater removed: nothing is transmitted; draft returned for operator approval
             self.blessings.record_auto_send(success=True)
-            print(f"   Action: ✅ AUTO-SENDING (Low Risk, Blessings: {self.blessings.state['blessings']}/100)")
+            print(f"   Action: ✅ LOW RISK — draft returned for operator approval (nothing sent; Blessings: {self.blessings.state['blessings']}/100)")
             return draft
         
         elif validation['approved'] and validation['can_auto_send'] and validation['risk_score'] >= 40:
-            # Medium risk - auto-send with warnings logged
+            # Medium risk - auto-send theater removed: nothing is transmitted; draft returned for operator approval
             self.blessings.record_auto_send(success=True)
-            print(f"   Action: ⚠️  AUTO-SENDING WITH WARNINGS (Medium Risk: {validation['risk_score']}/100)")
+            print(f"   Action: ⚠️  MEDIUM RISK — draft returned for operator approval (nothing sent; Risk: {validation['risk_score']}/100)")
             return draft
         
         elif validation['approved'] and not validation['can_auto_send']:
@@ -954,7 +952,7 @@ Here's what I'm seeing in your industry right now:
 - "Prove it wasn't tampered" questions with no good answer
 
 **WHAT'S WORKING:**
-{config['social_proof']} are using cryptographic governance systems (SHA-256 hashing) to create tamper-proof audit trails. Result: {config['roi_metric']}
+Illustrative scenario: {config['social_proof']} using cryptographic governance (SHA-256 hashing) for tamper-proof audit trails. Illustrative upside: {config['roi_metric']}
 
 No pitch yet—just want you to know this is solvable. Lots of {selected_industry.replace('_', ' ')} organizations are figuring this out right now.
 
@@ -1002,9 +1000,9 @@ PAIN POINT: {pain_point}
 
 SOLUTION: {value_prop}
 
-PROOF: {config['social_proof']} achieved zero audit findings using our cryptographic governance system. When regulators asked "{regulatory_ref}" questions, they had ironclad answers.
+DESIGN GOAL: cryptographic governance gives {config['social_proof']} ironclad answers when regulators ask "{regulatory_ref}" questions. Illustrative upside: {config['roi_metric']}
 
-ROI: {config['roi_metric']}
+ILLUSTRATIVE UPSIDE: {config['roi_metric']}
 
 REALITY CHECK: The regulatory landscape is tightening. Organizations building audit trails NOW will have 6-12 months of clean history when enforcement accelerates.
 
@@ -1035,7 +1033,7 @@ P.S. I can send our {industry}-specific validation report. It shows exactly what
 ❌ PROBLEM: {pain_point}
 ✅ SOLUTION: {value_prop}
 
-📊 PROOF: {config['social_proof']} already crushing it with our system. {config['roi_metric']}
+📊 ILLUSTRATIVE: {config['social_proof']} — upside {config['roi_metric']}
 
 ⚠️ COMPETITIVE REALITY: {competitive}
 
@@ -1045,7 +1043,7 @@ P.S. I can send our {industry}-specific validation report. It shows exactly what
 
 Herbert
 
-P.S. If you commit by Friday: $500 + I'll personally run your first {regulatory_ref} audit report. That's a $2k value. But only if you're ready to move."""
+P.S. At the $500 early adopter tier I'll personally run your first {regulatory_ref} audit report."""
     
     def _handle_question_with_soul(self, email_data: Dict, industry: str) -> str:
         """
@@ -1063,11 +1061,11 @@ P.S. If you commit by Friday: $500 + I'll personally run your first {regulatory_
 
 TECHNICAL DEPTH: SHA-256 cryptographic hashing on every AI decision—same standard used by federal systems. Auditors can mathematically verify zero tampering. It's provably immutable.
 
-PROOF: {config['social_proof']} already passing audits with zero findings. {config['roi_metric']}
+DESIGN INTENT: tamper-proof audit trails so {config['social_proof']} face audits with cryptographic evidence. Illustrative upside: {config['roi_metric']}
 
 REGULATORY REALITY: Without cryptographic proof, you're showing manual logs when auditors ask "{regulatory_ref}" questions. Those logs can be edited—that's an audit risk.
 
-TIMING: Early adopter pilot: $500 (2 slots remaining this quarter). Standard engagement: $2,500 with Q1 2026 waitlist.
+TIMING: Early adopter pilot: $500. Standard engagement: $2,500.
 
 NEXT STEP: I can send our {industry}-specific technical validation report now. Would Tuesday 10am or Wednesday 2pm work for a brief review call?
 
@@ -1084,13 +1082,13 @@ P.S. Happy to include a {regulatory_ref}-ready audit trail sample so you can see
             
             return f"""{opener} SHA-256 hashing on every AI decision. Auditors can verify zero tampering. It's the same crypto that secures blockchain—nobody's breaking it.
 
-💡 PROOF: {config['social_proof']} already passing audits. {config['roi_metric']}
+💡 ILLUSTRATIVE: {config['social_proof']} — {config['roi_metric']}
 
 ⚠️ REALITY: Without this? Your auditors see black-box AI with no provable lineage. That's a finding waiting to happen.
 
 ⏰ TIMING: {competitive}
 
-Early adopter pricing ($500) closes Friday—then it's $2,500.
+Early adopter pricing is $500; standard engagement is $2,500.
 
 {close}
 
@@ -1119,7 +1117,7 @@ P.S. Want me to send our validation report now so you can see what 'passing' loo
 
 Quick question: Do you have an upcoming audit, regulatory examination, or compliance review?
 
-The reason I ask: {config['social_proof']} in your space are currently building AI audit trails. The organizations who start NOW will have 6+ months of clean governance history when examiners arrive.
+The reason I ask: organizations in your space ({config['social_proof']}) are starting to build AI audit trails. Those who start now will have months of clean governance history when examiners arrive.
 
 REALITY CHECK: {pain_point}
 
@@ -1138,7 +1136,7 @@ Herbert"""
 
 But real talk: {competitive}
 
-And here's what you're walking away from: {config['roi_metric']}
+And the illustrative upside on the table: {config['roi_metric']}
 
 PAIN POINT: {pain_point}
 
@@ -1393,6 +1391,6 @@ if __name__ == '__main__':
     print("\n🔒 MYTHARA GOVERNANCE:")
     print("   ✅ SalesClause validation (NEVER_AUTO_SEND pricing/contracts)")
     print("   ✅ Blessings reservoir (+10 per deal, -10 per violation)")
-    print("   ✅ Messenger roles (Gabriel/Uriel auto-send, Raphael review)")
+    print("   ✅ Messenger roles (Gabriel/Uriel low-risk labels, Raphael review; nothing transmitted)")
     print("   ✅ Cryptographic audit trail (SHA-256 hashing)")
-    print("\n🎯 Set it loose and watch it close (with governance).")
+    print("\n🎯 Drafts prepared under governance — every message needs operator approval.")

@@ -318,9 +318,9 @@ class MytharaEducationSuite:
         ''', (teacher_id, school_id, name, email, department, data["subjects"], 
               data["hire_date"], data["created_at"], integrity_hash))
         
-        # Update school teacher count
-        # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE schools SET teacher_count = teacher_count, ?, (school_id,))
+        # Update school teacher count (parameterized — never interpolate IDs)
+        c.execute('UPDATE schools SET teacher_count = teacher_count + 1 WHERE school_id = ?',
+                  (school_id,))
         
         self.conn.commit()
         
@@ -361,7 +361,8 @@ class MytharaEducationSuite:
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
         # Update school student count
         # QUICKFIX FIX: Converted to parameterized query to prevent SQL injection (CWE-89)
-        c.execute('UPDATE schools SET student_count = student_count, ?, (school_id,))
+        c.execute('UPDATE schools SET student_count = student_count + 1 WHERE school_id = ?',
+                  (school_id,))
         
         self.conn.commit()
         
@@ -555,7 +556,7 @@ class MytharaEducationSuite:
                                    incident_type: str, severity: int,
                                    description: str) -> Dict[str, Any]:
         """Report behavioral incident with automatic escalation"""
-        incident_id = f"INC_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        incident_id = f"INC_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
         
         data = {
             "incident_id": incident_id,
@@ -583,8 +584,8 @@ class MytharaEducationSuite:
             c.execute('SELECT parent_email FROM students WHERE student_id = ?', (student_id,))
             parent_email = c.fetchone()[0]
             
-            # Notify parent
-            self._send_parent_notification(
+            # Queue parent notification (local outbox only — see method note)
+            self._queue_parent_notification(
                 student_id=student_id,
                 parent_email=parent_email,
                 subject=f"URGENT: Behavioral Incident Report",
@@ -748,17 +749,30 @@ class MytharaEducationSuite:
             ''', (tracking_id, student_id, subject, standard_code, proficiency, 
                   datetime.utcnow().isoformat(), datetime.utcnow().isoformat()))
     
-    def _send_parent_notification(self, student_id: str, parent_email: str,
-                                  subject: str, message: str):
-        """Send notification to parent"""
-        comm_id = f"COMM_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
-        
+    def _queue_parent_notification(self, student_id: str, parent_email: str,
+                                   subject: str, message: str) -> Dict[str, Any]:
+        """
+        Queue a parent notification in the local communications outbox.
+
+        HONEST SCOPE: this writes one row to parent_communications and returns.
+        No email, SMS, or push notification is sent — there is no delivery
+        provider wired in. To actually notify parents, integrate an email/SMS
+        provider and mark delivery status on send.
+        """
+        comm_id = f"COMM_{datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')}"
+
         c = self.conn.cursor()
         c.execute('''
-            INSERT INTO parent_communications 
+            INSERT INTO parent_communications
             (communication_id, student_id, parent_email, message_type, subject, message_body, sent_at)
             VALUES (?, ?, ?, 'alert', ?, ?, ?)
         ''', (comm_id, student_id, parent_email, subject, message, datetime.utcnow().isoformat()))
+
+        return {
+            "communication_id": comm_id,
+            "delivery_status": "queued_not_sent",
+            "note": "Stored in local outbox only. No email/SMS provider configured.",
+        }
 
 
 def main():

@@ -14,6 +14,17 @@ from datetime import datetime
 from typing import List
 
 
+# Public Grants.gov opportunity-search API (no API key required).
+# NOTE: post directly to apply07.grants.gov. Posting to www.grants.gov gets a
+# 301/302 redirect to this host, and requests follows it by converting the
+# POST into a GET, which the API rejects with 405.
+GRANTS_GOV_SEARCH_URL = "https://apply07.grants.gov/grantsws/rest/opportunities/search/"
+# Short on purpose: (connect seconds, read seconds). Any failure -> sample fallback.
+GRANTS_GOV_TIMEOUT = (5, 10)
+# Label stamped on EVERY fallback output and in the search_grants docstring.
+SAMPLE_DATA_NOTICE = "SAMPLE DATA — offline fallback, not live results."
+
+
 class MytharaGrantWriterBot:
     def __init__(self, db_path: str = "mythara_grants.db"):
         self.db_path = db_path
@@ -332,10 +343,110 @@ class MytharaGrantWriterBot:
         except Exception as e:
             print(f"[!] Could not connect to orchestrator: {e}")
 
+    def _fetch_grants_gov(self, keyword: str, rows: int = 10) -> List[dict]:
+        """One live call to the public Grants.gov opportunity-search API.
+
+        POSTs JSON {"keyword": ..., "oppStatuses": "forecasted|posted", ...}
+        and maps the documented "oppHits" response shape onto this bot's
+        grant-dict format.
+
+        Raises on ANY failure: network error, timeout, HTTP error, bad JSON,
+        or an unexpected response shape. Callers catch everything and fall
+        back to labeled sample data.
+        """
+        resp = requests.post(
+            GRANTS_GOV_SEARCH_URL,
+            json={
+                "keyword": keyword,
+                "oppStatuses": "forecasted|posted",
+                "rows": rows,
+                "startRecordNum": 0,
+                "sortBy": "openDate|desc",
+            },
+            timeout=GRANTS_GOV_TIMEOUT,
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "MytharaGrantWriterBot/1.0",
+            },
+        )
+        resp.raise_for_status()
+        payload = resp.json()  # raises on non-JSON bodies
+        hits = payload.get("oppHits")
+        if not isinstance(hits, list):
+            raise ValueError(
+                "unexpected grants.gov response shape "
+                f"(keys: {list(payload.keys()) if isinstance(payload, dict) else type(payload).__name__})"
+            )
+
+        grants: List[dict] = []
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            title = hit.get("title") or "(untitled opportunity)"
+            grantor = hit.get("agencyName") or hit.get("agency") or "Unknown agency"
+            opp_id = hit.get("id") or ""
+            url = (
+                f"https://www.grants.gov/search-results-detail/{opp_id}"
+                if opp_id
+                else "https://www.grants.gov/"
+            )
+            ceiling = hit.get("awardCeiling")
+            grants.append(
+                {
+                    "name": title,
+                    "number": hit.get("number") or "",
+                    "grantor": grantor,
+                    "type": "federal",  # grants.gov lists federal opportunities only
+                    "focus": hit.get("oppCategory") or keyword,
+                    "amount": f"${ceiling}" if ceiling else "See announcement",
+                    "deadline": hit.get("closeDate") or "",
+                    "eligibility": hit.get("eligibleApplicants")
+                    or "See announcement",
+                    "url": url,
+                    "fit_score": self._fit_score(f"{title} {grantor}", [keyword]),
+                }
+            )
+        return grants
+
+    @staticmethod
+    def _dedupe_grants(grants: List[dict]) -> List[dict]:
+        """Drop duplicate opportunities (same opportunity number + grantor)."""
+        seen = set()
+        unique: List[dict] = []
+        for grant in grants:
+            key = (grant.get("number") or grant.get("name"), grant.get("grantor"))
+            if key not in seen:
+                seen.add(key)
+                unique.append(grant)
+        return unique
+
+    @staticmethod
+    def _fit_score(text: str, keywords: List[str]) -> int:
+        """Naive fit heuristic: base 60, +5 per keyword found, capped at 95.
+
+        This is a rough keyword-overlap score, not a real assessment.
+        """
+        score = 60
+        haystack = (text or "").lower()
+        for kw in keywords:
+            if kw.strip().lower() and kw.strip().lower() in haystack:
+                score += 5
+        return min(score, 95)
+
     def search_grants(
         self, keywords: List[str] = None, grant_type: str = None
     ) -> List[dict]:
-        """Search for grant opportunities"""
+        """Search for grant opportunities.
+
+        Tries the live public Grants.gov API first (no API key required):
+        POST https://apply07.grants.gov/grantsws/rest/opportunities/search/
+        with a short timeout (5s connect / 10s read).
+
+        On ANY failure — no network, timeout, HTTP error, bad JSON, or an
+        unexpected response shape — it falls back to built-in sample data.
+        Every fallback output is labeled:
+        "SAMPLE DATA — offline fallback, not live results."
+        """
         c = self.conn.cursor()
 
         if keywords is None:
@@ -355,8 +466,20 @@ class MytharaGrantWriterBot:
                 "data security",
             ]
 
-        # Simulated grant search (in production, integrate with Grants.gov API, Foundation Directory, SBIR.gov)
-        discovered_grants = [
+        # Live first: public Grants.gov API (no key). ANY failure -> labeled sample data.
+        live_grants: List[dict] = []
+        used_fallback = False
+        try:
+            for kw in keywords[:2]:  # keep the live attempt bounded (2 short calls max)
+                live_grants.extend(self._fetch_grants_gov(kw, rows=10))
+            discovered_grants = self._dedupe_grants(live_grants)
+            print(
+                f"[OK] Live Grants.gov search returned {len(discovered_grants)} opportunities"
+            )
+        except Exception as e:  # noqa: BLE001 -- ANY failure means offline fallback
+            print(f"[!] Live Grants.gov search failed ({type(e).__name__}: {e})")
+            print(f"[!] {SAMPLE_DATA_NOTICE}")
+            discovered_grants = [
             {
                 "name": "NSF SBIR Phase II - Cybersecurity Infrastructure",
                 "grantor": "National Science Foundation",
@@ -431,6 +554,7 @@ class MytharaGrantWriterBot:
                 "amount": "$1,200,000",
                 "deadline": "2025-12-01",
                 "eligibility": "Energy sector innovation",
+                "url": "https://www.energy.gov/eere/amo/doe-sbir-sttr-phase-i-release-2",
                 "fit_score": 75,
             },
             {
@@ -441,23 +565,33 @@ class MytharaGrantWriterBot:
                 "amount": "$100,000",
                 "deadline": "2026-03-15",
                 "eligibility": "Tech companies with social impact",
+                "url": "https://www.siemens-foundation.org/",
                 "fit_score": 78,
             },
         ]
+            # Stamp every fallback record as sample data.
+            for _g in discovered_grants:
+                _g["notice"] = SAMPLE_DATA_NOTICE
+            used_fallback = True
+
+        if grant_type:
+            discovered_grants = [
+                g for g in discovered_grants if g.get("type") == grant_type
+            ]
 
         # Store discovered grants
         new_grants = 0
         for grant in discovered_grants:
             data = {
-                "grant_name": grant["name"],
-                "grantor": grant["grantor"],
-                "grant_type": grant["type"],
-                "focus_area": grant["focus"],
-                "award_amount": grant["amount"],
-                "deadline": grant["deadline"],
-                "eligibility": grant["eligibility"],
-                "url": grant["url"],
-                "fit_score": grant["fit_score"],
+                "grant_name": grant.get("name", "(untitled)"),
+                "grantor": grant.get("grantor", "Unknown"),
+                "grant_type": grant.get("type", "federal"),
+                "focus_area": grant.get("focus", ""),
+                "award_amount": grant.get("amount", ""),
+                "deadline": grant.get("deadline", ""),
+                "eligibility": grant.get("eligibility", ""),
+                "url": grant.get("url", ""),
+                "fit_score": grant.get("fit_score", 0),
             }
             integrity_hash = self._calculate_integrity_hash(data)
 
@@ -466,20 +600,21 @@ class MytharaGrantWriterBot:
                     """
                     INSERT INTO grant_opportunities (
                         grant_name, grantor, grant_type, focus_area, award_amount,
-                        deadline, eligibility, url, status, fit_score, integrity_hash
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        deadline, eligibility, url, status, fit_score, notes, integrity_hash
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                     (
-                        grant["name"],
-                        grant["grantor"],
-                        grant["type"],
-                        grant["focus"],
-                        grant["amount"],
-                        grant["deadline"],
-                        grant["eligibility"],
-                        grant["url"],
+                        data["grant_name"],
+                        data["grantor"],
+                        data["grant_type"],
+                        data["focus_area"],
+                        data["award_amount"],
+                        data["deadline"],
+                        data["eligibility"],
+                        data["url"],
                         "discovered",
-                        grant["fit_score"],
+                        data["fit_score"],
+                        grant.get("notice") or "Live result from Grants.gov API",
                         integrity_hash,
                     ),
                 )
@@ -489,10 +624,10 @@ class MytharaGrantWriterBot:
 
         self.conn.commit()
 
-        # Log search
+        # Log search ("manual" = our own labeled sample data; schema CHECK allows it)
         search_data = {
             "search_query": ", ".join(keywords),
-            "search_source": "grants.gov",
+            "search_source": "manual" if used_fallback else "grants.gov",
             "results_found": len(discovered_grants),
             "new_opportunities": new_grants,
         }
@@ -514,7 +649,8 @@ class MytharaGrantWriterBot:
 
         self.conn.commit()
         self._log_action(
-            f"Grant search completed: {new_grants} new opportunities discovered"
+            f"Grant search completed: {new_grants} new opportunities discovered",
+            details=SAMPLE_DATA_NOTICE if used_fallback else "live Grants.gov results",
         )
 
         return discovered_grants

@@ -10,6 +10,12 @@ Mythara Support Chat Bot - Customer Support Automation
 - Response time monitoring
 - Knowledge base management
 
+Customer channel: a minimal stdlib-only HTTP intake (POST /ticket) that runs
+on localhost via start_intake_server(). That is the ONLY customer-facing
+entry point this module provides — there is no public website widget, email
+listener, or chat integration wired up. For anything beyond local testing,
+the intake must be fronted by real infrastructure.
+
 Uses Mythara SSIP:
 - Sanctification: SLA rules locked (immutable)
 - Integrity Hashing: All tickets cryptographically verified
@@ -22,13 +28,91 @@ import sqlite3
 import hashlib
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 import requests
 import re
+
+try:
+    from soul_cradle.bot_witness import (
+        witness_action,
+        intake_evidence,
+        WitnessUnavailable,
+    )
+except ImportError:  # pragma: no cover — direct-script fallback
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from soul_cradle.bot_witness import (
+        witness_action,
+        intake_evidence,
+        WitnessUnavailable,
+    )
 
 # Orchestrator connection
 ORCHESTRATOR_URL = "http://localhost:5000"
 # QUICKFIX FIX: Moved to environment variable (CWE-798)
 VP_MASTER_TOKEN = os.getenv("VP_MASTER_TOKEN", "")  # Set via environment
+
+
+class _SupportIntakeHandler(BaseHTTPRequestHandler):
+    """Minimal local HTTP intake: POST /ticket (JSON) -> create_ticket().
+
+    This is the module's only customer entry point. It binds to localhost by
+    default and exists for local testing/use — it is NOT a public channel.
+    """
+    bot: "MytharaSupportBot" = None  # set by start_intake_server()
+
+    def _send_json(self, status: int, payload: Dict[str, Any]):
+        body = json.dumps(payload).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        if self.path.rstrip("/") in ("", "/health"):
+            self._send_json(200, {"status": "ok", "channel": "local-http-intake"})
+        else:
+            self._send_json(404, {"error": "not found"})
+
+    def do_POST(self):
+        if self.path.rstrip("/") != "/ticket":
+            self._send_json(404, {"error": "not found"})
+            return
+        length = int(self.headers.get("Content-Length") or 0)
+        raw = self.rfile.read(length) if length > 0 else b""
+        try:
+            data = json.loads(raw.decode("utf-8") or "{}")
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            self._send_json(400, {"error": "invalid JSON body"})
+            return
+        if not isinstance(data, dict):
+            self._send_json(400, {"error": "JSON body must be an object"})
+            return
+        missing = [f for f in ("customer_email", "subject") if not data.get(f)]
+        if missing:
+            self._send_json(
+                400, {"error": "missing required fields: " + ", ".join(missing)}
+            )
+            return
+        try:
+            result = self.bot.create_ticket(
+                customer_email=data["customer_email"],
+                customer_name=data.get("customer_name", ""),
+                subject=data["subject"],
+                description=data.get("description", ""),
+                category=data.get("category", "general"),
+                priority=data.get("priority", "normal"),
+            )
+        except Exception as e:  # never leak a traceback over HTTP
+            self._send_json(500, {"error": f"ticket creation failed: {e}"})
+            return
+        self._send_json(201, result)
+
+    def log_message(self, fmt, *args):  # keep the stdlib server quiet
+        pass
 
 class MytharaSupportBot:
     """Support Chat Bot - Customer support automation."""
@@ -170,6 +254,33 @@ class MytharaSupportBot:
         except Exception as e:
             print(f"[WARN] Could not connect to orchestrator: {e}")
     
+    def start_intake_server(self, host: str = "127.0.0.1", port: int = 8088) -> ThreadingHTTPServer:
+        """Start the minimal local customer-intake channel.
+
+        stdlib-only http.server: POST /ticket with a JSON body
+        {customer_email, customer_name, subject, description, category, priority}
+        creates a ticket and returns it with HTTP 201; GET /health is a
+        liveness check. Binds to localhost by default.
+
+        This is a LOCAL intake endpoint for testing/local use — the module's
+        only customer entry point, and not a public channel. Blocking: run
+        serve_forever() on the returned server, or serve it in a thread.
+        """
+        _SupportIntakeHandler.bot = self
+        server = ThreadingHTTPServer((host, port), _SupportIntakeHandler)
+        print(f"[SUPPORT] Local intake channel on http://{host}:{server.server_port}/ticket")
+        return server
+
+    def get_ticket(self, ticket_id: str) -> Optional[Dict[str, Any]]:
+        """Read a ticket back by ID (None if not found)."""
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM support_tickets WHERE ticket_id = ?", (ticket_id,))
+        row = c.fetchone()
+        conn.close()
+        return dict(row) if row else None
+    
     def _generate_integrity_hash(self, data: Dict[str, Any]) -> str:
         """Generate SHA-256 hash for audit trail."""
         json_str = json.dumps(data, sort_keys=True)
@@ -228,7 +339,26 @@ class MytharaSupportBot:
         conn.close()
         
         self._audit("ticket", "created", record)
-        
+
+        # --- Soul Cradle witnessing: record-only, intake is never blocked --
+        try:
+            evidence, bases = intake_evidence(
+                ticket_id=ticket_id,
+                fields_present=["customer_email", "customer_name", "subject",
+                                "description", "category", "priority"],
+                declared_intent="store the customer's request verbatim",
+            )
+            witness_action(
+                bot_id="support_bot",
+                action=f"intake ticket {ticket_id}",
+                evidence=evidence,
+                evidence_bases=bases,
+                enforce=False,
+            )
+        except WitnessUnavailable as exc:
+            print(f"[SUPPORT] WITNESS UNAVAILABLE — {exc}; proceeding.")
+        # --- end witnessing --------------------------------------------------
+
         print(f"[SUPPORT] Created ticket: {ticket_id}")
         print(f"          Customer: {customer_name} ({customer_email})")
         print(f"          Priority: {priority}")
