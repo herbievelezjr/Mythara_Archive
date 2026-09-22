@@ -50,3 +50,5 @@ Procfile
 
 # CI-generated test outputs (regenerated on every run, never commit)
 tests/output/
+soul_cradle/audit.jsonl
+aries_out/
