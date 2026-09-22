@@ -278,9 +278,9 @@ If you are experiencing:
 ### 18. Intellectual Property
 
 **All Mythara Gopher technology is proprietary and protected:**
-- Soul Cradle paradox detection algorithms (Patent Pending)
-- Blessings Reservoir benevolence quantification (Patent Pending)
-- Messenger Protocol, Sanctification Verification, Clause Orchestration (Patent Pending)
+- Soul Cradle paradox detection algorithms (patent application planned — not yet filed)
+- Blessings Reservoir benevolence quantification (patent application planned — not yet filed)
+- Messenger Protocol, Sanctification Verification, Clause Orchestration (patent application planned — not yet filed)
 - Mythara Engine platform architecture (Copyright © 2025)
 
 **You may NOT:**
@@ -328,11 +328,11 @@ c/o Herbert Velez Jr.
 ✅ **CCPA/CPRA Compliant** (California Consumer Privacy Act)  
 ✅ **COPPA Compliant** (Children's Online Privacy Protection Act)  
 ✅ **HIPAA Aware** (does not handle protected health information)  
-✅ **SOC 2 Type II** (in progress - expected Q1 2026)  
+✅ **SOC 2 Type II** (controls implemented, audit planned — not currently certified)  
 
 **Audit Trail:** All monitoring activities are logged with SHA-256 timestamps per Sanctification Verification protocol. Audit logs available upon request for legal compliance reviews.
 
 ---
 
 **POWERED BY MYTHARA ENGINE™**  
-**Patent Pending | Prior Art Established November 19, 2025**
+**Patent application planned (not yet filed) | Defensive publication November 19, 2025**

@@ -466,6 +466,38 @@ class UnifiedComplianceFramework:
                 ]
             }
     
+    def generate_compliance_report(self) -> Dict[str, Any]:
+        """
+        Generate a summary report of supported compliance frameworks,
+        grouped by regulatory domain.
+
+        Returns:
+            Report with framework count and per-domain framework listing
+        """
+        domains: Dict[str, List[str]] = {
+            "financial": [],
+            "privacy": [],
+            "security": [],
+        }
+        domain_map = {
+            ComplianceFramework.SOX: "financial",
+            ComplianceFramework.PCI_DSS: "financial",
+            ComplianceFramework.HIPAA: "privacy",
+            ComplianceFramework.GDPR: "privacy",
+            ComplianceFramework.CCPA: "privacy",
+            ComplianceFramework.FERPA: "privacy",
+            ComplianceFramework.ISO27001: "security",
+            ComplianceFramework.NIST: "security",
+            ComplianceFramework.SOC2: "security",
+            ComplianceFramework.FISMA: "security",
+        }
+        for fw in ComplianceFramework:
+            domains[domain_map[fw]].append(fw.value)
+        return {
+            "frameworks_supported": len(list(ComplianceFramework)),
+            "compliance_frameworks": domains,
+        }
+
     def get_audit_logs(
         self,
         user_id: Optional[str] = None,

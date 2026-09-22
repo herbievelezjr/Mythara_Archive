@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Mythara Engine - Redis-backed Rate Limiter
-Distributed rate limiting with tiered quotas and graceful degradation.
+Distributed rate limiting with graceful degradation.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
@@ -162,55 +162,3 @@ class RateLimiter:
                 logger.error(f"Failed to reset rate limit: {e}")
         else:
             self.memory_store.pop(key, None)
-
-
-class TieredRateLimiter(RateLimiter):
-    """
-    Rate limiter with tiered quotas based on license type.
-    """
-
-    # Default tier configurations
-    TIER_LIMITS = {
-        "trial": {"requests_per_minute": 10, "requests_per_hour": 100},
-        "pilot": {"requests_per_minute": 100, "requests_per_hour": 5000},
-        "enterprise": {"requests_per_minute": 1000, "requests_per_hour": 50000},
-        "sovereign": {"requests_per_minute": 10000, "requests_per_hour": 500000},
-    }
-
-    def check_tiered_limit(self, key: str, tier: str) -> Dict[str, any]:
-        """
-        Check rate limit with tier-specific quotas.
-
-        Returns:
-            {
-                "allowed": bool,
-                "limit_type": str,  # "minute" or "hour"
-                "remaining_minute": int,
-                "remaining_hour": int
-            }
-        """
-        limits = self.TIER_LIMITS.get(tier, self.TIER_LIMITS["trial"])
-
-        # Check minute limit
-        minute_ok = self.check_rate_limit(
-            f"{key}:minute", limits["requests_per_minute"], 60
-        )
-
-        # Check hour limit
-        hour_ok = self.check_rate_limit(
-            f"{key}:hour", limits["requests_per_hour"], 3600
-        )
-
-        allowed = minute_ok and hour_ok
-        limit_type = "minute" if not minute_ok else "hour" if not hour_ok else None
-
-        return {
-            "allowed": allowed,
-            "limit_type": limit_type,
-            "remaining_minute": self.get_remaining(
-                f"{key}:minute", limits["requests_per_minute"], 60
-            ),
-            "remaining_hour": self.get_remaining(
-                f"{key}:hour", limits["requests_per_hour"], 3600
-            ),
-        }

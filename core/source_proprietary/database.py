@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Mythara Engine - Database Layer
-PostgreSQL persistence for pilots, usage tracking, and domain registry.
+PostgreSQL persistence for API usage tracking, audit logs, and email queue.
 
 Copyright © 2025 Herbert Velez Jr. All rights reserved.
 Proprietary and Confidential.
@@ -47,36 +47,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-class Pilot(Base):
-    """
-    Pilot tier customer - tracks API key, domain, and pilot start date.
-    One pilot per business domain enforced by unique domain constraint.
-    """
-
-    __tablename__ = "pilots"
-
-    api_key = Column(String, primary_key=True, index=True)
-    email = Column(String, nullable=False, index=True)
-    domain = Column(
-        String, unique=True, nullable=False, index=True
-    )  # Unique domain constraint
-    company_name = Column(String, nullable=False)
-    employee_count = Column(Integer, nullable=False)
-    pilot_start_date = Column(DateTime, nullable=False, default=datetime.utcnow)
-    stripe_payment_id = Column(String, nullable=True)  # Track payment source
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    # Self-regulation fields
-    strike_count = Column(Integer, default=0)
-    suspended_until = Column(DateTime, nullable=True)
-    termination_reason = Column(String, nullable=True)
 
 
 class UsageTracking(Base):
     """
-    API call usage tracking per pilot - enforces 7-day total limits.
-    Separate table allows efficient queries without loading full pilot data.
+    API call usage tracking per API key.
+    Separate table allows efficient queries without loading full key data.
     """
 
     __tablename__ = "usage_tracking"
@@ -95,11 +71,17 @@ class UsageTracking(Base):
     sent_80_percent_alert = Column(Boolean, default=False)
     sent_24hr_expiration_alert = Column(Boolean, default=False)
 
+    # Self-regulation enforcement
+    strike_count = Column(Integer, default=0)
+    suspended_until = Column(DateTime, nullable=True)
+    is_active = Column(Boolean, default=True)
+    termination_reason = Column(String, nullable=True)
+
 
 class AuditLog(Base):
     """
     Immutable audit log for compliance and forensics.
-    Tracks all critical actions: pilot creation, API calls, strikes, terminations.
+    Tracks all critical actions: API calls, strikes, terminations.
     """
 
     __tablename__ = "audit_log"
@@ -109,7 +91,7 @@ class AuditLog(Base):
     api_key = Column(String, index=True, nullable=True)
     action = Column(
         String, nullable=False
-    )  # e.g., "pilot_created", "api_call", "strike_issued"
+    )  # e.g., "api_call", "strike_issued"
     details = Column(JSON, nullable=True)
     ip_address = Column(String, nullable=True)
     user_agent = Column(String, nullable=True)
@@ -168,68 +150,6 @@ def init_db():
         raise
 
 
-def get_pilot(db: Session, api_key: str) -> Optional[Pilot]:
-    """Get pilot by API key."""
-    return db.query(Pilot).filter(Pilot.api_key == api_key).first()
-
-
-def get_pilot_by_domain(db: Session, domain: str) -> Optional[Pilot]:
-    """Get pilot by business domain - enforces one pilot per domain."""
-    return db.query(Pilot).filter(Pilot.domain == domain).first()
-
-
-def create_pilot(
-    db: Session,
-    api_key: str,
-    email: str,
-    domain: str,
-    company_name: str,
-    employee_count: int,
-    pilot_start_date: datetime,
-    stripe_payment_id: Optional[str] = None,
-) -> Pilot:
-    """
-    Create new pilot account.
-    Raises exception if domain already exists (one pilot per domain).
-    """
-    pilot = Pilot(
-        api_key=api_key,
-        email=email,
-        domain=domain,
-        company_name=company_name,
-        employee_count=employee_count,
-        pilot_start_date=pilot_start_date,
-        stripe_payment_id=stripe_payment_id,
-        is_active=True,
-    )
-    db.add(pilot)
-    db.commit()
-    db.refresh(pilot)
-
-    # Initialize usage tracking
-    usage = UsageTracking(
-        api_key=api_key,
-        call_count=0,
-        total_limit=get_api_rate_limit_for_employee_count(employee_count),
-    )
-    db.add(usage)
-    db.commit()
-
-    # Audit log
-    audit = AuditLog(
-        api_key=api_key,
-        action="pilot_created",
-        details={
-            "domain": domain,
-            "employee_count": employee_count,
-            "stripe_payment_id": stripe_payment_id,
-        },
-    )
-    db.add(audit)
-    db.commit()
-
-    logger.info(f"Pilot created: {domain} ({api_key[:8]}...)")
-    return pilot
 
 
 def get_usage_tracking(db: Session, api_key: str) -> Optional[UsageTracking]:
@@ -237,54 +157,27 @@ def get_usage_tracking(db: Session, api_key: str) -> Optional[UsageTracking]:
     return db.query(UsageTracking).filter(UsageTracking.api_key == api_key).first()
 
 
-def increment_usage(db: Session, api_key: str) -> UsageTracking:
+
+
+def issue_strike(db: Session, api_key: str, reason: str) -> int:
     """
-    Increment call count for API key.
-    Creates usage record if it doesn't exist (defensive).
+    Issue strike to API key for self-regulation violation.
+    Graduated enforcement: 1 = warning, 2 = 7-day suspension, 3 = termination.
+    Returns the new strike count.
     """
     usage = get_usage_tracking(db, api_key)
     if not usage:
-        # Defensive: create usage record if missing
-        pilot = get_pilot(db, api_key)
-        if pilot:
-            usage = UsageTracking(
-                api_key=api_key,
-                call_count=0,
-                total_limit=get_api_rate_limit_for_employee_count(pilot.employee_count),
-            )
-            db.add(usage)
-            db.commit()
-            db.refresh(usage)
+        raise ValueError(f"Usage record not found: {api_key}")
 
-    if usage:
-        usage.call_count += 1
-        usage.last_call = datetime.utcnow()
-        if usage.first_call_date is None:
-            usage.first_call_date = datetime.utcnow()
-        db.commit()
-        db.refresh(usage)
+    usage.strike_count += 1
 
-    return usage
-
-
-def issue_strike(db: Session, api_key: str, reason: str) -> Pilot:
-    """
-    Issue strike to pilot for self-regulation violation.
-    Graduated enforcement: 1 = warning, 2 = 7-day suspension, 3 = termination.
-    """
-    pilot = get_pilot(db, api_key)
-    if not pilot:
-        raise ValueError(f"Pilot not found: {api_key}")
-
-    pilot.strike_count += 1
-
-    if pilot.strike_count == 2:
+    if usage.strike_count == 2:
         # Second strike = 7-day suspension
-        pilot.suspended_until = datetime.utcnow() + timedelta(days=7)
-    elif pilot.strike_count >= 3:
+        usage.suspended_until = datetime.utcnow() + timedelta(days=7)
+    elif usage.strike_count >= 3:
         # Third strike = termination
-        pilot.is_active = False
-        pilot.termination_reason = reason
+        usage.is_active = False
+        usage.termination_reason = reason
 
     db.commit()
 
@@ -294,20 +187,20 @@ def issue_strike(db: Session, api_key: str, reason: str) -> Pilot:
         action="strike_issued",
         details={
             "reason": reason,
-            "strike_count": pilot.strike_count,
+            "strike_count": usage.strike_count,
             "suspended_until": (
-                pilot.suspended_until.isoformat() if pilot.suspended_until else None
+                usage.suspended_until.isoformat() if usage.suspended_until else None
             ),
-            "terminated": pilot.strike_count >= 3,
+            "terminated": usage.strike_count >= 3,
         },
     )
     db.add(audit)
     db.commit()
 
     logger.warning(
-        f"Strike issued to {api_key[:8]}...: {reason} (strike {pilot.strike_count})"
+        f"Strike issued to {api_key[:8]}...: {reason} (strike {usage.strike_count})"
     )
-    return pilot
+    return usage.strike_count
 
 
 def log_audit(

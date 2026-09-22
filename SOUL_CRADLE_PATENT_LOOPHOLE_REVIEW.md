@@ -655,7 +655,7 @@ evidence for court proceedings...
 **2. Use NDAs For All Pre-Filing Disclosures**
    - Frank Azar pitch: Require signed NDA before demo
    - Investor meetings: NDA mandatory before sharing technical details
-   - Attorney partnerships: "Patent Pending" status + confidentiality agreement
+   - Attorney partnerships: "Patent Pending" status only after filing + confidentiality agreement
    - Beta testers: Terms of service with confidentiality clause
 
 **3. Avoid Public Disclosures Until Patent Filed**
@@ -745,7 +745,7 @@ evidence for court proceedings...
 ### Phase 2: 12-Month Development (Nov 2025 - Nov 2026)
 
 **Month 1-3 (Nov 2025 - Jan 2026):**
-- Launch Gopher consumer product with "Patent Pending" status
+- Launch Gopher consumer product with "Patent Pending" status (only after provisional is filed)
 - Collect user feedback on Soul Cradle paradox detection
 - Document additional use cases (employment law, contract disputes, whistleblower cases)
 
@@ -891,7 +891,7 @@ evidence for court proceedings...
 - Include patent statement in attorney outreach emails
 
 **Week 2-4:**
-- Pitch Frank Azar with NDA + patent pending status
+- Pitch Frank Azar with NDA + patent pending status (only after filing)
 - Launch Gopher beta with 100 users (collect use case data)
 - Document additional paradox types for expanded claims
 

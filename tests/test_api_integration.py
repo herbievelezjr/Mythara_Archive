@@ -327,62 +327,6 @@ class TestSoulEndpoints:
         assert "tiers" in data
 
 
-class TestPilotEndpoints:
-    """Test pilot-specific endpoints."""
-    
-    def test_pilot_unlock(self):
-        """Test pilot unlock endpoint."""
-        response = client.post(
-            "/v1/pilot/unlock",
-            json={
-                "email": "test@example.com",
-                "company": "Test Corp",
-                "employee_count": 50
-            }
-        )
-        # Should return success or domain conflict
-        assert response.status_code in [200, 409]
-    
-    def test_pilot_status_unauthenticated(self):
-        """Test pilot status without authentication."""
-        response = client.get("/v1/pilot/status")
-        assert response.status_code == 403
-    
-    def test_pilot_dashboard_unauthenticated(self):
-        """Test pilot dashboard without authentication."""
-        response = client.get("/v1/pilot/dashboard")
-        assert response.status_code == 403
-
-
-class TestLicenseAndPricing:
-    """Test license and pricing endpoints."""
-    
-    def test_license_status(self):
-        """Test license status endpoint."""
-        response = client.get(
-            "/v1/license/status",
-            headers={"Authorization": f"Bearer {VALID_API_KEY}"}
-        )
-        assert response.status_code == 200
-        data = response.json()
-        assert "mode" in data
-        assert "tier" in data
-    
-    def test_pricing_enterprise(self):
-        """Test enterprise pricing endpoint."""
-        response = client.get(
-            "/v1/pricing/enterprise",
-            params={"employee_count": 100}
-        )
-        assert response.status_code == 200
-        data = response.json()
-        assert "monthly_price" in data
-        assert "annual_price" in data
-    
-    def test_admin_pricing_requires_auth(self):
-        """Test admin pricing requires authentication."""
-        response = client.get("/v1/admin/pricing")
-        assert response.status_code == 403
 
 
 class TestDualFraming:
@@ -616,20 +560,12 @@ class TestIndividualClause:
 class TestPublicEndpoints:
     """Test public-facing endpoints."""
     
-    def test_pricing_page(self):
-        """Test pricing page endpoint."""
-        response = client.get("/pricing")
-        assert response.status_code == 200
     
     def test_terms_page(self):
         """Test terms page endpoint."""
         response = client.get("/terms")
         assert response.status_code == 200
     
-    def test_download_pilot_requires_auth(self):
-        """Test download pilot requires authentication."""
-        response = client.get("/download/pilot")
-        assert response.status_code == 403
 
 
 class TestAdminEndpoints:

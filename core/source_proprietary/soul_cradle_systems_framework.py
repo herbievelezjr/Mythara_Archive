@@ -346,6 +346,10 @@ class QuantumEntanglement(BaseModel):
     - Entanglement persists regardless of spatial separation
     - Measuring resolution state of one affects the other
     - Provides secure correlation for distributed witness validation
+
+    NOTE: classical simulation. This class models correlation between
+    paradox records using ordinary data structures; no actual quantum
+    entanglement, non-locality, or quantum hardware is involved.
     """
 
     entanglement_id: str = Field(
@@ -392,8 +396,12 @@ class QuantumSuperposition(BaseModel):
 
     Use Cases:
     - Store paradox before witnessing collapses superposition
-    - Maintain quantum coherence for distributed paradox analysis
-    - Enable quantum parallel processing of multiple resolution paths
+    - Maintain coherence for distributed paradox analysis
+    - Enable parallel evaluation of multiple resolution paths
+
+    NOTE: classical simulation. "Superposition" here is a probabilistic
+    data model sampled with a classical RNG; no quantum computation,
+    coherence, or parallel quantum processing occurs.
 
     Measurement:
     - Upon witnessing, superposition collapses to definite state
@@ -435,13 +443,14 @@ class QuantumSuperposition(BaseModel):
 
     def collapse_superposition(self) -> str:
         """
-        Collapse quantum superposition via measurement (witnessing).
-        Returns: 'resolved' or 'unresolved' based on probability amplitudes.
+        Collapse the simulated superposition via witnessing.
+        Returns: 'resolved' or 'unresolved' based on probability amplitudes
+        (classical random sampling, not quantum measurement).
         """
         if self.collapsed:
             return self.collapsed_state
 
-        # Quantum measurement using probability amplitudes
+        # Classical random sampling using probability amplitudes
         prob_resolved = self.amplitude_resolved**2
         measurement = secrets.SystemRandom().random()
 
@@ -470,13 +479,19 @@ class QuantumSuperposition(BaseModel):
 
 class QuantumCommunicationProtocol(BaseModel):
     """
-    Quantum Communication Protocol for secure Soul Cradle witness transmission.
+    Classical simulation of a quantum-communication-style protocol for
+    Soul Cradle witness transmission metadata.
 
-    Uses quantum key distribution (QKD) AND RSA encryption to ensure witness
-    validation data cannot be intercepted or tampered with during transmission
-    between Soul Cradle nodes.
+    This class stores protocol parameters (named after QKD protocols such
+    as BB84/E91 for modeling purposes) and generates key material with
+    the system CSPRNG. It does NOT perform quantum key distribution,
+    entanglement, teleportation, or eavesdropping detection — there is no
+    quantum hardware or quantum channel involved. Security-relevant
+    guarantees (forward secrecy, tamper evidence) rest on the classical
+    cryptography actually used (RSA, SHA-256, CSPRNG), not on quantum
+    properties.
 
-    Protocols:
+    Protocol names modeled (metadata only):
     - BB84: Prepare quantum states in random bases, transmit, measure
     - E91: Entanglement-based QKD with Bell inequality verification
     - Quantum Teleportation: Transfer paradox witness state via entanglement
@@ -484,12 +499,10 @@ class QuantumCommunicationProtocol(BaseModel):
     - Quantum Witness: Soul Cradle's custom protocol for paradox witnessing
     - RSA_QKD_Hybrid: RSA encryption + quantum key distribution
 
-    Security Properties:
-    - RSA 4096-bit encryption for classical data protection
-    - Eavesdropping detection via quantum no-cloning theorem
-    - Perfect forward secrecy via quantum key generation
-    - Tamper-evident transmission (decoherence detection)
-    - Post-quantum security via hybrid RSA + QKD
+    Classical properties actually provided:
+    - RSA encryption for classical data protection
+    - SHA-256 integrity hashing
+    - CSPRNG key generation
     """
 
     protocol_id: str = Field(
@@ -527,7 +540,11 @@ class QuantumCommunicationProtocol(BaseModel):
     rsa_encrypted: bool = Field(default=False, description="Data encrypted with RSA")
 
     def generate_quantum_key(self, key_length_bits: int = 256) -> str:
-        """Generate quantum-secure random key using secrets module"""
+        """Generate a simulated protocol key using the system CSPRNG.
+
+        Classical simulation only: returns CSPRNG bytes, not the output of
+        quantum key distribution. No quantum hardware is involved.
+        """
         # In production, this would interface with actual quantum hardware
         # For now, use cryptographically secure random (CSPRNG)
         quantum_key = secrets.token_hex(key_length_bits // 8)
@@ -535,7 +552,13 @@ class QuantumCommunicationProtocol(BaseModel):
         return quantum_key
 
     def verify_security(self) -> Dict[str, Any]:
-        """Verify quantum channel security"""
+        """Evaluate self-reported simulation parameters against thresholds.
+
+        NOTE: this checks the model's own fields (error_rate, fidelity,
+        eavesdropping_detected) — i.e. the simulation's configuration, not
+        a real channel. A "secure" verdict means the configured parameters
+        are within bounds, not that any transmission was verified secure.
+        """
         # Check QBER threshold (typically < 11% for BB84)
         qber_threshold = (
             0.11 if self.protocol_type == QuantumProtocolType.BB84 else 0.15

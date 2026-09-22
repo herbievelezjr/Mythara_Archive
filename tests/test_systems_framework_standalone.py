@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 # Add core/source_proprietary to path
-sys.path.insert(0, str(Path(__file__).parent / "core" / "source_proprietary"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "core" / "source_proprietary"))
 
 from soul_cradle_systems_framework import (
     SoulCradleParadox,
@@ -22,7 +22,6 @@ from soul_cradle_systems_framework import (
     SystemType,
     TerminalRiskLevel,
     TerminalRiskCalculator,
-    SystemQueryParser
 )
 from datetime import datetime, timedelta
 import json
@@ -181,34 +180,6 @@ def test_scenario_4_critical_risk():
     print(f"\n📋 Recommendation:\n{risk['recommendation']}")
     
     return risk
-
-
-def test_query_language():
-    """Test: System query language with wildcards"""
-    print("\n" + "="*60)
-    print("SCENARIO 5: Query Language Testing")
-    print("="*60)
-    
-    # Create diverse paradoxes
-    paradoxes = [
-        create_test_paradox("Healthcare", "Discharge policy", "Patient safety", days_ago=5),
-        create_test_paradox("Education", "Budget cuts", "Student needs", days_ago=10),
-        create_test_paradox("Nonprofit", "Board directive", "Mission conflict", days_ago=15),
-    ]
-    
-    # Test queries
-    query1 = "Every(Policy)Any(+)Some(Action)Non(Heart)"
-    query2 = "Every(*)Any(+)Some(*)Non(Heart)"
-    
-    print(f"\nQuery 1 (exact match): {query1}")
-    matches1 = sum(1 for p in paradoxes if SystemQueryParser.matches_query(p, query1))
-    print(f"Matches: {matches1}")
-    
-    print(f"\nQuery 2 (wildcard): {query2}")
-    matches2 = sum(1 for p in paradoxes if SystemQueryParser.matches_query(p, query2))
-    print(f"Matches: {matches2}")
-    
-    return {"query1_matches": matches1, "query2_matches": matches2}
 
 
 def test_time_window_comparison():

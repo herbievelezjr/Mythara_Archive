@@ -730,7 +730,7 @@ def process_customer_email(email_data: Dict, customer_id: str):
 
 **Replication Barrier**:
 1. **Requires 43+ domain-specific bots** (competitors don't have)
-2. **Requires Soul Cradle math** (patent-pending, 2 years R&D)
+2. **Requires Soul Cradle math** (patent application planned — not yet filed; 2 years R&D)
 3. **Requires integration layer** (bot orchestration, paradox correlation)
 4. **Network effects**: More bots = more paradox types detected = more valuable
 

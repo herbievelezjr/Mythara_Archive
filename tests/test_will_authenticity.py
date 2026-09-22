@@ -10,7 +10,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'core', 'source_proprietary')))
 
-from emotional_extortion_detector import (
+from will_integrity_guardian import (
     EmotionalExtortionDetector,
     ExtortionType,
     EXTORTION_PATTERNS

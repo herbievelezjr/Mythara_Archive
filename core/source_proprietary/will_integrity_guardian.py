@@ -383,6 +383,10 @@ class EmotionalExtortionDetector:
     Detects manipulation patterns that extract compliance through emotional
     pressure rather than genuine consent. Integrates with Soul Cradle to
     distinguish authentic Will (W) from manipulated compliance.
+
+    Implementation note: detection is keyword-pattern matching
+    (ExtortionPattern.matches counts keyword hits) — there is no machine
+    learning model, training, or adversarial-ML component in this module.
     """
 
     def __init__(

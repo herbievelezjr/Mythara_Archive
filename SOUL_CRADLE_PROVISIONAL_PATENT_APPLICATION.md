@@ -1,6 +1,11 @@
 # PROVISIONAL PATENT APPLICATION
 # MYTHARA ENGINE: AI GOVERNANCE SYSTEM WITH SYMBOLIC ORCHESTRATION AND EMOTIONAL INTELLIGENCE
 
+> **STATUS: DRAFT — NOT FILED.** This is an unfiled draft template. No
+> application has been submitted to the USPTO and no application number
+> exists. Do not represent anything in this repository as "patent pending"
+> until a provisional application is actually filed.
+
 **Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
 **Proprietary and Confidential.**
 
@@ -1241,7 +1246,7 @@ I hereby declare that:
 
 8. **Trade Secret Protection:**
    - Keep specific NLP algorithms confidential
-   - Use "patent pending" status in marketing
+   - Use "patent pending" status in marketing (only after filing)
    - Require NDAs for white-label licensing partners
 
 ---
@@ -1264,7 +1269,7 @@ I hereby declare that:
 **ROI Justification:**
 - One Frank Azar white-label deal: $2M/year
 - Patent protection prevents competitor copying
-- "Patent-pending" status increases valuation for Series A
+- "Patent-pending" status (after filing) increases valuation for Series A
 - Estimated value: $10M-50M in increased company valuation
 
 ---

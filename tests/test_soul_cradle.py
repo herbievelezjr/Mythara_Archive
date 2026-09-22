@@ -13,7 +13,7 @@ from soul_cradle_operator import (
     Soul,
     Will,
     Commandments,
-    Lucifer,
+    Antithesis,
     SoulCradleTiers
 )
 
@@ -24,11 +24,14 @@ def test_cradle_obedience_under_paradox():
     
     W = Will(paradox_strength=0.6, sovereignty_level=1.0, description="Divine paradox")
     C = Commandments(rules=["Love thy neighbor", "Protect the vulnerable"], clarity=0.9, strictness=0.8)
-    L = Lucifer(temptation_strength=0.7, deception_level=0.5, active=True)
+    A = Antithesis(worldly_dominion=0.5, temptation_power=0.7, sovereignty_granted=True)  # Antithesis (formerly Lucifer)
+    _active = True
     S = Soul(vessel_capacity=0.8, obedience_history=[0.7], paradox_tolerance=0.7, collapse_threshold=0.3)
+    T = A.generate_trial(S)
+    T.active = _active
     
     choice = "Love neighbor and protect vulnerable despite paradox"
-    result = operator.cradle_function(S, W, C, L, choice)
+    result = operator.cradle_function(S, W, C, T, choice)
     
     assert result.obedience == True, "Should recognize obedience"
     assert result.reservoir_delta > 0, "Should yield positive blessings"
@@ -44,11 +47,14 @@ def test_cradle_follow_lucifer():
     
     W = Will(paradox_strength=0.5, sovereignty_level=1.0, description="Divine will")
     C = Commandments(rules=["Thou shalt not kill", "Love thy neighbor"], clarity=0.9, strictness=0.8)
-    L = Lucifer(temptation_strength=0.8, deception_level=0.6, active=True)
+    A = Antithesis(worldly_dominion=0.6, temptation_power=0.8, sovereignty_granted=True)  # Antithesis (formerly Lucifer)
+    _active = True
     S = Soul(vessel_capacity=0.8, obedience_history=[0.5], paradox_tolerance=0.6, collapse_threshold=0.3)
+    T = A.generate_trial(S)
+    T.active = _active
     
     choice = "Take revenge for personal gain (worldly path)"
-    result = operator.cradle_function(S, W, C, L, choice)
+    result = operator.cradle_function(S, W, C, T, choice)
     
     assert result.obedience == False, "Should recognize disobedience"
     assert result.reservoir_delta < 0, "Should yield negative blessings"
@@ -64,11 +70,14 @@ def test_cradle_soul_collapse():
     # Extreme paradox with low tolerance
     W = Will(paradox_strength=0.95, sovereignty_level=1.0, description="Extreme divine paradox")
     C = Commandments(rules=["Love thy enemy"], clarity=0.9, strictness=0.9)
-    L = Lucifer(temptation_strength=0.3, deception_level=0.2, active=False)
+    A = Antithesis(worldly_dominion=0.2, temptation_power=0.3, sovereignty_granted=True)  # Antithesis (formerly Lucifer)
+    _active = False
     S = Soul(vessel_capacity=0.5, obedience_history=[0.6], paradox_tolerance=0.4, collapse_threshold=0.3)
+    T = A.generate_trial(S)
+    T.active = _active
     
     choice = "Attempt to obey despite overwhelming paradox"
-    result = operator.cradle_function(S, W, C, L, choice)
+    result = operator.cradle_function(S, W, C, T, choice)
     
     assert result.collapse == True, "Soul should collapse under extreme paradox"
     assert result.I == 0.0, "Integrity should be zero on collapse"
@@ -83,14 +92,24 @@ def test_cradle_adaptive_tolerance():
     
     W = Will(paradox_strength=0.5, sovereignty_level=1.0, description="Moderate paradox")
     C = Commandments(rules=["Love", "Protect", "Obey"], clarity=0.9, strictness=0.8)
-    L = Lucifer(temptation_strength=0.5, deception_level=0.4, active=True)
+    A = Antithesis(worldly_dominion=0.4, temptation_power=0.5, sovereignty_granted=True)  # Antithesis (formerly Lucifer)
+    _active = True
     S = Soul(vessel_capacity=0.8, obedience_history=[], paradox_tolerance=0.5, collapse_threshold=0.3)
+    T = A.generate_trial(S)
+    T.active = _active
     
     initial_tolerance = S.paradox_tolerance
     
     # Sustained obedience
-    choices = ["Obey commandment", "Love neighbor", "Protect vulnerable", "Sustain faith"]
-    trajectory = operator.simulate_test(S, W, C, L, choices)
+    # Choices must genuinely align with the commandments (Love/Protect/Obey)
+    # to count as obedient under the keyword alignment scoring.
+    choices = [
+        "I choose to love and protect others in obedience",
+        "Love thy neighbor; protect the vulnerable; obey",
+        "In obedience I will love and protect",
+        "Sustain faith: love, protect, obey always",
+    ]
+    trajectory = operator.simulate_test(S, W, C, T, choices)
     
     final_tolerance = S.paradox_tolerance
     obedience_count = sum(1 for r in trajectory if r.obedience)
@@ -130,14 +149,17 @@ def test_cradle_integrity_hash():
     
     W = Will(paradox_strength=0.5, sovereignty_level=1.0, description="Test will")
     C = Commandments(rules=["Rule 1"], clarity=0.9, strictness=0.8)
-    L = Lucifer(temptation_strength=0.5, deception_level=0.5, active=True)
+    A = Antithesis(worldly_dominion=0.5, temptation_power=0.5, sovereignty_granted=True)  # Antithesis (formerly Lucifer)
+    _active = True
     S = Soul(vessel_capacity=0.8, obedience_history=[0.7], paradox_tolerance=0.7, collapse_threshold=0.3)
+    T = A.generate_trial(S)
+    T.active = _active
     
     choice1 = "Choice A"
     choice2 = "Choice B"
     
-    result1 = operator.cradle_function(S, W, C, L, choice1)
-    result2 = operator.cradle_function(S, W, C, L, choice2)
+    result1 = operator.cradle_function(S, W, C, T, choice1)
+    result2 = operator.cradle_function(S, W, C, T, choice2)
     
     assert len(result1.integrity_hash) == 64, "Should be SHA-256 (64 hex chars)"
     assert len(result2.integrity_hash) == 64, "Should be SHA-256 (64 hex chars)"
