@@ -35,14 +35,20 @@ class EmotionalEvent:
 
 
 @dataclass
-class QuantumWitness:
-    """Quantum witness that validates emotional authenticity"""
+class SimulatedWitness:
+    """Simulated witness that validates emotional authenticity.
+
+    Classical simulation only: validation scores are randomized
+    (0.7 + random.random() * 0.3) combined with keyword heuristics.
+    No quantum computation is performed.
+    """
+
     witness_id: str
     validation_power: float  # 0.0 to 1.0
-    
+
     def validate_emotion(self, event: EmotionalEvent) -> Dict[str, Any]:
-        """Validate an emotional event using quantum witness protocol"""
-        # Simulate quantum validation using paradox detection
+        """Validate an emotional event using the simulated witness protocol"""
+        # Randomized simulation of validation scoring (not quantum)
         base_score = 0.7 + (random.random() * 0.3)  # 0.7-1.0 range
         
         # Check for manipulation indicators
@@ -74,31 +80,35 @@ class QuantumWitness:
         return min(manipulation_score, 1.0)
 
 
+# Backwards-compatible alias for the old class name
+QuantumWitness = SimulatedWitness
+
+
 class EmotionalBlockchain:
     """The revolutionary Emotional Blockchain system"""
     
     def __init__(self):
         self.chain: List[EmotionalEvent] = []
-        self.witnesses: List[QuantumWitness] = []
+        self.witnesses: List[SimulatedWitness] = []
         self.validation_threshold = 0.75  # Minimum authenticity score
         
-        # Initialize quantum witnesses
+        # Initialize simulated witnesses
         self._initialize_witnesses()
         
         # Create genesis block
         self._create_genesis_block()
     
     def _initialize_witnesses(self):
-        """Initialize quantum witness network"""
+        """Initialize simulated witness network"""
         witness_names = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"]
         for name in witness_names:
-            witness = QuantumWitness(
+            witness = SimulatedWitness(
                 witness_id=f"QW-{name}",
                 validation_power=0.8 + (random.random() * 0.2)
             )
             self.witnesses.append(witness)
         
-        print(f"✨ Initialized {len(self.witnesses)} quantum witnesses")
+        print(f"✨ Initialized {len(self.witnesses)} simulated witnesses")
     
     def _create_genesis_block(self):
         """Create the first block in the emotional blockchain"""
@@ -144,7 +154,7 @@ class EmotionalBlockchain:
             previous_hash=previous_hash
         )
         
-        # Validate with quantum witnesses
+        # Validate with simulated witnesses
         validation_results = []
         for witness in self.witnesses:
             result = witness.validate_emotion(event)
@@ -327,7 +337,7 @@ def main():
     integrity_valid = blockchain.verify_chain_integrity()
     print(f"\nChain Length: {len(blockchain.chain)} blocks")
     print(f"Integrity Status: {'✅ VALID - No tampering detected' if integrity_valid else '❌ COMPROMISED'}")
-    print(f"Total Quantum Witnesses: {len(blockchain.witnesses)}")
+    print(f"Total Simulated Witnesses: {len(blockchain.witnesses)}")
     print(f"Validation Threshold: {blockchain.validation_threshold:.0%}")
     
     # Show the power of immutability
@@ -338,7 +348,7 @@ def main():
 This system prevents emotional manipulation by:
 
 ✅ Creating immutable records of emotional states
-✅ Validating authenticity with quantum witnesses  
+✅ Validating authenticity with simulated witnesses  
 ✅ Detecting gaslighting and emotional extortion
 ✅ Providing verifiable emotional truth
 ✅ Making emotional history tamper-proof

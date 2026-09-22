@@ -518,7 +518,7 @@ Mythara.Engine@yahoo.com"""
 Our SSIP (Symbolic Safety Integrity Protocol) uses cryptographic sanctification to ensure AI behavior remains within defined safety boundaries. Key features:
 
 • Zero-trust architecture with integrity hashing
-• SOC 2 Type II compliant infrastructure
+• SOC 2 Type II controls implemented, audit planned (not currently certified)
 • GDPR/CCPA data protection
 • Immutable audit trails
 • Shadow Resolver failsafe mechanisms

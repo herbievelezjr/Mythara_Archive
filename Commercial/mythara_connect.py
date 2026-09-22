@@ -804,7 +804,7 @@ class MytharaConnect(AutonomousSalesBot):
             if len(validation['violations']) > 0:
                 self.voice.announce_violations(len(validation['violations']))
             else:
-                self.voice.announce_validation_status(validation['approved'], validation['risk_score']))
+                self.voice.announce_validation_status(validation['approved'], validation['risk_score'])
         
         if validation['approved'] and validation['can_auto_send'] and not validation['requires_human_review']:
             # Low risk - auto-send approved

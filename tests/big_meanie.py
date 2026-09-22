@@ -156,7 +156,7 @@ except ImportError:
     print("⚠️  Soul model not available")
 
 try:
-    from emotional_extortion_detector import EmotionalExtortionDetector
+    from will_integrity_guardian import EmotionalExtortionDetector
     EXTORTION_DETECTOR_AVAILABLE = True
 except ImportError:
     EXTORTION_DETECTOR_AVAILABLE = False

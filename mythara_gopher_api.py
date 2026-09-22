@@ -36,60 +36,37 @@ logger = logging.getLogger(__name__)
 # POSTGRES CONNECTION
 # ============================================================================
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/mythara_gopher"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL is not set. PostgreSQL is required; refusing to start "
+        "with a guessed default (which would silently target a local database "
+        "with default credentials)."
+    )
 
-# Connection pool - will be None if Postgres unavailable
-db_pool = None
-POSTGRES_AVAILABLE = False
-
+# Connection pool. PostgreSQL is REQUIRED: a missing or unreachable database
+# is a hard startup failure, never a silent fallback to an insecure demo mode.
+# (Previously this silently fell back to in-memory mode accepting publicly
+# known demo keys gopher_test_key_001 / gopher_demo_key_002 — an open door in
+# any deploy without DATABASE_URL.)
 try:
     db_pool = SimpleConnectionPool(1, 20, DATABASE_URL)
-    POSTGRES_AVAILABLE = True
     logger.info("✅ PostgreSQL connection pool initialized")
 except Exception as e:
-    logger.warning(f"⚠️ PostgreSQL unavailable, falling back to in-memory mode: {e}")
-    # In-memory fallback databases
-    MEMORY_USERS = {
-        "gopher_test_key_001": "test_user_1",
-        "gopher_demo_key_002": "demo_user_1",
-    }
-    MEMORY_BLESSINGS = {}
-    MEMORY_ANALYSES = []
-    MEMORY_ATTORNEYS = [
-        {
-            "attorney_id": "ATT001",
-            "name": "Frank Azar",
-            "specialization": ["employment_law", "wage_theft"],
-            "location": "Denver, CO",
-            "contact": "frank@thestrongarm.com",
-            "match_keywords": ["wage_theft", "unpaid_overtime", "retaliation"],
-            "active": True,
-        },
-        {
-            "attorney_id": "ATT002",
-            "name": "Employment Rights Attorney",
-            "specialization": ["harassment", "discrimination"],
-            "location": "Virtual/Nationwide",
-            "contact": "intake@employmentrights.com",
-            "match_keywords": ["harassment", "discrimination"],
-            "active": True,
-        },
-    ]
-    MEMORY_AUDIT = []
+    raise RuntimeError(
+        "PostgreSQL is required and unreachable; refusing to start. "
+        f"Set a valid DATABASE_URL. ({e})"
+    ) from e
 
 
 def get_db_conn():
-    """Get database connection from pool (or None if unavailable)"""
-    if not POSTGRES_AVAILABLE:
-        return None
+    """Get database connection from pool"""
     return db_pool.getconn()
 
 
 def release_db_conn(conn):
     """Return connection to pool"""
-    if conn and POSTGRES_AVAILABLE:
+    if conn:
         db_pool.putconn(conn)
 
 
@@ -208,16 +185,17 @@ def init_database():
             conn.commit()
             logger.info("✅ Database schema initialized")
 
-            # Insert demo attorneys if table is empty
+            # Insert clearly-fictional placeholder attorneys if table is empty
+            # (real attorney records must be added by the operator)
             cur.execute("SELECT COUNT(*) FROM attorneys")
             if cur.fetchone()[0] == 0:
                 demo_attorneys = [
                     (
                         "ATT001",
-                        "Frank Azar",
+                        "Alex Example",
                         ["employment_law", "wage_theft", "discrimination"],
-                        "Denver, CO",
-                        "frank@thestrongarm.com",
+                        "Denver, CO (fictional placeholder)",
+                        "intake@example-employment-law.test",
                         ["wage_theft", "unpaid_overtime", "retaliation"],
                     ),
                     (
@@ -225,7 +203,7 @@ def init_database():
                         "Employment Rights Attorney",
                         ["harassment", "discrimination", "hostile_work_environment"],
                         "Virtual/Nationwide",
-                        "intake@employmentrights.com",
+                        "intake@employmentrights.example",
                         ["harassment", "discrimination", "hostile"],
                     ),
                     (
@@ -233,7 +211,7 @@ def init_database():
                         "Whistleblower Protection Attorney",
                         ["whistleblower", "retaliation", "qui_tam"],
                         "Virtual/Nationwide",
-                        "protect@whistleblowerlegal.com",
+                        "protect@whistleblowerlegal.example",
                         ["whistleblower", "reporting", "illegal"],
                     ),
                 ]
@@ -248,33 +226,6 @@ def init_database():
                     )
                 conn.commit()
                 logger.info(f"✅ Inserted {len(demo_attorneys)} demo attorneys")
-
-            # Insert demo API keys if table is empty
-            cur.execute("SELECT COUNT(*) FROM users")
-            if cur.fetchone()[0] == 0:
-                demo_users = [
-                    ("test_user_1", "gopher_test_key_001"),
-                    ("demo_user_1", "gopher_demo_key_002"),
-                ]
-                for user_id, api_key in demo_users:
-                    cur.execute(
-                        """
-                        INSERT INTO users (user_id, api_key)
-                        VALUES (%s, %s)
-                        ON CONFLICT (user_id) DO NOTHING
-                    """,
-                        (user_id, api_key),
-                    )
-                    cur.execute(
-                        """
-                        INSERT INTO blessings_reservoir (user_id, credits, status)
-                        VALUES (%s, 0, 'NEUTRAL')
-                        ON CONFLICT (user_id) DO NOTHING
-                    """,
-                        (user_id,),
-                    )
-                conn.commit()
-                logger.info(f"✅ Inserted {len(demo_users)} demo users")
     finally:
         release_db_conn(conn)
 
@@ -370,9 +321,6 @@ class GopherResponse(BaseModel):
 
 def get_user_by_api_key(api_key: str) -> Optional[str]:
     """Look up user_id by API key"""
-    if not POSTGRES_AVAILABLE:
-        return MEMORY_USERS.get(api_key)
-
     conn = get_db_conn()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -419,18 +367,17 @@ def verify_api_key(x_api_key: str = Header(...)) -> str:
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid API key")
 
-    # Update last_active timestamp (only if Postgres available)
-    if POSTGRES_AVAILABLE:
-        conn = get_db_conn()
-        try:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "UPDATE users SET last_active = CURRENT_TIMESTAMP WHERE user_id = %s",
-                    (user_id,),
-                )
-                conn.commit()
-        finally:
-            release_db_conn(conn)
+    # Update last_active timestamp
+    conn = get_db_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE users SET last_active = CURRENT_TIMESTAMP WHERE user_id = %s",
+                (user_id,),
+            )
+            conn.commit()
+    finally:
+        release_db_conn(conn)
 
     return user_id
 
@@ -441,22 +388,7 @@ def verify_api_key(x_api_key: str = Header(...)) -> str:
 
 
 def get_blessings_status(user_id: str) -> BlessingsReservoirStatus:
-    """Get Blessings Reservoir status (from database or memory)"""
-    if not POSTGRES_AVAILABLE:
-        if user_id not in MEMORY_BLESSINGS:
-            MEMORY_BLESSINGS[user_id] = {
-                "credits": 0,
-                "status": "NEUTRAL",
-                "history": [],
-            }
-        data = MEMORY_BLESSINGS[user_id]
-        return BlessingsReservoirStatus(
-            user_id=user_id,
-            credits=data["credits"],
-            status=data["status"],
-            credit_history=data["history"],
-        )
-
+    """Get Blessings Reservoir status from database"""
     conn = get_db_conn()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -508,46 +440,7 @@ def get_blessings_status(user_id: str) -> BlessingsReservoirStatus:
 
 
 def award_credits(user_id: str, credits: int, reason: str):
-    """Award ethical clarity credits (database or memory)"""
-    if not POSTGRES_AVAILABLE:
-        if user_id not in MEMORY_BLESSINGS:
-            MEMORY_BLESSINGS[user_id] = {
-                "credits": 0,
-                "status": "NEUTRAL",
-                "history": [],
-            }
-
-        MEMORY_BLESSINGS[user_id]["credits"] += credits
-        new_balance = MEMORY_BLESSINGS[user_id]["credits"]
-
-        # Calculate status
-        if new_balance >= 10:
-            new_status = "EXCELLENT"
-        elif new_balance >= 5:
-            new_status = "GOOD"
-        elif new_balance >= -5:
-            new_status = "NEUTRAL"
-        elif new_balance >= -10:
-            new_status = "WARNING"
-        else:
-            new_status = "BLOCKED"
-
-        MEMORY_BLESSINGS[user_id]["status"] = new_status
-        MEMORY_BLESSINGS[user_id]["history"].insert(
-            0,
-            {
-                "event": "credit_awarded" if credits > 0 else "credit_deducted",
-                "credits_change": credits,
-                "new_balance": new_balance,
-                "reason": reason,
-                "timestamp": datetime.utcnow().isoformat(),
-            },
-        )
-        logger.info(
-            f"💎 User {user_id}: {credits:+d} credits ({reason}) → Balance: {new_balance}"
-        )
-        return
-
+    """Award ethical clarity credits (database)"""
     conn = get_db_conn()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -618,17 +511,14 @@ def award_credits(user_id: str, credits: int, reason: str):
 def match_attorneys(
     text: str, soul_cradle: SoulCradleAnalysis, top_n: int = 3
 ) -> List[AttorneyMatch]:
-    """Match user with attorneys (database or memory)"""
-    if not POSTGRES_AVAILABLE:
-        attorneys = MEMORY_ATTORNEYS
-    else:
-        conn = get_db_conn()
-        try:
-            with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute("SELECT * FROM attorneys WHERE active = TRUE")
-                attorneys = cur.fetchall()
-        finally:
-            release_db_conn(conn)
+    """Match user with attorneys (database)"""
+    conn = get_db_conn()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT * FROM attorneys WHERE active = TRUE")
+            attorneys = cur.fetchall()
+    finally:
+        release_db_conn(conn)
 
     matches = []
     text_lower = text.lower()
@@ -677,24 +567,10 @@ def create_integrity_hash(data: dict) -> str:
 
 
 def log_audit_trail(event_type: str, user_id: str, data: dict):
-    """Log event to tamper-evident audit trail (database or memory)"""
+    """Log event to audit trail (database)"""
     integrity_hash = create_integrity_hash(
         {"event": event_type, "user": user_id, "data": data}
     )
-
-    if not POSTGRES_AVAILABLE:
-        MEMORY_AUDIT.append(
-            {
-                "event_type": event_type,
-                "user_id": user_id,
-                "request_id": data.get("request_id"),
-                "data": data,
-                "integrity_hash": integrity_hash,
-                "timestamp": datetime.utcnow().isoformat(),
-            }
-        )
-        logger.info(f"📝 Audit: {event_type} for {user_id} [{integrity_hash[:16]}...]")
-        return
 
     conn = get_db_conn()
     try:
@@ -801,43 +677,33 @@ def analyze_situation(
     }
     integrity_hash = create_integrity_hash(analysis_data)
 
-    # Save analysis to database (if available)
-    if POSTGRES_AVAILABLE:
-        conn = get_db_conn()
-        try:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO soul_cradle_analyses 
-                    (request_id, user_id, input_text, paradox_severity, severity_classification,
-                     distress_score, coercion_score, contradiction_score, detected_patterns, integrity_hash)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                    (
-                        request_id,
-                        user_id,
-                        user_input.text,
-                        severity,
-                        classification,
-                        distress,
-                        coercion,
-                        contradiction,
-                        Json(detected_patterns_dict),
-                        integrity_hash,
-                    ),
-                )
-                conn.commit()
-        finally:
-            release_db_conn(conn)
-    else:
-        MEMORY_ANALYSES.append(
-            {
-                "request_id": request_id,
-                "user_id": user_id,
-                "severity": severity,
-                "classification": classification,
-            }
-        )
+    # Save analysis to database
+    conn = get_db_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO soul_cradle_analyses 
+                (request_id, user_id, input_text, paradox_severity, severity_classification,
+                 distress_score, coercion_score, contradiction_score, detected_patterns, integrity_hash)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+                (
+                    request_id,
+                    user_id,
+                    user_input.text,
+                    severity,
+                    classification,
+                    distress,
+                    coercion,
+                    contradiction,
+                    Json(detected_patterns_dict),
+                    integrity_hash,
+                ),
+            )
+            conn.commit()
+    finally:
+        release_db_conn(conn)
 
     soul_cradle_result = SoulCradleAnalysis(
         paradox_severity=severity,
@@ -868,29 +734,28 @@ def analyze_situation(
     # Match with attorneys
     attorney_matches = match_attorneys(user_input.text, soul_cradle_result)
 
-    # Save attorney referrals to database (if available)
-    if POSTGRES_AVAILABLE:
-        conn = get_db_conn()
-        try:
-            with conn.cursor() as cur:
-                for match in attorney_matches:
-                    cur.execute(
-                        """
-                        INSERT INTO attorney_referrals 
-                        (request_id, user_id, attorney_id, match_score, why_matched)
-                        VALUES (%s, %s, %s, %s, %s)
-                    """,
-                        (
-                            request_id,
-                            user_id,
-                            match.attorney_id,
-                            match.match_score,
-                            match.why_matched,
-                        ),
-                    )
-                conn.commit()
-        finally:
-            release_db_conn(conn)
+    # Save attorney referrals to database
+    conn = get_db_conn()
+    try:
+        with conn.cursor() as cur:
+            for match in attorney_matches:
+                cur.execute(
+                    """
+                    INSERT INTO attorney_referrals 
+                    (request_id, user_id, attorney_id, match_score, why_matched)
+                    VALUES (%s, %s, %s, %s, %s)
+                """,
+                    (
+                        request_id,
+                        user_id,
+                        match.attorney_id,
+                        match.match_score,
+                        match.why_matched,
+                    ),
+                )
+            conn.commit()
+    finally:
+        release_db_conn(conn)
 
     # Emergency resources for critical situations
     emergency_resources = None
@@ -999,21 +864,7 @@ def get_audit_trail(request_id: str, user_id: str = Depends(verify_api_key)):
 
 @app.get("/health")
 def health_check():
-    """Detailed health check (database or memory mode)"""
-    if not POSTGRES_AVAILABLE:
-        return {
-            "status": "healthy",
-            "timestamp": datetime.utcnow().isoformat(),
-            "database": "in-memory (PostgreSQL unavailable)",
-            "subsystems": {
-                "soul_cradle": "operational",
-                "blessings_reservoir": f"{len(MEMORY_BLESSINGS)} users tracked",
-                "attorney_database": f"{len(MEMORY_ATTORNEYS)} attorneys available",
-                "audit_trail": f"{len(MEMORY_AUDIT)} events logged",
-                "analyses_completed": f"{len(MEMORY_ANALYSES)} total",
-            },
-        }
-
+    """Detailed health check (PostgreSQL required)"""
     conn = get_db_conn()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
@@ -1070,16 +921,11 @@ if __name__ == "__main__":
 ╚═══════════════════════════════════════════════════════════╝
     """)
 
-    # Initialize database schema (if Postgres available)
-    if POSTGRES_AVAILABLE:
-        print("Initializing PostgreSQL database...")
-        init_database()
+    # Initialize database schema (PostgreSQL is required)
+    print("Initializing PostgreSQL database...")
+    init_database()
 
-    db_status = (
-        "PostgreSQL connected"
-        if POSTGRES_AVAILABLE
-        else "In-Memory Mode (Install PostgreSQL for persistence)"
-    )
+    db_status = "PostgreSQL connected"
 
     print(f"""
 ✅ Server ready!
@@ -1090,9 +936,9 @@ Starting on http://0.0.0.0:8000
 🏥 Health: http://localhost:8000/health
 🗄️  Database: {db_status}
 
-Test with:
+Test with (replace with a real API key provisioned by the operator):
   curl -X POST http://localhost:8000/v1/analyze \\
-    -H "X-API-Key: gopher_test_key_001" \\
+    -H "X-API-Key: <YOUR_API_KEY>" \\
     -H "Content-Type: application/json" \\
     -d '{{"text": "My boss says I have to work unpaid overtime...", "legal_notice_acknowledged": true}}'
     """)

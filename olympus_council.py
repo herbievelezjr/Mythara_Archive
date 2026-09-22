@@ -119,6 +119,13 @@ except ImportError:
     NEMESIS_AVAILABLE = False
     logging.warning("Nemesis not available")
 
+try:
+    from schrodinger_bot import SchrodingerBot
+    SCHRODINGER_AVAILABLE = True
+except ImportError:
+    SCHRODINGER_AVAILABLE = False
+    logging.warning("Schrodinger not available")
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -142,6 +149,7 @@ class OlympusAssessment:
     hades_judgment: Optional[Any] = None
     persephone_redemption: Optional[Any] = None
     nemesis_retribution: Optional[Any] = None
+    schrodinger_reasoning: Optional[Any] = None
     
     # Synthesized wisdom
     unified_guidance: str = ""
@@ -175,6 +183,7 @@ class OlympusCouncil:
         self.hades = HadesBot(workspace_root) if HADES_AVAILABLE else None
         self.persephone = PersephoneBot(workspace_root) if PERSEPHONE_AVAILABLE else None
         self.nemesis = NemesisBot(workspace_root) if NEMESIS_AVAILABLE else None
+        self.schrodinger = SchrodingerBot() if SCHRODINGER_AVAILABLE else None  # SchrodingerBot takes no args
         
         self.assessments: Dict[str, OlympusAssessment] = {}
         
@@ -183,12 +192,12 @@ class OlympusCouncil:
             PROMETHEUS_AVAILABLE, HERMES_AVAILABLE, JANUS_AVAILABLE,
             HEPHAESTUS_AVAILABLE, ARIES_AVAILABLE, DIONYSUS_AVAILABLE,
             EROS_AVAILABLE, DEMETER_AVAILABLE, HADES_AVAILABLE,
-            PERSEPHONE_AVAILABLE, NEMESIS_AVAILABLE
+            PERSEPHONE_AVAILABLE, NEMESIS_AVAILABLE, SCHRODINGER_AVAILABLE
         ])
         
-        logger.info(f"🏛️ OLYMPUS COUNCIL initialized with {available_gods}/11 gods available")
+        logger.info(f"🏛️ OLYMPUS COUNCIL initialized with {available_gods}/12 gods available")
         print("🏛️ OLYMPUS COUNCIL - Divine Assembly of Mount Olympus")
-        print(f"   {available_gods} of 11 GODBOTs present in council")
+        print(f"   {available_gods} of 12 GODBOTs present in council")
     
     def full_assessment(
         self,
@@ -241,6 +250,9 @@ class OlympusCouncil:
         
         if not assessment_scope or "nemesis" in assessment_scope:
             assessment.nemesis_retribution = self._invoke_nemesis(entity_id, entity_data)
+        
+        if not assessment_scope or "schrodinger" in assessment_scope:
+            assessment.schrodinger_reasoning = self._invoke_schrodinger(entity_id, entity_data)
         
         if not assessment_scope or "hephaestus" in assessment_scope:
             assessment.hephaestus_tools = self._invoke_hephaestus(entity_id, entity_data)
@@ -470,6 +482,25 @@ class OlympusCouncil:
         
         return None
     
+    def _invoke_schrodinger(self, entity_id: str, data: Dict) -> Optional[Any]:
+        """Invoke Schrodinger for quantum reasoning over possible paths"""
+        if not self.schrodinger:
+            return None
+        
+        print("\n⚛️ SCHRODINGER reasoning over possible paths...")
+        
+        try:
+            solution, observation, analysis = self.schrodinger.quantum_reason(
+                problem=data.get("problem", f"Optimal path for {entity_id}"),
+                context=data.get("context", {})
+            )
+            print(f"   Collapsed to: {solution.description[:60]} (confidence {observation.confidence:.2f})")
+            return observation
+        except Exception as e:
+            logger.error(f"Schrodinger invocation failed: {e}")
+        
+        return None
+    
     def _invoke_hephaestus(self, entity_id: str, data: Dict) -> Optional[Any]:
         """Invoke Hephaestus for tool creation"""
         if not self.hephaestus:
@@ -553,6 +584,9 @@ class OlympusCouncil:
         
         if assessment.nemesis_retribution:
             wisdom["Nemesis"] = f"Justice: {getattr(assessment.nemesis_retribution, 'justice_status', 'unknown')}"
+        
+        if assessment.schrodinger_reasoning:
+            wisdom["Schrodinger"] = getattr(assessment.schrodinger_reasoning, 'reasoning', 'Hold all paths until observed')
         
         return wisdom
     

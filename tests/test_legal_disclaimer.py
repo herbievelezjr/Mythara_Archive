@@ -10,7 +10,11 @@ import sys
 import io
 
 # Fix Windows console encoding
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# Windows-console UTF-8 fix: only rewrap a REAL console stdout.
+# Under pytest sys.stdout is a capture object; rewrapping it closes
+# pytest's capture buffer when the wrapper is garbage-collected.
+if type(sys.stdout) is io.TextIOWrapper:
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 from mythara_gopher_nlp_engine import MytharaGopherNLP, MYTHARA_GOPHER_LEGAL_DISCLAIMER
 

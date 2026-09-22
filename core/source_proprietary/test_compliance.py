@@ -1,72 +1,60 @@
 #!/usr/bin/env python3
-"""Test script for Unified Compliance Framework"""
+"""Tests for Unified Compliance Framework (current API).
 
-from unified_compliance_framework import unified_compliance, ComplianceFramework
+Copyright © 2025 Herbert Velez Jr. All rights reserved.
+"""
 
-print("=" * 60)
-print("Mythara Engine - Unified Compliance Framework Test")
-print("=" * 60)
+import pytest
 
-# Test 1: Framework enumeration
-print(f"\n✅ Supported frameworks: {len(list(ComplianceFramework))}")
+from unified_compliance_framework import UnifiedComplianceFramework, ComplianceFramework
 
-# Test 2: Generate report
-report = unified_compliance.generate_compliance_report()
-print(f"✅ Report generated: {report['frameworks_supported']} frameworks")
 
-# Test 3: List frameworks by category
-print("\n📋 Frameworks by Category:")
-for category, frameworks in report["compliance_frameworks"].items():
-    print(f"  - {category}: {len(frameworks)} frameworks")
+@pytest.fixture(scope="module")
+def ucf():
+    return UnifiedComplianceFramework()
 
-# Test 4: PCI DSS validation
-print("\n💳 Testing PCI DSS Validation:")
-pci_data = {
-    "card_token": "tok_abc123",
-    "amount": 100.00,
-    "encrypted": True,
-    "transaction_id": "TXN_001",
-}
-pci_result = unified_compliance.validate_multi_framework_compliance(
-    pci_data, [ComplianceFramework.PCI_DSS]
-)
-print(
-    f"  Result: {'✅ COMPLIANT' if pci_result['overall_compliant'] else '❌ NON-COMPLIANT'}"
-)
-print(f"  Risk: {pci_result['risk_assessment']}")
 
-# Test 5: TCPA validation
-print("\n📞 Testing FCC TCPA Validation:")
-tcpa_data = {
-    "automated": True,
-    "consent_given": True,
-    "call_time": "14:00",
-    "opt_out_available": True,
-    "on_dnc_list": False,
-}
-tcpa_result = unified_compliance.validate_multi_framework_compliance(
-    tcpa_data, [ComplianceFramework.FCC_TCPA]
-)
-print(
-    f"  Result: {'✅ COMPLIANT' if tcpa_result['overall_compliant'] else '❌ NON-COMPLIANT'}"
-)
-print(f"  Risk: {tcpa_result['risk_assessment']}")
+def test_framework_enumeration():
+    assert len(list(ComplianceFramework)) == 10
 
-# Test 6: Labor compliance validation
-print("\n👷 Testing NLRA (Labor) Validation:")
-labor_data = {
-    "union_activity": True,
-    "disciplinary_action": True,
-    "legitimate_business_reason": True,
-}
-labor_result = unified_compliance.validate_multi_framework_compliance(
-    labor_data, [ComplianceFramework.NLRA]
-)
-print(
-    f"  Result: {'✅ COMPLIANT' if labor_result['overall_compliant'] else '❌ NON-COMPLIANT'}"
-)
-print(f"  Risk: {labor_result['risk_assessment']}")
 
-print(f"\n{'='*60}")
-print("✅ All tests completed successfully!")
-print(f"{'='*60}\n")
+def test_generate_compliance_report(ucf):
+    report = ucf.generate_compliance_report()
+    assert report["frameworks_supported"] == 10
+    assert set(report["compliance_frameworks"]) == {"financial", "privacy", "security"}
+    total = sum(len(v) for v in report["compliance_frameworks"].values())
+    assert total == 10
+
+
+def test_validation_requires_authentication(ucf):
+    result = ucf.validate_multi_framework_compliance(
+        {"card_token": "tok_abc123"}, [ComplianceFramework.PCI_DSS]
+    )
+    assert result["error"] == "AUTHENTICATION_REQUIRED"
+
+
+def test_pci_dss_validation(ucf):
+    result = ucf.validate_multi_framework_compliance(
+        {"card_token": "tok_abc123", "amount": 100.00, "encrypted": True},
+        [ComplianceFramework.PCI_DSS],
+        user_id="pci_tester",
+    )
+    assert result["status"] == "COMPLIANT"
+    assert result["frameworks"]["PCI_DSS"]["compliant"] is True
+    assert "signature" in result
+
+
+def test_multi_framework_validation(ucf):
+    result = ucf.validate_multi_framework_compliance(
+        {"field": "value"},
+        [ComplianceFramework.GDPR, ComplianceFramework.SOC2],
+        user_id="multi_tester",
+    )
+    assert result["status"] == "COMPLIANT"
+    assert set(result["frameworks"]) == {"GDPR", "SOC2"}
+
+
+def test_audit_logs_recorded(ucf):
+    logs = ucf.get_audit_logs(user_id="pci_tester")
+    assert len(logs) > 0
+    assert all(entry["user_id"] == "pci_tester" for entry in logs)
