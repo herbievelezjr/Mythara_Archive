@@ -13,22 +13,24 @@
 
 | **Jurisdiction** | **Accessibility** | **Privacy** | **AI/ML** | **Healthcare** | **Education** | **Overall Status** |
 |------------------|-------------------|-------------|-----------|----------------|---------------|-------------------|
-| **United States** | ✅ ADA, 508, CVAA | ✅ HIPAA, COPPA | ⚠️ Voluntary | ✅ FDA (if applicable) | ✅ FERPA, IDEA | 🔍 MAPPED — not certified |
-| **European Union** | ✅ EAA, WAD, EN 301 549 | ✅ GDPR | ✅ AI Act | ✅ MDR (if applicable) | ✅ GDPR-ED | 🔍 MAPPED — not certified |
-| **United Kingdom** | ✅ Equality Act | ✅ UK GDPR, DPA | ⚠️ Voluntary | ✅ MHRA (if applicable) | ✅ DPA 2018 | 🔍 MAPPED — not certified |
-| **Canada** | ✅ ACA, AODA | ✅ PIPEDA | ⚠️ AIDA (pending) | ✅ Health Canada | ✅ PIPEDA | 🔍 MAPPED — not certified |
-| **Australia** | ✅ DDA | ✅ Privacy Act | ⚠️ Voluntary | ✅ TGA (if applicable) | ✅ Privacy Act | 🔍 MAPPED — not certified |
-| **Japan** | ✅ JIS X 8341-3 | ✅ APPI | ⚠️ Voluntary | ✅ PMDA (if applicable) | ✅ APPI | 🔍 MAPPED — not certified |
-| **China** | ✅ GB/T standards | ✅ PIPL | ✅ Algorithm Reg | ⚠️ NMPA (if applicable) | ✅ PIPL | ⚠️ PARTIAL* |
-| **India** | ✅ RPWD Act | ⚠️ DPDP Act (new) | ⚠️ Voluntary | ⚠️ CDSCO (if applicable) | ⚠️ DPDP Act | ⚠️ EVOLVING |
-| **Singapore** | ✅ ENGA guidelines | ✅ PDPA | ⚠️ Model AI Gov | ⚠️ HSA (if applicable) | ✅ PDPA | 🔍 MAPPED — not certified |
-| **South Korea** | ✅ KCAG | ✅ PIPA | ⚠️ Voluntary | ⚠️ MFDS (if applicable) | ✅ PIPA | 🔍 MAPPED — not certified |
+| **United States** | 🔍 ADA, 508, CVAA | 🔍 HIPAA, COPPA | ⚠️ Voluntary | 🔍 FDA (if applicable) | 🔍 FERPA, IDEA | 🔍 MAPPED — not certified |
+| **European Union** | 🔍 EAA, WAD, EN 301 549 | 🔍 GDPR | 🔍 AI Act | 🔍 MDR (if applicable) | 🔍 GDPR-ED | 🔍 MAPPED — not certified |
+| **United Kingdom** | 🔍 Equality Act | 🔍 UK GDPR, DPA | ⚠️ Voluntary | 🔍 MHRA (if applicable) | 🔍 DPA 2018 | 🔍 MAPPED — not certified |
+| **Canada** | 🔍 ACA, AODA | 🔍 PIPEDA | ⚠️ AIDA (pending) | 🔍 Health Canada | 🔍 PIPEDA | 🔍 MAPPED — not certified |
+| **Australia** | 🔍 DDA | 🔍 Privacy Act | ⚠️ Voluntary | 🔍 TGA (if applicable) | 🔍 Privacy Act | 🔍 MAPPED — not certified |
+| **Japan** | 🔍 JIS X 8341-3 | 🔍 APPI | ⚠️ Voluntary | 🔍 PMDA (if applicable) | 🔍 APPI | 🔍 MAPPED — not certified |
+| **China** | 🔍 GB/T standards | 🔍 PIPL | 🔍 Algorithm Reg | ⚠️ NMPA (if applicable) | 🔍 PIPL | ⚠️ PARTIAL* |
+| **India** | 🔍 RPWD Act | ⚠️ DPDP Act (new) | ⚠️ Voluntary | ⚠️ CDSCO (if applicable) | ⚠️ DPDP Act | ⚠️ EVOLVING |
+| **Singapore** | 🔍 ENGA guidelines | 🔍 PDPA | ⚠️ Model AI Gov | ⚠️ HSA (if applicable) | 🔍 PDPA | 🔍 MAPPED — not certified |
+| **South Korea** | 🔍 KCAG | 🔍 PIPA | ⚠️ Voluntary | ⚠️ MFDS (if applicable) | 🔍 PIPA | 🔍 MAPPED — not certified |
 
 **Legend:**
 - ✅ = Alignment mapped / controls documented (not independently audited)
 - 🔍 = Readiness mapped — controls implemented, independent audit planned — not currently certified
 - ⚠️ = Partial readiness, evolving regulation, or conditional mapping
 - ❌ = Not assessed or not mapped
+
+> **No entry in this matrix is an independent certification.** All ✅ and 🔍 marks mean Mythara's controls were mapped against the named framework by the project itself. No third-party audit (SOC 2, ISO 27001, HIPAA, GDPR, FedRAMP, CMMC, ITAR) has been completed.
 - * = Requires local partner/data localization
 
 ---

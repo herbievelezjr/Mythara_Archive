@@ -316,9 +316,9 @@ Every BR transaction generates:
 - Event metadata (anonymized)
 - API caller identity (API key or SSO user)
 
-### Compliance Certifications
-- **HIPAA**: Mythara is HIPAA-compliant (Business Associate Agreement available)
-- **GDPR**: EU data handling protocols for international deployments
+### Compliance Readiness (not certifications)
+- **HIPAA**: Readiness assessment mapped; no HIPAA audit has been completed and no certification is claimed. A Business Associate Agreement is available at contract signing.
+- **GDPR**: Data-handling controls mapped for international deployments; no GDPR certification is claimed.
 - **SOC 2**: Type II controls implemented, audit planned (not currently certified)
 
 ---
