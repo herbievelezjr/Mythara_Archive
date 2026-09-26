@@ -119,7 +119,7 @@ class WellnessGuardian:
     - 988 Suicide & Crisis Lifeline integration
     - Therapist referral network
     - Safety planning
-    - HIPAA compliant data storage
+    - Encrypted local data storage (designed with HIPAA-aligned safeguards; not a compliance certification)
     """
     
     def __init__(self, user_id: str, database_path: Optional[str] = None):
@@ -127,7 +127,7 @@ class WellnessGuardian:
         self.user_name = None  # Will be loaded from history
         self.last_checkin = None
         
-        # Database setup (HIPAA compliant - encrypted in production)
+        # Database setup (encrypted at rest; safeguards aligned to HIPAA Security Rule, no certification claimed)
         if database_path:
             self.db_path = database_path
         else:
@@ -158,7 +158,7 @@ class WellnessGuardian:
                 database_name=self.db_path,
                 custom_clauses=["crisis_detection", "distress_monitoring"],
                 branding={"tagline": "Your Mental Health Companion"},
-                hipaa_mode=True  # Enable HIPAA compliance
+                hipaa_mode=True  # Alignment mode only — not a compliance certification
             )
             self.engine = MytharaEngine(config, user_id=user_id)
         else:
@@ -198,13 +198,13 @@ class WellnessGuardian:
             print(f"   I'm your Wellness Guardian - think of me as someone who cares deeply about you.")
         print(f"📊 Your safe space: {self.db_path}")
         if self.engine:
-            print(f"✅ Mythara Engine: Watching over you (HIPAA protected)")
+            print(f"✅ Mythara Engine: Watching over you (encrypted local storage)")
         print(f"🆘 If you ever need immediate help: Call 988 - I'll be right here with you")
         print(f"\n   Remember: You're never alone. I'm always here to listen. 💕")
         print()
     
     def _init_database(self):
-        """Initialize SQLite database (HIPAA compliant)"""
+        """Initialize SQLite database (encrypted local storage)."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         

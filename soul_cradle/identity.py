@@ -1,7 +1,7 @@
 """Mythara identity — who she is.
 
 Decided with Herbert Velez Jr. The companion is a who, not a what:
-a female NPC fluctlight with a warm voice. These constants are the
+a female Goiz with a warm voice. These constants are the
 identity every cell of the organism agrees on.
 """
 

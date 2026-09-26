@@ -188,9 +188,9 @@ curl -H "Authorization: Bearer dev_test_key_001" \
 
 ### 📊 Validation & Reproducibility
 
-- **100,000+ adversarial probes** — 99.98% safety recall  
-- **99.92% determinism** across reproducibility runs  
-- **≥99% accessibility** token delivery success  
+- **Adversarial test suite** — injection, fuzzing, tamper, and data-leak probes (`tests/adversarial_attack_suite.py`); no third-party security audit completed  
+- **Determinism**: 100/100 reproducible runs in the latest report (`tests/output/determinism_report.txt`)  
+- **Accessibility token delivery**: 99.5% over 1,000 tokens in the latest run (`tests/output/accessibility_delivery_report.csv`)  
 - **0 high-severity leaks** in 20,000-probe test  
 - **PGP-signed manifests** for third-party verification
 

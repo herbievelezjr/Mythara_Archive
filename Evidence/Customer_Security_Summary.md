@@ -150,7 +150,7 @@ We maintain an automated test suite that attempts to break Mythara's cryptograph
 ## Certifications and Standards (Roadmap)
 
 - **Current:** OWASP alignment, NIST AI RMF mapping
-- **In Progress:** SOC 2 Type II, ISO 27001 certification
+- **Planned (no audit initiated):** SOC 2 Type II, ISO 27001
 - **Planned:** FIPS 140-3 validation (cryptographic module), Common Criteria EAL4+
 
 ---

@@ -34,9 +34,9 @@ Mythara Engine is a deployed-ready inference and explainability layer that selec
 
 ## Validation Highlights (select)
 
-- 100,000 adversarial probes; safety recall 99.98% (stress_test_log.csv).  
-- Determinism reproducibility: 99.92% across runs (determinism_report.txt).  
-- Accessibility token delivery: ≥99% success (accessibility_delivery_report.csv).  
+- Adversarial probe suites (injection, fuzzing, tamper, data-leak); no third-party security audit completed.  
+- Determinism: 100/100 reproducible runs (tests/output/determinism_report.txt).  
+- Accessibility token delivery: 99.5% over 1,000 tokens (tests/output/accessibility_delivery_report.csv).  
 - Leakage probe: 20,000 probes; 0 high-severity leaks (leakage_probe_log.csv).
 
 ## Escrow Bundle (included)
@@ -75,7 +75,7 @@ Government policy analysis, social media monitoring, healthcare protection, air-
 
 ## Contact & Next Steps
 
-**Herbert Velez Jr., Mythara Labs LLC**  
+**Herbert Velez Jr., Sole Proprietor** (Mythara Labs LLC planned — not yet formed)  
 Email: [legal@mythara.engine](mailto:legal@mythara.engine)  
 PGP Fingerprint: `571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C`
 

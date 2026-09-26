@@ -230,7 +230,7 @@ I built something you need.
 - Legal moat: No competitor has treaty-level compliance (2-3 year lead)
 - IP moat: Paradox Topology Engine is new category
 - Market timing: AI regulations coming (EU AI Act, US AI Executive Order)
-- Future-proof: Already compliant with emerging regulations
+- Future-proof: designed to adapt to emerging regulations
 
 **Slide 9: Team**
 - [Your background]

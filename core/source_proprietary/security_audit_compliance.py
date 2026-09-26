@@ -580,7 +580,7 @@ class ComplianceSecurityAuditor:
             "cvv": "123",
             "ssn": "123-45-6789",
             "password": "MySecretPass123",
-            "api_key": "sk_live_abc123xyz789",
+            "api_key": "sk_test_fixture_abc123xyz789",
         }
 
         is_compliant, violations = self.financial.validate_pci_dss_transaction(
@@ -593,7 +593,7 @@ class ComplianceSecurityAuditor:
             "4532123456789010",
             "123-45-6789",
             "MySecretPass123",
-            "sk_live_abc123xyz789",
+            "sk_test_fixture_abc123xyz789",
         ]
 
         for pattern in sensitive_patterns:

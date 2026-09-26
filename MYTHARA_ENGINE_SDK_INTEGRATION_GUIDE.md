@@ -227,7 +227,7 @@ engine.blessings.award_credits("patient_555", 10, "Reached out during difficult 
 **Wellness Guardian-Specific Features:**
 - Distress detection (suicidal ideation, self-harm)
 - Therapist referral network
-- HIPAA-compliant storage (local encryption)
+- Encrypted local storage (HIPAA-aligned safeguards; no certification claimed)
 - Crisis hotline integration (988, local resources)
 
 ---

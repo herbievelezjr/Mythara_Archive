@@ -122,7 +122,7 @@ Licensee may remit payment via:
 - **Wire Transfer / ACH:** Bank details provided in invoice
 - **Cash App:** $MytharaEngine
 - **Cryptocurrency:** BTC / ETH / USDC (wallet addresses provided upon request)
-- **Check:** Payable to "Herbert Velez Jr. / Mythara Labs LLC"
+- **Check:** Payable to "Herbert Velez Jr., Sole Proprietor"
 
 Cryptocurrency payments are converted to USD at the exchange rate on the date of payment confirmation.
 
@@ -367,7 +367,7 @@ If any provision is unenforceable, the remainder of the Agreement continues in e
 Notices must be in writing to:
 
 **Licensor:**  
-Herbert Velez Jr. / Mythara Labs LLC  
+Herbert Velez Jr., Sole Proprietor  
 Email: legal@mythara.engine  
 PGP: 571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C
 
@@ -381,8 +381,7 @@ PGP: 571F FB4C CCFA DCF A44A  63F6 D968 C2D5 DBE2 486C
 
 **LICENSOR:**
 
-Herbert Velez Jr., Sole Proprietor  
-Mythara Labs LLC
+Herbert Velez Jr., Sole Proprietor
 
 Signature: ___________________________  
 Date: ___________________________
