@@ -106,7 +106,7 @@ cm.onboard_contractor(
     name='Jane Contractor',
     hourly_rate=75.0,
     market_rate_factor=1.05,  # 5% market adjustment
-    password='SecurePass2025!'  # Auto-registers auth
+    password='<redacted>'  # Auto-registers auth
 )
 ```
 
@@ -116,7 +116,7 @@ cm.onboard_contractor(
 from mythara_contractor_auth import ContractorAuth
 
 auth = ContractorAuth()
-step1 = auth.login_step1('contractor@example.com', 'SecurePass2025!')
+step1 = auth.login_step1('contractor@example.com', '<redacted>')
 
 if step1['success']:
     otp_id = step1['otp_id']
@@ -163,7 +163,7 @@ otp_id = reset_request['otp_id']
 
 # Step 2: Submit new password with OTP
 otp_code = "654321"  # From email
-auth.reset_password(otp_id, otp_code, 'NewSecurePass2025!')
+auth.reset_password(otp_id, otp_code, '<redacted>')
 ```
 
 ---

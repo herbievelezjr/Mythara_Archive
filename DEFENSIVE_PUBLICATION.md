@@ -865,7 +865,7 @@ This publication establishes prior art for all technologies described herein as 
 
 ### Inventor Rights Reserved
 
-While this publication establishes prior art to prevent third-party patents, the inventor (Herbert Velez Jr. / Mythara Labs LLC) reserves all rights to:
+While this publication establishes prior art to prevent third-party patents, the inventor (Herbert Velez Jr.; Mythara Labs LLC is planned — not yet formed) reserves all rights to:
 
 1. File patent applications claiming these inventions (within one year of this publication under 35 U.S.C. § 102(b)(1)(A))
 2. Practice these inventions commercially

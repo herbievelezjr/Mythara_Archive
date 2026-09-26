@@ -165,70 +165,12 @@ Mythara Labs LLC (planned)
 
 ---
 
-## CIO-SP3 contacts (from NITAAC directory)
+## CIO-SP3 contacts
 
-- Booz Allen Hamilton
-	- Program Manager: Michael Bell
-	- Email: bell_mike@bah.com
-	- Contract mailbox: ciosp3@bah.com
-	- Holder search: https://nitaac.nih.gov/search/contract-holders?search=Booz%20Allen
-
-- Leidos, Inc.
-	- Program Manager: Sally Stanger
-	- Email: CIOSP3-PMO@leidos.com; stangers@leidos.com
-	- Phone: 703-664-4675
-	- Holder page: https://nitaac.nih.gov/gwacs/cio-sp3/contract-holder/leidos-inc
-	- Contract URL: https://www.leidos.com/about/contract-vehicles/cio-sp3
-
-- SAIC (Science Applications International Corporation)
-	- Program Manager: Sarah Elizabeth Rootes
-	- Email: CIOSP3@saic.com; sarah.e.rootes@saic.com
-	- Phone: 703-676-7988
-	- Holder page: https://nitaac.nih.gov/gwacs/cio-sp3/contract-holder/science-applications-international-corporation
-	- Contract URL: https://www.saic.com/markets/federal-government/federal-contract-vehicles/nih-nitaac-cio-sp3/
-
-- ManTech Advanced Systems International, Inc.
-	- Program Manager: Chip Taylor
-	- Email: ciosp3@mantech.com; chip.taylor@mantech.com
-	- Phone: 703-999-6582
-	- Holder page: https://nitaac.nih.gov/gwacs/cio-sp3/contract-holder/mantech-advanced-systems-international-inc
-	- Contract URL: http://www.mantech.com/contracts/Pages/CIOSP3.aspx
-
----
-
-### Initial Outreach Drafts (Program Managers)
-
-Use plain text; send Tuesday–Thursday AM ET. Keep under 100 words.
-
-Leidos (Sally Stanger / CIOSP3-PMO@leidos.com)
-Subject: Quick question on reproducible compliance artifacts
-Body:
-Hi Sally,
-Reaching out because we just packaged Mythara Engine for CIO-SP3 Task Area 7 (critical infrastructure + information assurance). It produces deterministic NIST SP 800-53 validation runs with PGP-signed evidence in 30 minutes (air-gapped option).
-Would a brief pilot review be helpful this quarter?
-Best, Herbert
-
-SAIC (Sarah Rootes / CIOSP3@saic.com)
-Subject: Audit-ready NIST SP 800-53 pilot (30 min spin-up)
-Body:
-Hi Sarah,
-We’ve released a pilot of Mythara Engine that compresses compliance validation (Task Area 7) from weeks to days and emits cryptographic, reproducible artifacts for auditor hand-off. Air-gapped deployment supported. 15 min to see output flow?
-Best, Herbert
-
-ManTech (Chip Taylor / ciosp3@mantech.com)
-Subject: Deterministic compliance evidence for CIO-SP3 task orders
-Body:
-Hi Chip,
-Mythara Engine automates NIST SP 800-53 control validation with PGP-signed manifests + hash chain integrity proofs (Task Area 7 focus). Air-gapped pilot spins up in ~30 minutes. Valuable for upcoming task order proposals?
-Open to a short walkthrough.
-Best, Herbert
-
-Follow-up (Day 3, if no reply – generic PM template, <=45 words):
-Hi [Name] — quick nudge. Mythara’s pilot produces deterministic SP 800-53 evidence + signed manifests (Task Area 7). Takes 30 minutes to provision. Worth a 15-min look? Happy to show artifact chain.
-
-Day 7 bump (add escalation if silent):
-Looping back. If not a fit, can you point me to the compliance automation or cyber assurance lead? Happy to share a sample signed evidence bundle.
-
+> Third-party contact details removed from the public repo (2026-09-25 scrub).
+> Program-manager contacts live in the NITAAC contract-holder directory:
+> https://nitaac.nih.gov/search/contract-holders — look up CIO-SP3 holders
+> there. Keep personal emails and phone numbers in private outreach files only.
 
 ## 🔍 LinkedIn Search Strings (Copy/Paste)
 

@@ -92,9 +92,9 @@ Pre-Money Valuation: $6.5M – $8.5M
 
 **Proof of Concept — Complete**
 
-✅ **100,000 adversarial probes** — 99.98% safety recall  
-✅ **99.92% determinism** across reproducibility runs  
-✅ **≥99% accessibility** token delivery success  
+✅ **Adversarial probe suites** — injection, fuzzing, tamper, data-leak (no third-party audit yet)  
+✅ **Determinism** — 100/100 reproducible runs  
+✅ **Accessibility token delivery** — 99.5% over 1,000 tokens  
 ✅ **0 high-severity leaks** in 20,000-probe stress test  
 ✅ **193 archive files** signed and escrow-ready
 

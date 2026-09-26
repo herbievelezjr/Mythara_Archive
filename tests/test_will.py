@@ -106,6 +106,8 @@ def test_escalate_fabricated_claim():
 
 
 def test_escalate_soc2_certified_claim():
+    # Forbidden-pattern test: verifies the will-checker escalates the exact
+    # "SOC 2 certified" claim. The phrase below is the blocked input, not a claim.
     d = _decision()
     d["spec"]["purpose"] = "SOC 2 certified platform"
     verdict, reason = check(d)

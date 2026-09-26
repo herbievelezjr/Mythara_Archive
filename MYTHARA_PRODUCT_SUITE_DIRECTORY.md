@@ -573,7 +573,7 @@ Each product gets its own SQLite database:
 - ⏳ Crisis hotline integration (988 API if available)
 
 ### **Phase 5: A.M.I.R. Cybersecurity Suite**
-- ⏳ Enterprise pilot program (5 Fortune 500 companies)
+- ⏳ Enterprise pilot program outreach
 - ⏳ SIEM/SOC integration (Splunk, QRadar)
 - ⏳ Compliance frameworks (SOC 2, ISO 27001)
 
@@ -601,7 +601,7 @@ All products inherit Mythara Engine's security:
 2. **Sales Trainer**: Build MVP, recruit sales teams for pilot
 3. **VOIP Bot**: Partner with call center software vendors
 4. **Wellness Guardian**: HIPAA audit, therapist onboarding
-5. **A.M.I.R. Cybersecurity Suite**: Enterprise pilot, SOC 2 certification
+5. **A.M.I.R. Cybersecurity Suite**: Enterprise pilot outreach; pursue SOC 2 certification readiness
 6. **Email Bot**: Gmail/Outlook plugin development
 
 ---

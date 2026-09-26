@@ -1,5 +1,5 @@
 # Mythara Archive - Forensic Corporate Review
-**Copyright © 2025 Mythara Labs LLC. All rights reserved.**  
+**Copyright © 2025 Herbert Velez Jr. All rights reserved.**  
 **Proprietary and Confidential - Attorney-Client Privileged Material**
 
 **Review Date:** November 18, 2025  

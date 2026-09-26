@@ -52,7 +52,7 @@ except ImportError:
     CRYPTOGRAPHY_AVAILABLE = False
     print("Warning: cryptography library not installed - using basic encryption")
 
-# Configure logging with HIPAA-compliant settings (no PHI in logs)
+# Configure logging to avoid PHI in logs (HIPAA-aligned practice; no certification claimed)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -104,7 +104,7 @@ class BotRole(Enum):
 
 
 class HIPAAAccessLevel(Enum):
-    """HIPAA-compliant access levels for role-based access control (RBAC)"""
+    """Access levels modeled on HIPAA's minimum-necessary principle (alignment only; no certification claimed)"""
     EMERGENCY = "emergency"  # Break-glass access for emergencies
     FULL_PHI = "full_phi"  # Physicians, nurses with patient care role
     LIMITED_PHI = "limited_phi"  # Support staff, minimum necessary
@@ -187,7 +187,7 @@ FCC_DATA_BREACH_NOTIFICATION_DAYS = 30  # FCC data breach notification timeline
 
 @dataclass
 class HIPAAUser:
-    """HIPAA-compliant user with access controls"""
+    """User record with role-based access controls (HIPAA-aligned; no certification claimed)"""
     user_id: str
     username: str
     role: str  # Provider, Nurse, Admin, etc.
@@ -204,7 +204,7 @@ class HIPAAUser:
 
 @dataclass
 class HIPAAAuditLog:
-    """HIPAA-compliant audit log entry"""
+    """Tamper-evident audit log entry (HIPAA-aligned; no certification claimed)"""
     log_id: str
     event_type: HIPAAEventType
     user_id: str

@@ -26,18 +26,18 @@ Most clients start with a paid pilot to validate ROI before committing to enterp
 #### 2. **"Who are your current customers?"**
 
 **DON'T SAY:** "We don't have any yet" or "I can't disclose due to NDAs"
-**DO SAY:** "We're in pilot phase with several government contractors and regional banks. I'm happy to connect you with a reference once we complete your pilot and you're considering enterprise deployment."
+**DO SAY:** "We're pre-customer — Mythara is a solo-built engine in validation, with no paying customers or active pilots yet. That's exactly why early pilots are structured to prove ROI on your infrastructure first, with full validation reports included."
 
-**Backup answer if pressed:** "We've completed validation testing with 100,000+ adversarial probes and have forensic manifests ready for third-party review. Would seeing our validation reports help build confidence?"
+**Backup answer if pressed:** "We've completed internal validation — adversarial probe suites, determinism runs, and tamper-evidence checks — and have forensic manifests ready for third-party review. Would seeing our validation reports help build confidence?"
 
-**Why this works:** Deflects without lying, pivots to proof you DO have.
+**Why this works:** Honest about stage, pivots to proof you DO have.
 
 ---
 
 #### 3. **"What's your company size? How many engineers?"**
 
 **DON'T SAY:** "It's just me" or "We're a startup"
-**DO SAY:** "Mythara Labs is a focused engineering team optimized for sovereign deployment and escrow-ready systems. Our development model prioritizes reproducibility and audit trails over headcount. That's why everything is PGP-signed and container-ready from day one."
+**DO SAY:** "Mythara is a focused solo engineering practice optimized for sovereign deployment and escrow-ready systems. The development model prioritizes reproducibility and audit trails over headcount. That's why everything is PGP-signed and container-ready from day one."
 
 **Why this works:** Reframes "small" as "focused" and turns it into a technical advantage.
 
@@ -83,7 +83,7 @@ We're complementary, not competitive — Vanta handles policies, Mythara handles
 
 #### 7. **"What happens if your company goes out of business?"**
 
-**DO SAY:** "That's why we built Mythara with escrow-readiness from day one. Our Sovereign tier includes full source code escrow with a third-party escrow agent. Even if Mythara Labs ceases operations, you have complete access to the codebase, validation suite, and documentation to maintain it in-house."
+**DO SAY:** "That's why Mythara is built escrow-ready from day one. The planned Sovereign tier will include full source code escrow with a third-party escrow agent once the entity is formed. Even if the practice ceases operations, you would have complete access to the codebase, validation suite, and documentation to maintain it in-house."
 
 **Proof point:** "All our releases are PGP-signed and reproducibly buildable. You're never locked in."
 
@@ -138,10 +138,10 @@ The clause system is extensible, so you can add custom compliance rules specific
 #### 11. **"Is this SOC 2 certified? Do you have a security audit?"**
 
 **DON'T SAY:** "No, we're too small for that" or deflect
-**DO SAY:** "SOC 2 Type II controls implemented, audit planned (not currently certified). Our validation suite includes:
-- 100,000+ adversarial security probes (99.98% safety recall)
-- Leakage detection with 0 high-severity issues
-- Determinism testing (99.92% reproducibility)
+**DO SAY:** "Not currently certified — SOC 2 Type II controls are implemented and an audit is planned. Our validation suite includes:
+- Adversarial probe suites (injection, fuzzing, tamper, data-leak probes — see tests/adversarial_attack_suite.py)
+- Determinism testing (100/100 reproducible runs in the latest report)
+- Leakage detection probes included in the adversarial suite
 
 All validation reports are included in the pilot package. Since you'll be deploying Mythara on your infrastructure with your security controls, you inherit your own SOC 2/security posture."
 
@@ -154,7 +154,7 @@ All validation reports are included in the pilot package. Since you'll be deploy
 **DO SAY:** "Mythara doesn't phone home or send telemetry. All data stays in your infrastructure. The pilot runs entirely on localhost. In production, everything is stored in your database - we never see your data."
 
 **Follow-up:** "So there's no cloud component?"
-**Answer:** "Correct. Mythara is designed for air-gapped, sovereign deployment. That's why government contractors and banks choose us."
+**Answer:** "Correct. Mythara is designed for air-gapped, sovereign deployment — built for government contractors and banks evaluating sovereign AI infrastructure."
 
 ---
 

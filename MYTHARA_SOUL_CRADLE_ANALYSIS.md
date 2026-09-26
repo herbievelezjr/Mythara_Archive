@@ -416,8 +416,8 @@ if risk_level == TerminalRiskLevel.CRITICAL:
 **Problem**: Healthcare/education orgs need to prove duty of care
 
 **What's Needed**:
-- HIPAA-compliant audit logs
-- FERPA-compliant student records (for education)
+- Tamper-evident audit logs (HIPAA-aligned; no certification claimed)
+- FERPA-aligned student records handling (for education)
 - "Did we intervene?" proof reports
 - Regulatory compliance dashboards
 
@@ -513,7 +513,7 @@ if risk_level == TerminalRiskLevel.CRITICAL:
 
 3. **Compliance Reporting** (1 week):
    - Audit log exports
-   - HIPAA-compliant storage
+   - Encrypted storage (HIPAA-aligned safeguards; no certification claimed)
    - Regulatory dashboards
 
 **Deliverable**: Complete duty-of-care solution

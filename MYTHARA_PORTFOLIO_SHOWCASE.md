@@ -440,7 +440,7 @@
 - **988 Suicide & Crisis Lifeline Integration**: Immediate escalation for critical cases
 - **Therapist Referral Network**: Affordable, insurance-accepting providers
 - **Safety Planning**: Personalized crisis response plans
-- **HIPAA-Compliant**: Encrypted PHI storage
+- **Encrypted PHI storage**: local encryption with HIPAA-aligned safeguards (no certification claimed)
 
 #### **💰 Mental Health Impact**
 | Metric | Value |
