@@ -26,6 +26,16 @@ except ImportError:
     )
 
 
+# Process-wide in-memory rate-limit counters (development fallback only).
+# Shared across middleware instances; tests reset it between cases.
+_IN_MEMORY_STORE: Dict[str, Tuple[int, float]] = {}
+
+
+def reset_in_memory_store() -> None:
+    """Clear in-memory rate-limit counters (test isolation)."""
+    _IN_MEMORY_STORE.clear()
+
+
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """
     Rate limiting middleware with multiple tiers:
@@ -48,8 +58,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.default_limit = default_limit
         self.window_seconds = window_seconds
 
-        # In-memory fallback (not distributed - for development only)
-        self._memory_store: Dict[str, Tuple[int, float]] = {}
+        # In-memory fallback (not distributed - for development only).
+        # Module-level so it is shared across middleware instances in this
+        # process and resettable by tests (see reset_in_memory_store).
+        self._memory_store = _IN_MEMORY_STORE
 
         # Endpoint-specific rate limits
         self.endpoint_limits = {

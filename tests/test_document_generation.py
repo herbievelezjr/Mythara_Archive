@@ -132,7 +132,7 @@ def test_direct_document_generation():
     
     return [doc1, doc2, doc3, doc5]
 
-def test_file_output(documents):
+def check_file_output(documents):
     """Test that documents can be saved to files"""
     print("\n" + "=" * 80)
     print("  TESTING FILE OUTPUT")
@@ -178,7 +178,7 @@ def main():
         documents = test_direct_document_generation()
         
         # Test 3: File output
-        test_file_output(documents)
+        check_file_output(documents)
         
         # Test 4: SHA-256 integrity
         verify_sha256_integrity(documents)
