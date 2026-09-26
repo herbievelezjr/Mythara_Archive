@@ -28,7 +28,6 @@ import requests
 from datetime import datetime
 from typing import List
 
-
 # Illustrative sample listings. These are NOT real Grants.gov data — they
 # exist so the schema, discovery flow, and reports can be exercised offline.
 # Each record is stamped is_sample=True by fetch_grants_gov_opportunities().
@@ -236,7 +235,9 @@ class MytharaSBGABot:
 
         self.conn.commit()
         print("[OK] Initialized demo SBGA membership record for Mythara Labs")
-        print("     (placeholder — replace with real membership details before relying on it)")
+        print(
+            "     (placeholder — replace with real membership details before relying on it)"
+        )
 
     def _calculate_integrity_hash(self, data: dict) -> str:
         """Calculate SHA-256 integrity hash"""
@@ -478,7 +479,9 @@ class MytharaSBGABot:
                 pass  # Already exists
 
         self.conn.commit()
-        self._log_action(f"Recorded {discovered_count} ILLUSTRATIVE SAMPLE grant records")
+        self._log_action(
+            f"Recorded {discovered_count} ILLUSTRATIVE SAMPLE grant records"
+        )
 
         return sbga_grants
 
@@ -851,8 +854,12 @@ if __name__ == "__main__":
     print("\n[DEMO] Recording illustrative sample grant records\n")
     grants = bot.discover_sbga_grants()
     samples = sum(1 for g in grants if g.get("is_sample"))
-    print(f"[OK] Recorded {len(grants)} grant records ({samples} labeled ILLUSTRATIVE SAMPLES)")
-    print("     (live Grants.gov data requires GRANTS_GOV_API_KEY; samples are not real listings)")
+    print(
+        f"[OK] Recorded {len(grants)} grant records ({samples} labeled ILLUSTRATIVE SAMPLES)"
+    )
+    print(
+        "     (live Grants.gov data requires GRANTS_GOV_API_KEY; samples are not real listings)"
+    )
 
     print("\n[DEMO] Adding SBGA network connections\n")
     conn1 = bot.add_sbga_connection(
