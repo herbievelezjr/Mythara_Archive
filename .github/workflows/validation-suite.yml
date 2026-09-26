@@ -191,7 +191,11 @@ jobs:
           gpg --verify forensic_manifest.json.asc forensic_manifest.json
 
       - name: Verify checksums
-        # checksums.sha256 paths are repo-root-relative; run from root
+        # checksums.sha256 paths are repo-root-relative; run from root.
+        # IMPORTANT: whenever a file listed in manifest/checksums.sha256
+        # changes, regenerate its hash before pushing, e.g.:
+        #   sha256sum <path>   # then paste the new hash into checksums.sha256
+        # A stale hash fails this gate on every run (daily + per push).
         run: |
           sha256sum -c manifest/checksums.sha256
 
