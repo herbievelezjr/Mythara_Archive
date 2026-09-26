@@ -31,7 +31,9 @@ VP Model Risk, Western Union"""
     }
     
     ea = EmailAssistant()
-    intent = ea.categorize_intent(email_data)
+    intent, confidence = ea.categorize_intent(
+        email_data["body"], email_data["subject"]
+    )
     print(f"\n📊 DETECTED INTENT: {intent}")
     
     draft = ea.generate_draft_response(email_data, intent)
@@ -58,7 +60,9 @@ CMIO, UCHealth"""
     }
     
     ea = EmailAssistant()
-    intent = ea.categorize_intent(email_data)
+    intent, confidence = ea.categorize_intent(
+        email_data["body"], email_data["subject"]
+    )
     print(f"\n📊 DETECTED INTENT: {intent}")
     
     draft = ea.generate_draft_response(email_data, intent)
@@ -83,7 +87,9 @@ Mike"""
     }
     
     ea = EmailAssistant()
-    intent = ea.categorize_intent(email_data)
+    intent, confidence = ea.categorize_intent(
+        email_data["body"], email_data["subject"]
+    )
     print(f"\n📊 DETECTED INTENT: {intent}")
     
     draft = ea.generate_draft_response(email_data, intent)

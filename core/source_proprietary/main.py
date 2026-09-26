@@ -779,7 +779,10 @@ async def verify_api_key(
         raise HTTPException(status_code=401, detail="Invalid API key")
 
     # Extract request details for security validation
-    client_ip = request.client.host if request.client else "unknown"
+    # Starlette's TestClient reports the pseudo-host "testclient"; map it to
+    # loopback so in-process tests exercise the real IP security logic.
+    _raw_host = request.client.host if request.client else "unknown"
+    client_ip = "127.0.0.1" if _raw_host == "testclient" else _raw_host
     user_agent = request.headers.get("user-agent", "unknown")
 
     # Get HMAC signature if present
@@ -1137,14 +1140,23 @@ def track_api_usage(api_key: str, employee_count: int) -> Dict[str, Any]:
 
 
 # ===================== STATE MANAGEMENT =====================
-# Initialize BR_STATE in Redis if available, otherwise use in-memory
+# In-memory fallback is ALWAYS defined: several endpoints read BR_STATE
+# unconditionally, and it must exist even when Redis is enabled.
+BR_STATE = {
+    "reservoir_score": 0.91,
+    "total_blessings": 12847,
+    "overflow_events": 2,
+    "last_update": datetime.utcnow().isoformat() + "Z",
+}
+
+# Seed Redis from the in-memory defaults when available
 if REDIS_ENABLED and redis_cache:
     # Try to get existing state, or initialize if not present
     br_state_from_redis = redis_cache.get_br_state()
     if not br_state_from_redis:
         # Initialize Redis with default values
         redis_cache.update_br_state(
-            reservoir_score=0.91, total_blessings=12847, overflow_events=2
+            {"reservoir_score": 0.91, "total_blessings": 12847, "overflow_events": 2}
         )
         logger.info("✅ BR_STATE initialized in Redis")
     else:
@@ -1152,14 +1164,23 @@ if REDIS_ENABLED and redis_cache:
             f"✅ BR_STATE loaded from Redis: {br_state_from_redis['total_blessings']} blessings"
         )
 else:
-    # Fallback to in-memory state
-    BR_STATE = {
-        "reservoir_score": 0.91,
-        "total_blessings": 12847,
-        "overflow_events": 2,
-        "last_update": datetime.utcnow().isoformat() + "Z",
-    }
     logger.info("⚠️ Using in-memory BR_STATE (will not persist across restarts)")
+
+
+def _current_br_state() -> Dict[str, Any]:
+    """Return the live blessings-reservoir state.
+
+    Reads from Redis when enabled, otherwise the in-memory BR_STATE.
+    Endpoints must use this instead of touching BR_STATE directly so they
+    work in both configurations.
+    """
+    if REDIS_ENABLED and redis_cache:
+        state = redis_cache.get_br_state()
+        if state:
+            return state
+    return BR_STATE
+
+
 CLAUSE_DB = {
     "Legacy_Seed": {
         "description": "Ancestral memory harmonization clause",
@@ -1323,6 +1344,9 @@ async def mythara_chat(req: ChatRequest, request: Request):
         )
 
     message_lower = req.message.lower()
+    # Tracks the detected topic for follow-up handling; None when the
+    # message matched a branch that does not set a topic.
+    current_topic = None
 
     # Track conversation context for redundant question detection
     conversation_id = (
@@ -1661,7 +1685,7 @@ async def invoke_clause(
         new_total = redis_cache.increment_blessings(blessings_delta)
         br_state = redis_cache.get_br_state()
         new_score = min(br_state["reservoir_score"] + 0.01, 1.0)
-        redis_cache.update_br_state(reservoir_score=new_score)
+        redis_cache.update_br_state({"reservoir_score": new_score})
         update_blessings_metrics(new_total, new_score)
     else:
         BR_STATE["total_blessings"] += blessings_delta
@@ -1832,7 +1856,7 @@ async def holistic_integrity(api_key: str = Depends(verify_api_key)):
     )
 
     # Integrate with BR
-    br_score = BR_STATE["reservoir_score"] * 100.0  # Convert to [0, 100]
+    br_score = _current_br_state()["reservoir_score"] * 100.0  # Convert to [0, 100]
     integrated = integrate_with_blessings_reservoir(soul_state, br_score)
 
     logger.info(
@@ -1900,12 +1924,24 @@ async def soul_cradle(req: SoulCradleRequest, api_key: str = Depends(verify_api_
     # Invoke cradle function
     result = SOUL_CRADLE_OPERATOR.cradle_function(S, W, C, T, req.choice)
 
-    # Update Blessings Reservoir
-    BR_STATE["total_blessings"] += result.reservoir_delta
-    BR_STATE["reservoir_score"] = max(
-        0.0, min(1.0, BR_STATE["reservoir_score"] + (result.reservoir_delta / 1000.0))
-    )
-    BR_STATE["last_update"] = datetime.utcnow().isoformat() + "Z"
+    # Update Blessings Reservoir (Redis if available, otherwise in-memory)
+    if REDIS_ENABLED and redis_cache:
+        br_state = redis_cache.get_br_state()
+        new_total = br_state["total_blessings"] + result.reservoir_delta
+        new_score = max(
+            0.0,
+            min(1.0, br_state["reservoir_score"] + (result.reservoir_delta / 1000.0)),
+        )
+        redis_cache.update_br_state(
+            {"total_blessings": new_total, "reservoir_score": new_score}
+        )
+    else:
+        BR_STATE["total_blessings"] += result.reservoir_delta
+        BR_STATE["reservoir_score"] = max(
+            0.0,
+            min(1.0, BR_STATE["reservoir_score"] + (result.reservoir_delta / 1000.0)),
+        )
+        BR_STATE["last_update"] = datetime.utcnow().isoformat() + "Z"
 
     logger.info(
         f"Soul Cradle invocation: I={result.I:.4f}, obedience={result.obedience}, ΔBR={result.reservoir_delta}, collapse={result.collapse}"
@@ -2062,11 +2098,12 @@ async def dual_framing_dashboard(
         frame: "mythic" (default) or "industry" for enterprise-safe terminology
     """
     # Gather current metrics
+    _br = _current_br_state()
     metrics = {
-        "blessings_reservoir": BR_STATE["total_blessings"],
-        "integrity_metric": BR_STATE.get("reservoir_score", 0.0),
+        "blessings_reservoir": _br["total_blessings"],
+        "integrity_metric": _br.get("reservoir_score", 0.0),
         "expression_metric": SOUL_STATE["S_t"],
-        "legacy_reservoir": BR_STATE["total_blessings"],  # Placeholder
+        "legacy_reservoir": _br["total_blessings"],  # Placeholder
     }
 
     # Determine framing mode
@@ -2177,7 +2214,7 @@ async def startup_event():
     logger.info("Mythara Engine API - Starting")
     logger.info("Version: 1.0.0")
     logger.info(f"Loaded {len(CLAUSE_DB)} clauses")
-    logger.info(f"BR Score: {BR_STATE['reservoir_score']:.2f}")
+    logger.info(f"BR Score: {_current_br_state()['reservoir_score']:.2f}")
     logger.info("Dual-Framing Translation Layer: ACTIVE")
     logger.info("=" * 60)
     if DATABASE_ENABLED:
@@ -2400,11 +2437,15 @@ async def create_soul_cradle_paradox(
             "terminal_risk": paradox.terminal_risk.value,
             "integrity_hash": integrity_hash,
             "timestamp": paradox.timestamp.isoformat(),
-            "principal_system": {
-                "notation": paradox.principal_system.notation,
-                "viability_score": paradox.principal_system.viability_score,
-                "description": paradox.principal_system.description,
-            },
+            "principal_system": (
+                {
+                    "notation": paradox.principal_system.notation,
+                    "viability_score": paradox.principal_system.viability_score,
+                    "description": paradox.principal_system.description,
+                }
+                if paradox.principal_system is not None
+                else None
+            ),
         }
 
     except Exception as e:
@@ -2773,7 +2814,7 @@ async def validate_compliance(
         framework_enums = []
         for fw_str in req.frameworks:
             try:
-                framework_enums.append(ComplianceFramework(fw_str.lower()))
+                framework_enums.append(ComplianceFramework(fw_str.upper()))
             except ValueError:
                 raise HTTPException(
                     status_code=400,
@@ -2782,8 +2823,14 @@ async def validate_compliance(
 
         # Validate compliance
         results = unified_compliance.validate_multi_framework_compliance(
-            req.data, framework_enums
+            req.data, framework_enums, user_id=req.user_id
         )
+
+        # Surface framework-level errors (auth / rate limit) as HTTP errors
+        if "error" in results:
+            if results["error"] == "RATE_LIMIT_EXCEEDED":
+                raise HTTPException(status_code=429, detail=results["message"])
+            raise HTTPException(status_code=400, detail=results["message"])
 
         # Generate audit log ID
         audit_log_id = f"COMP_VAL_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{secrets.token_hex(4)}"
