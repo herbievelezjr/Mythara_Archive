@@ -244,7 +244,7 @@ app = FastAPI(
     redoc_url="/api/redoc",
 )
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 # Production Environment Detection
 # Railway, Heroku, and most cloud providers set DATABASE_URL with postgres://
@@ -770,6 +770,10 @@ async def verify_api_key(
     request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> str:
     """Enhanced API key verification with multi-layer security"""
+    # Missing Authorization header is always 401 here, regardless of the
+    # FastAPI version's HTTPBearer default (it has flipped between 401/403).
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
     api_key = credentials.credentials
 
     # Basic API key validation
