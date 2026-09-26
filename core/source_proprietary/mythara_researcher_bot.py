@@ -304,7 +304,9 @@ class MytharaResearcherBot:
         )
 
         self.conn.commit()
-        self._log_action(f"Email verification attempted (no provider): {email} - UNVERIFIED")
+        self._log_action(
+            f"Email verification attempted (no provider): {email} - UNVERIFIED"
+        )
 
         return data
 
@@ -592,16 +594,22 @@ if __name__ == "__main__":
         validation_method="linkedin",
     )
     print(f"[OK] Recorded: {result1['contact']} at {result1['company']}")
-    print(f"     Status: {result1['status']} | Data-completeness score: {result1['confidence_score']}/100 (not a verification)")
+    print(
+        f"     Status: {result1['status']} | Data-completeness score: {result1['confidence_score']}/100 (not a verification)"
+    )
 
     # Email check - no provider configured: explicitly UNVERIFIED
     email_result = bot.verify_email("satya@microsoft.com")
-    print(f"[OK] Email check: verified={email_result['verified']}, status={email_result['status']}")
+    print(
+        f"[OK] Email check: verified={email_result['verified']}, status={email_result['status']}"
+    )
     print(f"     {email_result['detail']}")
 
     # LinkedIn lookup - no provider configured: explicitly UNVERIFIED
     li_result = bot.lookup_linkedin("linkedin.com/in/satyanadella")
-    print(f"[OK] LinkedIn lookup: verified={li_result['verified']}, status={li_result['status']}")
+    print(
+        f"[OK] LinkedIn lookup: verified={li_result['verified']}, status={li_result['status']}"
+    )
     print(f"     {li_result['detail']}")
 
     # Validate POC #2 - Medium data completeness (NOT verified)
@@ -613,12 +621,16 @@ if __name__ == "__main__":
         validation_method="manual",
     )
     print(f"\n[OK] Recorded: {result2['contact']} at {result2['company']}")
-    print(f"     Status: {result2['status']} | Data-completeness score: {result2['confidence_score']}/100 (not a verification)")
+    print(
+        f"     Status: {result2['status']} | Data-completeness score: {result2['confidence_score']}/100 (not a verification)"
+    )
 
     # Company research - no provider configured: explicitly UNVERIFIED
     print("\n[DEMO] Requesting company research\n")
     research = bot.research_company("Salesforce", "Technology")
-    print(f"[OK] Company research: verified={research['verified']}, status={research['status']}")
+    print(
+        f"[OK] Company research: verified={research['verified']}, status={research['status']}"
+    )
     print(f"     {research['detail']}")
 
     # Queue research tasks
