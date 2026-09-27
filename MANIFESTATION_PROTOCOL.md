@@ -59,7 +59,7 @@
 ### Step 2: Set Environment Variables
 ```bash
 # In Railway → Variables tab, add:
-SENDGRID_API_KEY=***REMOVED***
+SENDGRID_API_KEY=[REDACTED - set via environment]
 FROM_EMAIL=Mythara.Engine@yahoo.com
 SUPPORT_EMAIL=Mythara.Engine@yahoo.com
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret

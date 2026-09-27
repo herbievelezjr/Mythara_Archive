@@ -305,7 +305,7 @@ class PaymentMonitorBot:
     """
     
     def __init__(self):
-        self.access_token = os.getenv('LOYVERSE_ACCESS_TOKEN', '***REMOVED***')
+        self.access_token = os.getenv('LOYVERSE_ACCESS_TOKEN', '')  # set via environment; never hardcode
         self.api_base_url = "https://api.loyverse.com/v1.0"
         
     def get_recent_receipts(self, hours_back: int = 24) -> List[Dict]:

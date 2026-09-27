@@ -221,7 +221,7 @@ PORT=8000
 MYTHARA_DEBUG=false
 
 # Database (optional, uses in-memory by default)
-DATABASE_URL=***REMOVED***/mythara
+DATABASE_URL=postgresql://mythara_app:CHANGEME_SET_VIA_ENV@localhost:5432/mythara
 
 # Redis (optional, for caching)
 REDIS_URL=redis://localhost:6379

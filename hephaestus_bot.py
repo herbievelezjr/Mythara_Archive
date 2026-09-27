@@ -848,7 +848,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=***REMOVED***/dbname
+      - DATABASE_URL=postgresql://user@db:5432/dbname
+      - PGPASSWORD=${{POSTGRES_PASSWORD:-CHANGEME_SET_VIA_ENV}}
     depends_on:
       - db
   
@@ -856,7 +857,7 @@ services:
     image: postgres:15
     environment:
       - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=${{POSTGRES_PASSWORD:-CHANGEME_SET_VIA_ENV}}
       - POSTGRES_DB=dbname
     volumes:
       - postgres_data:/var/lib/postgresql/data
