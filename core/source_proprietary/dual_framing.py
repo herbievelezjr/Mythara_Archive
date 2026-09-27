@@ -203,7 +203,9 @@ def translate_response(
     for key, value in response_data.items():
         # Check if key should be translated
         new_key = key
-        if key in mapping:
+        # integrity_hash is a machine integrity field required by API response
+        # contracts and tests — never rename it, in any framing mode.
+        if key != "integrity_hash" and key in mapping:
             term = mapping[key][term_key]
             # Convert "Reserve" → "reserve", "Your Principles" → "your_principles"
             new_key = term.lower().replace(" ", "_")
