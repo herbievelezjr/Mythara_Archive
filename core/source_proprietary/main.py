@@ -1479,7 +1479,7 @@ async def mythara_chat(req: ChatRequest, request: Request):
         word in message_lower
         for word in ["dual framing", "mythic", "enterprise terminology", "translation"]
     ):
-        response = "Dual-framing is genius - keep your mythic terms internally (Blessings Reservoir, Soul Proportion) but show enterprise-safe terminology externally (Resonance Reservoir, Impact Metrics). Just add ?frame=industry to any endpoint. Boardroom-ready in seconds!"
+        response = "Mythara speaks plain by default — Reserve, Score, Your Principles. The mythic terms live underneath (Blessings Reservoir, Soul Proportion), and there's an enterprise-safe overlay if you ever need it: add ?frame=industry to any endpoint for boardroom-ready terminology."
 
     elif any(
         word in message_lower
@@ -1726,9 +1726,11 @@ async def reservoir_status(
     Get Blessings Reservoir status with optional dual-framing support.
 
     Query parameters:
-        frame: "mythic" (default) or "industry" for enterprise-safe terminology
+        frame: "plain" (default, direct human words), "mythic", or "industry"
+            for enterprise-safe terminology
 
-    Returns mythic terms by default (Blessings Reservoir), or industry overlay
+    Returns plain terms by default (Reserve), mythic terms
+    (Blessings Reservoir) when frame=mythic, or industry overlay
     (Resonance Reservoir) when frame=industry.
     """
     # Get state from Redis or in-memory fallback
@@ -1737,9 +1739,12 @@ async def reservoir_status(
     else:
         response_data = BR_STATE
 
-    # Apply dual-framing translation if requested
-    if frame == "industry":
-        response_data = translate_response(response_data, FramingMode.INDUSTRY)
+    # Apply framing translation (plain by default)
+    mode = {
+        "industry": FramingMode.INDUSTRY,
+        "mythic": FramingMode.MYTHIC,
+    }.get(frame, FramingMode.PLAIN)
+    response_data = translate_response(response_data, mode)
 
     return response_data
 
@@ -1756,7 +1761,7 @@ async def soul_status(
     Use as reflective/supportive indicator, never as gatekeeper.
 
     Query parameters:
-        frame: "mythic" (default) or "industry" for enterprise-safe terminology
+        frame: "plain" (default, direct human words), "mythic", or "industry"
     """
     # Compute dynamics from current emotion features
     emotions = EmotionFeatures(**SOUL_STATE["emotion_features"])
@@ -1774,9 +1779,12 @@ async def soul_status(
         "integrity_hash": integrity_hash,
     }
 
-    # Apply dual-framing translation if requested
-    if frame == "industry":
-        response_data = translate_response(response_data, FramingMode.INDUSTRY)
+    # Apply framing translation (plain by default)
+    mode = {
+        "industry": FramingMode.INDUSTRY,
+        "mythic": FramingMode.MYTHIC,
+    }.get(frame, FramingMode.PLAIN)
+    response_data = translate_response(response_data, mode)
 
     return response_data
 
@@ -2099,7 +2107,7 @@ async def dual_framing_dashboard(
     with optional industry-safe framing for external audiences.
 
     Query parameters:
-        frame: "mythic" (default) or "industry" for enterprise-safe terminology
+        frame: "plain" (default, direct human words), "mythic", or "industry"
     """
     # Gather current metrics
     _br = _current_br_state()
@@ -2110,8 +2118,11 @@ async def dual_framing_dashboard(
         "legacy_reservoir": _br["total_blessings"],  # Placeholder
     }
 
-    # Determine framing mode
-    mode = FramingMode.INDUSTRY if frame == "industry" else FramingMode.MYTHIC
+    # Determine framing mode (plain by default)
+    mode = {
+        "industry": FramingMode.INDUSTRY,
+        "mythic": FramingMode.MYTHIC,
+    }.get(frame, FramingMode.PLAIN)
 
     # Format for dashboard
     dashboard = format_for_manager_dashboard(metrics, mode, include_kpis=True)

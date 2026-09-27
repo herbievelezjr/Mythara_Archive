@@ -36,6 +36,8 @@ class FramingMode(str, Enum):
 
     MYTHIC = "mythic"  # Internal truth: Blessings Reservoir, Soul Encoding, etc.
     INDUSTRY = "industry"  # External overlay: Resonance Reservoir, Trust Index, etc.
+    LEGAL = "legal"  # Adjudicatory voice: findings, holdings, attested record.
+    PLAIN = "plain"  # Plain speak: direct, human, no jargon.
 
 
 # Core dual-framing mapping: Mythic Truth → Industry-Safe Overlay
@@ -117,26 +119,39 @@ MYTHIC_TO_INDUSTRY: Dict[str, Dict[str, str]] = {
 
 def translate_term(
     mythic_key: str,
-    mode: FramingMode = FramingMode.INDUSTRY,
+    mode: FramingMode = FramingMode.PLAIN,
     include_explanation: bool = False,
 ) -> str:
     """
-    Translate a mythic term to industry-safe terminology.
+    Translate a mythic term into the requested voice.
 
     Args:
         mythic_key: Key from MYTHIC_TO_INDUSTRY (e.g., "blessings_reservoir")
-        mode: MYTHIC (return mythic term) or INDUSTRY (return industry term)
-        include_explanation: If True, append managerial explanation to industry term
+        mode: PLAIN (default, direct human words), MYTHIC (preserve),
+            or INDUSTRY (enterprise-safe terms)
+        include_explanation: If True, append explanation to the term
+            (industry mode: managerial explanation; plain mode: plain explanation)
 
     Returns:
         Translated term string
 
     Example:
+        >>> translate_term("blessings_reservoir")
+        'Reserve'
         >>> translate_term("blessings_reservoir", FramingMode.INDUSTRY)
         'Resonance Reservoir'
         >>> translate_term("blessings_reservoir", FramingMode.MYTHIC)
         'Blessings Reservoir'
     """
+    if mode == FramingMode.PLAIN:
+        entry = MYTHIC_TO_PLAIN.get(mythic_key)
+        if entry is None:
+            return mythic_key  # Passthrough if not in mapping
+        term = entry["plain_term"]
+        if include_explanation:
+            return f"{term} — {entry['plain_explanation']}"
+        return term
+
     if mythic_key not in MYTHIC_TO_INDUSTRY:
         return mythic_key  # Passthrough if not in mapping
 
@@ -153,34 +168,45 @@ def translate_term(
 
 
 def translate_response(
-    response_data: Dict[str, Any], mode: FramingMode = FramingMode.INDUSTRY
+    response_data: Dict[str, Any], mode: FramingMode = FramingMode.PLAIN
 ) -> Dict[str, Any]:
     """
-    Recursively translate mythic keys in a response dictionary to industry-safe terms.
+    Recursively translate mythic keys in a response dictionary.
 
     Args:
         response_data: API response dictionary with mythic keys
-        mode: MYTHIC (preserve) or INDUSTRY (translate)
+        mode: PLAIN (default, direct human words), MYTHIC (preserve),
+            or INDUSTRY (enterprise-safe terms)
 
     Returns:
         Translated response dictionary
 
     Example:
         >>> data = {"blessings_reservoir": 145, "integrity_metric": 0.95}
+        >>> translate_response(data)
+        {'reserve': 145, 'integrity_metric': 0.95}
         >>> translate_response(data, FramingMode.INDUSTRY)
         {'resonance_reservoir': 145, 'trust_index': 0.95}
     """
     if mode == FramingMode.MYTHIC:
         return response_data  # No translation needed
 
+    if mode == FramingMode.PLAIN:
+        mapping = MYTHIC_TO_PLAIN
+        term_key = "plain_term"
+    else:
+        # mode == FramingMode.INDUSTRY
+        mapping = MYTHIC_TO_INDUSTRY
+        term_key = "industry_term"
+
     translated = {}
     for key, value in response_data.items():
         # Check if key should be translated
         new_key = key
-        if key in MYTHIC_TO_INDUSTRY:
-            industry_term = MYTHIC_TO_INDUSTRY[key]["industry_term"]
-            # Convert "Resonance Reservoir" → "resonance_reservoir"
-            new_key = industry_term.lower().replace(" ", "_")
+        if key in mapping:
+            term = mapping[key][term_key]
+            # Convert "Reserve" → "reserve", "Your Principles" → "your_principles"
+            new_key = term.lower().replace(" ", "_")
 
         # Recursively translate nested dicts
         if isinstance(value, dict):
@@ -225,7 +251,7 @@ def generate_dual_framing_chart() -> List[Dict[str, str]]:
 
 def format_for_manager_dashboard(
     metrics: Dict[str, Any],
-    mode: FramingMode = FramingMode.INDUSTRY,
+    mode: FramingMode = FramingMode.PLAIN,
     include_kpis: bool = True,
 ) -> Dict[str, Any]:
     """
@@ -233,7 +259,7 @@ def format_for_manager_dashboard(
 
     Args:
         metrics: Raw metrics dict (mythic keys)
-        mode: MYTHIC or INDUSTRY framing
+        mode: PLAIN (default), MYTHIC, or INDUSTRY framing
         include_kpis: If True, include standard KPIs alongside resonance metrics
 
     Returns:
@@ -326,6 +352,420 @@ def generate_flow_diagram_text() -> str:
 │                   ?frame=mythic (for internal truth)         │
 └──────────────────────────────────────────────────────────────┘
 """
+
+
+# Mythic → Legal mapping: the adjudicatory voice. The engine's findings are
+# rendered the way a reviewing body writes them: the record, the findings,
+# the holding. Same math, no archaisms.
+MYTHIC_TO_LEGAL: Dict[str, Dict[str, str]] = {
+    "blessings_reservoir": {
+        "legal_term": "Reserve Account",
+        "mythic_term": "Blessings Reservoir",
+        "legal_explanation": "Standing reserve credited or debited by adjudicated actions.",
+        "category": "metric",
+    },
+    "integrity": {
+        "legal_term": "Integrity Finding",
+        "mythic_term": "Integrity",
+        "legal_explanation": "Composite score: conformity to provisions × capacity to reconcile conflict.",
+        "category": "metric",
+    },
+    "integrity_metric": {
+        "legal_term": "Integrity Finding",
+        "mythic_term": "Integrity Metric",
+        "legal_explanation": "Composite score: conformity to provisions × capacity to reconcile conflict.",
+        "category": "metric",
+    },
+    "alignment_commandments": {
+        "legal_term": "Conformity to Provisions",
+        "mythic_term": "Alignment to Commandments",
+        "legal_explanation": "Degree to which the action conforms to the governing provisions.",
+        "category": "metric",
+    },
+    "tolerance_will": {
+        "legal_term": "Capacity to Reconcile",
+        "mythic_term": "Tolerance of Will",
+        "legal_explanation": "Capacity to hold the principal's intent alongside conflicting provisions.",
+        "category": "metric",
+    },
+    "obedience": {
+        "legal_term": "Compliant",
+        "mythic_term": "Obedience",
+        "legal_explanation": "Whether the action was held compliant with the governing provisions.",
+        "category": "verdict",
+    },
+    "reservoir_delta": {
+        "legal_term": "Reserve Adjustment",
+        "mythic_term": "Reservoir Delta",
+        "legal_explanation": "Credits or debits applied to the Reserve Account by this finding.",
+        "category": "metric",
+    },
+    "collapse": {
+        "legal_term": "Material Failure",
+        "mythic_term": "Collapse",
+        "legal_explanation": "Whether the finding constitutes a material failure of the matter.",
+        "category": "verdict",
+    },
+    "integrity_hash": {
+        "legal_term": "Seal",
+        "mythic_term": "Integrity Hash",
+        "legal_explanation": "Tamper-evident seal affixed to the finding.",
+        "category": "record",
+    },
+    "will": {
+        "legal_term": "Principal's Stated Intent",
+        "mythic_term": "Will",
+        "legal_explanation": "The objective as stated by the principal.",
+        "category": "party",
+    },
+    "commandments": {
+        "legal_term": "Governing Provisions",
+        "mythic_term": "Commandments",
+        "legal_explanation": "The binding provisions the action is measured against.",
+        "category": "authority",
+    },
+    "temptation": {
+        "legal_term": "Improper Inducement",
+        "mythic_term": "Temptation",
+        "legal_explanation": "Short-term incentive pressuring departure from the provisions.",
+        "category": "pressure",
+    },
+}
+
+# Verdict prefixes in the mythic voice → their legal rendering.
+MYTHIC_VERDICT_TO_LEGAL = {
+    "WILDERNESS/DARKNESS": "ADVERSE FINDING",
+    "GARDEN/LIGHT": "FAVORABLE FINDING",
+}
+
+
+def translate_term_legal(mythic_key: str) -> str:
+    """Translate one mythic key to its legal term; passthrough when unmapped."""
+    entry = MYTHIC_TO_LEGAL.get(mythic_key)
+    return entry["legal_term"] if entry else mythic_key
+
+
+def render_legal_finding(result: Dict[str, Any]) -> str:
+    """Render a Soul Cradle result as a legal finding.
+
+    The numbers are untouched; only the voice changes. Reads the way a
+    reviewing body writes: the matter, the findings, the holding, the seal.
+
+    Args:
+        result: Soul Cradle response dict (mythic keys).
+
+    Returns:
+        The finding rendered in the adjudicatory voice.
+    """
+    choice = str(result.get("choice", ""))
+    for mythic_prefix, legal_prefix in MYTHIC_VERDICT_TO_LEGAL.items():
+        if choice.startswith(mythic_prefix + ":"):
+            choice = legal_prefix + ":" + choice[len(mythic_prefix) + 1 :]
+            break
+
+    compliant = bool(result.get("obedience", False))
+    holding = "COMPLIANT" if compliant else "NON-COMPLIANT"
+    integrity = result.get("integrity", 0.0)
+    conformity = result.get("alignment_commandments", 0.0)
+    capacity = result.get("tolerance_will", 0.0)
+    delta = result.get("reservoir_delta", 0)
+    material_failure = bool(result.get("collapse", False))
+    seal = str(result.get("integrity_hash", ""))
+    timestamp = str(result.get("timestamp", ""))
+
+    if isinstance(integrity, float):
+        integrity_s = f"{integrity:.2f}"
+    else:
+        integrity_s = str(integrity)
+
+    lines = [
+        "FINDING OF REVIEW",
+        f"Matter: {choice}",
+    ]
+    if timestamp:
+        lines.append(f"Date: {timestamp}")
+    lines += [
+        "",
+        "Upon review of the record, the following is found:",
+        "",
+        f"1. Conformity to the governing provisions: {conformity}.",
+        f"2. Capacity to reconcile conflicting intent: {capacity}.",
+        f"3. Composite integrity finding: {integrity_s}.",
+        f"4. HOLDING: the action is {holding}.",
+    ]
+    if delta:
+        direction = "credited" if delta > 0 else "debited"
+        lines.append(
+            f"5. The Reserve Account is {direction} {abs(delta)} credits pursuant to this finding."
+        )
+    else:
+        lines.append("5. No adjustment to the Reserve Account.")
+    lines.append(f"6. Material failure: {'YES' if material_failure else 'none found'}.")
+    lines += [
+        "",
+        "Attested and sealed.",
+    ]
+    if seal:
+        lines.append(f"Seal: {seal[:32]}...")
+    return "\n".join(lines)
+
+
+def _plain_read(score: float, high: str, mid: str, low: str) -> str:
+    """Qualitative read of a 0-1 score; no numbers, just the shape of it."""
+    if score >= 0.75:
+        return high
+    if score >= 0.5:
+        return mid
+    return low
+
+
+def render_spoken_finding(result: Dict[str, Any]) -> str:
+    """Render a Soul Cradle result as clean spoken prose.
+
+    No numbers, no parameters, no seal hashes — the verdict the way it
+    sounds when spoken aloud. The full scored breakdown stays in
+    render_plain_finding() for text/screens.
+    """
+    choice = str(result.get("choice", ""))
+    for mythic_prefix in MYTHIC_VERDICT_TO_PLAIN:
+        if choice.startswith(mythic_prefix + ":"):
+            choice = choice[len(mythic_prefix) + 1 :].strip()
+            break
+
+    met_bar = bool(result.get("obedience", False))
+    match_principles = float(result.get("alignment_commandments", 0.0) or 0.0)
+    delta = result.get("reservoir_delta", 0)
+    fell_apart = bool(result.get("collapse", False))
+
+    principles_read = _plain_read(
+        match_principles,
+        "It lined up with your principles.",
+        "It partly lined up with your principles.",
+        "It strayed from your principles.",
+    )
+
+    if delta:
+        direction = "grew a little" if delta > 0 else "took a small hit"
+        reserve_line = f"Your reserve {direction}."
+    else:
+        reserve_line = "Your reserve is untouched."
+
+    parts = [
+        f"Here's the call on: {choice}.",
+        "You were holding two things at once, and they pulled in different directions.",
+        principles_read,
+        f"The call: it {'met' if met_bar else 'did not meet'} the bar.",
+        reserve_line,
+        "It fell apart." if fell_apart else "Nothing broke.",
+        "Signed and sealed.",
+    ]
+    return " ".join(parts)
+
+
+# Emotions that mark a record as a remark rather than a moral call.
+# Running a joke through the verdict machinery comes out pompous: the
+# witnesses clear it, but there was never anything to judge. The honest
+# move is to check whether there is a call to make before putting on
+# the judge voice.
+LIGHT_EMOTIONS = frozenset({
+    "playful",
+    "joking",
+    "amused",
+    "happy",
+    "joyful",
+    "casual",
+    "silly",
+    "grateful",
+    "calm",
+    "relaxed",
+})
+
+
+def choose_spoken_voice(emotion: str) -> str:
+    """Pick the honest voice for a record: "verdict" or "remark".
+
+    Real calls get the verdict voice. Jokes, remarks, and small talk
+    get a human response — never the judge voice for something that
+    was never a decision.
+    """
+    if str(emotion or "").strip().lower() in LIGHT_EMOTIONS:
+        return "remark"
+    return "verdict"
+
+
+def render_spoken_remark(statement: str, cleared: int, engaged: int) -> str:
+    """Speak a non-call record: short, human, no ceremony.
+
+    cleared/engaged come from the real witness panel, so the remark can
+    cite the panel's actual read honestly without moralizing the joke.
+    """
+    statement = str(statement or "").strip().strip("\"'")
+    if engaged and cleared == engaged:
+        if engaged == 8:
+            witness_line = (
+                "All eight witnesses cleared it unanimously — "
+                "the least surprising verdict on record."
+            )
+        else:
+            witness_line = f"All {engaged} witnesses cleared it unanimously."
+    elif engaged:
+        witness_line = f"{cleared} of {engaged} witnesses cleared it."
+    else:
+        witness_line = "No witness had anything to say about it."
+    parts = [f"Noted — '{statement}', recorded.", witness_line]
+    return " ".join(parts)
+
+
+def translate_response_legal(response_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Translate a Soul Cradle response dict's keys into legal terminology.
+
+    Values are untouched; nested dicts are translated recursively.
+    """
+    translated = {}
+    for key, value in response_data.items():
+        new_key = key
+        if key in MYTHIC_TO_LEGAL:
+            new_key = MYTHIC_TO_LEGAL[key]["legal_term"].lower().replace(" ", "_")
+        if isinstance(value, dict):
+            translated[new_key] = translate_response_legal(value)
+        elif isinstance(value, list):
+            translated[new_key] = [
+                translate_response_legal(i) if isinstance(i, dict) else i for i in value
+            ]
+        else:
+            translated[new_key] = value
+    return translated
+
+
+# Mythic → Plain speak mapping. No archaisms, no legalese, no corporate
+# overlay. The way one honest person explains the call to another.
+MYTHIC_TO_PLAIN: Dict[str, Dict[str, str]] = {
+    "blessings_reservoir": {
+        "plain_term": "Reserve",
+        "mythic_term": "Blessings Reservoir",
+        "plain_explanation": "Your standing reserve. Good calls add to it, bad ones draw it down.",
+        "category": "metric",
+    },
+    "integrity": {
+        "plain_term": "Score",
+        "mythic_term": "Integrity",
+        "plain_explanation": "The overall score: how well you matched your principles times how well you held the tension.",
+        "category": "metric",
+    },
+    "alignment_commandments": {
+        "plain_term": "Match to Principles",
+        "mythic_term": "Alignment to Commandments",
+        "plain_explanation": "How well the action matched the principles you set for yourself.",
+        "category": "metric",
+    },
+    "tolerance_will": {
+        "plain_term": "Hold on the Tension",
+        "mythic_term": "Tolerance of Will",
+        "plain_explanation": "How well you held two pulling truths at once without dropping either.",
+        "category": "metric",
+    },
+    "obedience": {
+        "plain_term": "Met the Bar",
+        "mythic_term": "Obedience",
+        "plain_explanation": "Whether the action met the bar you set.",
+        "category": "verdict",
+    },
+    "reservoir_delta": {
+        "plain_term": "Reserve Change",
+        "mythic_term": "Reservoir Delta",
+        "plain_explanation": "What this call added to or took from your reserve.",
+        "category": "metric",
+    },
+    "collapse": {
+        "plain_term": "Fell Apart",
+        "mythic_term": "Collapse",
+        "plain_explanation": "Whether the whole thing fell apart.",
+        "category": "verdict",
+    },
+    "integrity_hash": {
+        "plain_term": "Seal",
+        "mythic_term": "Integrity Hash",
+        "plain_explanation": "The tamper-proof seal on this call.",
+        "category": "record",
+    },
+    "will": {
+        "plain_term": "What You Wanted",
+        "mythic_term": "Will",
+        "plain_explanation": "What you were aiming at.",
+        "category": "party",
+    },
+    "commandments": {
+        "plain_term": "Your Principles",
+        "mythic_term": "Commandments",
+        "plain_explanation": "The principles you said you'd hold to.",
+        "category": "authority",
+    },
+    "temptation": {
+        "plain_term": "The Easy Way Out",
+        "mythic_term": "Temptation",
+        "plain_explanation": "The shortcut that was pulling at you.",
+        "category": "pressure",
+    },
+}
+
+MYTHIC_VERDICT_TO_PLAIN = {
+    "WILDERNESS/DARKNESS": "didn't meet the bar",
+    "GARDEN/LIGHT": "met the bar",
+}
+
+
+def translate_term_plain(mythic_key: str) -> str:
+    """Translate one mythic key to its plain-speak term; passthrough when unmapped."""
+    entry = MYTHIC_TO_PLAIN.get(mythic_key)
+    return entry["plain_term"] if entry else mythic_key
+
+
+def render_plain_finding(result: Dict[str, Any]) -> str:
+    """Render a Soul Cradle result in plain speak.
+
+    The numbers are untouched. No archaisms, no legalese — the call explained
+    the way one honest person explains it to another.
+    """
+    choice = str(result.get("choice", ""))
+    for mythic_prefix in MYTHIC_VERDICT_TO_PLAIN:
+        if choice.startswith(mythic_prefix + ":"):
+            choice = choice[len(mythic_prefix) + 1 :].strip()
+            break
+
+    met_bar = bool(result.get("obedience", False))
+    integrity = result.get("integrity", 0.0)
+    match_principles = result.get("alignment_commandments", 0.0)
+    hold_tension = result.get("tolerance_will", 0.0)
+    delta = result.get("reservoir_delta", 0)
+    fell_apart = bool(result.get("collapse", False))
+    seal = str(result.get("integrity_hash", ""))
+
+    integrity_s = f"{integrity:.2f}" if isinstance(integrity, float) else str(integrity)
+
+    lines = [
+        f"Here's the call on: {choice}.",
+        "",
+        "You were holding two things at once, and they pulled in different directions.",
+        "",
+        f"- Match to your principles: {match_principles}.",
+        f"- Hold on the tension: {hold_tension}.",
+        f"- Overall score: {integrity_s}.",
+        "",
+        f"The call: it {'met' if met_bar else 'did not meet'} the bar.",
+    ]
+    if delta:
+        direction = "added to" if delta > 0 else "came off"
+        lines.append(f"{abs(delta)} credits {direction} your reserve.")
+    else:
+        lines.append("Your reserve is untouched.")
+    lines.append("It fell apart." if fell_apart else "Nothing broke.")
+    lines += [
+        "",
+        "Signed and sealed.",
+    ]
+    if seal:
+        lines.append(f"Seal: {seal[:32]}...")
+    return "\n".join(lines)
 
 
 # Example usage for testing
