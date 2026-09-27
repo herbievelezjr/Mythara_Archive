@@ -46,13 +46,21 @@ jobs:
         continue-on-error: true
       
       # Blocking filesystem scan: catches any secret committed to the tree.
-      # (History was purged separately; base/head SHAs are unreliable across
-      # push, PR, and scheduled triggers, so scan the working tree instead.)
-      - name: Scan for secrets
-        uses: trufflesecurity/trufflehog@main
-        continue-on-error: false
-        with:
-          path: ./
+      # Runs the pinned TruffleHog release directly in filesystem mode, so the
+      # scan can never silently become a git-history or diff scan on scheduled
+      # runs (base/head SHAs are unreliable across push, PR, and schedule
+      # triggers). Pinned to v3.97.9 (reviewed) instead of @main.
+      # --only-verified keeps the gate blocking on live secrets without
+      # flaking on placeholders.
+      - name: Install TruffleHog v3.97.9
+        run: |
+          curl -sSfL https://github.com/trufflesecurity/trufflehog/releases/download/v3.97.9/trufflehog_3.97.9_linux_amd64.tar.gz -o /tmp/trufflehog.tar.gz
+          tar -xzf /tmp/trufflehog.tar.gz -C /tmp trufflehog
+          chmod +x /tmp/trufflehog
+          /tmp/trufflehog --version
+
+      - name: Scan for secrets (filesystem)
+        run: /tmp/trufflehog filesystem --directory=. --only-verified --fail
       
       - name: Upload security reports
         uses: actions/upload-artifact@v4
